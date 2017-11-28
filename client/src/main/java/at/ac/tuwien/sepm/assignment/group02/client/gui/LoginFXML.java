@@ -18,6 +18,7 @@ public class LoginFXML {
         LOG.info("called startHelloWorld");
 
         try {
+
             Lumber lumber = resourceController.getLumber(1);
             LOG.debug("ID: " + lumber.getId());
             LOG.debug("Name: " + lumber.getContent());

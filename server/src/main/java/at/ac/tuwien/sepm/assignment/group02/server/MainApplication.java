@@ -17,10 +17,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MainApplication {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     public static LumberService lumberService = new LumberServiceImpl(new LumberManagementDAOJDBC(DBUtil.getConnection()));
 
     public static void main(String[] args) {
         LOG.debug("Application starting with arguments={}", (Object) args);
+
         SpringApplication.run(MainApplication.class, args);
 
         lumberService.helloWorldLumber(0);

@@ -21,8 +21,10 @@ public class SimpleResourceController implements ResourceController {
         LOG.debug("called getLumber");
 
         RestTemplate restTemplate = new RestTemplate();
+
         return restTemplate.getForObject(
-                "http://localhost:8080/lumber",
-                Lumber.class, 200);
+                "http://localhost:8080/getLumberById/{id}",
+                Lumber.class, id);
+
     }
 }
