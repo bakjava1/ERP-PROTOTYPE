@@ -19,7 +19,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.1.11</logback.version>
         <h2.version>1.4.196</h2.version>
-        <springframework.version>5.0.1.RELEASE</springframework.version>
+        <springboot.version>1.5.8.RELEASE</springboot.version>
         <!-- test dependencies -->
         <junit.version>4.12</junit.version>
         <!-- plugins -->
@@ -32,14 +32,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>1.5.8.RELEASE</version>
+            <version>${springboot.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>1.5.8.RELEASE</version>
+            <version>${springboot.version}</version>
             <scope>test</scope>
         </dependency>
 
