@@ -9,8 +9,13 @@ import at.ac.tuwien.sepm.assignment.group02.server.dao.Lumber;
 public interface LumberService {
 
     /**
-     * Hello World
+     * Hello World get Lumber
      */
-    Lumber helloWorldLumber(int id);
+    Lumber getLumber(int id);
+
+    /**
+     * Hello World add Lumber
+     */
+    void addLumber(Lumber lumber);
 
 }

@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
+import at.ac.tuwien.sepm.assignment.group02.server.dao.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
 
 /**
@@ -9,5 +10,6 @@ public interface LumberManagementDAO {
     /**
      * Hello World
      */
-    boolean helloWorld() throws PersistenceLevelException;
+    void createLumber(Lumber lumber) throws PersistenceLevelException;
+    Lumber readLumberById(int id) throws PersistenceLevelException;
 }

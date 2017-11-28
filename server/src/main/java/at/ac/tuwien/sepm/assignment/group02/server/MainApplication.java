@@ -1,17 +1,16 @@
 package at.ac.tuwien.sepm.assignment.group02.server;
 
+import at.ac.tuwien.sepm.assignment.group02.server.dao.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberManagementDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.invoke.MethodHandles;
-
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.lang.invoke.MethodHandles;
 
 @SpringBootApplication
 public class MainApplication {
@@ -25,15 +24,14 @@ public class MainApplication {
 
         SpringApplication.run(MainApplication.class, args);
 
-        lumberService.helloWorldLumber(0);
-        lumberService.helloWorldLumber(1);
-        lumberService.helloWorldLumber(2);
-
+        lumberService.addLumber(new Lumber(1, "hallo"));
+        lumberService.addLumber(new Lumber(2, "hallohallo"));
+        lumberService.addLumber(new Lumber(3, "hallohallohallo"));
     }
 
-
+    //TODO how to stop the server?
     public void stop() throws Exception {
-        //DBUtil.dropTable();
+        DBUtil.dropTable();
         LOG.debug("Closing Database Connection");
         DBUtil.closeConnection();
     }

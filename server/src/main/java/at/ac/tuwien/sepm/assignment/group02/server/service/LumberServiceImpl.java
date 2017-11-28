@@ -14,25 +14,32 @@ public class LumberServiceImpl implements LumberService {
     private static LumberManagementDAO lumberManagementDAO;
 
     public LumberServiceImpl(LumberManagementDAO lumberManagementDAO){
+
         LumberServiceImpl.lumberManagementDAO = lumberManagementDAO;
     }
 
 
     @Override
-    public Lumber helloWorldLumber(int id) {
+    public Lumber getLumber(int id) {
 
-        LumberRESTController restController = new LumberRESTController();
-
-        boolean b = false;
         try {
-            b = lumberManagementDAO.helloWorld();
+            return lumberManagementDAO.readLumberById(id);
         } catch (PersistenceLevelException e) {
             LOG.warn("helloWorldLumber Persistence Exception: {}",e.getMessage());
         }
 
-        if(b)
-            return restController.helloWorldLumber(id);
-        else return restController.helloWorldLumber(id+1);
+        return null;
+
+    }
+
+    @Override
+    public void addLumber(Lumber lumber) {
+
+        try {
+            lumberManagementDAO.createLumber(lumber);
+        } catch (PersistenceLevelException e) {
+            LOG.warn("helloWorldLumber Persistence Exception: {}",e.getMessage());
+        }
 
     }
 

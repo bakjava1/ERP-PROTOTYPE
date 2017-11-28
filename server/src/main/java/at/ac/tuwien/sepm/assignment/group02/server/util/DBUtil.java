@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -60,13 +61,11 @@ public class DBUtil {
         }
     }
 
-    /* just for testing
+    /* just for testing */
     public static void dropTable(){
         try {
             PreparedStatement ps = getConnection().prepareStatement(
-                    "DROP TABLE is_part_of;\n" +
-                            "DROP TABLE RECEIPT;\n" +
-                            "DROP TABLE PRODUCT;"
+                    "DROP TABLE LUMBER;"
             );
             ps.executeUpdate();
             ps.close();
@@ -75,6 +74,6 @@ public class DBUtil {
             LOG.error("SQLException on createProduct");
         }
     }
-    */
+
 
 }
