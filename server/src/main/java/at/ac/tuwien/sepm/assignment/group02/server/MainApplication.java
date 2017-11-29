@@ -19,6 +19,10 @@ public class MainApplication {
 
     public static LumberService lumberService = new LumberServiceImpl(new LumberManagementDAOJDBC(DBUtil.getConnection()));
 
+    /**
+     * Main method begins execution of Java application
+     * @param args
+     */
     public static void main(String[] args) {
         LOG.debug("Application starting with arguments={}", (Object) args);
 

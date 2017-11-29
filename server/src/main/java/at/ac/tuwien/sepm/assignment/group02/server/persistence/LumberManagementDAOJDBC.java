@@ -19,6 +19,7 @@ public class LumberManagementDAOJDBC implements LumberManagementDAO {
 
 
     public LumberManagementDAOJDBC(Connection dbConnection){
+
         LumberManagementDAOJDBC.dbConnection = dbConnection;
     }
 
