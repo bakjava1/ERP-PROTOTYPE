@@ -1,9 +1,0 @@
-/Users/raquelsima/Desktop/SEPMgruppe/proj_ws17_sepm_qse_02/server/src/main/java/at/ac/tuwien/sepm/assignment/group02/server/exceptions/PersistenceLevelException.java
-/Users/raquelsima/Desktop/SEPMgruppe/proj_ws17_sepm_qse_02/server/src/main/java/at/ac/tuwien/sepm/assignment/group02/server/dao/Lumber.java
-/Users/raquelsima/Desktop/SEPMgruppe/proj_ws17_sepm_qse_02/server/src/main/java/at/ac/tuwien/sepm/assignment/group02/server/rest/LumberRESTController.java
-/Users/raquelsima/Desktop/SEPMgruppe/proj_ws17_sepm_qse_02/server/src/main/java/at/ac/tuwien/sepm/assignment/group02/server/persistence/LumberManagementDAOJDBC.java
-/Users/raquelsima/Desktop/SEPMgruppe/proj_ws17_sepm_qse_02/server/src/main/java/at/ac/tuwien/sepm/assignment/group02/server/persistence/LumberManagementDAO.java
-/Users/raquelsima/Desktop/SEPMgruppe/proj_ws17_sepm_qse_02/server/src/main/java/at/ac/tuwien/sepm/assignment/group02/server/service/LumberServiceImpl.java
-/Users/raquelsima/Desktop/SEPMgruppe/proj_ws17_sepm_qse_02/server/src/main/java/at/ac/tuwien/sepm/assignment/group02/server/util/DBUtil.java
-/Users/raquelsima/Desktop/SEPMgruppe/proj_ws17_sepm_qse_02/server/src/main/java/at/ac/tuwien/sepm/assignment/group02/server/service/LumberService.java
-/Users/raquelsima/Desktop/SEPMgruppe/proj_ws17_sepm_qse_02/server/src/main/java/at/ac/tuwien/sepm/assignment/group02/server/MainApplication.java
