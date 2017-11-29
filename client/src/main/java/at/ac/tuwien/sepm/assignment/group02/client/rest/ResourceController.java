@@ -1,4 +1,4 @@
-package at.ac.tuwien.sepm.assignment.group02.client.service;
+package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.client.dao.Lumber;
 

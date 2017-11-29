@@ -1,8 +1,8 @@
 package at.ac.tuwien.sepm.assignment.group02.client;
 
 import at.ac.tuwien.sepm.assignment.group02.client.gui.LoginFXML;
-import at.ac.tuwien.sepm.assignment.group02.client.service.ResourceController;
-import at.ac.tuwien.sepm.assignment.group02.client.service.SimpleResourceController;
+import at.ac.tuwien.sepm.assignment.group02.client.rest.ResourceController;
+import at.ac.tuwien.sepm.assignment.group02.client.rest.SimpleResourceController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
