@@ -1,9 +1,9 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
-import at.ac.tuwien.sepm.assignment.group02.server.dao.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.converter.LumberConverter;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberManagementDAO;
-import at.ac.tuwien.sepm.assignment.group02.server.rest.LumberRESTController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +12,7 @@ import java.lang.invoke.MethodHandles;
 public class LumberServiceImpl implements LumberService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static LumberManagementDAO lumberManagementDAO;
+    private static LumberConverter lumberConverter = new LumberConverter();
 
     public LumberServiceImpl(LumberManagementDAO lumberManagementDAO){
 
@@ -20,10 +21,10 @@ public class LumberServiceImpl implements LumberService {
 
 
     @Override
-    public Lumber getLumber(int id) {
+    public LumberDTO getLumber(int id) {
 
         try {
-            return lumberManagementDAO.readLumberById(id);
+            return lumberConverter.convertPlainObjectToRestDTO(lumberManagementDAO.readLumberById(id));
         } catch (PersistenceLevelException e) {
             LOG.warn("helloWorldLumber Persistence Exception: {}",e.getMessage());
         }
@@ -33,10 +34,10 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public void addLumber(Lumber lumber) {
+    public void addLumber(LumberDTO lumberDTO) {
 
         try {
-            lumberManagementDAO.createLumber(lumber);
+            lumberManagementDAO.createLumber(lumberConverter.convertRestDTOToPlainObject(lumberDTO));
         } catch (PersistenceLevelException e) {
             LOG.warn("helloWorldLumber Persistence Exception: {}",e.getMessage());
         }

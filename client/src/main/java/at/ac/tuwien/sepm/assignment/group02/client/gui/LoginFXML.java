@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
-import at.ac.tuwien.sepm.assignment.group02.client.dao.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -10,7 +10,7 @@ import org.springframework.web.client.ResourceAccessException;
 
 import java.lang.invoke.MethodHandles;
 
-import static at.ac.tuwien.sepm.assignment.group02.client.MainApplication.resourceController;
+import static at.ac.tuwien.sepm.assignment.group02.client.MainApplication.lumberService;
 
 public class LoginFXML {
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -34,8 +34,8 @@ public class LoginFXML {
         }
 
         try {
-            Lumber lumber = resourceController.getLumber(id);
-            LOG.debug("Lumber: " + lumber.toString());
+            Lumber lumber = lumberService.getLumber(id);
+            LOG.debug("LumberDTO: " + lumber.toString());
             label_helloWorld.setText(lumber.toString());
         } catch (ResourceAccessException e){
             LOG.warn("ResourceAccessException: {}", e.getMessage());

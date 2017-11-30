@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
-
-import at.ac.tuwien.sepm.assignment.group02.server.dao.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 
 /**
  * This interface defines all service layer methods needed for product handling.
@@ -9,13 +8,13 @@ import at.ac.tuwien.sepm.assignment.group02.server.dao.Lumber;
 public interface LumberService {
 
     /**
-     * Hello World get Lumber
+     * Hello World get LumberDTO
      */
-    Lumber getLumber(int id);
+    LumberDTO getLumber(int id);
 
     /**
-     * Hello World add Lumber
+     * Hello World add LumberDTO
      */
-    void addLumber(Lumber lumber);
+    void addLumber(LumberDTO lumber);
 
 }

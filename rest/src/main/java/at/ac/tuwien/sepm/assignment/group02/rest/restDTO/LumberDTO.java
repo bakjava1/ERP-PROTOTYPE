@@ -1,18 +1,18 @@
-package at.ac.tuwien.sepm.assignment.group02.client.dao;
+package at.ac.tuwien.sepm.assignment.group02.rest.restDTO;
 
 //TODO access these DAO from Server and Client??
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Lumber {
+public class LumberDTO {
     private int id;
     private String content;
 
     /**
      * Default constructor
      */
-    public Lumber() {
+    public LumberDTO() {
     }
 
     /**
@@ -20,7 +20,7 @@ public class Lumber {
      * @param id
      * @param content
      */
-    public Lumber(int id, String content) {
+    public LumberDTO(int id, String content) {
         this.id = id;
         this.content = content;
     }
@@ -67,7 +67,7 @@ public class Lumber {
      */
     @Override
     public String toString() {
-        return "Lumber{" +
+        return "LumberDTO{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
                 '}';

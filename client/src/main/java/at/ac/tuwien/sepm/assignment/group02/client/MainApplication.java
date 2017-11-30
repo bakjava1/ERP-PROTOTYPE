@@ -1,8 +1,8 @@
 package at.ac.tuwien.sepm.assignment.group02.client;
 
 import at.ac.tuwien.sepm.assignment.group02.client.gui.LoginFXML;
-import at.ac.tuwien.sepm.assignment.group02.client.rest.ResourceController;
-import at.ac.tuwien.sepm.assignment.group02.client.rest.SimpleResourceController;
+import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.LumberServiceImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,7 +15,7 @@ import java.lang.invoke.MethodHandles;
 public final class MainApplication extends Application {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    public static ResourceController resourceController = new SimpleResourceController();
+    public static LumberService lumberService = new LumberServiceImpl();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
