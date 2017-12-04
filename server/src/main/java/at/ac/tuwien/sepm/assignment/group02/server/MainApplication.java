@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberManagementDAOJDBC;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
@@ -17,7 +17,7 @@ public class MainApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static LumberService lumberService = new LumberServiceImpl(new LumberManagementDAOJDBC(DBUtil.getConnection()));
+    public static LumberService lumberService = new LumberServiceImpl(new LumberDAOJDBC(DBUtil.getConnection()));
 
     /**
      * Main method begins execution of Java application

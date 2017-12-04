@@ -27,10 +27,9 @@ public class LumberControllerImpl implements LumberController {
     @Override
     @RequestMapping(value="/getLumberById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public LumberDTO getLumberById(@PathVariable(value = "id") int id) {
+        LOG.debug("called getLumberById");
 
-        LOG.debug("called helloWorldLumber2");
-
-        return MainApplication.lumberService.getLumber(id);
+        return MainApplication.lumberService.getLumberById(id);
     }
 
 

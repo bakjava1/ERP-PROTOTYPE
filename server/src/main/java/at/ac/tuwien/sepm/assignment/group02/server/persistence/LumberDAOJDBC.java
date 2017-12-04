@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
 import org.slf4j.Logger;
@@ -7,19 +8,20 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
+import java.util.List;
 
 /**
  * Created by e0701149 on 20.11.17.
  */
-public class LumberManagementDAOJDBC implements LumberManagementDAO {
+public class LumberDAOJDBC implements LumberDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Connection dbConnection;
 
 
-    public LumberManagementDAOJDBC(Connection dbConnection){
+    public LumberDAOJDBC(Connection dbConnection){
 
-        LumberManagementDAOJDBC.dbConnection = dbConnection;
+        LumberDAOJDBC.dbConnection = dbConnection;
     }
 
 
@@ -80,6 +82,21 @@ public class LumberManagementDAOJDBC implements LumberManagementDAO {
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLevelException(e.getMessage());
         }
+    }
+
+    @Override
+    public void updateLumber(Lumber lumber) throws PersistenceLevelException {
+
+    }
+
+    @Override
+    public void deleteLumber(int id) throws PersistenceLevelException {
+
+    }
+
+    @Override
+    public List<Lumber> getAllLumber(Filter filter) throws PersistenceLevelException {
+        return null;
     }
 
 }

@@ -1,10 +1,10 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.restController;
+package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 
 import java.util.List;
 
-public interface TaskController {
+public interface TaskService {
 
     /**
      * 1.1.3 Aufträge erstellen
@@ -17,12 +17,13 @@ public interface TaskController {
     void deleteTask(TaskDTO task);
 
     /**
-     * 2.2.3 & 3.2.6 Reserviertes Schnittholz dem Auftrag hinzufügen.
+     * 2.2.3 & 3.2.6 Add lumber to task
      */
     void updateTask(TaskDTO task);
 
     /**
-     * 2.5.2 Eine tabellarische Übersicht der vorhandenen Aufträge anzeigen.
+     * 2.5.2
+     * return a list of all open tasks
      */
     List<TaskDTO> getAllOpenTasks();
 
