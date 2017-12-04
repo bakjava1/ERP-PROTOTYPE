@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
-import at.ac.tuwien.sepm.assignment.group02.server.dao.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
 
 /**

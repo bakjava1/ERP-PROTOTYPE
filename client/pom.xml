@@ -4,38 +4,37 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>at.ac.tuwien.sepm.assignment.group02.client</groupId>
-
+    <parent>
+        <groupId>at.ac.tuwien.sepm.assignment.group02</groupId>
+        <artifactId>smartholz</artifactId>
+        <version>1.0</version>
+    </parent>
 
     <artifactId>smartholz-client</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <properties>
+        <!-- project settings -->
+        <start-class>at.ac.tuwien.sepm.assignment.group02.client.MainApplication</start-class>
         <exec.mainClass>at.ac.tuwien.sepm.assignment.group02.client.MainApplication</exec.mainClass>
-	<!-- build properties -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>9</maven.compiler.source>
-        <maven.compiler.target>9</maven.compiler.target>
-        <!-- dependencies -->
-        <slf4j.version>1.7.25</slf4j.version>
-        <logback.version>1.1.11</logback.version>
+
+        <!-- dependency -->
+        <smartholz-rest.version>1.0</smartholz-rest.version>
         <springframework.version>5.0.1.RELEASE</springframework.version>
-        <!-- test dependencies -->
-        <junit.version>4.12</junit.version>
-        <!-- plugins -->
-        <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
         <jackson.version>2.9.2</jackson.version>
+
+        <!-- plugins -->
+        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
     </properties>
 
 
     <dependencies>
 
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
+            <groupId>at.ac.tuwien.sepm.assignment.group02</groupId>
+            <artifactId>smartholz-rest</artifactId>
+            <version>${smartholz-rest.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
@@ -52,31 +51,11 @@
             <version>${springframework.version}</version>
         </dependency>
 
-        <!-- compile dependencies -->
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <!-- runtime dependencies -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- test dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
     </dependencies>
@@ -84,25 +63,11 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <!-- enable parallel test runs -->
-                    <parallel>methods</parallel>
-                    <threadCount>10</threadCount>
-                    <!-- discover all *.java files -->
-                    <includes>
-                        <include>*.java</include>
-                    </includes>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
+                <version>${maven-jar-plugin.version}</version>
                 <configuration>
                     <archive>
                         <manifest>

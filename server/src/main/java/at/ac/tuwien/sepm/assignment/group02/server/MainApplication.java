@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server;
 
-import at.ac.tuwien.sepm.assignment.group02.server.dao.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberManagementDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderManagementDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberService;
@@ -18,29 +18,31 @@ import java.lang.invoke.MethodHandles;
 @SpringBootApplication
 public class MainApplication {
 
-    public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static LumberService lumberService = new LumberServiceImpl(new LumberManagementDAOJDBC(DBUtil.getConnection()));
     public static OrderService orderService = new OrderServiceImpl(new OrderManagementDAOJDBC(DBUtil.getConnection()));
 
     /**
      * Main method begins execution of Java application
-     * @param args
+     * @param args passed arguments
      */
     public static void main(String[] args) {
         LOG.debug("Application starting with arguments={}", (Object) args);
 
         SpringApplication.run(MainApplication.class, args);
 
-        lumberService.addLumber(new Lumber(1, "hallo"));
-        lumberService.addLumber(new Lumber(2, "hallohallo"));
-        lumberService.addLumber(new Lumber(3, "hallohallohallo"));
+        lumberService.addLumber(new LumberDTO(1, "hallo"));
+        lumberService.addLumber(new LumberDTO(2, "hallohallo"));
+        lumberService.addLumber(new LumberDTO(3, "hallohallohallo"));
     }
 
+    /*
     //TODO how to stop the server?
     public void stop() throws Exception {
-        DBUtil.dropTable();
+        //DBUtil.dropTable();
         LOG.debug("Closing Database Connection");
         DBUtil.closeConnection();
     }
+    */
 }

@@ -4,30 +4,65 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>at.ac.tuwien.sepm.assignment.group02.server</groupId>
+    <parent>
+        <groupId>at.ac.tuwien.sepm.assignment.group02</groupId>
+        <artifactId>smartholz</artifactId>
+        <version>1.0</version>
+    </parent>
+
     <artifactId>smartholz-server</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <properties>
+        <!-- project settings -->
+        <start-class>at.ac.tuwien.sepm.assignment.group02.server.MainApplication</start-class>
         <exec.mainClass>at.ac.tuwien.sepm.assignment.group02.server.MainApplication</exec.mainClass>
-	    <!-- build properties -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>9</maven.compiler.source>
-        <maven.compiler.target>9</maven.compiler.target>
-        <!-- dependencies -->
-        <slf4j.version>1.7.25</slf4j.version>
-        <logback.version>1.1.11</logback.version>
-        <h2.version>1.4.196</h2.version>
+
+        <!-- dependency -->
+        <smartholz-rest.version>1.0</smartholz-rest.version>
         <springboot.version>1.5.8.RELEASE</springboot.version>
-        <!-- test dependencies -->
-        <junit.version>4.12</junit.version>
+        <h2.version>1.4.196</h2.version>
+
         <!-- plugins -->
-        <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
+        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
     </properties>
 
 
     <dependencies>
+
+        <dependency>
+            <groupId>at.ac.tuwien.sepm.assignment.group02</groupId>
+            <artifactId>smartholz-rest</artifactId>
+            <version>${smartholz-rest.version}</version>
+        </dependency>
+
+        <!-- INSO
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-dependencies</artifactId>
+    <type>pom</type>
+    <version>${springboot.version}</version>
+    <scope>import</scope>
+</dependency>
+
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+        -->
+
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -35,6 +70,7 @@
             <version>${springboot.version}</version>
         </dependency>
 
+        <!-- test -->
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -43,36 +79,10 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- compile dependencies -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <!-- runtime dependencies -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
-        </dependency>
-        <!-- test dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -80,29 +90,31 @@
 
     <build>
         <plugins>
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springboot.version}</version>
                 <configuration>
-                    <!-- enable parallel test runs -->
-                    <parallel>methods</parallel>
-                    <threadCount>10</threadCount>
-                    <!-- discover all *.java files -->
-                    <includes>
-                        <include>*.java</include>
-                    </includes>
+                    <skip>true</skip>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
+                <version>${maven-jar-plugin.version}</version>
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>at.ac.tuwien.sepm.assignment.group02.server</mainClass>
+                            <mainClass>at.ac.tuwien.sepm.assignment.group02.server.MainApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

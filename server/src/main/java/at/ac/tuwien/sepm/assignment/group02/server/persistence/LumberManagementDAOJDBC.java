@@ -1,8 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
-import at.ac.tuwien.sepm.assignment.group02.server.dao.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
-import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
