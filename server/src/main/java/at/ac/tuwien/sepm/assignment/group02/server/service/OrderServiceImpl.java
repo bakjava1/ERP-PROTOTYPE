@@ -12,6 +12,8 @@ public class OrderServiceImpl implements OrderService {
 
     private static OrderManagementDAO orderManagementDAO;
 
+    public OrderServiceImpl() {}
+
     public OrderServiceImpl(OrderManagementDAO orderManagementDAO) {
         this.orderManagementDAO = orderManagementDAO;
     }

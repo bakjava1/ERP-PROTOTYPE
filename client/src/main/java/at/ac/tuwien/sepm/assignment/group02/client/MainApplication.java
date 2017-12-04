@@ -1,10 +1,11 @@
 package at.ac.tuwien.sepm.assignment.group02.client;
 
 import at.ac.tuwien.sepm.assignment.group02.client.gui.LoginFXML;
-import at.ac.tuwien.sepm.assignment.group02.client.service.OrderController;
+import at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.OrderServiceImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,12 +29,19 @@ public final class MainApplication extends Application {
         primaryStage.centerOnScreen();
         primaryStage.setOnCloseRequest(event -> LOG.debug("Application shutdown initiated"));
 
+        /*
         // initiate controller
         LoginFXML loginFXML = new LoginFXML();
 
         // prepare fxml loader to inject controller
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(loginFXML) ? loginFXML : null);
+        primaryStage.setScene(new Scene(fxmlLoader.load()));
+        */
+        //TODO undo
+        OfficeFXML officeFXML = new OfficeFXML();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/office.fxml"));
+        fxmlLoader.setControllerFactory(param -> param.isInstance(officeFXML) ? officeFXML : null);
         primaryStage.setScene(new Scene(fxmlLoader.load()));
 
         // show application

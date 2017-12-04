@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
-import at.ac.tuwien.sepm.assignment.group02.server.dao.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,16 +24,16 @@ public class OrderManagementDAOJDBC implements OrderManagementDAO {
 
         //TODO soft delete?
         String deleteOrder = "UPDATE ORDERS SET DELETED = 1 WHERE ID = ?";
-        String deleteTask = "UPDATE TASK SET DELETED = 1 WHERE ORDERID = ?";
+        //String deleteTask = "UPDATE TASK SET DELETED = 1 WHERE ORDERID = ?";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(deleteOrder);
             ps.setInt(1, id);
             ps.execute();
 
-            ps = dbConnection.prepareStatement(deleteTask);
-            ps.setInt(1, id);
-            ps.execute();
+            //ps = dbConnection.prepareStatement(deleteTask);
+            //ps.setInt(1, id);
+            //ps.execute();
 
             ps.close();
         } catch (SQLException e) {

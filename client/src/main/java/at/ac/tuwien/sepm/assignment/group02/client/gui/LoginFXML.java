@@ -12,7 +12,6 @@ import org.springframework.web.client.ResourceAccessException;
 import java.lang.invoke.MethodHandles;
 
 import static at.ac.tuwien.sepm.assignment.group02.client.MainApplication.lumberService;
-import static at.ac.tuwien.sepm.assignment.group02.client.MainApplication.orderController;
 
 public class LoginFXML {
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -24,10 +23,6 @@ public class LoginFXML {
     public Label label_helloWorld;
 
 
-    @FXML private TextField selectedOrder;
-    @FXML private Button deleteOrderButton;
-
-    /*
     @FXML
     public void startHelloWorld() {
         LOG.info("called startHelloWorld");
@@ -47,14 +42,6 @@ public class LoginFXML {
         } catch (ResourceAccessException e){
             LOG.warn("ResourceAccessException: {}", e.getMessage());
         }
-    }*/
-
-    @FXML
-    public void deleteOrder() {
-        LOG.trace("called deleteOrder");
-        int selectedOrderID = Integer.parseInt(selectedOrder.getText());
-
-        orderController.deleteOrder(selectedOrderID);
     }
 
 }
