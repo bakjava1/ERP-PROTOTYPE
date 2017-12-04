@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client;
 
-import at.ac.tuwien.sepm.assignment.group02.client.gui.LoginFXML;
+import at.ac.tuwien.sepm.assignment.group02.client.gui.*;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberServiceImpl;
 import javafx.application.Application;
@@ -29,12 +29,24 @@ public final class MainApplication extends Application {
         primaryStage.centerOnScreen();
         primaryStage.setOnCloseRequest(event -> LOG.debug("Application shutdown initiated"));
 
-        // initiate controller
-        LoginFXML loginFXML = new LoginFXML();
+        // initiate controller, prepare fxml loader to inject controller
+        FXMLLoader fxmlLoader = null;
+        if(lead) {
+            LeadWorkerFXML leadWorkerFXML = new LeadWorkerFXML();
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/lead.fxml"));
+            fxmlLoader.setControllerFactory(param -> param.isInstance(leadWorkerFXML) ? leadWorkerFXML : null);
+        }
+        if(office) {
+            OfficeFXML officeFXML = new OfficeFXML();
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/office.fxml"));
+            fxmlLoader.setControllerFactory(param -> param.isInstance(officeFXML) ? officeFXML : null);
+        }
+        if(crane) {
+            CraneOperatorFXML craneOperatorFXML = new CraneOperatorFXML();
+            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/crane.fxml"));
+            fxmlLoader.setControllerFactory(param -> param.isInstance(craneOperatorFXML) ? craneOperatorFXML : null);
+        }
 
-        // prepare fxml loader to inject controller
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-        fxmlLoader.setControllerFactory(param -> param.isInstance(loginFXML) ? loginFXML : null);
         primaryStage.setScene(new Scene(fxmlLoader.load()));
 
         // show application
@@ -46,16 +58,18 @@ public final class MainApplication extends Application {
 
     public static void main(String[] args) {
         LOG.debug("Application starting with arguments={}", (Object) args);
-        if(args[0].equals("a")) {
+        if(args[0].equals("crane")) {
             //crane
             crane = true;
-        } else if(args[0].equals("b")) {
+        } else if(args[0].equals("office")) {
             //office
             office = true;
-        } else if(args[0].equals("c")) {
-            //
+        } else if(args[0].equals("lead")) {
+            //lead
+            lead = true;
         } else {
-
+            //unknown client error
+            return;
         }
         Application.launch(MainApplication.class, args);
     }
