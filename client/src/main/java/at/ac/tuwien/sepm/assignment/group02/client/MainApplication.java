@@ -20,6 +20,7 @@ public final class MainApplication extends Application {
     public static boolean lead = false;
     public static boolean office = false;
 
+    public static OrderService orderService = new OrderServiceImpl();
 
     @Override
     public void start(Stage primaryStage) throws Exception {

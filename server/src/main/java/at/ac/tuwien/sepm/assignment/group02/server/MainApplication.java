@@ -2,8 +2,11 @@ package at.ac.tuwien.sepm.assignment.group02.server;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAOJDBC;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderManagementDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberServiceImpl;
+import at.ac.tuwien.sepm.assignment.group02.server.service.OrderService;
+import at.ac.tuwien.sepm.assignment.group02.server.service.OrderServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,7 @@ public class MainApplication {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static LumberService lumberService = new LumberServiceImpl(new LumberDAOJDBC(DBUtil.getConnection()));
+    public static OrderService orderService = new OrderServiceImpl(new OrderManagementDAOJDBC(DBUtil.getConnection()));
 
     /**
      * Main method begins execution of Java application
