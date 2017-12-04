@@ -16,6 +16,10 @@ public final class MainApplication extends Application {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     public static LumberService lumberService = new LumberServiceImpl();
+    public static boolean crane = false;
+    public static boolean lead = false;
+    public static boolean office = false;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -42,6 +46,17 @@ public final class MainApplication extends Application {
 
     public static void main(String[] args) {
         LOG.debug("Application starting with arguments={}", (Object) args);
+        if(args[0].equals("a")) {
+            //crane
+            crane = true;
+        } else if(args[0].equals("b")) {
+            //office
+            office = true;
+        } else if(args[0].equals("c")) {
+            //
+        } else {
+
+        }
         Application.launch(MainApplication.class, args);
     }
 
