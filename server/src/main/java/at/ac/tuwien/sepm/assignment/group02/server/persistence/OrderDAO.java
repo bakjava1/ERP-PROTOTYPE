@@ -16,6 +16,7 @@ public interface OrderDAO {
      * 1.2.2 Bestellung löschen.
      */
     void deleteOrder(Order order) throws PersistenceLevelException;
+    void deleteOrder(int id) throws PersistenceLevelException;
 
     /**
      * 1.3.1 Alle offenen Bestellungen anfordern.

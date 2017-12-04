@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.assignment.group02.client;
 import at.ac.tuwien.sepm.assignment.group02.client.gui.*;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberServiceImpl;
+import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.OrderServiceImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,12 +17,13 @@ import java.lang.invoke.MethodHandles;
 public final class MainApplication extends Application {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     public static LumberService lumberService = new LumberServiceImpl();
+    public static OrderService orderService = new OrderServiceImpl();
+
     public static boolean crane = false;
     public static boolean lead = false;
     public static boolean office = false;
-
-    public static OrderService orderService = new OrderServiceImpl();
 
     @Override
     public void start(Stage primaryStage) throws Exception {

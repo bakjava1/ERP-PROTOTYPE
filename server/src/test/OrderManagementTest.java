@@ -1,10 +1,12 @@
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
-import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderManagementDAO;
-import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderManagementDAOJDBC;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,14 +22,14 @@ public class OrderManagementTest {
     private Connection dbConnection;
 
     private OrderService orderService;
-    private OrderManagementDAO orderManagementDAO;
+    private OrderDAO orderDAO;
 
     @Before
     public void setup() {
         LOG.debug("test setup initiated");
         dbConnection = DBUtil.getConnection();
 
-        orderService = new OrderServiceImpl(new OrderManagementDAOJDBC(dbConnection));
+        orderService = new OrderServiceImpl(new OrderDAOJDBC(dbConnection));
         LOG.debug("test setup completed");
     }
 

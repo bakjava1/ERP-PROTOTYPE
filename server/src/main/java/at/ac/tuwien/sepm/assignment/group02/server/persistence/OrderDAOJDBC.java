@@ -1,21 +1,33 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
+import java.util.List;
 
-public class OrderManagementDAOJDBC implements OrderManagementDAO {
+public class OrderDAOJDBC implements OrderDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static Connection dbConnection;
 
-    public OrderManagementDAOJDBC(Connection dbConnection) {
+    public OrderDAOJDBC(Connection dbConnection) {
         this.dbConnection = dbConnection;
     }
 
+
+    @Override
+    public void createOrder(Order order) throws PersistenceLevelException {
+
+    }
+
+    @Override
+    public void deleteOrder(Order order) throws PersistenceLevelException {
+
+    }
 
     @Override
     public void deleteOrder(int id) throws PersistenceLevelException {
@@ -40,5 +52,25 @@ public class OrderManagementDAOJDBC implements OrderManagementDAO {
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLevelException(e.getMessage());
         }
+    }
+
+    @Override
+    public List<Order> getAllOpen() throws PersistenceLevelException {
+        return null;
+    }
+
+    @Override
+    public void updateOrder(Order order) throws PersistenceLevelException {
+
+    }
+
+    @Override
+    public List<Order> getAllClosed() throws PersistenceLevelException {
+        return null;
+    }
+
+    @Override
+    public Order getOrderById(int order_id) throws PersistenceLevelException {
+        return null;
     }
 }

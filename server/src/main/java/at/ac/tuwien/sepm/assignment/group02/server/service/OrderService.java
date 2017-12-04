@@ -15,7 +15,7 @@ public interface OrderService {
      * 1.2.2 Bestellung löschen.
      */
     void deleteOrder(OrderDTO orderDTO);
-
+    void deleteOrder(int order_id);
     /**
      * 1.3.1 Alle offenen Bestellungen anfordern.
      * @return
