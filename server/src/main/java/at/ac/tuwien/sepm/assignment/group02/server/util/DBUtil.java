@@ -38,7 +38,7 @@ public class DBUtil {
         }
 
         try {
-            connection = DriverManager.getConnection("jdbc:h2:file:~/restaurantManagementDB;INIT=runscript from 'classpath:create.sql'",
+            connection = DriverManager.getConnection("jdbc:h2:~/smartholzDB;INIT=runscript from 'classpath:create.sql'",
                     "sa", "");
         } catch (SQLException e) {
             LOG.error("ERROR: SQLException{}",e);

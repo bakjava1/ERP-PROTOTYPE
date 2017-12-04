@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.client;
 
 import at.ac.tuwien.sepm.assignment.group02.client.gui.LoginFXML;
+import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.ResourceController;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.SimpleResourceController;
 import javafx.application.Application;
@@ -16,6 +17,7 @@ public final class MainApplication extends Application {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     public static ResourceController resourceController = new SimpleResourceController();
+    public static OrderController orderController = new OrderController();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
