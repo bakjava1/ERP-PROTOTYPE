@@ -22,11 +22,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Order order) {
-        //TODO delete order by orderDTO
-        //OrderConverter orderConverter = new OrderConverter();
-        //OrderDTO orderDTO = orderConverter.convertPlainObjectToRestDTO(order);
-        //orderController.deleteOrder(orderDTO);
-        orderController.deleteOrder(order.getID());
+        OrderDTO orderToDelete = orderConverter.convertPlainObjectToRestDTO(order);
+        orderController.deleteOrder(orderToDelete);
     }
 
     @Override

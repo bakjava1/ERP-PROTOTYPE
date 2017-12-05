@@ -38,31 +38,19 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public void deleteOrder(Order order) throws PersistenceLevelException {
+        LOG.debug("deleting order number {} from database", order.getID());
 
-    }
-
-    @Override
-    public void deleteOrder(int id) throws PersistenceLevelException {
-        LOG.debug("deleting order number {} from database", id);
-        LOG.debug("deleting tasks containing order number {} from database", id);
-
-        //TODO soft delete?
         String deleteOrder = "UPDATE ORDERS SET DELETED = 1 WHERE ID = ?";
-        //String deleteTask = "UPDATE TASK SET DELETED = 1 WHERE ORDERID = ?";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(deleteOrder);
-            ps.setInt(1, id);
+            ps.setInt(1, order.getID());
             ps.execute();
-
-            //ps = dbConnection.prepareStatement(deleteTask);
-            //ps.setInt(1, id);
-            //ps.execute();
 
             ps.close();
         } catch (SQLException e) {
             LOG.error("SQLException: {}", e.getMessage());
-            throw new PersistenceLevelException(e.getMessage());
+            throw new PersistenceLevelException("Database error");
         }
     }
 

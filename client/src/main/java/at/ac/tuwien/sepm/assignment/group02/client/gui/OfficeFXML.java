@@ -24,7 +24,6 @@ public class OfficeFXML {
     public void deleteOrder() {
         LOG.trace("called deleteOrder");
  
-        //TODO create order correctly and use orderDTO for REST
         int selectedOrderID = Integer.parseInt(selectedOrder.getText());
         Order order = new Order();
         order.setID(selectedOrderID);

@@ -18,16 +18,6 @@ public class OrderControllerImpl implements OrderController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-
-
-    @RequestMapping(value="/deleteOrderById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void deleteOrder(@PathVariable(value = "id") int id) {
-
-        LOG.debug("deleted order number {}", id);
-
-        orderService.deleteOrder(id);
-    }
-
     @Override
     @RequestMapping(value="/createOrder",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     public void createOrder(@RequestBody OrderDTO orderDTO) {
@@ -37,8 +27,10 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public void deleteOrder(OrderDTO orderDTO) {
-
+    @RequestMapping(value="/deleteOrder",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteOrder(@RequestBody OrderDTO orderDTO) {
+        LOG.debug("Deleting order " + orderDTO.getID());
+        orderService.deleteOrder(orderDTO);
     }
 
     @Override

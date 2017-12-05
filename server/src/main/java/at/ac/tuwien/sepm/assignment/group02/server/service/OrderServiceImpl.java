@@ -23,15 +23,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(OrderDTO orderDTO) {
-
-    }
-
-    @Override
-    public void deleteOrder(int id) {
+        Order orderToDelete = orderConverter.convertRestDTOToPlainObject(orderDTO);
         try {
-            orderManagementDAO.deleteOrder(id);
+            orderManagementDAO.deleteOrder(orderToDelete);
         } catch (PersistenceLevelException e) {
-            LOG.warn("error at deleting order: {}", e.getMessage());
+            LOG.error("Error while deleting an order");
         }
     }
 
