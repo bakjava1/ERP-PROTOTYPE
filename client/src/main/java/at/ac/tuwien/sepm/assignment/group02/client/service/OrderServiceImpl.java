@@ -12,10 +12,12 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     public static OrderController orderController = new OrderControllerImpl();
+    private static OrderConverter orderConverter = new OrderConverter();
 
     @Override
     public void addOrder(Order order, List<Task> tasks) {
-
+        OrderDTO toAdd = orderConverter.convertPlainObjectToRestDTO(order);
+        orderController.createOrder(toAdd);
     }
 
     @Override

@@ -21,7 +21,19 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public void createOrder(Order order) throws PersistenceLevelException {
+        LOG.debug("Creating new Order");
+        String createSentence = "INSERT INTO ORDERS VALUES(default,now(),false,false)";
 
+        try{
+            PreparedStatement stmt = dbConnection.prepareStatement(createSentence, Statement.RETURN_GENERATED_KEYS);
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            rs.next();
+            int id = rs.getInt(1);
+        } catch(SQLException e) {
+            LOG.error("SQL Exception: " + e.getMessage());
+            throw new PersistenceLevelException("Database Error");
+        }
     }
 
     @Override

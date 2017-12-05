@@ -34,6 +34,7 @@ public class OfficeFXML {
 
     @FXML
     public void createOrder(ActionEvent actionEvent) {
+        LOG.info("createOrder called");
         Order newOrder = new Order();
         orderService.addOrder(newOrder,null);
     }

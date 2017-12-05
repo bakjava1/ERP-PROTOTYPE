@@ -3,13 +3,13 @@ package at.ac.tuwien.sepm.assignment.group02.rest.entity;
 import java.sql.Timestamp;
 
 public class Order {
-    private int id;
 
+    private int id;
     private Timestamp orderDate;
-    boolean isPaid;
+    private boolean isPaid;
 
     public Order() {
-
+        this.id = -1;
     }
 
     public Order(int id, Timestamp orderDate) {
@@ -23,5 +23,21 @@ public class Order {
 
     public int getID() {
         return this.id;
+    }
+
+    public Timestamp getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Timestamp orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
     }
 }
