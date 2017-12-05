@@ -6,13 +6,13 @@ import java.sql.Timestamp;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderDTO {
-    private int id;
 
+    private int id;
     private Timestamp orderDate;
-    boolean isPaid;
+    private boolean isPaid;
 
     public OrderDTO() {
-
+        this.id = -1;
     }
 
     public OrderDTO(int id, Timestamp orderDate) {
@@ -26,5 +26,21 @@ public class OrderDTO {
 
     public int getID() {
         return this.id;
+    }
+
+    public Timestamp getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Timestamp orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
     }
 }

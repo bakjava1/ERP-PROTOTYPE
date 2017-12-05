@@ -13,7 +13,7 @@
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
                 <children>
                     <TextField fx:id="selectedOrder" layoutX="168.0" layoutY="14.0" prefHeight="25.0" prefWidth="85.0" promptText="select order" />
-                  <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#createOrder" text="Bestellung erstellen" />
+                    <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#createOrder" text="Bestellung erstellen" />
                     <Button fx:id="deleteOrderButton" layoutX="168.0" layoutY="49.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
                 </children>
             </AnchorPane>

@@ -23,7 +23,7 @@ public class OfficeFXML {
     @FXML
     public void deleteOrder() {
         LOG.trace("called deleteOrder");
-
+ 
         //TODO create order correctly and use orderDTO for REST
         int selectedOrderID = Integer.parseInt(selectedOrder.getText());
         Order order = new Order();
@@ -34,6 +34,7 @@ public class OfficeFXML {
 
     @FXML
     public void createOrder(ActionEvent actionEvent) {
+        LOG.info("createOrder called");
         Order newOrder = new Order();
         orderService.addOrder(newOrder,null);
     }
