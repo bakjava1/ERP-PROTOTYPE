@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -41,6 +42,8 @@ public class LoginFXML {
             label_helloWorld.setText(lumber.toString());
         } catch (ResourceAccessException e){
             LOG.warn("ResourceAccessException: {}", e.getMessage());
+        } catch (InvalidInputException e) {
+            e.printStackTrace();
         }
     }
 

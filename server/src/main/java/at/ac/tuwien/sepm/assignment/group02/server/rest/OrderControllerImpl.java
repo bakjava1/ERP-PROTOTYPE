@@ -24,11 +24,11 @@ public class OrderControllerImpl implements OrderController {
         LOG.debug("deleted order number {}", id);
 
         MainApplication.orderService.deleteOrder(id);
+
     }
 
     @Override
     public void createOrder(OrderDTO orderDTO) {
-
     }
 
     @Override

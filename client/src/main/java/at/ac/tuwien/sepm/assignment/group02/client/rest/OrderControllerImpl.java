@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
@@ -20,9 +22,17 @@ public class OrderControllerImpl implements OrderController {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        restTemplate.getForObject(
-                "http://localhost:8080/deleteOrderById/{id}",
-                OrderDTO.class, id);
+        try{
+            restTemplate.getForObject(
+                    "http://localhost:8080/deleteOrderById/{id}",
+                    OrderDTO.class, id);
+
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+        }
     }
 
     @Override
