@@ -1,9 +1,8 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.restController;
-
+package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 
-public interface TimberController {
+public interface TimberService {
 
     /**
      * 1.8.2 Hinzufügen von neuem Rundholz
@@ -11,11 +10,12 @@ public interface TimberController {
      * On server side this might mean that a new record is inserted on persistence level,
      * or an existing record will be updated with the new timber object.
      */
-    void createTimber(TimberDTO timber);
+    void addTimber(TimberDTO timber);
 
     /**
      * 3.2.3 Rundholz aus dem Lager entfernen.
      * This method removes round timber from the round timber store.
      */
-    void deleteTimber(TimberDTO timber);
+    void updateTimber(TimberDTO timber);
+
 }

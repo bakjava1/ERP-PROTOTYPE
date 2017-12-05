@@ -1,10 +1,10 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.restController;
+package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 
 import java.util.List;
 
-public interface OrderController {
+public interface OrderService {
 
     /**
      * 1.1.2 Bestellung mit allen relevanten Daten + eindeutigem Schlüssel (id) erstellen.
@@ -15,8 +15,7 @@ public interface OrderController {
      * 1.2.2 Bestellung löschen.
      */
     void deleteOrder(OrderDTO orderDTO);
-    void deleteOrder(int id);
-
+    void deleteOrder(int order_id);
     /**
      * 1.3.1 Alle offenen Bestellungen anfordern.
      * @return
@@ -38,4 +37,5 @@ public interface OrderController {
      * 1.6.2 Rechnungsdetails (Geschlossene Bestellung) anfordern.
      */
     OrderDTO getOrderById(int order_id);
+
 }

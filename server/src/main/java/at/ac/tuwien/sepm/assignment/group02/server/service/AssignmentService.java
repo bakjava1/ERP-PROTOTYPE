@@ -1,13 +1,18 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.restController;
+package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
 
 import java.util.List;
 
-public interface AssignmentController {
+/**
+ * CONVERSION HAPPENS ON THIS LAYER
+ * VALIDATION HAPPENS ON THIS LAYER
+ */
+public interface AssignmentService {
 
     /**
-     * 2.4.4 Neue Aufgabe für Kranfahrer erstellen.
+     * 2.4.4
+     * This method creates a new assignment for the crane operator
      */
     void createAssignment(AssignmentDTO assignmentDTO);
 

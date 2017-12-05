@@ -29,7 +29,6 @@ public interface LumberController {
     void createLumber(LumberDTO lumber);
 
     /**
-     * Hello World!
      * get lumber specified by id
      * @param id int id of lumber to get
      * @return LumberDTO specified by id

@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ public class LoginFXML {
 
     @FXML
     public Label label_helloWorld;
+
 
     @FXML
     public void startHelloWorld() {

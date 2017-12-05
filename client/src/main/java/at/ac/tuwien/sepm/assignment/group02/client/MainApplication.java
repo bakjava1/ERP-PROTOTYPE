@@ -17,12 +17,13 @@ import java.lang.invoke.MethodHandles;
 public final class MainApplication extends Application {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     public static LumberService lumberService = new LumberServiceImpl();
     public static OrderService orderService = new OrderServiceImpl();
+
     public static boolean crane = false;
     public static boolean lead = false;
     public static boolean office = false;
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {
