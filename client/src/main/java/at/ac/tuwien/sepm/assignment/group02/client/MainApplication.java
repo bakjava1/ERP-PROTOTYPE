@@ -29,23 +29,25 @@ public final class MainApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         // setup application
-        primaryStage.setTitle("Manage Products");
         primaryStage.centerOnScreen();
         primaryStage.setOnCloseRequest(event -> LOG.debug("Application shutdown initiated"));
 
         // initiate controller, prepare fxml loader to inject controller
         FXMLLoader fxmlLoader = null;
         if(lead) {
+            primaryStage.setTitle("Lead Worker");
             LeadWorkerFXML leadWorkerFXML = new LeadWorkerFXML();
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/lead.fxml"));
             fxmlLoader.setControllerFactory(param -> param.isInstance(leadWorkerFXML) ? leadWorkerFXML : null);
         }
         if(office) {
+            primaryStage.setTitle("Office");
             OfficeFXML officeFXML = new OfficeFXML();
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/office.fxml"));
             fxmlLoader.setControllerFactory(param -> param.isInstance(officeFXML) ? officeFXML : null);
         }
         if(crane) {
+            primaryStage.setTitle("Crane Operator");
             CraneOperatorFXML craneOperatorFXML = new CraneOperatorFXML();
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/crane.fxml"));
             fxmlLoader.setControllerFactory(param -> param.isInstance(craneOperatorFXML) ? craneOperatorFXML : null);

@@ -10,14 +10,8 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
+
     public static OrderController orderController = new OrderControllerImpl();
-
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
-
-import java.util.List;
-
-public class OrderServiceImpl implements OrderService{
 
     @Override
     public void addOrder(Order order, List<Task> tasks) {
