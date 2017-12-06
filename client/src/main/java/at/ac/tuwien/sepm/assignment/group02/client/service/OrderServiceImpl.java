@@ -1,11 +1,10 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderControllerImpl;
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restController.OrderController;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 
 import java.util.List;
 
@@ -26,7 +25,11 @@ public class OrderServiceImpl implements OrderService {
         //OrderConverter orderConverter = new OrderConverter();
         //OrderDTO orderDTO = orderConverter.convertPlainObjectToRestDTO(order);
         //orderController.deleteOrder(orderDTO);
-        orderController.deleteOrder(order.getID());
+        try {
+            orderController.deleteOrder(order.getID());
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

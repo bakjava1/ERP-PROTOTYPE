@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 
@@ -17,7 +18,7 @@ public interface OrderService {
      * und Verbindung zu Bestellung (relationale Datenbank)
      * @param order
      */
-    void addOrder(Order order, List<Task> tasks);
+    void addOrder(Order order, List<Task> tasks) throws InvalidInputException;
 
     /**
      * 1.2 Bestellung löschen
@@ -25,7 +26,7 @@ public interface OrderService {
      * 1.2.2 (rest/OrderController) Bestehende Bestellung löschen
      * @param order
      */
-    void deleteOrder(Order order);
+    void deleteOrder(Order order) throws InvalidInputException;
 
     /**
      * 1.3 Übersicht Bestellungen
@@ -39,7 +40,7 @@ public interface OrderService {
      * 1.4.3 (rest/LumberController) Schnittholz aus dem Schnittholzlager entfernen.
      * @param order
      */
-    void closeOrder(Order order);
+    void closeOrder(Order order) throws InvalidInputException;
 
     /**
      * 1.5 Übersicht Rechnungen
@@ -54,6 +55,6 @@ public interface OrderService {
      * @param order_id
      * @return
      */
-    Order getReceiptById(int order_id);
+    Order getReceiptById(int order_id) throws InvalidInputException;
 
 }

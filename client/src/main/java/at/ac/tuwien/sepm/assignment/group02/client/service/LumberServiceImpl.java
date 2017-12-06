@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restController.LumberController;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 
@@ -24,7 +25,12 @@ public class LumberServiceImpl implements LumberService {
 
         LumberConverter lumberConverter = new LumberConverter();
 
-        LumberDTO lumberDTO = lumberController.getLumberById(id);
+        LumberDTO lumberDTO = null;
+        try {
+            lumberDTO = lumberController.getLumberById(id);
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+        }
         Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
 
         return lumber;

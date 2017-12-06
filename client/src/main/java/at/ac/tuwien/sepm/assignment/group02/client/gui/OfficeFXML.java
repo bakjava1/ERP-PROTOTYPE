@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import javafx.event.ActionEvent;
@@ -29,13 +30,21 @@ public class OfficeFXML {
         Order order = new Order();
         order.setID(selectedOrderID);
 
-        orderService.deleteOrder(order);
+        try {
+            orderService.deleteOrder(order);
+        } catch (InvalidInputException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     public void createOrder(ActionEvent actionEvent) {
         LOG.info("createOrder called");
         Order newOrder = new Order();
-        orderService.addOrder(newOrder,null);
+        try {
+            orderService.addOrder(newOrder,null);
+        } catch (InvalidInputException e) {
+            e.printStackTrace();
+        }
     }
 }

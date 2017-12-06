@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
 
@@ -13,7 +14,7 @@ public interface LumberService {
      * 2.1.3 (rest/LumberController) Suchfunktionalität implementieren
      * @return
      */
-    List<Lumber> getAll(Filter filter);
+    List<Lumber> getAll(Filter filter) throws InvalidInputException;
 
     /**
      * 2.2 Reservierung Schnittholz
@@ -24,9 +25,9 @@ public interface LumberService {
      * @param lumber
      * @param quantity
      */
-    void reserveLumber(Lumber lumber, int quantity);
+    void reserveLumber(Lumber lumber, int quantity) throws InvalidInputException;
 
 
     // just an example
-    Lumber getLumber(int id);
+    Lumber getLumber(int id) throws InvalidInputException;
 }
