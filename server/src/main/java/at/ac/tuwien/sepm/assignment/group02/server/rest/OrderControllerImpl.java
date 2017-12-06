@@ -34,8 +34,10 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
+    @RequestMapping(value="/getAllOpen",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public List<OrderDTO> getAllOpen() {
-        return null;
+        LOG.debug("Get all order");
+        return orderService.getAllOpen();
     }
 
     @Override

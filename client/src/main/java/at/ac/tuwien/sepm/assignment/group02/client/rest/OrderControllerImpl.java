@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.restController.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,7 +34,18 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     public List<OrderDTO> getAllOpen() {
-        return null;
+        LOG.debug("get all open order");
+
+        List<OrderDTO> orderList = new ArrayList<>();
+        OrderDTO[] orderArray = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
+
+        for (int i = 0; orderArray!= null && i < orderArray.length; i++) {
+            orderList.add(orderArray[i]);
+        }
+
+
+        return orderList;
+
     }
 
     @Override

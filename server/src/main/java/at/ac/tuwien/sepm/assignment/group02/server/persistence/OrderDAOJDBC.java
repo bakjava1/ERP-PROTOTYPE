@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDAOJDBC implements OrderDAO {
@@ -56,7 +59,50 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public List<Order> getAllOpen() throws PersistenceLevelException {
-        return null;
+        LOG.debug("Get all open Order from database");
+
+        List<Order> orderList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+
+            //connect to db
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISPAID = 0 AND DELETED = 0 ORDER BY ORDERDATE");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+
+                Order currentOrder = new Order(rs.getInt("ID"), rs.getTimestamp("ORDERDATE"));
+                currentOrder.setPaid(false);
+
+                orderList.add(currentOrder);
+            }
+
+            if (orderList.size() == 0) {
+                //no open order was found
+                throw new PersistenceLevelException("No open orders found");
+            }
+
+        } catch (SQLException e) {
+            throw new PersistenceLevelException("Database error");
+        } finally {
+            //close connections
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+
+        }
+
+        return orderList;
     }
 
     @Override

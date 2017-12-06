@@ -6,8 +6,13 @@ import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restController.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+
 
 public class OrderServiceImpl implements OrderService {
 
@@ -28,7 +33,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOpen() {
-        return null;
+
+        List<OrderDTO> allOpen = orderController.getAllOpen();
+        List<Order> allOpenConverted = new LinkedList<Order>();
+
+
+        for (OrderDTO order: allOpen) {
+            allOpenConverted.add(orderConverter.convertRestDTOToPlainObject(order));
+        }
+
+        return allOpenConverted;
+
     }
 
     @Override
