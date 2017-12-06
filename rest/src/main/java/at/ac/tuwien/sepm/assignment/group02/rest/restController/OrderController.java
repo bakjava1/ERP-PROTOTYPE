@@ -11,7 +11,7 @@ public interface OrderController {
     /**
      * 1.1.2 Bestellung mit allen relevanten Daten + eindeutigem Schlüssel (id) erstellen.
      */
-    void createOrder(OrderDTO orderDTO);
+    void createOrder(OrderDTO orderDTO) throws EntityCreationException;
 
     /**
      * 1.2.2 Bestellung löschen.
