@@ -11,33 +11,32 @@ public interface OrderController {
     /**
      * 1.1.2 Bestellung mit allen relevanten Daten + eindeutigem Schlüssel (id) erstellen.
      */
-    void createOrder(OrderDTO orderDTO) throws EntityCreationException;
+    void createOrder(OrderDTO orderDTO);
 
     /**
      * 1.2.2 Bestellung löschen.
      */
-    void deleteOrder(OrderDTO orderDTO) throws EntityNotFoundException;
-    void deleteOrder(int id) throws EntityNotFoundException;
+    void deleteOrder(OrderDTO orderDTO);
 
     /**
      * 1.3.1 Alle offenen Bestellungen anfordern.
      * @return
      */
-    List<OrderDTO> getAllOpen() throws EntityNotFoundException;
+    List<OrderDTO> getAllOpen();
 
     /**
      * 1.4.2 Abzurechnende Bestellung bearbeiten (Abgerechnet Flag setzten, zusätzliche Werte speichern)
      */
-    void updateOrder(OrderDTO orderDTO) throws EntityNotFoundException;
+    void updateOrder(OrderDTO orderDTO);
 
     /**
      * 1.5.1 Alle geschlossenen Bestellungen == Rechnugen anfordern.
      * @return
      */
-    List<OrderDTO> getAllClosed() throws EntityNotFoundException;
+    List<OrderDTO> getAllClosed();
 
     /**
      * 1.6.2 Rechnungsdetails (Geschlossene Bestellung) anfordern.
      */
-    OrderDTO getOrderById(int order_id) throws EntityNotFoundException;
+    OrderDTO getOrderById(int order_id);
 }

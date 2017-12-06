@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
@@ -24,15 +25,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(OrderDTO orderDTO) {
-
-    }
-
-    @Override
-    public void deleteOrder(int id) {
+        Order orderToDelete = orderConverter.convertRestDTOToPlainObject(orderDTO);
         try {
-            orderManagementDAO.deleteOrder(id);
+            orderManagementDAO.deleteOrder(orderToDelete);
         } catch (PersistenceLevelException e) {
-            LOG.warn("error at deleting order: {}", e.getMessage());
+            LOG.error("Error while deleting an order");
         }
     }
 
@@ -49,7 +46,26 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> getAllOpen() {
-        return null;
+        List<Order> allOpen = null;
+        List<OrderDTO> allOpenConverted = null;
+
+
+        try{
+            allOpen = orderManagementDAO.getAllOpen();
+
+        } catch(PersistenceLevelException e) {
+            LOG.error("Error while trying to get objects from Database");
+        }
+
+        if (allOpen!= null) {
+            allOpenConverted = new ArrayList<>();
+
+            for (int i = 0; i < allOpen.size(); i++) {
+                allOpenConverted.add(orderConverter.convertPlainObjectToRestDTO(allOpen.get(i)));
+            }
+        }
+
+        return allOpenConverted;
     }
 
     @Override

@@ -9,9 +9,13 @@ import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityCreationExcept
 import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restController.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -34,20 +38,23 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Order order) {
-        //TODO delete order by orderDTO
-        //OrderConverter orderConverter = new OrderConverter();
-        //OrderDTO orderDTO = orderConverter.convertPlainObjectToRestDTO(order);
-        //orderController.deleteOrder(orderDTO);
-        try {
-            orderController.deleteOrder(order.getID());
-        } catch (EntityNotFoundException e) {
-            e.printStackTrace();
-        }
+        OrderDTO orderToDelete = orderConverter.convertPlainObjectToRestDTO(order);
+        orderController.deleteOrder(orderToDelete);
     }
 
     @Override
     public List<Order> getAllOpen() {
-        return null;
+
+        List<OrderDTO> allOpen = orderController.getAllOpen();
+        List<Order> allOpenConverted = new LinkedList<Order>();
+
+
+        for (OrderDTO order: allOpen) {
+            allOpenConverted.add(orderConverter.convertRestDTOToPlainObject(order));
+        }
+
+        return allOpenConverted;
+
     }
 
     @Override

@@ -38,7 +38,7 @@ public class OrderManagementTest {
         LOG.debug("testing for order deletion");
 
         //TODO add test cases
-        orderService.deleteOrder(1);
+        //orderService.deleteOrder(1);
 
         int orderCountAfterDeletion = getActiveOrderByOrderID(1);
         //int taskCountAfterDeletion = getActiveTaskByOrderID(1);

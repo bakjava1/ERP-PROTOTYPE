@@ -13,6 +13,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,23 +22,7 @@ public class OrderControllerImpl implements OrderController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static RestTemplate restTemplate = new RestTemplate();
 
-    public void deleteOrder(@RequestParam(value="id", defaultValue="0") int id) {
-        LOG.debug("called deleteOrder");
 
-        RestTemplate restTemplate = new RestTemplate();
-
-        try{
-            restTemplate.getForObject(
-                    "http://localhost:8080/deleteOrderById/{id}",
-                    OrderDTO.class, id);
-
-        } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-        } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-        }
-    }
 
     @Override
     public void createOrder(@RequestBody OrderDTO orderDTO) throws EntityCreationException {
@@ -58,13 +43,41 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public void deleteOrder(OrderDTO orderDTO) {
+    public void deleteOrder(@RequestBody OrderDTO orderDTO) {
+
+        LOG.debug("sending order to be deleted to server");
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        try{
+            restTemplate.postForObject("http://localhost:8080/deleteOrder", orderDTO, OrderDTO.class);
+
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+        }
+
+
+
 
     }
 
     @Override
     public List<OrderDTO> getAllOpen() {
-        return null;
+        LOG.debug("get all open order");
+
+        List<OrderDTO> orderList = new ArrayList<>();
+        OrderDTO[] orderArray = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
+
+        for (int i = 0; orderArray!= null && i < orderArray.length; i++) {
+            orderList.add(orderArray[i]);
+        }
+
+
+        return orderList;
+
     }
 
     @Override
