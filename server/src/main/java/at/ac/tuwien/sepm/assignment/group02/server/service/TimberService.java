@@ -10,12 +10,12 @@ public interface TimberService {
      * On server side this might mean that a new record is inserted on persistence level,
      * or an existing record will be updated with the new timber object.
      */
-    void addTimber(TimberDTO timber);
+    void addTimber(TimberDTO timberDTO);
 
     /**
      * 3.2.3 Rundholz aus dem Lager entfernen.
      * This method removes round timber from the round timber store.
      */
-    void updateTimber(TimberDTO timber);
+    void updateTimber(TimberDTO timberDTO);
 
 }

@@ -1,10 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.client;
 
 import at.ac.tuwien.sepm.assignment.group02.client.gui.*;
-import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
-import at.ac.tuwien.sepm.assignment.group02.client.service.LumberServiceImpl;
-import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
-import at.ac.tuwien.sepm.assignment.group02.client.service.OrderServiceImpl;
+import at.ac.tuwien.sepm.assignment.group02.client.service.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,6 +17,7 @@ public final class MainApplication extends Application {
 
     public static LumberService lumberService = new LumberServiceImpl();
     public static OrderService orderService = new OrderServiceImpl();
+    public static TimberService timberService = new TimberServiceImpl();
 
     public static boolean crane = false;
     public static boolean lead = false;
@@ -34,27 +32,28 @@ public final class MainApplication extends Application {
 
         // initiate controller, prepare fxml loader to inject controller
         FXMLLoader fxmlLoader = null;
+        LeadWorkerFXML leadWorkerFXML = new LeadWorkerFXML();
+        OfficeFXML officeFXML = new OfficeFXML();
+        CraneOperatorFXML craneOperatorFXML = new CraneOperatorFXML();
+
         if(lead) {
             primaryStage.setTitle("Lead Worker");
-            LeadWorkerFXML leadWorkerFXML = new LeadWorkerFXML();
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/lead.fxml"));
             fxmlLoader.setControllerFactory(param -> param.isInstance(leadWorkerFXML) ? leadWorkerFXML : null);
         }
         if(office) {
             primaryStage.setTitle("Office");
-            OfficeFXML officeFXML = new OfficeFXML();
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/office.fxml"));
             fxmlLoader.setControllerFactory(param -> param.isInstance(officeFXML) ? officeFXML : null);
         }
         if(crane) {
             primaryStage.setTitle("Crane Operator");
-            CraneOperatorFXML craneOperatorFXML = new CraneOperatorFXML();
             fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/crane.fxml"));
             fxmlLoader.setControllerFactory(param -> param.isInstance(craneOperatorFXML) ? craneOperatorFXML : null);
         }
 
         primaryStage.setScene(new Scene(fxmlLoader.load()));
-
+        officeFXML.initStage();
         // show application
         primaryStage.show();
         primaryStage.toFront();

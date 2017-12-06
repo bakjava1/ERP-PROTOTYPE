@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TabPane xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
+<TabPane tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
    <tabs>
       <Tab text="Bestellungen">
          <content>
@@ -16,6 +18,19 @@
                   <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#createOrder" text="Bestellung erstellen" />
                     <Button fx:id="deleteOrderButton" layoutX="168.0" layoutY="49.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
                 </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab text="Rundholz">
+         <content>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+               <children>
+                  <Button layoutX="253.0" layoutY="143.0" mnemonicParsing="false" onAction="#addTimber" text="Speichern" />
+                  <ChoiceBox fx:id="cb_timber_box" layoutX="220.0" layoutY="48.0" prefHeight="26.0" prefWidth="171.0" />
+                  <TextField fx:id="tf_timber_amount" layoutX="220.0" layoutY="97.0" />
+                  <Label layoutX="45.0" layoutY="53.0" text="Rundholz Lagerbox" />
+                  <Label layoutX="45.0" layoutY="102.0" text="hinzugefügte Anzahl" />
+               </children>
             </AnchorPane>
          </content>
       </Tab>
