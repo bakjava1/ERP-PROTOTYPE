@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceDatabaseException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,12 +37,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void createOrder(OrderDTO orderDTO) {
+    public void createOrder(OrderDTO orderDTO) throws ServiceDatabaseException{
         Order order = orderConverter.convertRestDTOToPlainObject(orderDTO);
         try{
             orderManagementDAO.createOrder(order);
         } catch(PersistenceLevelException e) {
             LOG.error("Error while trying to create Object in Database");
+            throw new ServiceDatabaseException("Failed Persistenz");
         }
     }
 

@@ -1,8 +1,11 @@
 package at.ac.tuwien.sepm.assignment.group02.server.rest;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityCreationException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restController.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.MainApplication;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceDatabaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -30,10 +33,15 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     @RequestMapping(value="/createOrder",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-    public void createOrder(@RequestBody OrderDTO orderDTO) {
+    public void createOrder(@RequestBody OrderDTO orderDTO) throws EntityCreationException {
         LOG.debug("Trying creation of Order with id: " + orderDTO.getID());
 
-        orderService.createOrder(orderDTO);
+        try {
+            orderService.createOrder(orderDTO);
+        } catch(ServiceDatabaseException e) {
+            LOG.error("Database Error: " + e.getMessage());
+            throw new EntityCreationException("Failed Creation");
+        }
     }
 
     @Override

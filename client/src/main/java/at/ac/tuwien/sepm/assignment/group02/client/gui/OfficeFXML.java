@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -43,8 +44,18 @@ public class OfficeFXML {
         Order newOrder = new Order();
         try {
             orderService.addOrder(newOrder,null);
+            Alert success = new Alert(Alert.AlertType.INFORMATION);
+            success.setTitle("Creation successful");
+            success.setHeaderText(null);
+            success.setContentText("Order created successfully!");
+            success.showAndWait();
         } catch (InvalidInputException e) {
             e.printStackTrace();
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Creation failed");
+            error.setHeaderText(null);
+            error.setContentText("Order Creation failed!");
+            error.showAndWait();
         }
     }
 }
