@@ -30,6 +30,18 @@ public class OfficeFXML {
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @FXML
+    private TableView table_addedTask;
+
+    @FXML
+    private TextField tf_order_customerUID;
+
+    @FXML
+    private TextField tf_order_customeraddress;
+
+    @FXML
+    private TextField tf_order_customername;
+
+    @FXML
     private Tab tab_timber;
 
     @FXML
@@ -49,6 +61,8 @@ public class OfficeFXML {
 
     @FXML
     TableView<Order> table_openOrder;
+
+
 
     @FXML
     void initialize() {
@@ -79,7 +93,11 @@ public class OfficeFXML {
     public void createOrder(ActionEvent actionEvent) {
         LOG.info("createOrder called");
         Order newOrder = new Order();
-        try {
+        newOrder.setCustomerName(tf_order_customername.getText());
+        newOrder.setCustomerAddress(tf_order_customeraddress.getText());
+        newOrder.setCustomerUID(tf_order_customerUID.getText());
+        LOG.debug(newOrder.toString());
+        /*try {
             orderService.addOrder(newOrder,null);
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setTitle("Creation successful");
@@ -93,7 +111,7 @@ public class OfficeFXML {
             error.setHeaderText(null);
             error.setContentText("Order Creation failed!");
             error.showAndWait();
-        }
+        }*/
 
         updateTable();
     }
@@ -144,4 +162,6 @@ public class OfficeFXML {
         });
     }
 
+    public void addTaskToOrder(ActionEvent actionEvent) {
+    }
 }

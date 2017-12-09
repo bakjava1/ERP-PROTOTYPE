@@ -9,25 +9,60 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<TabPane tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
+<TabPane prefHeight="500.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
    <tabs>
       <Tab text="Bestellungen">
          <content>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="900.0">
                 <children>
-                    <TextField fx:id="selectedOrder" layoutX="368.0" layoutY="339.0" prefHeight="25.0" prefWidth="85.0" promptText="select order" />
-                    <Button layoutX="59.0" layoutY="339.0" mnemonicParsing="false" onAction="#createOrder" text="Bestellung erstellen" />
-                    <Button fx:id="deleteOrderButton" layoutX="468.0" layoutY="339.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
-                  <TableView fx:id="table_openOrder" layoutX="7.0" prefHeight="322.0" prefWidth="585.0">
+                    <TextField fx:id="selectedOrder" layoutX="284.0" layoutY="339.0" prefHeight="25.0" prefWidth="85.0" promptText="select order" />
+                    <Button fx:id="deleteOrderButton" layoutX="382.0" layoutY="339.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
+                  <TableView fx:id="table_openOrder" layoutX="7.0" prefHeight="322.0" prefWidth="460.0">
                     <columns>
-                      <TableColumn fx:id="col_orderID" prefWidth="75.0" text="Nr" />
-                      <TableColumn prefWidth="98.0" text="Kundenname" />
-                        <TableColumn prefWidth="137.0" text="Anzahl Aufträge" />
-                        <TableColumn prefWidth="166.0" text="Anzahl Stück Gesamt" />
-                        <TableColumn prefWidth="108.0" text="Summe (Brutto)" />
+                      <TableColumn fx:id="col_orderID" prefWidth="30.0" text="Nr" />
+                      <TableColumn prefWidth="100.0" text="Kundenname" />
+                        <TableColumn prefWidth="100.0" text="Anzahl Aufträge" />
+                        <TableColumn prefWidth="130.0" text="Anzahl Stück Gesamt" />
+                        <TableColumn prefWidth="100.0" text="Summe (Brutto)" />
                     </columns>
                   </TableView>
+                  <Label layoutX="573.0" layoutY="14.0" text="Bestellung erstellen">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="511.0" layoutY="67.0" text="Name">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tf_order_customername" layoutX="706.0" layoutY="64.0" />
+                  <TextField fx:id="tf_order_customeraddress" layoutX="706.0" layoutY="103.0" />
+                  <TextField fx:id="tf_order_customerUID" layoutX="706.0" layoutY="140.0" />
+                  <Label layoutX="511.0" layoutY="106.0" text="Adresse">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="511.0" layoutY="143.0" text="Kunden UID">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="608.0" layoutY="197.0" mnemonicParsing="false" onAction="#addTaskToOrder" text="Aufträge hinzufügen" />
+                  <TableView fx:id="table_addedTask" layoutX="474.0" layoutY="239.0" prefHeight="150.0" prefWidth="425.0">
+                    <columns>
+                      <TableColumn prefWidth="35.0" text="Nr" />
+                      <TableColumn prefWidth="150.0" text="Bezeichnung" />
+                      <TableColumn prefWidth="60.0" text="Anzahl" />
+                      <TableColumn prefWidth="60.0" text="Stärke" />
+                      <TableColumn prefWidth="60.0" text="Breite" />
+                      <TableColumn prefWidth="60.0" text="Länge" />
+                    </columns>
+                  </TableView>
+                  <Button layoutX="603.0" layoutY="400.0" mnemonicParsing="false" onAction="#createOrder" text="Bestellung aufnehmen" />
                 </children>
             </AnchorPane>
          </content>
