@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 
@@ -18,5 +19,7 @@ public interface TaskService {
      * @return
      */
     List<Task> getAllOpenTasks();
+
+    Task validateTaskInput(UnvalidatedTask toValidate) throws InvalidInputException;
 
 }

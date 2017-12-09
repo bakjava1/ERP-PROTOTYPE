@@ -54,12 +54,12 @@
                   <Button layoutX="608.0" layoutY="197.0" mnemonicParsing="false" onAction="#addTaskToOrder" text="Aufträge hinzufügen" />
                   <TableView fx:id="table_addedTask" layoutX="474.0" layoutY="239.0" prefHeight="150.0" prefWidth="425.0">
                     <columns>
-                      <TableColumn prefWidth="35.0" text="Nr" />
-                      <TableColumn prefWidth="150.0" text="Bezeichnung" />
-                      <TableColumn prefWidth="60.0" text="Anzahl" />
-                      <TableColumn prefWidth="60.0" text="Stärke" />
-                      <TableColumn prefWidth="60.0" text="Breite" />
-                      <TableColumn prefWidth="60.0" text="Länge" />
+                      <TableColumn fx:id="col_taskNr" prefWidth="35.0" text="Nr" />
+                      <TableColumn fx:id="col_taskDescription" prefWidth="150.0" text="Bezeichnung" />
+                      <TableColumn fx:id="col_taskQuantity" prefWidth="60.0" text="Anzahl" />
+                      <TableColumn fx:id="col_taskSize" prefWidth="60.0" text="Stärke" />
+                      <TableColumn fx:id="col_taskWidth" prefWidth="60.0" text="Breite" />
+                      <TableColumn fx:id="col_taskLength" prefWidth="60.0" text="Länge" />
                     </columns>
                   </TableView>
                   <Button layoutX="603.0" layoutY="400.0" mnemonicParsing="false" onAction="#createOrder" text="Bestellung aufnehmen" />

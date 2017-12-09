@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.rest.entity;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
@@ -17,12 +18,15 @@ public class Order {
         this.id = -1;
         this.orderDate = null;
         this.isPaid = false;
+        this.taskList = new ArrayList<>();
     }
 
     public Order(int id, Timestamp orderDate) {
         this.id = id;
         this.orderDate = orderDate;
     }
+
+    public void addTask(Task toAdd) { taskList.add(toAdd); }
 
     public void setID(int id) {
         this.id = id;
