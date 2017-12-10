@@ -6,12 +6,12 @@ import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
  * Created by e0701149 on 20.11.17.
  */
+
 public class DBUtil {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -60,20 +60,4 @@ public class DBUtil {
             e.printStackTrace();
         }
     }
-
-    /* just for testing */
-    public static void dropTable(){
-        try {
-            PreparedStatement ps = getConnection().prepareStatement(
-                    "DROP TABLE LUMBER;"
-            );
-            ps.executeUpdate();
-            ps.close();
-
-        } catch (SQLException e) {
-            LOG.error("SQLException on createProduct");
-        }
-    }
-
-
 }

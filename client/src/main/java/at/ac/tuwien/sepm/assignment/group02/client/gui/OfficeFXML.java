@@ -1,31 +1,30 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
-import static at.ac.tuwien.sepm.assignment.group02.client.MainApplication.orderService;
-import static at.ac.tuwien.sepm.assignment.group02.client.MainApplication.timberService;
-
-
+@Controller
 public class OfficeFXML {
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -50,6 +49,16 @@ public class OfficeFXML {
     @FXML
     TableView<Order> table_openOrder;
 
+    private OrderService orderService;
+    private TimberService timberService;
+
+    @Autowired
+    public OfficeFXML(OrderService orderService, TimberService timberService){
+        this.orderService = orderService;
+        this.timberService = timberService;
+    }
+
+
     @FXML
     void initialize() {
         col_orderID.setCellValueFactory(new PropertyValueFactory("ID"));
@@ -69,7 +78,9 @@ public class OfficeFXML {
         try {
             orderService.deleteOrder(order);
         } catch (InvalidInputException e) {
-            e.printStackTrace();
+            LOG.warn(e.getMessage());
+        } catch (ServiceLayerException e) {
+            LOG.warn(e.getMessage());
         }
 
         updateTable();
@@ -87,12 +98,14 @@ public class OfficeFXML {
             success.setContentText("Order created successfully!");
             success.showAndWait();
         } catch (InvalidInputException e) {
-            e.printStackTrace();
+            LOG.warn(e.getMessage());
             Alert error = new Alert(Alert.AlertType.ERROR);
             error.setTitle("Creation failed");
             error.setHeaderText(null);
             error.setContentText("Order Creation failed!");
             error.showAndWait();
+        } catch (ServiceLayerException e) {
+            LOG.warn(e.getMessage());
         }
 
         updateTable();
@@ -101,7 +114,12 @@ public class OfficeFXML {
 
     private void updateTable() {
 
-        List<Order> allOpen = orderService.getAllOpen();
+        List<Order> allOpen = null;
+        try {
+            allOpen = orderService.getAllOpen();
+        } catch (ServiceLayerException e) {
+            LOG.warn(e.getMessage());
+        }
 
         if (allOpen != null) {
             ObservableList<Order> openOrderForTable = FXCollections.observableArrayList();
@@ -126,6 +144,8 @@ public class OfficeFXML {
             timberService.addTimber(timber);
         } catch (InvalidInputException e) {
             LOG.error("Invalid Input Error: " + e.getMessage());
+        } catch (ServiceLayerException e) {
+            LOG.warn(e.getMessage());
         }
     }
 

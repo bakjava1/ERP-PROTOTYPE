@@ -1,59 +1,60 @@
 package at.ac.tuwien.sepm.assignment.group02.client;
 
-import at.ac.tuwien.sepm.assignment.group02.client.gui.*;
-import at.ac.tuwien.sepm.assignment.group02.client.service.*;
+import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_SpringFXMLLoader;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.lang.invoke.MethodHandles;
 
-public final class MainApplication extends Application {
+@SpringBootApplication
+@ComponentScan(basePackages = {"at.ac.tuwien.sepm.assignment.group02.client", "at.ac.tuwien.sepm.assignment.group02.rest"})
+public class MainApplication extends Application {
 
-    public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static LumberService lumberService = new LumberServiceImpl();
-    public static OrderService orderService = new OrderServiceImpl();
-    public static TimberService timberService = new TimberServiceImpl();
+    private static boolean crane = false;
+    private static boolean lead = false;
+    private static boolean office = false;
 
-    public static boolean crane = false;
-    public static boolean lead = false;
-    public static boolean office = false;
+    private AnnotationConfigApplicationContext context;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        // setup application
-        primaryStage.centerOnScreen();
-        primaryStage.setOnCloseRequest(event -> LOG.debug("Application shutdown initiated"));
+        context = new AnnotationConfigApplicationContext();
+        context.getBeanFactory().registerSingleton("primaryStage", primaryStage);
+        context.scan("at.ac.tuwien.sepm.assignment.group02.client");
+        context.refresh();
+        context.start();
 
         // initiate controller, prepare fxml loader to inject controller
-        FXMLLoader fxmlLoader = null;
-        LeadWorkerFXML leadWorkerFXML = new LeadWorkerFXML();
-        OfficeFXML officeFXML = new OfficeFXML();
-        CraneOperatorFXML craneOperatorFXML = new CraneOperatorFXML();
+        ExampleQSE_SpringFXMLLoader fxmlLoader = context.getBean(ExampleQSE_SpringFXMLLoader.class);
 
         if(lead) {
             primaryStage.setTitle("Lead Worker");
-            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/lead.fxml"));
-            fxmlLoader.setControllerFactory(param -> param.isInstance(leadWorkerFXML) ? leadWorkerFXML : null);
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/lead.fxml"), 640, 480));
+
         }
         if(office) {
             primaryStage.setTitle("Office");
-            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/office.fxml"));
-            fxmlLoader.setControllerFactory(param -> param.isInstance(officeFXML) ? officeFXML : null);
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/office.fxml"), 640, 480));
         }
         if(crane) {
             primaryStage.setTitle("Crane Operator");
-            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/crane.fxml"));
-            fxmlLoader.setControllerFactory(param -> param.isInstance(craneOperatorFXML) ? craneOperatorFXML : null);
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/crane.fxml"), 640, 480));
         }
 
-        primaryStage.setScene(new Scene(fxmlLoader.load()));
-        officeFXML.initStage();
+        primaryStage.centerOnScreen();
+        primaryStage.setOnCloseRequest(event -> LOG.debug("Application shutdown initiated"));
+
         // show application
         primaryStage.show();
         primaryStage.toFront();
@@ -82,6 +83,7 @@ public final class MainApplication extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
+        context.stop();
         LOG.debug("stop application");
     }
 }
