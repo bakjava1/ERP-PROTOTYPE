@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,6 +24,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 import static at.ac.tuwien.sepm.assignment.group02.client.MainApplication.orderService;
+//import static at.ac.tuwien.sepm.assignment.group02.client.MainApplication.taskService;
 import static at.ac.tuwien.sepm.assignment.group02.client.MainApplication.timberService;
 
 
@@ -66,8 +68,12 @@ public class OfficeFXML {
         Order order = new Order();
         order.setID(selectedOrderID);
 
+        Task task = new Task();
+        task.setOrderID(selectedOrderID);
+
         try {
             orderService.deleteOrder(order);
+            //taskService.deleteTask(task);
         } catch (InvalidInputException e) {
             e.printStackTrace();
         }

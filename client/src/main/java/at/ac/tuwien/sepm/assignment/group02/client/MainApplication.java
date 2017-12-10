@@ -17,6 +17,7 @@ public final class MainApplication extends Application {
 
     public static LumberService lumberService = new LumberServiceImpl();
     public static OrderService orderService = new OrderServiceImpl();
+    //public static TaskService taskService = new TaskServiceImpl();
     public static TimberService timberService = new TimberServiceImpl();
 
     public static boolean crane = false;
