@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 
 import java.util.List;
 
@@ -14,16 +15,16 @@ public interface AssignmentService {
      * 2.4.4
      * This method creates a new assignment for the crane operator
      */
-    void createAssignment(AssignmentDTO assignmentDTO);
+    void addAssignment(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 
     /**
      * 3.1.2 Alle nicht erledigten Aufgaben anfordern.
      */
-    List<AssignmentDTO> getAllOpenAssignments();
+    List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 
     /**
      * 3.2.2 Aufgabe als erledigt markieren.
      */
-    void setDone(AssignmentDTO assignmentDTO);
+    void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 
 }

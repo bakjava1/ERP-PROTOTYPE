@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-
     <timestamp key="byDay" datePattern="yyyy-MM-dd"/>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>./logs/smartholz-client-${byDay}.log</file>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy−MM−dd HH:mm:ss} %level [%thread] [%file:%line] %msg%n</pattern>
         </encoder>
     </appender>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>client/logs/smartholz-client-${byDay}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>application-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy−MM−dd HH:mm:ss} %level [%thread] [%file:%line] %msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="ALL">
-        <appender-ref ref="FILE" />
-        <appender-ref ref="STDOUT" />
+    <logger name="org.springframework" level="DEBUG"/>
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ROLLING_FILE"/>
     </root>
 
 </configuration>

@@ -3,7 +3,9 @@ package at.ac.tuwien.sepm.assignment.group02.rest.converter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderConverter implements SimpleConverter<Order, OrderDTO> {
 
     @Override

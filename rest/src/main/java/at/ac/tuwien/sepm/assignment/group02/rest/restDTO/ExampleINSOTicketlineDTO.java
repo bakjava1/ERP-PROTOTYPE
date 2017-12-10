@@ -1,4 +1,4 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.restDTO;
+/*package at.ac.tuwien.sepm.assignment.group02.rest.restDTO;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -126,3 +126,4 @@ public class ExampleINSOTicketlineDTO {
         }
     }
 }
+*/

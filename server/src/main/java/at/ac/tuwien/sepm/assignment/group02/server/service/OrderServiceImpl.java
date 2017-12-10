@@ -3,23 +3,28 @@ package at.ac.tuwien.sepm.assignment.group02.server.service;
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceDatabaseException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class OrderServiceImpl implements OrderService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static OrderDAO orderManagementDAO;
-    private static OrderConverter orderConverter = new OrderConverter();
+    private static OrderConverter orderConverter;
 
-    public OrderServiceImpl(OrderDAO orderManagementDAO) {
+    @Autowired
+    public OrderServiceImpl(OrderDAO orderManagementDAO, OrderConverter orderConverter) {
         OrderServiceImpl.orderManagementDAO = orderManagementDAO;
+        OrderServiceImpl.orderConverter = orderConverter;
     }
 
 
@@ -28,19 +33,19 @@ public class OrderServiceImpl implements OrderService {
         Order orderToDelete = orderConverter.convertRestDTOToPlainObject(orderDTO);
         try {
             orderManagementDAO.deleteOrder(orderToDelete);
-        } catch (PersistenceLevelException e) {
+        } catch (PersistenceLayerException e) {
             LOG.error("Error while deleting an order");
         }
     }
 
     @Override
-    public void createOrder(OrderDTO orderDTO) throws ServiceDatabaseException{
+    public void createOrder(OrderDTO orderDTO) throws ServiceLayerException {
         Order order = orderConverter.convertRestDTOToPlainObject(orderDTO);
         try{
             orderManagementDAO.createOrder(order);
-        } catch(PersistenceLevelException e) {
+        } catch(PersistenceLayerException e) {
             LOG.error("Error while trying to create Object in Database");
-            throw new ServiceDatabaseException("Failed Persistenz");
+            throw new ServiceLayerException("Failed Persistenz");
         }
     }
 
@@ -53,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
         try{
             allOpen = orderManagementDAO.getAllOpen();
 
-        } catch(PersistenceLevelException e) {
+        } catch(PersistenceLayerException e) {
             LOG.error("Error while trying to get objects from Database");
         }
 

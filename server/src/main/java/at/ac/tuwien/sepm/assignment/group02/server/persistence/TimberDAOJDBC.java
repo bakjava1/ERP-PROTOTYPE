@@ -3,17 +3,24 @@ package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+@Component
 public class TimberDAOJDBC implements TimberDAO{
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Connection dbConnection;
 
+    @Autowired
     public TimberDAOJDBC(Connection dbConnection) {
-        this.dbConnection = dbConnection;
+        TimberDAOJDBC.dbConnection = dbConnection;
     }
 
     @Override
@@ -45,7 +52,7 @@ public class TimberDAOJDBC implements TimberDAO{
 
             LOG.error("SQL Exception: " + e.getMessage());
 
-            //throw new PersistenceLevelException("Database Error");
+            //throw new PersistenceLayerException("Database Error");
 
         }
         finally {

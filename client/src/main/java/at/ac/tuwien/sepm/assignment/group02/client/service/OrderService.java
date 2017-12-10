@@ -1,13 +1,15 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 
 import java.util.List;
 
 /**
- * OrderDTO Management (Bestellungen/Rechnungen)
+ * CONVERSION HAPPENS ON THIS LAYER
+ * VALIDATION HAPPENS ON THIS LAYER
  */
 public interface OrderService {
 
@@ -18,7 +20,7 @@ public interface OrderService {
      * und Verbindung zu Bestellung (relationale Datenbank)
      * @param order
      */
-    void addOrder(Order order, List<Task> tasks) throws InvalidInputException;
+    void addOrder(Order order, List<Task> tasks) throws InvalidInputException, ServiceLayerException;
 
     /**
      * 1.2 Bestellung löschen
@@ -26,13 +28,13 @@ public interface OrderService {
      * 1.2.2 (rest/OrderController) Bestehende Bestellung löschen
      * @param order
      */
-    void deleteOrder(Order order) throws InvalidInputException;
+    void deleteOrder(Order order) throws InvalidInputException, ServiceLayerException;
 
     /**
      * 1.3 Übersicht Bestellungen
      * @return
      */
-    List<Order> getAllOpen();
+    List<Order> getAllOpen() throws ServiceLayerException;
 
     /**
      * 1.4 Abrechnen von Bestellung
@@ -40,14 +42,14 @@ public interface OrderService {
      * 1.4.3 (rest/LumberController) Schnittholz aus dem Schnittholzlager entfernen.
      * @param order
      */
-    void closeOrder(Order order) throws InvalidInputException;
+    void closeOrder(Order order) throws InvalidInputException, ServiceLayerException;
 
     /**
      * 1.5 Übersicht Rechnungen
      * (rest/OrderController)
      * @return
      */
-    List<Order> getAllClosed();
+    List<Order> getAllClosed() throws ServiceLayerException;
 
     /**
      * 1.6 Detailansicht Rechnungen
@@ -55,6 +57,6 @@ public interface OrderService {
      * @param order_id
      * @return
      */
-    Order getReceiptById(int order_id) throws InvalidInputException;
+    Order getReceiptById(int order_id) throws InvalidInputException, ServiceLayerException;
 
 }

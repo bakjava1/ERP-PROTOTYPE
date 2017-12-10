@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 
 public interface TimberDAO {
 
@@ -10,13 +10,13 @@ public interface TimberDAO {
      * This method creates new round timber on persistence level.
      * @param timber Timber entity to create
      */
-    void createTimber(Timber timber) throws PersistenceLevelException;
+    void createTimber(Timber timber) throws PersistenceLayerException;
 
     /**
      * 3.2.3
      * This method updates a round timber record.
      * @param timber the updated round timber entity
      */
-    void updateTimber(Timber timber) throws PersistenceLevelException;
+    void updateTimber(Timber timber) throws PersistenceLayerException;
 
 }

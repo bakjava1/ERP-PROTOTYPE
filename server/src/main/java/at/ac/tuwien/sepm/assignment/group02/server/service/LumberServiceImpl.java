@@ -3,22 +3,27 @@ package at.ac.tuwien.sepm.assignment.group02.server.service;
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+@Service
 public class LumberServiceImpl implements LumberService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     private static LumberDAO lumberManagementDAO;
-    private static LumberConverter lumberConverter = new LumberConverter();
+    private static LumberConverter lumberConverter;
 
-    public LumberServiceImpl(LumberDAO lumberManagementDAO){
-
+    @Autowired
+    public LumberServiceImpl(LumberDAO lumberManagementDAO, LumberConverter lumberConverter){
         LumberServiceImpl.lumberManagementDAO = lumberManagementDAO;
+        LumberServiceImpl.lumberConverter = lumberConverter;
     }
 
 
@@ -27,7 +32,7 @@ public class LumberServiceImpl implements LumberService {
 
         try {
             return lumberConverter.convertPlainObjectToRestDTO(lumberManagementDAO.readLumberById(id));
-        } catch (PersistenceLevelException e) {
+        } catch (PersistenceLayerException e) {
             LOG.warn("helloWorldLumber Persistence Exception: {}",e.getMessage());
         }
 
@@ -55,7 +60,7 @@ public class LumberServiceImpl implements LumberService {
 
         try {
             lumberManagementDAO.createLumber(lumberConverter.convertRestDTOToPlainObject(lumberDTO));
-        } catch (PersistenceLevelException e) {
+        } catch (PersistenceLayerException e) {
             LOG.warn("helloWorldLumber Persistence Exception: {}",e.getMessage());
         }
 
