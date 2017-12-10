@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.EmptyInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.NoValidIntegerException;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,27 @@ import java.lang.invoke.MethodHandles;
 public class Validator {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    public void inputValidationOrder(Order toValidate) throws InvalidInputException {
+        try {
+            validateText(toValidate.getCustomerName());
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Customer Name: " + e.getMessage());
+            throw new InvalidInputException("Error at Customer Name: " + e.getMessage());
+        }
+        try {
+            validateText(toValidate.getCustomerAddress());
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Customer Address: " + e.getMessage());
+            throw new InvalidInputException("Error at Customer Address: " + e.getMessage());
+        }
+        try {
+            validateText(toValidate.getCustomerUID());
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Customer UID: " + e.getMessage());
+            throw new InvalidInputException("Error at Customer UID: " + e.getMessage());
+        }
+    }
 
     public Task inputValidationTask(UnvalidatedTask toValidate) throws InvalidInputException {
         try {

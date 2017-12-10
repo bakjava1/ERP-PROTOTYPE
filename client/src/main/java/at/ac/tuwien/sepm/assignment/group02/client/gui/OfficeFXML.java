@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,7 @@ public class OfficeFXML {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Order currentOrder = new Order();
+    private static List<Task> currentOrderTaskList = new ArrayList<>();
     private static int currentOrderIndex = 1;
 
     @FXML
@@ -146,12 +148,24 @@ public class OfficeFXML {
     @FXML
     public void createOrder(ActionEvent actionEvent) {
         LOG.info("createOrder called");
+        if(currentOrderTaskList.size() == 0) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("No Tasks added");
+            error.setHeaderText(null);
+            error.setContentText("There is not Task added to the Order");
+            error.showAndWait();
+            return;
+        }
         currentOrder.setCustomerName(tf_order_customername.getText());
         currentOrder.setCustomerAddress(tf_order_customeraddress.getText());
         currentOrder.setCustomerUID(tf_order_customerUID.getText());
         LOG.debug(currentOrder.toString());
-        /*try {
-            orderService.addOrder(newOrder,null);
+        try {
+            orderService.addOrder(currentOrder,currentOrderTaskList);
+            ObservableList<Task> orderTasks = FXCollections.observableArrayList();
+            table_addedTask.setItems(orderTasks);
+            currentOrder = new Order();
+            currentOrderTaskList = new ArrayList<>();
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setTitle("Creation successful");
             success.setHeaderText(null);
@@ -164,7 +178,7 @@ public class OfficeFXML {
             error.setHeaderText(null);
             error.setContentText("Order Creation failed!");
             error.showAndWait();
-        }*/
+        }
 
         updateTable();
     }
@@ -284,6 +298,7 @@ public class OfficeFXML {
                 Task toAdd = taskService.validateTaskInput(results);
                 toAdd.setId(currentOrderIndex);
                 currentOrderIndex++;
+                currentOrderTaskList.add(toAdd);
                 table_addedTask.getItems().add(toAdd);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Successfully created Task");

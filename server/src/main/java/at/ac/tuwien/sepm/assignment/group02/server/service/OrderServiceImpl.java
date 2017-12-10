@@ -1,8 +1,11 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
+import at.ac.tuwien.sepm.assignment.group02.rest.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceDatabaseException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
@@ -17,6 +20,7 @@ public class OrderServiceImpl implements OrderService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static OrderDAO orderManagementDAO;
     private static OrderConverter orderConverter = new OrderConverter();
+    private static TaskConverter taskConverter = new TaskConverter();
 
     public OrderServiceImpl(OrderDAO orderManagementDAO) {
         OrderServiceImpl.orderManagementDAO = orderManagementDAO;
@@ -35,7 +39,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void createOrder(OrderDTO orderDTO) throws ServiceDatabaseException{
+        List<TaskDTO> toConvert = orderDTO.getTaskList();
+        List<Task> converted = new ArrayList<>();
+        orderDTO.setTaskList(null);
         Order order = orderConverter.convertRestDTOToPlainObject(orderDTO);
+        for(int i  = 0; i < toConvert.size();i++) {
+            converted.add(taskConverter.convertRestDTOToPlainObject(toConvert.get(i)));
+        }
+        order.setTaskList(converted);
         try{
             orderManagementDAO.createOrder(order);
         } catch(PersistenceLevelException e) {
