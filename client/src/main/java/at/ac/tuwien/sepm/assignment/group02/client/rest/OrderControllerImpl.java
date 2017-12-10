@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 public class OrderControllerImpl implements OrderController {
-
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private RestTemplate restTemplate;

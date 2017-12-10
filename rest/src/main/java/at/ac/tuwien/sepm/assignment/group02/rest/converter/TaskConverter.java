@@ -3,7 +3,9 @@ package at.ac.tuwien.sepm.assignment.group02.rest.converter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TaskConverter implements SimpleConverter<Task, TaskDTO> {
 
     @Override

@@ -18,7 +18,6 @@ import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static OrderController orderController;

@@ -40,7 +40,7 @@ public class LumberDAOJDBC implements LumberDAO {
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,lumber.getContent());
+            ps.setString(1,lumber.getDescription());
             ps.executeUpdate();
 
             ResultSet generatedKey = ps.getGeneratedKeys();
@@ -64,7 +64,7 @@ public class LumberDAOJDBC implements LumberDAO {
                 "ID, NAME " +
                 "FROM LUMBER WHERE ID = ? LIMIT 1";
 
-        Lumber lumber = new Lumber(id,"");
+        Lumber lumber = new Lumber();
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(readSQL);
@@ -74,7 +74,7 @@ public class LumberDAOJDBC implements LumberDAO {
 
             rs.next();
             lumber.setId(rs.getInt(1));
-            lumber.setContent(rs.getString(2));
+            lumber.setDescription(rs.getString(2));
             rs.close();
             ps.close();
 
