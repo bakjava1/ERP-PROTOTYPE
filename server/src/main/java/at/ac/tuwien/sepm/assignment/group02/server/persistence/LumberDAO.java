@@ -22,6 +22,7 @@ public interface LumberDAO {
      * 2.2.2 & 3.2.5 Schnittholz als reserviert markieren.
      */
     void updateLumber(Lumber lumber) throws PersistenceLevelException;
+
     void deleteLumber(int id) throws PersistenceLevelException;
 
     /**
