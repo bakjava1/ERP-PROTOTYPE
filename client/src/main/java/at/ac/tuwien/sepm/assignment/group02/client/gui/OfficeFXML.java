@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.gui;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
@@ -36,9 +37,6 @@ public class OfficeFXML {
     private Tab tab_order;
 
     @FXML
-    private TextField selectedOrder;
-
-    @FXML
     private TextField tf_timber_amount;
 
     @FXML
@@ -52,17 +50,20 @@ public class OfficeFXML {
 
     private OrderService orderService;
     private TimberService timberService;
+    private TaskService taskService;
 
     @Autowired
-    public OfficeFXML(OrderService orderService, TimberService timberService){
+    public OfficeFXML(OrderService orderService, TimberService timberService, TaskService taskService){
         this.orderService = orderService;
         this.timberService = timberService;
+        this.taskService = taskService;
     }
 
 
     @FXML
     void initialize() {
         col_orderID.setCellValueFactory(new PropertyValueFactory("ID"));
+        table_openOrder.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         updateTable();
     }
@@ -71,17 +72,16 @@ public class OfficeFXML {
     public void deleteOrder() {
         LOG.trace("called deleteOrder");
 
-        //TODO create order correctly and use orderDTO for REST
-        int selectedOrderID = Integer.parseInt(selectedOrder.getText());
         Order order = new Order();
-        order.setID(selectedOrderID);
+        order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
+        System.out.println(order.getID());
 
         Task task = new Task();
-        task.setOrderID(selectedOrderID);
+        task.setOrderID(order.getID());
 
         try {
             orderService.deleteOrder(order);
-            //taskService.deleteTask(task);
+            taskService.deleteTask(task);
         } catch (InvalidInputException e) {
             LOG.warn(e.getMessage());
         } catch (ServiceLayerException e) {

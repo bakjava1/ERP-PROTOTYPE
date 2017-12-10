@@ -16,7 +16,6 @@
          <content>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
                 <children>
-                    <TextField fx:id="selectedOrder" layoutX="368.0" layoutY="339.0" prefHeight="25.0" prefWidth="85.0" promptText="select order" />
                     <Button layoutX="59.0" layoutY="339.0" mnemonicParsing="false" onAction="#createOrder" text="Bestellung erstellen" />
                     <Button fx:id="deleteOrderButton" layoutX="468.0" layoutY="339.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
                   <TableView fx:id="table_openOrder" layoutX="7.0" prefHeight="322.0" prefWidth="585.0">
