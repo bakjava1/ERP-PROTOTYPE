@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,5 +55,12 @@ public class TimberControllerImpl implements TimberController {
         return restTemplate.getForObject(
                 "http://localhost:8080/getTimberbyId/{id}",
                 TimberDTO.class, id);
+    }
+
+    @Override
+    public int getNumberOfBoxes() throws PersistenceLayerException {
+        LOG.debug("called getNumberOfBoxes");
+
+        return restTemplate.getForObject("http://localhost:8080/getNumberOfBoxes", Integer.class);
     }
 }

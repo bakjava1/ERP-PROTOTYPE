@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.server.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityCreationException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TimberService;
 import org.slf4j.Logger;
@@ -45,7 +46,20 @@ public class TimberControllerImpl {
 
     }
 
+
+
     public TimberDTO getTimberById(int timber_id) {
         return null;
+    }
+
+    @RequestMapping(value="/getNumberOfBoxes",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public int getNumberOfBoxes() throws EntityNotFoundException{
+        LOG.debug("Trying return number of boxes");
+
+        try {
+            return timberService.numberOfBoxes();
+        } catch (ServiceLayerException e) {
+            throw new EntityNotFoundException("failed to return number of boxes");
+        }
     }
 }

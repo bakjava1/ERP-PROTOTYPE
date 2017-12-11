@@ -21,4 +21,11 @@ public interface TimberController {
     void deleteTimber(TimberDTO timberDTO) throws PersistenceLayerException;
 
     TimberDTO getTimberById(int timber_id) throws PersistenceLayerException;
+
+    /**
+     * This method returns the number of boxes currently existing.
+     * @return number of boxes
+     * @throws PersistenceLayerException
+     */
+    int getNumberOfBoxes() throws PersistenceLayerException;
 }

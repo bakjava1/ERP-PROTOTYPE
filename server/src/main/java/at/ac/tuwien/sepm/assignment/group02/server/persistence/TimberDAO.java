@@ -19,4 +19,11 @@ public interface TimberDAO {
      */
     void updateTimber(Timber timber) throws PersistenceLayerException;
 
+    /**
+     * This method returns the number of boxes currently existing in the database.
+     * @return number of boxes
+     * @throws PersistenceLayerException
+     */
+    int getNumberOfBoxes() throws PersistenceLayerException;
+
 }

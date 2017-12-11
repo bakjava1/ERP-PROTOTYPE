@@ -1,10 +1,10 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.rest.SchnittholzController;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.SchnittholzControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Schnittholz;
-import at.ac.tuwien.sepm.assignment.group02.rest.restController.SchnittholzController;
 
 import java.util.List;
 

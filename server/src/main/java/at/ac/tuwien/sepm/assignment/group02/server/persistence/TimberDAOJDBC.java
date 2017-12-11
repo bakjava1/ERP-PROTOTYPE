@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ public class TimberDAOJDBC implements TimberDAO{
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Connection dbConnection;
+    private PreparedStatement stmt = null;
+    private ResultSet rs = null;
 
     @Autowired
     public TimberDAOJDBC(Connection dbConnection) {
@@ -24,13 +27,12 @@ public class TimberDAOJDBC implements TimberDAO{
     }
 
     @Override
-    public void createTimber(Timber timber) {
+    public void createTimber(Timber timber) throws PersistenceLayerException {
         LOG.debug("Creating new Timber");
 
         String selectSentence = "SELECT AMOUNT FROM TIMBER WHERE ID = ?";
         String updateSentence = "UPDATE TIMBER SET AMOUNT=? WHERE ID = ?";
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+
         try{
             stmt = dbConnection.prepareStatement(selectSentence);
             stmt.setInt(1, timber.getBox_id());
@@ -40,7 +42,6 @@ public class TimberDAOJDBC implements TimberDAO{
             int currentAmount = rs.getInt(1);
 
             int newAmount = currentAmount + timber.getAmount();
-            System.out.println("the new amount is " + newAmount);
 
             stmt = dbConnection.prepareStatement(updateSentence);
             stmt.setInt(1, newAmount);
@@ -49,19 +50,12 @@ public class TimberDAOJDBC implements TimberDAO{
 
 
         } catch(SQLException e) {
-
             LOG.error("SQL Exception: " + e.getMessage());
-
-            //throw new PersistenceLayerException("Database Error");
+            throw new PersistenceLayerException("Database Error");
 
         }
         finally {
-            try {
-                stmt.close();
-                rs.close();
-            } catch (SQLException e) {
-                LOG.error("SQL Exception: " + e.getMessage());
-            }
+            closeStatement();
         }
 
     }
@@ -69,5 +63,35 @@ public class TimberDAOJDBC implements TimberDAO{
     @Override
     public void updateTimber(Timber timber){
 
+    }
+
+    @Override
+    public int getNumberOfBoxes() throws PersistenceLayerException {
+        int numberOfBoxes = 0;
+        String countSentence = "SELECT COUNT(*) FROM TIMBER";
+
+        try {
+            stmt = dbConnection.prepareStatement(countSentence);
+            rs = stmt.executeQuery();
+            rs.next();
+            numberOfBoxes = rs.getInt(1);
+        } catch (SQLException e) {
+            LOG.error("SQL Exception: " + e.getMessage());
+            throw new PersistenceLayerException("Database Error");
+        }
+        finally {
+            closeStatement();
+        }
+        return numberOfBoxes;
+    }
+
+    private void closeStatement() throws PersistenceLayerException {
+        try {
+            stmt.close();
+            rs.close();
+        } catch (SQLException e) {
+            LOG.error("SQL Exception: " + e.getMessage());
+            throw new PersistenceLayerException("Database Error");
+        }
     }
 }

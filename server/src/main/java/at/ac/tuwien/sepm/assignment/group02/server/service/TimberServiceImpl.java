@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.rest.converter.TimberConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TimberDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class TimberServiceImpl implements TimberService{
 
 
     @Override
-    public void addTimber(TimberDTO timberDTO) {
+    public void addTimber(TimberDTO timberDTO) throws ServiceLayerException {
 
         Timber timber = timberConverter.convertRestDTOToPlainObject(timberDTO);
 
@@ -36,13 +37,23 @@ public class TimberServiceImpl implements TimberService{
             timberManagementDAO.createTimber(timber);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while trying to create Object in Database");
-            //throw new ServiceDatabaseException("Failed Persistenz");
-
+            throw new ServiceLayerException("Failed Persistence");
         }
     }
 
     @Override
     public void updateTimber(TimberDTO timberDTO) {
 
+    }
+
+    @Override
+    public int numberOfBoxes() throws ServiceLayerException {
+        try {
+            return timberManagementDAO.getNumberOfBoxes();
+        } catch (PersistenceLayerException e) {
+            LOG.error("Error while trying to get Number of Boxes");
+            throw new ServiceLayerException("Failed Persistence");
+
+        }
     }
 }

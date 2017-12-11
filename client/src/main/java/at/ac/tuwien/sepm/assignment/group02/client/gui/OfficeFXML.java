@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputExcept
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
+import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_AlertBuilder;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
 import javafx.beans.value.ChangeListener;
@@ -62,7 +63,7 @@ public class OfficeFXML {
     @FXML
     void initialize() {
         col_orderID.setCellValueFactory(new PropertyValueFactory("ID"));
-
+        initTimberTab();
         updateTable();
     }
 
@@ -139,19 +140,42 @@ public class OfficeFXML {
     @FXML
     public void addTimber(ActionEvent actionEvent){
         //TODO catch exception (InvalidInputException by Lucia)
-        Timber timber = new Timber(cb_timber_box.getSelectionModel().getSelectedIndex()+1, Integer.parseInt(tf_timber_amount.getText()));
-        try {
-            timberService.addTimber(timber);
-        } catch (InvalidInputException e) {
-            LOG.error("Invalid Input Error: " + e.getMessage());
-        } catch (ServiceLayerException e) {
-            LOG.warn(e.getMessage());
+        if(tf_timber_amount.getText().isEmpty() || cb_timber_box.getSelectionModel().getSelectedIndex()==-1){
+            LOG.error("No Input");
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Input Error");
+            alert.setHeaderText("No Input");
+            alert.setContentText("Please use only valid input!");
+            alert.showAndWait();
+        }
+        else{
+            int tes = cb_timber_box.getSelectionModel().getSelectedIndex();
+            Timber timber = new Timber(cb_timber_box.getSelectionModel().getSelectedIndex()+1, Integer.parseInt(tf_timber_amount.getText()));
+            try {
+                timberService.addTimber(timber);
+            } catch (InvalidInputException e) {
+                LOG.error("Invalid Input Error: " + e.getMessage());
+            } catch (ServiceLayerException e) {
+                LOG.warn(e.getMessage());
+            }
         }
     }
 
-    //initialize the gui
-    public void initStage() {
-        cb_timber_box.setItems(FXCollections.observableArrayList("Box 1", "Box 2"));
+    //initialize the timberTab
+    public void initTimberTab() {
+        ObservableList<String> boxes = FXCollections.observableArrayList();
+        int numberOfBoxes = 0;
+        try {
+            numberOfBoxes = timberService.getNumberOfBoxes();
+        } catch (ServiceLayerException e) {
+            LOG.warn(e.getMessage());
+        }
+        for(int i=0; i<numberOfBoxes; i++){
+            boxes.add("Box " + (i+1));
+        }
+
+        cb_timber_box.setItems(boxes);
         // force the field to be numeric only
         tf_timber_amount.textProperty().addListener(new ChangeListener<String>() {
             @Override

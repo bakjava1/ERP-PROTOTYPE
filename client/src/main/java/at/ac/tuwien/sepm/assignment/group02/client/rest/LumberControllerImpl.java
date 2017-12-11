@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.restController.LumberController;
+
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import org.slf4j.Logger;

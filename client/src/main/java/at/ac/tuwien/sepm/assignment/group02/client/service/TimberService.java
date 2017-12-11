@@ -22,4 +22,11 @@ public interface TimberService {
      */
     void addTimber(Timber timber) throws InvalidInputException, ServiceLayerException;
 
+
+    /**
+     * This method returns the number of boxes currently existing.
+     * @return number of boxes
+     * @throws ServiceLayerException
+     */
+    int getNumberOfBoxes() throws ServiceLayerException;
 }

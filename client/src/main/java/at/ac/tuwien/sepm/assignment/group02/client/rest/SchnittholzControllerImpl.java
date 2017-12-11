@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityCreationException;
-import at.ac.tuwien.sepm.assignment.group02.rest.restController.SchnittholzController;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.SchnittholzDTO;
 import org.slf4j.Logger;
@@ -18,32 +17,32 @@ public class SchnittholzControllerImpl implements SchnittholzController{
 
 
     @Override
-    public void createSchnittholz(SchnittholzDTO schnittholzDTO) throws EntityCreationException {
+    public void createSchnittholz(SchnittholzDTO schnittholzDTO) throws PersistenceLayerException {
 
     }
 
     @Override
-    public void removeSchnittholz(SchnittholzDTO schnittholzDTO) throws EntityCreationException {
+    public void removeSchnittholz(SchnittholzDTO schnittholzDTO) throws PersistenceLayerException {
 
     }
 
     @Override
-    public void rserveSchnittholz(SchnittholzDTO schnittholzDTO) throws EntityCreationException {
+    public void rserveSchnittholz(SchnittholzDTO schnittholzDTO) throws PersistenceLayerException {
 
     }
 
     @Override
-    public void updateSchnittholz(SchnittholzDTO schnittholzDTO) throws EntityCreationException {
+    public void updateSchnittholz(SchnittholzDTO schnittholzDTO) throws PersistenceLayerException {
 
     }
 
     @Override
-    public List<SchnittholzDTO> getAllSchnittholz(FilterDTO filterDTO) throws EntityCreationException {
+    public List<SchnittholzDTO> getAllSchnittholz(FilterDTO filterDTO) throws PersistenceLayerException {
         return null;
     }
 
     @Override
-    public SchnittholzDTO getSchnittholzByID(int schnittID) throws EntityCreationException {
+    public SchnittholzDTO getSchnittholzByID(int schnittID) throws PersistenceLayerException {
         return null;
     }
 }
