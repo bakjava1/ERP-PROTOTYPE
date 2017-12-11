@@ -166,6 +166,9 @@ public class OfficeFXML {
             table_addedTask.setItems(orderTasks);
             currentOrder = new Order();
             currentOrderTaskList = new ArrayList<>();
+            tf_order_customername.setText("");
+            tf_order_customeraddress.setText("");
+            tf_order_customerUID.setText("");
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setTitle("Creation successful");
             success.setHeaderText(null);

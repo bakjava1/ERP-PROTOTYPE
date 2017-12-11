@@ -19,6 +19,7 @@ public class MainApplication {
     public static LumberService lumberService = new LumberServiceImpl(new LumberDAOJDBC(DBUtil.getConnection()));
     public static OrderService orderService = new OrderServiceImpl(new OrderDAOJDBC(DBUtil.getConnection()));
     public static TimberService timberService = new TimberServiceImpl(new TimberDAOJDBC(DBUtil.getConnection()));
+    public static TaskService taskService = new TaskServiceImpl(new TaskDAOJDBC(DBUtil.getConnection()));
 
     /**
      * Main method begins execution of Java application

@@ -27,7 +27,6 @@ public class OrderControllerImpl implements OrderController {
     @Override
     public void createOrder(@RequestBody OrderDTO orderDTO) throws EntityCreationException {
         LOG.debug("Sending request for Order Creation to Server");
-        System.out.println("TEST");
         try {
             restTemplate.postForObject("http://localhost:8080/createOrder", orderDTO, OrderDTO.class);
         } catch(HttpStatusCodeException e){

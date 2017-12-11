@@ -15,6 +15,27 @@ public class Validator {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    public int[] temporaryAddTaskToLumberValidation(String id, String amount) throws InvalidInputException {
+        int[] result = new int[2];
+        int validatedId;
+        try {
+            validatedId = validateNumber(id);
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Id: " + e.getMessage());
+            throw new InvalidInputException("Error at Id: " + e.getMessage());
+        }
+        result[0] = validatedId;
+        int validatedAmount;
+        try {
+            validatedAmount = validateNumber(amount);
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Amount: " + e.getMessage());
+            throw new InvalidInputException("Error at Amount: " + e.getMessage());
+        }
+        result[1] = validatedAmount;
+        return result;
+    }
+
     public void inputValidationOrder(Order toValidate) throws InvalidInputException {
         try {
             validateText(toValidate.getCustomerName());

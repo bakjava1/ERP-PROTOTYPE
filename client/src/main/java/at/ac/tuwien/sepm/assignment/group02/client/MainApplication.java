@@ -54,7 +54,9 @@ public final class MainApplication extends Application {
         }
 
         primaryStage.setScene(new Scene(fxmlLoader.load()));
-        officeFXML.initStage();
+        if(office) {
+            officeFXML.initStage();
+        }
         // show application
         primaryStage.show();
         primaryStage.toFront();
