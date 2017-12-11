@@ -19,7 +19,7 @@ public interface TaskDAO {
     void deleteTask(Task task) throws PersistenceLayerException;
 
     /**
-     * 2.2.3 & 3.2.6 Reserviertes Schnittholz dem Auftrag hinzufügen.
+     * 2.2.3 & 3.2.6 Reserviertes SchnittholzDAO dem Auftrag hinzufügen.
      */
     void updateTask(Task task) throws PersistenceLayerException;
 

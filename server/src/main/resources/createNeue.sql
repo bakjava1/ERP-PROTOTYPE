@@ -97,11 +97,11 @@ all_reserved,all_delivered) VALUES
 ('Lager1', 'Latten', 'Prismiert','Ta', 'I/III', 22,48,3000,40,50,42,1,0),
 ('Lager1', 'Staffel', 'Prismiert','Ta', 'II/IV', 22,48,2000,40,50,42,1,0),
 ('Lager1', 'Kantholz', 'Prismiert','Fi/Ta', 'I/III', 22,48,5000,40,100,50,1,1),
-('Lager1', 'Schnittholz','Prismiert','Ta','S10/CE/TS', 22,48,1000,40,50,42,1,0),
+('Lager1', 'SchnittholzDAO','Prismiert','Ta','S10/CE/TS', 22,48,1000,40,50,42,1,0),
 ('Lager1', 'Latten', 'roh-SW','Fi', 'I/III', 22,48,3000,40,50,42,1,0),
 ('Lager1', 'Staffel', 'roh-SW','Ta', 'S10/CE/TS', 22,48,6000,40,50,42,1,0),
 ('Lager1', 'Kantholz', 'roh-SW','Fi', 'II/IV', 22,48,2500,40,50,42,1,0),
-('Lager1', 'Schnittholz', 'roh-SW','Fi/Ta', 'I/III', 22,48,2100,40,50,42,1,0),
+('Lager1', 'SchnittholzDAO', 'roh-SW','Fi/Ta', 'I/III', 22,48,2100,40,50,42,1,0),
 ('Lager1', 'Latten', 'Prismiert','Ta', 'I/III', 22,48,1500,40,50,42,1,0),
 ('Lager1', 'Latten', 'roh','Ta', 'S10/CE/TS', 22,48,3000,40,60,60,0,1);
 
@@ -134,11 +134,11 @@ width,length,quantity,produced_quantity, bestellNr,done,deleted) VALUES
 ('Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0,0),
 ('Staffel','Prismiert','Ta', 'II/IV', 22,50,2000,40,50,1,0,0),
 ('Kantholz','Prismiert','Fi/Ta','I/III',22,48,5000,40,100,1,1,0),
-('Schnittholz','Prismiert','Ta','S10/CE/TS',22,48,900,40,50,1,0,0),
+('SchnittholzDAO','Prismiert','Ta','S10/CE/TS',22,48,900,40,50,1,0,0),
 ('Latten','roh-SW','Fi', 'I/III', 22,48,3000,40,50,1,0,0),
 ('Staffel','roh-SW','Ta','S10/CE/TS',22,48,6000,40,70,5,0,0),
 ('Kantholz','roh-SW','Fi', 'II/IV', 22,48,2500,40,42,1,0,0),
-('Schnittholz','roh-SW','Fi/Ta','I/III',22,48,2100,40,50,3,0,0),
+('SchnittholzDAO','roh-SW','Fi/Ta','I/III',22,48,2100,40,50,3,0,0),
 ('Latten','Prismiert','Ta', 'I/III', 22,48,1500,40,42,1,0,0),
 ('Latten','roh','Ta', 'S10/CE/TS', 22,48,3000,40,80,2,1,0);
 

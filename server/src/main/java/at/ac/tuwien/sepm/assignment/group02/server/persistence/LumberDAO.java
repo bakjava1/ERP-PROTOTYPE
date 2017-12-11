@@ -14,12 +14,12 @@ public interface LumberDAO {
     Lumber readLumberById(int id) throws PersistenceLayerException;
 
     /**
-     * 3.2.4 Schnittholz ins Lager hinzufügen.
+     * 3.2.4 SchnittholzDAO ins Lager hinzufügen.
      */
     void createLumber(Lumber lumber) throws PersistenceLayerException;
 
     /**
-     * 2.2.2 & 3.2.5 Schnittholz als reserviert markieren.
+     * 2.2.2 & 3.2.5 SchnittholzDAO als reserviert markieren.
      */
     void updateLumber(Lumber lumber) throws PersistenceLayerException;
 

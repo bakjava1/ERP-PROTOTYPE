@@ -1,37 +1,42 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.entity;
+package at.ac.tuwien.sepm.assignment.group02.rest.restDTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
- * Created by raquelsima on 10.12.17.
+ * Created by raquelsima on 11.12.17.
  */
-public class Schnittholz {
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+
+public class SchnittholzDTO {
 
     /**
      * declaration of instance variables
      */
-private  int schnittID;
-private  String lager;
-private  String description;
-private  String finishing;
-private  String wood_type;
-private  String quality;
-private int size;
-private int width;
-private int length;
-private int quantity;
-private int reserved_quantity;
-private int delivered_quantity;
-private boolean all_reserved;
-private boolean all_delivered;
+    private int schnittID;
+    private  String lager;
+    private String description;
+    private  String finishing;
+    private  String wood_type;
+    private  String quality;
+    private int size;
+    private int width;
+    private int length;
+    private int quantity;
+    private int reserved_quantity;
+    private int delivered_quantity;
+    private boolean all_reserved;
+    private boolean all_delivered;
 
     /**
      * a default constructor
      */
-    public Schnittholz(){
+    public SchnittholzDTO(){
 
-}
+    }
+
     /**
      * constructor with parameter, initializes with instances variables.
      * @param schnittID
@@ -49,7 +54,7 @@ private boolean all_delivered;
      * @param all_reserved
      * @param all_delivered
      */
-    public Schnittholz(int schnittID,String lager,String description,String finishing, String wood_type, String quality,
+    public SchnittholzDTO(int schnittID,String lager,String description,String finishing, String wood_type, String quality,
                        int size,int width,int length,int quantity, int reserved_quantity, int delivered_quantity,
                        boolean all_reserved, boolean all_delivered) {
         this.schnittID = schnittID;
@@ -68,7 +73,7 @@ private boolean all_delivered;
         this.all_delivered=all_delivered;
     }
 
-     //Create Setters and Getters
+    //Create Setters and Getters
 
     /**
      * method to retrieve the schnittholz ID
@@ -294,16 +299,16 @@ private boolean all_delivered;
         this.all_delivered = all_delivered;
     }
 
-/**
- * JavaFX  BEAN Property Methods
- */
+    /**
+     * JavaFX  BEAN Property Methods
+     */
 
-public SimpleIntegerProperty schnittIDProperty(){
-    return new SimpleIntegerProperty(schnittID);
-}
+    public SimpleIntegerProperty schnittIDProperty(){
+        return new SimpleIntegerProperty(schnittID);
+    }
 
     public SimpleIntegerProperty sizeProperty(){
-    return new SimpleIntegerProperty(size);
+        return new SimpleIntegerProperty(size);
     }
 
     public SimpleIntegerProperty lengthProperty(){
@@ -349,4 +354,5 @@ public SimpleIntegerProperty schnittIDProperty(){
                 ", all_delivered=" + all_delivered +
                 '}';
     }
+
 }
