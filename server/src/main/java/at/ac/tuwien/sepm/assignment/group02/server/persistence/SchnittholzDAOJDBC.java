@@ -82,8 +82,6 @@ public class SchnittholzDAOJDBC implements SchnittholzDAO {
             }
         }
 
-
-
     @Override
     public void deleteSchnittholz(Schnittholz schnittholz) throws PersistenceLayerException, SQLException {
         LOG.debug("deleting lumber number {} from database", schnittholz.getSchnittID());
