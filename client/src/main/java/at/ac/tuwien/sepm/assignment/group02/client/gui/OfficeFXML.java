@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
@@ -94,11 +95,13 @@ public class OfficeFXML {
 
     private OrderService orderService;
     private TimberService timberService;
+    private TaskService taskService;
 
     @Autowired
-    public OfficeFXML(OrderService orderService, TimberService timberService){
+    public OfficeFXML(OrderService orderService, TimberService timberService,TaskService taskService){
         this.orderService = orderService;
         this.timberService = timberService;
+        this.taskService = taskService;
     }
 
 

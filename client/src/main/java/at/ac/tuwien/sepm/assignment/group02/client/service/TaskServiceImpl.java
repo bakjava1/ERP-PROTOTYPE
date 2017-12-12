@@ -6,14 +6,23 @@ import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+@Service
 public class TaskServiceImpl implements TaskService {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    Validator validator = new Validator();
+
+    private Validator validator;
+
+    @Autowired
+    public TaskServiceImpl(Validator validator) {
+        this.validator = validator;
+    }
 
     @Override
     public void createTask(Task task) throws InvalidInputException {

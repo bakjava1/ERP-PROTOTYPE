@@ -40,5 +40,5 @@ public interface LumberService {
      * temporär funktion zu 2.2.3 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
      */
 
-    void addReservedLumberToTask(String id, String quantity) throws InvalidInputException;
+    void addReservedLumberToTask(String id, String quantity) throws InvalidInputException, ServiceLayerException;
 }

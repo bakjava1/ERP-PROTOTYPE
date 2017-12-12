@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityCreationException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,11 +31,13 @@ public class OrderServiceImpl implements OrderService {
 
     private static OrderController orderController;
     private static OrderConverter orderConverter;
+    private static TaskConverter taskConverter;
 
     @Autowired
-    public OrderServiceImpl (OrderController orderController, OrderConverter orderConverter){
+    public OrderServiceImpl (OrderController orderController, OrderConverter orderConverter,TaskConverter taskConverter){
         OrderServiceImpl.orderController = orderController;
         OrderServiceImpl.orderConverter = orderConverter;
+        OrderServiceImpl.taskConverter = taskConverter;
     }
 
     @Override
@@ -46,14 +50,11 @@ public class OrderServiceImpl implements OrderService {
             for(int i = 0; i < tasks.size();i++) {
                 convertList.add(taskConverter.convertPlainObjectToRestDTO(tasks.get(i)));
             }
-            OrderDTO toAdd = orderConverter.convertPlainObjectToRestDTO(order);
+            toAdd = orderConverter.convertPlainObjectToRestDTO(order);
             toAdd.setTaskList(convertList);
             orderController.createOrder(toAdd);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
-        } catch(EntityCreationException e) {
-            LOG.error("Error creating Entity: " + e.getMessage());
-            throw new InvalidInputException("Could not create Order");
         } catch(InvalidInputException e) {
             //TODO maybe add another exception like Failed TaskCreationException
             LOG.error("Input Validation failed: " + e.getMessage());

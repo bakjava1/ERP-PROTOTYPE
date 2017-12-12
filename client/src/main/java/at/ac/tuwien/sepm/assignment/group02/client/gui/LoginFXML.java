@@ -54,8 +54,6 @@ public class LoginFXML {
             LOG.warn("ResourceAccessException: {}", e.getMessage());
         } catch (InvalidInputException e) {
             e.printStackTrace();
-        } catch (ServiceLayerException e) {
-            e.printStackTrace();
         }
     }
 

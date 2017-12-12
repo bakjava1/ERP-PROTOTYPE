@@ -22,7 +22,6 @@ public class MainApplication extends Application {
     private static boolean crane = false;
     private static boolean lead = false;
     private static boolean office = false;
-    public static TaskService taskService = new TaskServiceImpl();
 
     private AnnotationConfigApplicationContext context;
 
@@ -46,7 +45,7 @@ public class MainApplication extends Application {
         }
         if(office) {
             primaryStage.setTitle("Office");
-            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/office.fxml"), 640, 480));
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/office.fxml"), 900, 500));
         }
         if(crane) {
             primaryStage.setTitle("Crane Operator");
