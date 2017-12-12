@@ -24,7 +24,7 @@ public class TimberControllerImpl {
     private static TimberService timberService;
 
     @Autowired
-    public TimberControllerImpl(TimberService timberService){
+    public TimberControllerImpl(TimberService timberService) throws EntityCreationException {
 
         TimberControllerImpl.timberService = timberService;
     }

@@ -25,17 +25,24 @@ public interface LumberService {
     /**
      * Schnittholz aus dem Schnittholzlager entfernen.
      */
-    void removeLumber(LumberDTO lumber) throws ServiceLayerException;
+    void removeLumber(LumberDTO lumberDTO) throws ServiceLayerException;
 
     /**
      * 2.2.2 & 3.2.5 Schnittholz als reserviert markieren.
      */
-    void reserveLumber(LumberDTO lumber) throws ServiceLayerException;
+    void reserveLumber(LumberDTO lumberDTO) throws ServiceLayerException;
+
+    /**
+     * 2.2.2 Schnittholz bearbeiten
+     * @param lumberDTO
+     * @throws ServiceLayerException
+     */
+    public void updateLumber(LumberDTO lumberDTO) throws ServiceLayerException;
 
     /**
      * 3.2.4 Schnittholz ins Lager hinzufügen.
      */
-    void addLumber(LumberDTO lumber) throws ServiceLayerException;
+    void addLumber(LumberDTO lumberDTO) throws ServiceLayerException;
 
     /**
      * Hello World!

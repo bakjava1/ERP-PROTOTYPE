@@ -58,10 +58,6 @@ public class OrderControllerImpl implements OrderController {
             //no response payload, probably server not running
             LOG.warn("server is down? - {}", e.getMessage());
         }
-
-
-
-
     }
 
     @Override

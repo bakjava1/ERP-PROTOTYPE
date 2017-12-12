@@ -39,7 +39,7 @@ public interface SchnittholzDAO {
      * @param schnittholz
      * @throws PersistenceLayerException
      */
-    public void deleteSchnittholz(Schnittholz schnittholz)  throws PersistenceLayerException;
+    public void deleteSchnittholz(Schnittholz schnittholz) throws PersistenceLayerException, SQLException;
 
     /**
      * 2.1.2. Eine   tabellarische   Übersicht   des   vorhandenen   Schnittholz   anzeigen.

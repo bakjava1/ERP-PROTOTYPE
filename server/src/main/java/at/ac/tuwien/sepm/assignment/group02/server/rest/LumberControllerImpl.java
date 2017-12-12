@@ -2,6 +2,8 @@ package at.ac.tuwien.sepm.assignment.group02.server.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityCreationException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberService;
@@ -9,9 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -26,7 +26,44 @@ public class LumberControllerImpl {
 
     @Autowired
     public LumberControllerImpl(LumberService lumberService){
+
         LumberControllerImpl.lumberService = lumberService;
+    }
+
+
+    public void createLumber(LumberDTO lumber) {
+
+    }
+
+    public void reserveLumber(LumberDTO lumber) {
+
+    }
+
+    public List<LumberDTO> getAllLumber(FilterDTO filter) {
+        return null;
+    }
+
+
+    @RequestMapping(value="/updateLumber",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public void updateLumber(@RequestBody LumberDTO lumberDTO) throws EntityCreationException{
+        LOG.debug("Updating the Lumber  with id: " + lumberDTO.getId());
+
+        try {
+            lumberService.updateLumber(lumberDTO);
+        }catch (ServiceLayerException e){
+            LOG.error("Database Error:"+e.getMessage());
+            throw  new EntityCreationException("Update failed");
+        }
+    }
+
+    @RequestMapping(value="/deleteLumber",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public void removeLumber(@RequestBody LumberDTO lumberDTO) throws EntityNotFoundException {
+        LOG.debug("Deleting lumber " + lumberDTO.getId());
+        try {
+            lumberService.removeLumber(lumberDTO);
+        } catch (ServiceLayerException e) {
+            throw new EntityNotFoundException("Failed to delete lumber.");
+        }
     }
 
 
@@ -44,23 +81,4 @@ public class LumberControllerImpl {
             throw new EntityNotFoundException("failed to get lumber.");
         }
     }
-
-
-    public List<LumberDTO> getAllLumber(FilterDTO filter) {
-        return null;
-    }
-
-
-    public void removeLumber(LumberDTO lumber) {
-
-    }
-
-    public void reserveLumber(LumberDTO lumber) {
-
-    }
-
-    public void createLumber(LumberDTO lumber) {
-
-    }
-
 }

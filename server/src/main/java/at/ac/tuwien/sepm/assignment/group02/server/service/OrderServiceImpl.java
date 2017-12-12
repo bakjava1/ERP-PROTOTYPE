@@ -27,7 +27,6 @@ public class OrderServiceImpl implements OrderService {
         OrderServiceImpl.orderConverter = orderConverter;
     }
 
-
     @Override
     public void deleteOrder(OrderDTO orderDTO) {
         Order orderToDelete = orderConverter.convertRestDTOToPlainObject(orderDTO);

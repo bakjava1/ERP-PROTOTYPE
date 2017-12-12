@@ -32,6 +32,8 @@ public interface LumberService {
      */
     void reserveLumber(Lumber lumber, int quantity) throws InvalidInputException, ServiceLayerException;
 
+    public void deleteLumber(Lumber lumber) throws ServiceLayerException;
+
 
     // just an example
     Lumber getLumber(int id) throws InvalidInputException, ServiceLayerException;

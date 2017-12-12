@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberController;
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
@@ -54,6 +55,11 @@ public class LumberServiceImpl implements LumberService {
 
     @Override
     public void reserveLumber(Lumber lumber, int quantity) {
+
+    }
+
+    @Override
+    public void deleteLumber(Lumber lumber) throws ServiceLayerException {
 
     }
 

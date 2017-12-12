@@ -48,9 +48,29 @@ public class SchnittholzDAOJDBC implements SchnittholzDAO {
                 "ALL_DELIVERED=? WHERE WOOD_TYPE=?";
             try {
 
+
                 PreparedStatement ps = getConnection().prepareStatement(sql);
-                ps.setString(1, String.valueOf(schnittholz));
-                ps.executeUpdate();
+                //ps.setString(1, String.valueOf(schnittholz));
+                ps.setString(1,schnittholz.getLager());
+                ps.setString(2,schnittholz.getDescription());
+                ps.setString(3,schnittholz.getFinishing());
+                ps.setString(4,schnittholz.getWood_type());
+                ps.setString(5,schnittholz.getQuality());
+                ps.setInt(6,schnittholz.getSize());
+                ps.setInt(7,schnittholz.getWidth());
+                ps.setInt(8,schnittholz.getLength());
+                ps.setInt(9,schnittholz.getQuantity());
+                ps.setInt(10,schnittholz.getReserved_quantity());
+                ps.setInt(11,schnittholz.getDelivered_quantity());
+                ps.setBoolean(12, schnittholz.isAll_reserved());
+                ps.setBoolean(13,schnittholz.isAll_delivered());
+
+                int i=ps.executeUpdate();
+                if (i!=0){
+                    LOG.info("UPDATED OK");
+                }else {
+                    LOG.info("UPDATED NOT OK");
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -65,7 +85,31 @@ public class SchnittholzDAOJDBC implements SchnittholzDAO {
 
 
     @Override
-    public void deleteSchnittholz(Schnittholz schnittholz) throws PersistenceLayerException {
+    public void deleteSchnittholz(Schnittholz schnittholz) throws PersistenceLayerException, SQLException {
+        LOG.debug("deleting lumber number {} from database", schnittholz.getSchnittID());
+
+        dbConnection.setAutoCommit(false);
+
+        String deleteLumber= "DELETE FROM SCHNITTHOLZ WHERE ID=?";
+
+        try {
+            PreparedStatement ps = dbConnection.prepareStatement(deleteLumber);
+            ps.setInt(1, schnittholz.getSchnittID());
+            int i=ps.executeUpdate();
+            // ps.close();
+            if(i!=0){
+                LOG.info("DELETED OK");
+            }else {
+                LOG.info("DELETED NOT OK");
+            }
+        }catch (SQLException e){
+            LOG.error("SQLException: {}", e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        } finally {
+            if (getConnection() != null) {
+                getConnection().close();
+            }
+        }
 
     }
 

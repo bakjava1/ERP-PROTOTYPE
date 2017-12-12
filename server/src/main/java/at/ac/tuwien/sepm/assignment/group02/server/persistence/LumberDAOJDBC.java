@@ -100,9 +100,13 @@ public class LumberDAOJDBC implements LumberDAO {
         try {
             PreparedStatement ps = dbConnection.prepareStatement(updateLumber);
             ps.setString(1,lumber.getContent());
-            ps.executeUpdate();
-            ps.close();
-
+            int i=ps.executeUpdate();
+           // ps.close();
+            if(i!=0){
+                LOG.info("UPDATED");
+            }else {
+                LOG.info("NOT UPDATED");
+            }
         }catch (SQLException e){
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLayerException("Database error");
@@ -111,7 +115,6 @@ public class LumberDAOJDBC implements LumberDAO {
                 getConnection().close();
             }
         }
-
     }
 
     @Override
@@ -125,9 +128,13 @@ public class LumberDAOJDBC implements LumberDAO {
         try {
             PreparedStatement ps = dbConnection.prepareStatement(deleteLumber);
             ps.setInt(1, lumber.getId());
-            ps.executeUpdate();
-
-            ps.close();
+            int i=ps.executeUpdate();
+           // ps.close();
+            if(i!=0){
+                LOG.info("DELETED OK");
+            }else {
+                LOG.info("DELETED NOT OK");
+            }
         }catch (SQLException e){
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLayerException("Database error");
