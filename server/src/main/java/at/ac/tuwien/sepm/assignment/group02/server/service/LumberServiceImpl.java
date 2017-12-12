@@ -1,9 +1,13 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.LumberConverter;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -41,21 +46,6 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public List<LumberDTO> getAllLumber(FilterDTO filter) {
-        return null;
-    }
-
-    @Override
-    public void removeLumber(LumberDTO lumber) {
-
-    }
-
-    @Override
-    public void reserveLumber(LumberDTO lumber) {
-
-    }
-
-    @Override
     public void addLumber(LumberDTO lumberDTO) {
 
         try {
@@ -65,4 +55,39 @@ public class LumberServiceImpl implements LumberService {
         }
 
     }
+
+    @Override
+    public List<LumberDTO> getAllLumber(FilterDTO filter) {
+
+        return null;
+    }
+
+    @Override
+    public void reserveLumber(LumberDTO lumber) {
+
+    }
+
+    @Override
+    public void updateLumber(LumberDTO lumberDTO) throws ServiceLayerException, SQLException {
+
+        try {
+            lumberManagementDAO.updateLumber(lumberConverter.convertRestDTOToPlainObject(lumberDTO));
+        }catch (PersistenceLayerException e){
+            LOG.warn("Updating Lumber Persistence Exception: {}",e.getMessage());
+        }
+    }
+
+    @Override
+    public void removeLumber(LumberDTO lumberDTO) throws SQLException {
+
+        Lumber lumberToDelete = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
+
+        try {
+            lumberManagementDAO.deleteLumber(lumberToDelete);
+        } catch (PersistenceLayerException e) {
+            LOG.error("Error while deleting an order");
+        }
+    }
+
+
 }
