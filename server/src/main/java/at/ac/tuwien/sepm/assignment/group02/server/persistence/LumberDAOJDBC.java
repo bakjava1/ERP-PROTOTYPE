@@ -12,6 +12,8 @@ import java.lang.invoke.MethodHandles;
 import java.sql.*;
 import java.util.List;
 
+import static at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil.getConnection;
+
 /**
  * Created by e0701149 on 20.11.17.
  */
@@ -88,8 +90,10 @@ public class LumberDAOJDBC implements LumberDAO {
     }
 
     @Override
-    public void updateLumber(Lumber lumber) throws PersistenceLayerException {
+    public void updateLumber(Lumber lumber) throws PersistenceLayerException, SQLException {
         LOG.debug("Entering update Lumber method with parameter" +lumber);
+
+        dbConnection.setAutoCommit(false);
 
         String updateLumber="UPDATE LUMBER SET NAME=1 WHERE ID=?";
 
@@ -102,16 +106,21 @@ public class LumberDAOJDBC implements LumberDAO {
         }catch (SQLException e){
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLayerException("Database error");
+        } finally {
+            if (getConnection() != null) {
+                getConnection().close();
+            }
         }
 
     }
 
     @Override
-    public void deleteLumber(Lumber lumber) throws PersistenceLayerException {
+    public void deleteLumber(Lumber lumber) throws PersistenceLayerException, SQLException {
         LOG.debug("deleting lumber number {} from database", lumber.getId());
 
-        String deleteLumber= "DELETE FROM LUMBER WHERE ID=?";
+        dbConnection.setAutoCommit(false);
 
+        String deleteLumber= "DELETE FROM LUMBER WHERE ID=?";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(deleteLumber);
@@ -122,7 +131,11 @@ public class LumberDAOJDBC implements LumberDAO {
         }catch (SQLException e){
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLayerException("Database error");
+        } finally {
+        if (getConnection() != null) {
+            getConnection().close();
         }
+    }
 
     }
 
