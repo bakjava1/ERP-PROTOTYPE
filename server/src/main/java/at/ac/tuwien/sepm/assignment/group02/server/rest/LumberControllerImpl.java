@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.invoke.MethodHandles;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -45,7 +46,7 @@ public class LumberControllerImpl {
 
 
     @RequestMapping(value="/updateLumber",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-    public void updateLumber(@RequestBody LumberDTO lumberDTO) throws EntityCreationException{
+    public void updateLumber(@RequestBody LumberDTO lumberDTO) throws EntityCreationException, SQLException {
         LOG.debug("Updating the Lumber  with id: " + lumberDTO.getId());
 
         try {
@@ -57,7 +58,7 @@ public class LumberControllerImpl {
     }
 
     @RequestMapping(value="/deleteLumber",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-    public void removeLumber(@RequestBody LumberDTO lumberDTO) throws EntityNotFoundException {
+    public void removeLumber(@RequestBody LumberDTO lumberDTO) throws EntityNotFoundException, SQLException {
         LOG.debug("Deleting lumber " + lumberDTO.getId());
         try {
             lumberService.removeLumber(lumberDTO);
