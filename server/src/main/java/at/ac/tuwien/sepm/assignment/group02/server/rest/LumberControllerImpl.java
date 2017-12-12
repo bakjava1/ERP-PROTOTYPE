@@ -68,7 +68,6 @@ public class LumberControllerImpl {
         }
     }
 
-
     /**
      * Hello World example
      * get lumber specified by id

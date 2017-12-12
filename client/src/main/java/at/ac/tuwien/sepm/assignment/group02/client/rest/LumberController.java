@@ -17,24 +17,24 @@ public interface LumberController {
     /**
      * 1.4.3 Schnittholz aus dem Schnittholzlager entfernen.
      */
-    void removeLumber(LumberDTO lumber) throws PersistenceLayerException;
+    void removeLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
 
     /**
      * 2.2.2 & 3.2.5 Schnittholz als reserviert markieren.
      */
-    void reserveLumber(LumberDTO lumber) throws PersistenceLayerException;
+    void reserveLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
 
     /**
      * 2.2.2 Ausgewähltes Schnittholz als reserviert markieren.
-     * @param lumber
+     * @param lumberDTO
      * @throws PersistenceLayerException
      */
-    public void updateLumber(LumberDTO lumber) throws PersistenceLayerException;
+    public void updateLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
 
     /**
      * 3.2.4 Schnittholz ins Lager hinzufügen.
      */
-    void createLumber(LumberDTO lumber) throws PersistenceLayerException;
+    void createLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
 
     /**
      * get lumber specified by id

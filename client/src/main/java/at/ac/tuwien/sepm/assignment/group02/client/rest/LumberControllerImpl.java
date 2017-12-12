@@ -27,6 +27,10 @@ public class LumberControllerImpl implements LumberController {
 
     private RestTemplate restTemplate;
 
+    public LumberControllerImpl(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     @Override
     public List<LumberDTO> getAllLumber(FilterDTO filter) {
 
@@ -34,12 +38,13 @@ public class LumberControllerImpl implements LumberController {
     }
 
     @Override
-    public void removeLumber(@RequestBody LumberDTO lumber) {
+    public void removeLumber(@RequestBody LumberDTO lumberDTO) {
 
             LOG.debug("sending lumber to be deleted to server");
 
             try{
-                restTemplate.postForObject("http://localhost:8080/deleteLumber", lumber, LumberDTO.class);
+               // restTemplate.postForObject("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
+                restTemplate.delete("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
 
             } catch(HttpStatusCodeException e){
                 LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
