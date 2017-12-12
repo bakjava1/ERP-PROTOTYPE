@@ -32,9 +32,9 @@ public class TaskDAOJDBC implements TaskDAO {
     public void deleteTask(Task task) throws PersistenceLayerException {
         LOG.debug("deleting task with order number: {}", task.getOrderID());
 
-        String getLumberForDeletingTask = "SELECT DESCRIPTION, FINISHING, WOOD_TYPE, QUALITY, SIZE, WIDTH, LENGTH FROM TASK WHERE ORDERID = ?";
+        String getLumberForDeletingTask = "SELECT * FROM TASK WHERE ORDERID = ?";
         String getTotalReservedLumber = "SELECT RESERVED_QUANTITY FROM LUMBER WHERE DESCRIPTION = ? AND FINISHING = ? AND WOOD_TYPE = ? AND QUALITY = ? AND SIZE = ? AND WIDTH = ? AND LENGTH = ?";
-        String getReservedLumberTask = "SELECT RESERVED_QUANTITY FROM TASK WHERE WHERE DESCRIPTION = ? AND FINISHING = ? AND WOOD_TYPE = ? AND QUALITY = ? AND SIZE = ? AND WIDTH = ? AND LENGTH = ?";
+        String getTaskLumberAmount = "SELECT QUANTITY FROM TASK WHERE DESCRIPTION = ? AND FINISHING = ? AND WOOD_TYPE = ? AND QUALITY = ? AND SIZE = ? AND WIDTH = ? AND LENGTH = ?";
         String deleteLumberReservation = "UPDATE LUMBER SET RESERVED_QUANTITY = ?, ALL_RESERVED = 0 WHERE DESCRIPTION = ? AND FINISHING = ? AND WOOD_TYPE = ? AND QUALITY = ? AND SIZE = ? AND WIDTH = ? AND LENGTH = ?";
         String deleteTask = "UPDATE TASK SET DELETED = 1 WHERE ORDERID = ?";
 
@@ -44,7 +44,7 @@ public class TaskDAOJDBC implements TaskDAO {
             ps.setInt(1, task.getOrderID());
             ps.execute();
 
-            ResultSet rs = ps.getGeneratedKeys();
+            ResultSet rs = ps.getResultSet();
 
             Lumber lumber;
             int totalReservedLumber, reservedLumberTask, calculatedReservedLumber = 0;
@@ -58,8 +58,9 @@ public class TaskDAOJDBC implements TaskDAO {
                 lumber.setWidth(rs.getInt("Width"));
                 lumber.setLength(rs.getInt("Length"));
 
+
                 //get amount of reserved lumber in table lumber for the current task
-                ps = dbConnection.prepareStatement(getTotalReservedLumber, Statement.RETURN_GENERATED_KEYS);
+                ps = dbConnection.prepareStatement(getTotalReservedLumber);
                 ps.setString(1, lumber.getDescription());
                 ps.setString(2, lumber.getFinishing());
                 ps.setString(3, lumber.getWood_type());
@@ -68,10 +69,12 @@ public class TaskDAOJDBC implements TaskDAO {
                 ps.setInt(6, lumber.getWidth());
                 ps.setInt(7, lumber.getLength());
                 ps.execute();
-                totalReservedLumber = ps.getGeneratedKeys().getInt(1);
+                ps.getResultSet().next();
+                totalReservedLumber = ps.getResultSet().getInt("RESERVED_QUANTITY");
+
 
                 //get amount of reserved lumber for the current task (table task)
-                ps = dbConnection.prepareStatement(getReservedLumberTask, Statement.RETURN_GENERATED_KEYS);
+                ps = dbConnection.prepareStatement(getTaskLumberAmount, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, lumber.getDescription());
                 ps.setString(2, lumber.getFinishing());
                 ps.setString(3, lumber.getWood_type());
@@ -80,7 +83,8 @@ public class TaskDAOJDBC implements TaskDAO {
                 ps.setInt(6, lumber.getWidth());
                 ps.setInt(7, lumber.getLength());
                 ps.execute();
-                reservedLumberTask = ps.getGeneratedKeys().getInt(1);
+                ps.getResultSet().next();
+                reservedLumberTask = ps.getResultSet().getInt("QUANTITY");
 
                 if(totalReservedLumber > reservedLumberTask) {
                     calculatedReservedLumber = totalReservedLumber - reservedLumberTask;
@@ -102,6 +106,7 @@ public class TaskDAOJDBC implements TaskDAO {
                 ps = dbConnection.prepareStatement(deleteTask, Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, task.getOrderID());
                 ps.execute();
+
             }
         } catch (SQLException e) {
             LOG.error("SQL Exception: " + e.getMessage());
