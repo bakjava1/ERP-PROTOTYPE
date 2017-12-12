@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 
 import java.util.List;
 
@@ -19,22 +20,22 @@ public interface LumberService {
      * 2.1.2 Eine tabellarische Übersicht des vorhandenen Schnittholz anzeigen.
      * 2.1.3 Suchfunktionalität implementieren
      */
-    List<LumberDTO> getAllLumber(FilterDTO filter);
+    List<LumberDTO> getAllLumber(FilterDTO filter) throws ServiceLayerException;
 
     /**
      * Schnittholz aus dem Schnittholzlager entfernen.
      */
-    void removeLumber(LumberDTO lumber);
+    void removeLumber(LumberDTO lumber) throws ServiceLayerException;
 
     /**
      * 2.2.2 & 3.2.5 Schnittholz als reserviert markieren.
      */
-    void reserveLumber(LumberDTO lumber);
+    void reserveLumber(LumberDTO lumber) throws ServiceLayerException;
 
     /**
      * 3.2.4 Schnittholz ins Lager hinzufügen.
      */
-    void addLumber(LumberDTO lumber);
+    void addLumber(LumberDTO lumber) throws ServiceLayerException;
 
     /**
      * Hello World!
@@ -42,6 +43,6 @@ public interface LumberService {
      * @param id int id of lumber to get
      * @return LumberDTO specified by id
      */
-    LumberDTO getLumberById(int id);
+    LumberDTO getLumberById(int id) throws ServiceLayerException;
 
 }

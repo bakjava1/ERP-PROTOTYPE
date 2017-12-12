@@ -14,21 +14,40 @@
     <version>1.0</version>
     <packaging>jar</packaging>
 
+    <properties>
+        <springfox-swagger.version>2.7.0</springfox-swagger.version>
+        <springframework.version>5.0.1.RELEASE</springframework.version>
+    </properties>
+
     <dependencies>
+        <!--
+        Automated JSON API documentation for API's built with Spring.
+        -->
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger.version}</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>5.0.1.RELEASE</version>
+            <version>${springframework.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>RELEASE</version>
-        </dependency>
+
     </dependencies>
 
 </project>

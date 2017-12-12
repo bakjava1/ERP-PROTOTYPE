@@ -5,6 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import javafx.scene.control.TextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import java.lang.invoke.MethodHandles;
 
 import static at.ac.tuwien.sepm.assignment.group02.client.MainApplication.lumberService;
 
+@Controller
 public class LeadWorkerFXML {
 
     @FXML

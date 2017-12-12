@@ -1,11 +1,16 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
 
 import java.util.List;
 
+/**
+ * CONVERSION HAPPENS ON THIS LAYER
+ * VALIDATION HAPPENS ON THIS LAYER
+ */
 public interface LumberService {
 
     /**
@@ -14,7 +19,7 @@ public interface LumberService {
      * 2.1.3 (rest/LumberController) Suchfunktionalität implementieren
      * @return
      */
-    List<Lumber> getAll(Filter filter) throws InvalidInputException;
+    List<Lumber> getAll(Filter filter) throws InvalidInputException, ServiceLayerException;
 
     /**
      * 2.2 Reservierung Schnittholz
@@ -25,7 +30,7 @@ public interface LumberService {
      * @param lumber
      * @param quantity
      */
-    void reserveLumber(Lumber lumber, int quantity) throws InvalidInputException;
+    void reserveLumber(Lumber lumber, int quantity) throws InvalidInputException, ServiceLayerException;
 
 
     // just an example

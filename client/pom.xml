@@ -21,11 +21,19 @@
 
         <!-- dependency -->
         <smartholz-rest.version>1.0</smartholz-rest.version>
-        <springframework.version>5.0.1.RELEASE</springframework.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <logback.version>1.1.11</logback.version>
+        <springboot.version>1.5.8.RELEASE</springboot.version>
         <jackson.version>2.9.2</jackson.version>
 
-        <!-- plugins -->
+        <!-- test dependencies -->
+        <junit.version>4.12</junit.version>
+
+        <!-- plugins  -->
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+        <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
+
     </properties>
 
 
@@ -37,21 +45,29 @@
             <version>${smartholz-rest.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+        <!-- Starter for building web, including RESTful, applications using Spring MVC.
+        Uses Tomcat as the default embedded container -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${springframework.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${springboot.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.data</groupId>
+                    <artifactId>spring-data-jpa</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+        <!-- Starter for testing Spring Boot applications with libraries
+        including JUnit, Hamcrest and Mockito -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${springframework.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${springboot.version}</version>
+            <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -79,12 +95,71 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 
     <build>
         <plugins>
 
+            <!--
+            The Spring Boot Maven Plugin provides Spring Boot support in Maven,
+            allowing you to package executable jar or war archives and
+            run an application “in-place”.
+            Maven 3.2 (or better).
+            -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springboot.version}</version>
+            </plugin>
+
+            <!-- mvn compile -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <!-- JAXB, along with the other APIs shared with Java EE
+                    (JAX-WS, JAF, JTA, and the so-called "Common Annotations")
+                    are deprecated in Java SE 9 and are proposed to be removed
+                    in a future release of Java SE and the JDK.
+                    A first step towards dropping these APIs from Java SE and the
+                    JDK is to not resolve the modules containing these APIs by default.
+                    When you compile or run code on the class path with JDK 9 then
+                    it will initially appear that the APIs do not exist.
+                    That CLI option adds the "java.xml.bind" module to the set of root
+                    modules to resolve at startup and it works with JDK 9 because
+                    this module is included in the JDK run-time image. -->
+                    <compilerArgs>
+                        <arg>--add-modules</arg>
+                        <arg>java.xml.bind</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <!-- mvn surefire:test
+            Only one goal: surefire:test runs the unit tests of an application.
+            -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <argLine>--add-modules java.xml.bind</argLine>
+                </configuration>
+            </plugin>
+
+            <!-- mvn package
+            Usually there is no need to mentioned the 'maven-jar-plugin'
+            explicit cause it's bound to the Maven Build Life Cycle.
+            We do need it because of the manifest declaration.
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -97,7 +172,6 @@
                     </archive>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 

@@ -1,22 +1,28 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.restController.TimberController;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
 
+@RestController
 public class TimberControllerImpl implements TimberController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    RestTemplate restTemplate = new RestTemplate();
+    private RestTemplate restTemplate;
+
+    @Autowired
+    public TimberControllerImpl(RestTemplate restTemplate){
+        this.restTemplate = restTemplate;
+    }
 
     @Override
     public void createTimber(@RequestBody TimberDTO timberDTO) {
@@ -27,12 +33,9 @@ public class TimberControllerImpl implements TimberController {
 
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-            //throw new EntityCreationException("Connection Problem with Server");
-
         } catch(RestClientException e){
             //no response payload, probably server not running
             LOG.warn("server is down? - {}", e.getMessage());
-            //throw new EntityCreationException("Connection Problem with Server");
         }
 
 
