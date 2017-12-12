@@ -30,7 +30,7 @@ public interface SchnittholzController {
      * @param schnittholzDTO
      * @throws EntityCreationException
      */
-    public void rserveSchnittholz(SchnittholzDTO schnittholzDTO) throws EntityCreationException;
+    public void reserveSchnittholz(SchnittholzDTO schnittholzDTO) throws EntityCreationException;
 
     /**
      * 2.2.2 Schnittholz bearbeiten. Execute an update in the data base

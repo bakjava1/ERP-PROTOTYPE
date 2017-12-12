@@ -31,10 +31,37 @@ public class LumberControllerImpl implements LumberController {
         this.restTemplate = restTemplate;
     }
 
+
+    @Override
+    public void createLumber(LumberDTO lumberDTO) {
+
+    }
+
+    @Override
+    public void reserveLumber(LumberDTO lumberDTO) {
+
+    }
+
     @Override
     public List<LumberDTO> getAllLumber(FilterDTO filter) {
 
         return null;
+    }
+
+    @Override
+    public void updateLumber(@RequestBody LumberDTO lumberDTO)  throws PersistenceLayerException {
+        LOG.debug("Sending request for lumber updating to server");
+
+        try {
+            restTemplate.postForObject("http://localhost:8080/updateLumber", lumberDTO, OrderDTO.class);
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("Connection Problem with Server");
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("Connection Problem with Server");
+        }
     }
 
     @Override
@@ -43,8 +70,8 @@ public class LumberControllerImpl implements LumberController {
             LOG.debug("sending lumber to be deleted to server");
 
             try{
-               // restTemplate.postForObject("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
-                restTemplate.delete("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
+                restTemplate.postForObject("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
+                //restTemplate.delete("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
 
             } catch(HttpStatusCodeException e){
                 LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
@@ -54,23 +81,6 @@ public class LumberControllerImpl implements LumberController {
             }
         }
 
-
-
-    @Override
-    public void reserveLumber(LumberDTO lumber) {
-
-    }
-
-    @Override
-    public void updateLumber(LumberDTO lumber) throws PersistenceLayerException {
-
-
-    }
-
-    @Override
-    public void createLumber(LumberDTO lumber) {
-
-    }
 
     /**
      * HELLO WORLD example
