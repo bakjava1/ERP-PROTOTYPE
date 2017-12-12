@@ -57,4 +57,10 @@ public interface OrderService {
      */
     Order getReceiptById(int order_id) throws InvalidInputException;
 
+    /**
+     * 1.4.2 Erstellen der benoetigten Daten um Bestellung abzurechnen
+     * @param selectedOrder
+     * @throws InvalidInputException
+     */
+    void invoiceOrder(Order selectedOrder) throws InvalidInputException;
 }

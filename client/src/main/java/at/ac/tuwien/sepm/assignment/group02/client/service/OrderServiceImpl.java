@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -85,5 +86,23 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getReceiptById(int order_id) {
         return null;
+    }
+
+    @Override
+    public void invoiceOrder(Order selectedOrder) throws InvalidInputException {
+
+        if(selectedOrder==null){
+            throw new InvalidInputException("");
+        }
+        int netAmount = selectedOrder.getNetAmount();
+        //TODO get tax rate from properties file
+        int taxAmount = netAmount * (20/100);
+        int grossAmount = netAmount + taxAmount;
+        selectedOrder.setGrossAmount(grossAmount);
+        selectedOrder.setTaxAmount(taxAmount);
+        selectedOrder.setDeliveryDate(new Date());
+        OrderDTO orderDTO = orderConverter.convertPlainObjectToRestDTO(selectedOrder);
+
+        orderController.invoiceOrder(orderDTO);
     }
 }

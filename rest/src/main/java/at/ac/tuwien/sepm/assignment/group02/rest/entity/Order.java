@@ -2,17 +2,26 @@ package at.ac.tuwien.sepm.assignment.group02.rest.entity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Order {
 
     private int id;
+    private int invoiceNumber;
+    private Date invoiceDate;
+    private Date deliveryDate;
     private String customerName;
     private String customerAddress;
     private String customerUID;
     private Timestamp orderDate;
     private boolean isPaid;
     private List<Task> taskList;
+
+    //prices in cent
+    private int grossAmount;
+    private int netAmount;
+    private int taxAmount;
 
     public Order() {
         this.id = -1;
@@ -83,6 +92,46 @@ public class Order {
 
     public void setCustomerUID(String customerUID) {
         this.customerUID = customerUID;
+    }
+
+    public Date getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(Date deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public Date getInvoiceDate() {
+        return invoiceDate;
+    }
+
+    public void setInvoiceDate(Date invoiceDate) {
+        this.invoiceDate = invoiceDate;
+    }
+
+    public int getGrossAmount() {
+        return grossAmount;
+    }
+
+    public void setGrossAmount(int grossAmount) {
+        this.grossAmount = grossAmount;
+    }
+
+    public int getNetAmount() {
+        return netAmount;
+    }
+
+    public void setNetAmount(int netAmount) {
+        this.netAmount = netAmount;
+    }
+
+    public int getTaxAmount() {
+        return taxAmount;
+    }
+
+    public void setTaxAmount(int taxAmount) {
+        this.taxAmount = taxAmount;
     }
 
     @Override

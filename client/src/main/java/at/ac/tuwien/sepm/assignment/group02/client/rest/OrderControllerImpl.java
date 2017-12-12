@@ -93,4 +93,24 @@ public class OrderControllerImpl implements OrderController {
     public OrderDTO getOrderById(int order_id) {
         return null;
     }
+
+    @Override
+    public void invoiceOrder(OrderDTO orderDTO){
+
+        LOG.debug("sending order that will be invoiced on server");
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        try{
+            restTemplate.postForObject("http://localhost:8080/invoiceOrder", orderDTO, OrderDTO.class);
+
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+        }
+
+
+    }
 }

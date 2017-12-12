@@ -5,14 +5,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.EditOrderFXML">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.EditOrderFXML">
    <children>
-      <Button layoutX="253.0" layoutY="244.0" mnemonicParsing="false" onAction="#testCraneController" text="Test Controller" />
-      <Label layoutX="233.0" layoutY="136.0" text="Crane">
+      <Button fx:id="btnSave" layoutX="140.0" layoutY="646.0" mnemonicParsing="false" onAction="#saveBtnClicked" text="Speichern" />
+      <Button fx:id="btnClose" layoutX="279.0" layoutY="646.0" mnemonicParsing="false" onAction="#closeBtnClicked" text="Abbrechen" />
+      <Label layoutX="157.0" layoutY="36.0" text="Bestellung bearbeiten">
          <font>
-            <Font size="52.0" />
+            <Font size="22.0" />
          </font>
       </Label>
-      <Label fx:id="crane_label" layoutX="286.0" layoutY="320.0" />
+      <Label layoutX="104.0" layoutY="86.0" text="Bestell Nummer" />
+      <Label layoutX="101.0" layoutY="121.0" text="Bestell Datum" />
+      <Label layoutX="104.0" layoutY="157.0" text="Kundenname" />
+      <Label layoutX="101.0" layoutY="222.0" text="Kunden Adresse" />
+      <Label layoutX="102.0" layoutY="259.0" text="Kunden UID" />
    </children>
 </AnchorPane>

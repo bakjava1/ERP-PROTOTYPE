@@ -39,4 +39,5 @@ public interface OrderService {
      */
     OrderDTO getOrderById(int order_id);
 
+    void invoiceOrder(OrderDTO orderDTO);
 }

@@ -93,4 +93,15 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO getOrderById(int order_id) {
         return null;
     }
+
+    @Override
+    public void invoiceOrder(OrderDTO orderDTO) {
+        Order order = orderConverter.convertRestDTOToPlainObject(orderDTO);
+
+        try {
+            orderManagementDAO.invoiceOrder(order);
+        } catch (PersistenceLevelException e) {
+            LOG.error("Error while tying to invoice Order: " + e.getMessage());
+        }
+    }
 }
