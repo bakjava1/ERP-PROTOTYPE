@@ -73,19 +73,29 @@ public class OfficeFXML {
         LOG.trace("called deleteOrder");
 
         Order order = new Order();
-        order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
-        System.out.println(order.getID());
 
-        Task task = new Task();
-        task.setOrderID(order.getID());
+        if(table_openOrder.getSelectionModel().getSelectedItem() != null) {
+            order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
 
-        try {
-            orderService.deleteOrder(order);
-            taskService.deleteTask(task);
-        } catch (InvalidInputException e) {
-            LOG.warn(e.getMessage());
-        } catch (ServiceLayerException e) {
-            LOG.warn(e.getMessage());
+            Task task = new Task();
+            task.setOrderID(order.getID());
+
+            try {
+                orderService.deleteOrder(order);
+                taskService.deleteTask(task);
+            } catch (InvalidInputException e) {
+                //InvalidInputException is never thrown
+                //the only user input is to select an order
+                //LOG.warn(e.getMessage());
+            } catch (ServiceLayerException e) {
+                LOG.warn(e.getMessage());
+            }
+        } else {
+            Alert noSelection = new Alert(Alert.AlertType.ERROR);
+            noSelection.setTitle("Deletion failed");
+            noSelection.setHeaderText(null);
+            noSelection.setContentText("You have to choose an order to delete it!");
+            noSelection.showAndWait();
         }
 
         updateTable();

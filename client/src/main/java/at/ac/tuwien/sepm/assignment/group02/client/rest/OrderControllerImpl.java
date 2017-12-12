@@ -30,7 +30,6 @@ public class OrderControllerImpl implements OrderController {
     @Override
     public void createOrder(@RequestBody OrderDTO orderDTO) throws PersistenceLayerException {
         LOG.debug("Sending request for Order Creation to Server");
-        System.out.println("TEST");
         try {
             restTemplate.postForObject("http://localhost:8080/createOrder", orderDTO, OrderDTO.class);
         } catch(HttpStatusCodeException e){
@@ -45,7 +44,6 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     public void deleteOrder(@RequestBody OrderDTO orderDTO) {
-
         LOG.debug("sending order to be deleted to server");
 
         try{
@@ -57,10 +55,6 @@ public class OrderControllerImpl implements OrderController {
             //no response payload, probably server not running
             LOG.warn("server is down? - {}", e.getMessage());
         }
-
-
-
-
     }
 
     @Override

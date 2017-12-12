@@ -49,7 +49,9 @@ public class OrderDAOJDBC implements OrderDAO {
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(deleteOrder);
+            System.out.print("");
             ps.setInt(1, order.getID());
+            System.out.print("");
             ps.execute();
 
             ps.close();
