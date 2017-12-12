@@ -25,6 +25,7 @@ public class TimberControllerImpl {
 
     @Autowired
     public TimberControllerImpl(TimberService timberService){
+
         TimberControllerImpl.timberService = timberService;
     }
 

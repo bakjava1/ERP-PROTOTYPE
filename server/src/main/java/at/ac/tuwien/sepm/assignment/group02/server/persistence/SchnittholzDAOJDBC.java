@@ -2,7 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Schnittholz;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,27 +24,27 @@ public class SchnittholzDAOJDBC implements SchnittholzDAO {
     }
 
     @Override
-    public void createSchnittholz(Schnittholz schnittholz) throws PersistenceLevelException {
+    public void createSchnittholz(Schnittholz schnittholz) throws PersistenceLayerException {
 
     }
 
     @Override
-    public Schnittholz readSchnittholzByID(int schnittID) throws PersistenceLevelException {
+    public Schnittholz readSchnittholzByID(int schnittID) throws PersistenceLayerException {
         return null;
     }
 
     @Override
-    public void updateSchnittholz(Schnittholz schnittholz) throws PersistenceLevelException {
+    public void updateSchnittholz(Schnittholz schnittholz) throws PersistenceLayerException {
 
     }
 
     @Override
-    public void deleteSchnittholz(Schnittholz schnittholz) throws PersistenceLevelException {
+    public void deleteSchnittholz(Schnittholz schnittholz) throws PersistenceLayerException {
 
     }
 
     @Override
-    public List<Schnittholz> getAllSchnittholz(Filter filter) throws PersistenceLevelException {
+    public List<Schnittholz> getAllSchnittholz(Filter filter) throws PersistenceLayerException {
         return null;
     }
 }

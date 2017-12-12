@@ -89,11 +89,40 @@ public class LumberDAOJDBC implements LumberDAO {
 
     @Override
     public void updateLumber(Lumber lumber) throws PersistenceLayerException {
+        LOG.debug("Entering update Lumber method with parameter" +lumber);
+        PreparedStatement preparedStatement;
+
+        String updateLumber="UPDATE LUMBER SET DELETED=1 WHERE ID=?";
+
+        try {
+            PreparedStatement ps = dbConnection.prepareStatement(updateLumber);
+            ps.execute();
+            ps.close();
+
+        }catch (SQLException e){
+            LOG.error("SQLException: {}", e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
 
     }
 
     @Override
-    public void deleteLumber(int id) throws PersistenceLayerException {
+    public void deleteLumber(Lumber lumber) throws PersistenceLayerException {
+        LOG.debug("deleting lumber number {} from database", lumber.getId());
+
+        String deleteLumber= "DELETE FROM LUMBER WHERE ID=?";
+
+
+        try {
+            PreparedStatement ps = dbConnection.prepareStatement(deleteLumber);
+            ps.setInt(1, lumber.getId());
+            ps.execute();
+
+            ps.close();
+        }catch (SQLException e){
+            LOG.error("SQLException: {}", e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
 
     }
 

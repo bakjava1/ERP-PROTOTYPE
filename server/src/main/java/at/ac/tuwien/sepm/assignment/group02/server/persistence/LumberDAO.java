@@ -23,7 +23,7 @@ public interface LumberDAO {
      */
     void updateLumber(Lumber lumber) throws PersistenceLayerException;
 
-    void deleteLumber(int id) throws PersistenceLayerException;
+    void deleteLumber(Lumber lumber) throws PersistenceLayerException;
 
     /**
      * 2.1.2 & 2.1.3

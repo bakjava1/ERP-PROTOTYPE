@@ -1,11 +1,13 @@
 package at.ac.tuwien.sepm.assignment.group02.server.rest;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityCreationException;
-import at.ac.tuwien.sepm.assignment.group02.rest.restController.SchnittholzController;
+
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.SchnittholzDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.service.SchnittholzService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -13,37 +15,42 @@ import java.util.List;
 /**
  * Created by raquelsima on 11.12.17.
  */
-public class SchnittholzControllerImpl implements SchnittholzController{
+
+@RestController
+
+public class SchnittholzControllerImpl{
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @Override
-    public void createSchnittholz(SchnittholzDTO schnittholzDTO) throws EntityCreationException {
+     static SchnittholzService schnittholzService;
+
+    @Autowired
+    public SchnittholzControllerImpl() {
+        SchnittholzControllerImpl.schnittholzService=schnittholzService;
+    }
+
+
+    public void createSchnittholz(SchnittholzDTO schnittholzDTO){
 
     }
 
-    @Override
-    public void removeSchnittholz(SchnittholzDTO schnittholzDTO) throws EntityCreationException {
+    public void removeSchnittholz(SchnittholzDTO schnittholzDTO){
 
     }
 
-    @Override
-    public void rserveSchnittholz(SchnittholzDTO schnittholzDTO) throws EntityCreationException {
+    public void rserveSchnittholz(SchnittholzDTO schnittholzDTO){
 
     }
 
-    @Override
-    public void updateSchnittholz(SchnittholzDTO schnittholzDTO) throws EntityCreationException {
+    public void updateSchnittholz(SchnittholzDTO schnittholzDTO){
 
     }
 
-    @Override
-    public List<SchnittholzDTO> getAllSchnittholz(FilterDTO filterDTO) throws EntityCreationException {
+    public List<SchnittholzDTO> getAllSchnittholz(FilterDTO filterDTO){
         return null;
     }
 
-    @Override
-    public SchnittholzDTO getSchnittholzByID(int schnittID) throws EntityCreationException {
+    public SchnittholzDTO getSchnittholzByID(int schnittID){
         return null;
     }
 }
