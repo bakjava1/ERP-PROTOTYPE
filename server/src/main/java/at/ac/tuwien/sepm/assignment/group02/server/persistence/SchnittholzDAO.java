@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Schnittholz;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public interface SchnittholzDAO {
      * @param schnittholz
      * @throws PersistenceLayerException
      */
-    public void updateSchnittholz(Schnittholz schnittholz)  throws PersistenceLayerException;
+    public void updateSchnittholz(Schnittholz schnittholz) throws PersistenceLayerException, SQLException;
 
     /**
      * Schnittholz delete from database

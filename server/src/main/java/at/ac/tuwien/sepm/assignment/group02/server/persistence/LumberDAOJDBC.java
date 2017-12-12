@@ -90,13 +90,13 @@ public class LumberDAOJDBC implements LumberDAO {
     @Override
     public void updateLumber(Lumber lumber) throws PersistenceLayerException {
         LOG.debug("Entering update Lumber method with parameter" +lumber);
-        PreparedStatement preparedStatement;
 
-        String updateLumber="UPDATE LUMBER SET DELETED=1 WHERE ID=?";
+        String updateLumber="UPDATE LUMBER SET NAME=1 WHERE ID=?";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(updateLumber);
-            ps.execute();
+            ps.setString(1,lumber.getContent());
+            ps.executeUpdate();
             ps.close();
 
         }catch (SQLException e){
@@ -116,7 +116,7 @@ public class LumberDAOJDBC implements LumberDAO {
         try {
             PreparedStatement ps = dbConnection.prepareStatement(deleteLumber);
             ps.setInt(1, lumber.getId());
-            ps.execute();
+            ps.executeUpdate();
 
             ps.close();
         }catch (SQLException e){
