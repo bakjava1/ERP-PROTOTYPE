@@ -45,12 +45,12 @@ public class TaskManagementTest {
         taskDAO = new TaskDAOJDBC(dbConnection);
 
         task1.setId(1);
-        task1.setOrderID(1);
+        task1.setOrder_id(1);
         task2.setId(2);
-        task2.setOrderID(1);
+        task2.setOrder_id(1);
 
         task3.setId(3);
-        task3.setOrderID(2);
+        task3.setOrder_id(2);
         task3.setDescription("Kantholz");
         task3.setFinishing("Prismiert");
         task3.setWood_type("Fi/Ta");
@@ -61,9 +61,9 @@ public class TaskManagementTest {
         task3.setQuantity(30);
 
         taskDTO1.setId(4);
-        taskDTO1.setOrderID(3);
+        taskDTO1.setOrder_id(3);
         taskDTO2.setId(5);
-        taskDTO2.setOrderID(3);
+        taskDTO2.setOrder_id(3);
 
         taskConverter = new TaskConverter();
         taskService = new TaskServiceImpl(taskDAO, taskConverter);
