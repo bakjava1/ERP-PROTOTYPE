@@ -105,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
 
         try {
             orderManagementDAO.invoiceOrder(order);
-        } catch (PersistenceLevelException e) {
+        } catch (PersistenceLayerException e) {
             LOG.error("Error while tying to invoice Order: " + e.getMessage());
         }
     }

@@ -140,7 +140,7 @@ public class OrderDAOJDBC implements OrderDAO {
     }
 
     @Override
-    public void invoiceOrder(Order order) throws PersistenceLevelException {
+    public void invoiceOrder(Order order) throws PersistenceLayerException {
         String updateSentence = "UPDATE ORDERS SET ISPAID=? WHERE ID=?";
 
         try {
@@ -153,7 +153,7 @@ public class OrderDAOJDBC implements OrderDAO {
             stmt.close();
         } catch (SQLException e) {
             LOG.error("SQLException: {}", e.getMessage());
-            throw new PersistenceLevelException("Database error");
+            throw new PersistenceLayerException("Database error");
         }
     }
 }
