@@ -23,4 +23,10 @@ public interface TimberService {
      */
     void updateTimber(TimberDTO timberDTO) throws ServiceLayerException;
 
+    /**
+     * This method returns the number of boxes currently existing.
+     * @return number of boxes
+     * @throws ServiceLayerException
+     */
+    int numberOfBoxes() throws ServiceLayerException;
 }

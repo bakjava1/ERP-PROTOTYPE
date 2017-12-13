@@ -1,3 +1,4 @@
+import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderService;
@@ -29,7 +30,7 @@ public class OrderManagementTest {
         LOG.debug("test setup initiated");
         dbConnection = DBUtil.getConnection();
 
-        orderService = new OrderServiceImpl(new OrderDAOJDBC(dbConnection));
+        orderService = new OrderServiceImpl(new OrderDAOJDBC(dbConnection), new OrderConverter());
         LOG.debug("test setup completed");
     }
 
