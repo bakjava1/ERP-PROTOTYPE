@@ -36,7 +36,7 @@ public class LumberDAOJDBC implements LumberDAO {
     public List<Lumber> getAllLumber(Lumber filter) throws PersistenceLayerException {
         LOG.debug("Get all Lumber from database");
 
-        System.out.println("filter:"+filter);
+
         String Query = "SELECT * FROM LUMBER";
         List<Lumber> lumberList = new ArrayList<>();
         PreparedStatement ps = null;
@@ -112,7 +112,6 @@ public class LumberDAOJDBC implements LumberDAO {
         }
 
 
-        System.out.println("query:"+Query);
 
 
 
@@ -135,7 +134,7 @@ public class LumberDAOJDBC implements LumberDAO {
 
             if (lumberList.size() == 0) {
                 //no open order was found
-                throw new PersistenceLayerException("No lumber found");
+                return null;
             }
 
         } catch (SQLException e) {

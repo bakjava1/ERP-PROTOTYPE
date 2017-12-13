@@ -63,9 +63,10 @@ public class LumberServiceImpl implements LumberService {
     public List<Lumber> getAll(Lumber filter) {
 
         LOG.debug("getAllSchnittholz called");
-        List<LumberDTO> allLumber = null;
 
+        List<LumberDTO> allLumber = null;
         LumberDTO filterDTO = lumberConverter.convertPlainObjectToRestDTO(filter);
+
         try {
             allLumber = lumberController.getAllLumber(filterDTO);
         } catch (PersistenceLayerException e) {

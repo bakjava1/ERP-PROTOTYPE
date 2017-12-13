@@ -25,9 +25,6 @@ public class Lumber {
     public Lumber(){
     }
 
-    public Lumber(String description){
-        this.description = description;
-    }
 
     public Lumber(int id){
         this.schnittID = id;

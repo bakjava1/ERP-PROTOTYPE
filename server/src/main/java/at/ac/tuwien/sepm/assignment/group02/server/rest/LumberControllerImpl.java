@@ -55,7 +55,6 @@ public class LumberControllerImpl {
             throw new EntityNotFoundException("failed to get all lumbers.");
         }
 
-
     }
 
 

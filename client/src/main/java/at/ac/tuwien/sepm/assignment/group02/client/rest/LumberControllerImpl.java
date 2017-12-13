@@ -40,15 +40,11 @@ public class LumberControllerImpl implements LumberController {
 
         List<LumberDTO> lumberList = new ArrayList<>();
 
+        LumberDTO[] lumberArray = restTemplate.postForObject("http://localhost:8080/getAllLumber", filter, LumberDTO[].class);
 
-            LumberDTO[] lumberArray = restTemplate.postForObject("http://localhost:8080/getAllLumber", filter, LumberDTO[].class);
-
-            for (int i = 0; lumberArray!= null && i < lumberArray.length; i++) {
-                lumberList.add(lumberArray[i]);
-            }
-
-
-
+        for (int i = 0; lumberArray!= null && i < lumberArray.length; i++) {
+            lumberList.add(lumberArray[i]);
+        }
 
         return lumberList;
 

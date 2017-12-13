@@ -163,7 +163,7 @@ public class LeadWorkerFXML {
             filter.setLength(-1);
         }
 
-        System.out.println("->>>> "+filter);
+
         try {
             allLumber = lumberService.getAll(filter);
         } catch (ServiceLayerException e) {
@@ -179,7 +179,7 @@ public class LeadWorkerFXML {
                 lumberForTable.add(lumber);
             }
 
-            System.out.println(lumberForTable);
+
             table_lumber.setItems(lumberForTable);
 
             table_lumber.refresh();
