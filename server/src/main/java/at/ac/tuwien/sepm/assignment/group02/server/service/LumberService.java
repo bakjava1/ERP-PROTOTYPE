@@ -44,7 +44,6 @@ public interface LumberService {
     void addLumber(LumberDTO lumber) throws ServiceLayerException;
 
     /**
-     * Hello World!
      * get lumber specified by id
      * @param id int id of lumber to get
      * @return LumberDTO specified by id
