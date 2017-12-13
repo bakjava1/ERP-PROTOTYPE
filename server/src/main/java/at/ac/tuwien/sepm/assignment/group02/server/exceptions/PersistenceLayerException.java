@@ -6,9 +6,9 @@ package at.ac.tuwien.sepm.assignment.group02.server.exceptions;
 
  */
 
-public class PersistenceLevelException extends Exception {
+public class PersistenceLayerException extends Exception {
 
-    public PersistenceLevelException(String message) {
+    public PersistenceLayerException(String message) {
 
         super(message);
 

@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 
 import java.util.List;
 
@@ -8,28 +9,43 @@ public interface TaskService {
 
     /**
      * 1.1.3 Aufträge erstellen
+     * method creates a new task
+     * @param task the TaskDTO to be created
+     * @throws ServiceLayerException in case the TaskDTO can't be created
      */
-    void createTask(TaskDTO task);
+    void createTask(TaskDTO task) throws ServiceLayerException;
 
     /**
      * 1.2.1 Aufträge löschen
+     * method deletes a given task (identified by its id)
+     * @param task the TaskDTO to be deleted
+     * @throws ServiceLayerException in case the TaskDTO can't be deleted
      */
-    void deleteTask(TaskDTO task);
+    void deleteTask(TaskDTO task) throws ServiceLayerException;
 
     /**
-     * 2.2.3 & 3.2.6 Add lumber to task
+     * 2.2.3 & 3.2.6 (method used to add lumber to task)
+     * method updates the values of a given task (identified by its id)
+     * @param task the updated version of the TaskDTO
+     * @throws ServiceLayerException in case the TaskDTO can't be updated
      */
-    void updateTask(TaskDTO task);
+    void updateTask(TaskDTO task) throws ServiceLayerException;
 
     /**
      * 2.5.2
-     * return a list of all open tasks
+     * method returns all open tasks
+     * @return a List of TaskDTO that are marked as open tasks
+     * @throws ServiceLayerException in case the TaskDTO can't be returned
      */
-    List<TaskDTO> getAllOpenTasks();
+    List<TaskDTO> getAllOpenTasks() throws ServiceLayerException;
 
     /**
      * 3.2.7 maybe not needed.
+     * method returns a TaskDTO defined by the task id
+     * @param task_id integer defining the id of the task
+     * @return TaskDTO with specified task_id
+     * @throws ServiceLayerException in case the TaskDTO can't be returned
      */
-    void getTaskById(int task_id);
+    TaskDTO getTaskById(int task_id) throws ServiceLayerException;
 
 }

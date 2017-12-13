@@ -1,7 +1,6 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.restController;
+package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityCreationException;
-import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityNotFoundException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 
 import java.util.List;
@@ -11,34 +10,34 @@ public interface OrderController {
     /**
      * 1.1.2 Bestellung mit allen relevanten Daten + eindeutigem Schlüssel (id) erstellen.
      */
-    void createOrder(OrderDTO orderDTO) throws EntityCreationException;
+    void createOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 
     /**
      * 1.2.2 Bestellung löschen.
      */
-    void deleteOrder(OrderDTO orderDTO);
+    void deleteOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 
     /**
      * 1.3.1 Alle offenen Bestellungen anfordern.
      * @return
      */
-    List<OrderDTO> getAllOpen();
+    List<OrderDTO> getAllOpen() throws PersistenceLayerException;
 
     /**
      * 1.4.2 Abzurechnende Bestellung bearbeiten (Abgerechnet Flag setzten, zusätzliche Werte speichern)
      */
-    void updateOrder(OrderDTO orderDTO);
+    void updateOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 
     /**
      * 1.5.1 Alle geschlossenen Bestellungen == Rechnugen anfordern.
      * @return
      */
-    List<OrderDTO> getAllClosed();
+    List<OrderDTO> getAllClosed() throws PersistenceLayerException;
 
     /**
      * 1.6.2 Rechnungsdetails (Geschlossene Bestellung) anfordern.
      */
-    OrderDTO getOrderById(int order_id);
+    OrderDTO getOrderById(int order_id) throws PersistenceLayerException;
 
     void invoiceOrder(OrderDTO orderDTO);
 }

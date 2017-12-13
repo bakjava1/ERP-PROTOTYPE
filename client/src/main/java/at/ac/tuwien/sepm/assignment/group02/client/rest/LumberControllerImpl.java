@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.restController.LumberController;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import org.slf4j.Logger;
@@ -15,6 +14,7 @@ import java.util.List;
 /**
  * Implements interface from rest/restController
  */
+
 @RestController
 public class LumberControllerImpl implements LumberController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -38,7 +38,6 @@ public class LumberControllerImpl implements LumberController {
     public void createLumber(LumberDTO lumber) {
 
     }
-
 
     /**
      * HELLO WORLD example

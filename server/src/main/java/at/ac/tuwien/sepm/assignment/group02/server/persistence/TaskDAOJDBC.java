@@ -1,14 +1,16 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
 import java.util.List;
 
+@Component
 public class TaskDAOJDBC implements TaskDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -20,17 +22,17 @@ public class TaskDAOJDBC implements TaskDAO {
     }
 
     @Override
-    public void createTask(Task task) throws PersistenceLevelException {
+    public void createTask(Task task) throws PersistenceLayerException {
 
     }
 
     @Override
-    public void deleteTask(Task task) throws PersistenceLevelException {
+    public void deleteTask(Task task) throws PersistenceLayerException {
 
     }
 
     @Override
-    public void updateTask(Task task) throws PersistenceLevelException {
+    public void updateTask(Task task) throws PersistenceLayerException {
         LOG.info("Attempting to Update Task");
         String getStatement = "SELECT PRODUCED_QUANTITY FROM TASK WHERE ID = ?";
         String updateStatement = "UPDATE TASK SET PRODUCED_QUANTITY = ? WHERE ID = ?";
@@ -48,18 +50,18 @@ public class TaskDAOJDBC implements TaskDAO {
             stmt.executeUpdate();
         } catch(SQLException e) {
             LOG.error("SQL Exception: " + e.getMessage());
-            throw new PersistenceLevelException("Database Error");
+            throw new PersistenceLayerException("Database Error");
         }
 
         }
 
     @Override
-    public List<Task> getAllOpenTasks() throws PersistenceLevelException {
+    public List<Task> getAllOpenTasks() throws PersistenceLayerException {
         return null;
     }
 
     @Override
-    public void getTaskById(int task_id) throws PersistenceLevelException {
+    public void getTaskById(int task_id) throws PersistenceLayerException {
 
     }
 }

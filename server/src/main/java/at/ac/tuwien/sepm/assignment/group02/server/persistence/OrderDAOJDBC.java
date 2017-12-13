@@ -2,29 +2,31 @@ package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLevelException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class OrderDAOJDBC implements OrderDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static Connection dbConnection;
 
+    @Autowired
     public OrderDAOJDBC(Connection dbConnection) {
-        this.dbConnection = dbConnection;
+        OrderDAOJDBC.dbConnection = dbConnection;
     }
 
 
     @Override
-    public void createOrder(Order order) throws PersistenceLevelException {
+    public void createOrder(Order order) throws PersistenceLayerException {
         LOG.debug("Creating new Order");
         String createSentence = "INSERT INTO ORDERS VALUES(default,now(),false,false)";
         String insertTaskSentence = "INSERT INTO TASK VALUES(default,?,?,?,?,?,?,?,?,?,?,false,false);";
@@ -52,12 +54,12 @@ public class OrderDAOJDBC implements OrderDAO {
             }
         } catch(SQLException e) {
             LOG.error("SQL Exception: " + e.getMessage());
-            throw new PersistenceLevelException("Database Error");
+            throw new PersistenceLayerException("Database Error");
         }
     }
 
     @Override
-    public void deleteOrder(Order order) throws PersistenceLevelException {
+    public void deleteOrder(Order order) throws PersistenceLayerException {
         LOG.debug("deleting order number {} from database", order.getID());
 
         String deleteOrder = "UPDATE ORDERS SET DELETED = 1 WHERE ID = ?";
@@ -70,12 +72,12 @@ public class OrderDAOJDBC implements OrderDAO {
             ps.close();
         } catch (SQLException e) {
             LOG.error("SQLException: {}", e.getMessage());
-            throw new PersistenceLevelException("Database error");
+            throw new PersistenceLayerException("Database error");
         }
     }
 
     @Override
-    public List<Order> getAllOpen() throws PersistenceLevelException {
+    public List<Order> getAllOpen() throws PersistenceLayerException {
         LOG.debug("Get all open Order from database");
 
         List<Order> orderList = new ArrayList<>();
@@ -99,11 +101,11 @@ public class OrderDAOJDBC implements OrderDAO {
 
             if (orderList.size() == 0) {
                 //no open order was found
-                throw new PersistenceLevelException("No open orders found");
+                throw new PersistenceLayerException("No open orders found");
             }
 
         } catch (SQLException e) {
-            throw new PersistenceLevelException("Database error");
+            throw new PersistenceLayerException("Database error");
         } finally {
             //close connections
             if (rs != null) {
@@ -123,17 +125,17 @@ public class OrderDAOJDBC implements OrderDAO {
     }
 
     @Override
-    public void updateOrder(Order order) throws PersistenceLevelException {
+    public void updateOrder(Order order) throws PersistenceLayerException {
 
     }
 
     @Override
-    public List<Order> getAllClosed() throws PersistenceLevelException {
+    public List<Order> getAllClosed() throws PersistenceLayerException {
         return null;
     }
 
     @Override
-    public Order getOrderById(int order_id) throws PersistenceLevelException {
+    public Order getOrderById(int order_id) throws PersistenceLayerException {
         return null;
     }
 

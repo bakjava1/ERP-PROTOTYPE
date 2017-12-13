@@ -1,24 +1,29 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Assignment;
 
 import java.util.List;
 
+/**
+ * CONVERSION HAPPENS ON THIS LAYER
+ * VALIDATION HAPPENS ON THIS LAYER
+ */
 public interface AssignmentService {
 
     /**
      * 2.4.4 Neue Aufgabe für Kranfahrer erstellen.
      * @param assignment
      */
-    void createAssignment(Assignment assignment) throws InvalidInputException;
+    void createAssignment(Assignment assignment) throws InvalidInputException, ServiceLayerException;
 
     /**
      * 3.1 Aufgaben anzeigen
      * 3.1.2 (rest/AssignmentController) Eine tabellarische Übersicht der nicht erledigten Aufgaben anzeigen.
      * @return
      */
-    List<Assignment> getAllOpenAssignments();
+    List<Assignment> getAllOpenAssignments() throws ServiceLayerException;
 
     /**
      * 3.2 Aufgaben abschließen
@@ -30,6 +35,7 @@ public interface AssignmentService {
      * 3.2.7 Überprüfen ob Auftrag fertig ist (? => (rest/TaskController) getTaskById)
      * @param assignment
      */
-    void setDone(Assignment assignment) throws InvalidInputException;
+    void setDone(Assignment assignment) throws InvalidInputException, ServiceLayerException;
 
 }
+

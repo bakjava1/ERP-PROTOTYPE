@@ -1,50 +1,61 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
-import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderControllerImpl;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityCreationException;
-import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityNotFoundException;
-import at.ac.tuwien.sepm.assignment.group02.rest.restController.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
-import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+@Service
 public class OrderServiceImpl implements OrderService {
 
-    public static OrderController orderController = new OrderControllerImpl();
-    private static OrderConverter orderConverter = new OrderConverter();
-    private static TaskConverter taskConverter = new TaskConverter();
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Validator validator = new Validator();
 
+    private static OrderController orderController;
+    private static OrderConverter orderConverter;
+    private static TaskConverter taskConverter;
+
+    @Autowired
+    public OrderServiceImpl (OrderController orderController, OrderConverter orderConverter,TaskConverter taskConverter){
+        OrderServiceImpl.orderController = orderController;
+        OrderServiceImpl.orderConverter = orderConverter;
+        OrderServiceImpl.taskConverter = taskConverter;
+    }
+
     @Override
     public void addOrder(Order order, List<Task> tasks) throws InvalidInputException{
+        LOG.debug("addOrder called: {},{}", order, tasks);
+        OrderDTO toAdd = orderConverter.convertPlainObjectToRestDTO(order);
         try {
             validator.inputValidationOrder(order);
             List<TaskDTO> convertList = new ArrayList<>();
             for(int i = 0; i < tasks.size();i++) {
                 convertList.add(taskConverter.convertPlainObjectToRestDTO(tasks.get(i)));
             }
-            OrderDTO toAdd = orderConverter.convertPlainObjectToRestDTO(order);
+            toAdd = orderConverter.convertPlainObjectToRestDTO(order);
             toAdd.setTaskList(convertList);
             orderController.createOrder(toAdd);
-        } catch(EntityCreationException e) {
-            LOG.error("Error creating Entity: " + e.getMessage());
-            throw new InvalidInputException("Could not create Order");
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
         } catch(InvalidInputException e) {
             //TODO maybe add another exception like Failed TaskCreationException
             LOG.error("Input Validation failed: " + e.getMessage());
@@ -54,15 +65,27 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Order order) {
+        LOG.debug("deleteOrder called: {}", order);
         OrderDTO orderToDelete = orderConverter.convertPlainObjectToRestDTO(order);
-        orderController.deleteOrder(orderToDelete);
+        try {
+            orderController.deleteOrder(orderToDelete);
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
+        }
     }
 
     @Override
     public List<Order> getAllOpen() {
+        LOG.debug("getAllOpen called");
+        List<OrderDTO> allOpen = null;
 
-        List<OrderDTO> allOpen = orderController.getAllOpen();
-        List<Order> allOpenConverted = new LinkedList<Order>();
+        try {
+            allOpen = orderController.getAllOpen();
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
+        }
+
+        List<Order> allOpenConverted = new LinkedList<>();
 
 
         for (OrderDTO order: allOpen) {
@@ -75,16 +98,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void closeOrder(Order order) {
-
+        LOG.debug("closeOrder called: {}", order);
     }
 
     @Override
     public List<Order> getAllClosed() {
+        LOG.debug("getAllClosed called");
         return null;
     }
 
     @Override
     public Order getReceiptById(int order_id) {
+        LOG.debug("getReceiptById called: {}", order_id);
         return null;
     }
 
