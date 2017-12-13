@@ -3,6 +3,11 @@ package at.ac.tuwien.sepm.assignment.group02.client.service;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberController;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberControllerImpl;
+import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskController;
+import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskControllerImpl;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
@@ -12,6 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -21,13 +29,19 @@ public class LumberServiceImpl implements LumberService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 
+    public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     private static LumberController lumberController;
     private static LumberConverter lumberConverter;
+    private static TaskController taskController;
+    private static Validator validator;
 
     @Autowired
-    public LumberServiceImpl (LumberController lumberController, LumberConverter lumberConverter){
+    public LumberServiceImpl (LumberController lumberController, LumberConverter lumberConverter,TaskController taskController,Validator validator){
         LumberServiceImpl.lumberController = lumberController;
         LumberServiceImpl.lumberConverter = lumberConverter;
+        LumberServiceImpl.taskController = taskController;
+        LumberServiceImpl.validator = validator;
     }
 
     /**
@@ -51,6 +65,23 @@ public class LumberServiceImpl implements LumberService {
 
         return lumber;
 
+    }
+
+    @Override
+    public void addReservedLumberToTask(String id, String quantity) throws InvalidInputException,ServiceLayerException {
+        try {
+            int[] validated = validator.temporaryAddTaskToLumberValidation(id,quantity);
+            TaskDTO toAdd = new TaskDTO();
+            toAdd.setId(validated[0]);
+            toAdd.setProduced_quantity(validated[1]);
+            taskController.updateTask(toAdd);
+        }catch(InvalidInputException e) {
+            LOG.error("Failed to validate Input: " + e.getMessage());
+            throw new InvalidInputException(e.getMessage());
+        } catch(PersistenceLayerException e) {
+            LOG.error("Failed to reserve Lumber in Task: " + e.getMessage());
+            throw new ServiceLayerException("Server Problems");
+        }
     }
 
     @Override

@@ -37,5 +37,11 @@ public interface LumberService {
 
 
     // just an example
-    Lumber getLumber(int id) throws InvalidInputException, ServiceLayerException;
+    Lumber getLumber(int id) throws InvalidInputException;
+
+    /**
+     * temporär funktion zu 2.2.3 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
+     */
+
+    void addReservedLumberToTask(String id, String quantity) throws InvalidInputException, ServiceLayerException;
 }
