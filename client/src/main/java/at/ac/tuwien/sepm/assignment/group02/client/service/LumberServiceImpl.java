@@ -28,9 +28,6 @@ import java.util.List;
 public class LumberServiceImpl implements LumberService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-
-    public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     private static LumberController lumberController;
     private static LumberConverter lumberConverter;
     private static TaskController taskController;
