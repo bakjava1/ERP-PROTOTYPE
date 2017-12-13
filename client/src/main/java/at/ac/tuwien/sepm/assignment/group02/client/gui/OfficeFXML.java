@@ -146,7 +146,7 @@ public class OfficeFXML {
             order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
 
             Task task = new Task();
-            task.setOrderID(order.getID());
+            task.setOrder_id(order.getID());
 
             try {
                 orderService.deleteOrder(order);

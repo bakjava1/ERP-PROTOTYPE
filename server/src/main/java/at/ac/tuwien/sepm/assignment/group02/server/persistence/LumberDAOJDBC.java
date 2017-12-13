@@ -91,7 +91,7 @@ public class LumberDAOJDBC implements LumberDAO {
 
     @Override
     public void updateLumber(Lumber lumber) throws PersistenceLayerException, SQLException {
-        LOG.debug("Entering update Lumber method with parameter" +lumber);
+        /*LOG.debug("Entering update Lumber method with parameter" +lumber);
 
         dbConnection.setAutoCommit(false);
 
@@ -114,7 +114,7 @@ public class LumberDAOJDBC implements LumberDAO {
             if (getConnection() != null) {
                 getConnection().close();
             }
-        }
+        }*/
     }
 
     @Override
