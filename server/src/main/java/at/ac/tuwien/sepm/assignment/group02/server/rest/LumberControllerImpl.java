@@ -34,7 +34,7 @@ public class LumberControllerImpl {
 
     @RequestMapping(value="/updateLumber",method = RequestMethod.PUT,produces = MediaType.APPLICATION_JSON_VALUE)
     public void updateLumber(@RequestBody LumberDTO lumberDTO) throws EntityCreationException, SQLException {
-        LOG.debug("Updating the Lumber  with id: " + lumberDTO.getId());
+        LOG.debug("Updating the Lumber  with id: " + lumberDTO.getID());
 
         try {
             lumberService.updateLumber(lumberDTO);
@@ -46,7 +46,7 @@ public class LumberControllerImpl {
 
     @RequestMapping(value="/deleteLumber",method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
     public void removeLumber(@RequestBody LumberDTO lumberDTO) throws EntityNotFoundException, SQLException {
-        LOG.debug("Deleting lumber " + lumberDTO.getId());
+        LOG.debug("Deleting lumber " + lumberDTO.getID());
         try {
 
             lumberService.removeLumber(lumberDTO);

@@ -33,7 +33,7 @@ public interface LumberService {
     /**
      * Schnittholz aus dem Schnittholzlager entfernen.
      */
-    void removeLumber(LumberDTO lumberDTO) throws ServiceLayerException;
+    void removeLumber(LumberDTO lumberDTO) throws ServiceLayerException, SQLException;
 
     /**
      * 2.2.2 & 3.2.5 Schnittholz als reserviert markieren.

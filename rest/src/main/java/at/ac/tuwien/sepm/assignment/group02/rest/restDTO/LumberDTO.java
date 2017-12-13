@@ -11,7 +11,7 @@ public class LumberDTO {
     /**
      * declaration of instance variables
      */
-    private int schnittID;
+    private int id;
     private  String lager;
     private String description;
     private  String finishing;
@@ -35,7 +35,7 @@ public class LumberDTO {
 
     /**
      * constructor with parameter, initializes with instances variables.
-     * @param schnittID
+     * @param id
      * @param lager
      * @param description
      * @param finishing
@@ -50,10 +50,10 @@ public class LumberDTO {
      * @param all_reserved
      * @param all_delivered
      */
-    public LumberDTO(int schnittID,String lager,String description,String finishing, String wood_type, String quality,
+    public LumberDTO(int id,String lager,String description,String finishing, String wood_type, String quality,
                           int size,int width,int length,int quantity, int reserved_quantity, int delivered_quantity,
                           boolean all_reserved, boolean all_delivered) {
-        this.schnittID = schnittID;
+        this.id = id;
         this.lager=lager;
         this.description=description;
         this.finishing=finishing;
@@ -73,18 +73,18 @@ public class LumberDTO {
 
     /**
      * method to retrieve the schnittholz ID
-     * @return a value of schnittID to caller
+     * @return a value of id to caller
      */
-    public int getSchnittID() {
-        return schnittID;
+    public int getID() {
+        return id;
     }
 
     /**
      * method to set the schnittholz ID
-     * @param schnittID
+     * @param id
      */
-    public void setSchnittID(int schnittID) {
-        this.schnittID = schnittID;
+    public void setID(int id) {
+        this.id = id;
     }
 
     /**
@@ -299,8 +299,8 @@ public class LumberDTO {
      * JavaFX  BEAN Property Methods
      */
 
-    public SimpleIntegerProperty schnittIDProperty(){
-        return new SimpleIntegerProperty(schnittID);
+    public SimpleIntegerProperty idProperty(){
+        return new SimpleIntegerProperty(id);
     }
 
     public SimpleIntegerProperty sizeProperty(){
@@ -334,7 +334,7 @@ public class LumberDTO {
     @Override
     public String toString() {
         return "Schnittholz{" +
-                "schnittID=" + schnittID +
+                "id=" + id +
                 ", lager='" + lager + '\'' +
                 ", description='" + description + '\'' +
                 ", finishing='" + finishing + '\'' +
