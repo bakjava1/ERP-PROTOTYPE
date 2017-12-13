@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
@@ -36,12 +39,15 @@ public class LumberControllerImpl implements LumberController {
         LOG.debug("get lumber");
 
         List<LumberDTO> lumberList = new ArrayList<>();
-        LumberDTO[] lumberArray = restTemplate.postForObject("http://localhost:8080/getAllLumber", filter, LumberDTO[].class);
 
 
-        for (int i = 0; lumberArray!= null && i < lumberArray.length; i++) {
-            lumberList.add(lumberArray[i]);
-        }
+            LumberDTO[] lumberArray = restTemplate.postForObject("http://localhost:8080/getAllLumber", filter, LumberDTO[].class);
+
+            for (int i = 0; lumberArray!= null && i < lumberArray.length; i++) {
+                lumberList.add(lumberArray[i]);
+            }
+
+
 
 
         return lumberList;

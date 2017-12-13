@@ -54,7 +54,7 @@ public class LumberServiceImpl implements LumberService {
             allLumber = lumberManagementDAO.getAllLumber(filter);
 
         } catch(PersistenceLayerException e) {
-            LOG.error("Error while trying to get objects from Database");
+            LOG.error(e.getMessage());
         }
 
         if (allLumber!= null) {

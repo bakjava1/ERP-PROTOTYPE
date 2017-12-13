@@ -3,13 +3,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.gui;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
-import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
-import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Schnittholz;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +13,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
@@ -32,10 +25,17 @@ public class LeadWorkerFXML {
 
 
     @FXML
-    private TextField selectedOrder;
+    private TextField tf_description;
 
     @FXML
-    private TextField tf_timber_amount;
+    private TextField tf_strength;
+
+    @FXML
+    private TextField tf_length;
+
+    @FXML
+    private TextField tf_width;
+
 
     @FXML
     private ChoiceBox cb_finishing;
@@ -99,16 +99,15 @@ public class LeadWorkerFXML {
         col_quantity.setCellValueFactory(new PropertyValueFactory("quantity"));
         col_reserved_quantity.setCellValueFactory(new PropertyValueFactory("reserved_quantity"));
 
-        cb_finishing.setItems(FXCollections.observableArrayList("ROH-SW", "Prismiert"));
-        cb_finishing.setValue("ROH-SW");
+        cb_finishing.setItems(FXCollections.observableArrayList("roh-SW", "Prismiert", "keine Angabe"));
+        cb_wood_type.setItems(FXCollections.observableArrayList("Ta", "Fi", "keine Angabe"));
+        cb_quality.setItems(FXCollections.observableArrayList("I/III", "II/III", "II/IV", "keine Angabe"));
 
 
-        cb_wood_type.setItems(FXCollections.observableArrayList("Ta", "Fi"));
-        cb_wood_type.setValue("Ta");
 
-
-        cb_quality.setItems(FXCollections.observableArrayList("I/III", "II/III"));
-        cb_quality.setValue("II/III");
+        cb_finishing.getSelectionModel().selectFirst();
+        cb_wood_type.getSelectionModel().selectFirst();
+        cb_quality.getSelectionModel().selectFirst();
 
 
 
@@ -117,8 +116,54 @@ public class LeadWorkerFXML {
 
     @FXML
     public void onSearchButtonClicked(ActionEvent actionEvent) {
-        Lumber filter = new Lumber(1);
+        Lumber filter = new Lumber();
         List<Lumber> allLumber = null;
+
+        String description = tf_description.getText().trim();
+        String finishing = cb_finishing.getSelectionModel().getSelectedItem().toString().equals("keine Angabe")? "" :
+                cb_finishing.getSelectionModel().getSelectedItem().toString();
+        String wood_type = cb_wood_type.getSelectionModel().getSelectedItem().toString().equals("keine Angabe")? "" :
+                cb_wood_type.getSelectionModel().getSelectedItem().toString();
+        String quality = cb_quality.getSelectionModel().getSelectedItem().toString().equals("keine Angabe")? "" :
+                cb_quality.getSelectionModel().getSelectedItem().toString();
+        String strength = tf_strength.getText().trim();
+        String width = tf_width.getText().trim();
+        String length = tf_length.getText().trim();
+
+        if (!description.equals("")){
+            filter.setDescription(description);
+        }
+        if (!finishing.equals("")){
+            filter.setFinishing(finishing);
+        }
+
+        if (!wood_type.equals("")){
+            filter.setWood_type(wood_type);
+        }
+
+        if (!quality.equals("")){
+            filter.setQuality(quality);
+        }
+
+        if (!strength.equals("")){
+            filter.setSize(Integer.parseInt(strength));
+        }else{
+            filter.setSize(-1);
+        }
+
+        if (!width.equals("")){
+            filter.setWidth(Integer.parseInt(width));
+        }else{
+            filter.setWidth(-1);
+        }
+
+        if (!length.equals("")){
+            filter.setLength(Integer.parseInt(length));
+        }else{
+            filter.setLength(-1);
+        }
+
+        System.out.println("->>>> "+filter);
         try {
             allLumber = lumberService.getAll(filter);
         } catch (ServiceLayerException e) {
@@ -136,6 +181,7 @@ public class LeadWorkerFXML {
 
             System.out.println(lumberForTable);
             table_lumber.setItems(lumberForTable);
+
             table_lumber.refresh();
         } else {
             table_lumber.refresh();

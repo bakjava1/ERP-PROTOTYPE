@@ -36,14 +36,90 @@ public class LumberDAOJDBC implements LumberDAO {
     public List<Lumber> getAllLumber(Lumber filter) throws PersistenceLayerException {
         LOG.debug("Get all Lumber from database");
 
+        System.out.println("filter:"+filter);
+        String Query = "SELECT * FROM LUMBER";
         List<Lumber> lumberList = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
 
+
+
+        boolean conditions = false;
+        String description = filter.getDescription();
+        String finishing = filter.getFinishing();
+        String wood_type = filter.getWood_type();
+        String quality = filter.getQuality();
+        int strength = filter.getSize();
+        int width = filter.getWidth();
+        int length = filter.getLength();
+
+        if (description != null && !description.equals("")){
+            Query += " WHERE description = '" + description+"'";
+            conditions = true;
+
+        }
+        if (finishing != null && !finishing.equals("")){
+            if (conditions) {
+                Query += " AND finishing = '" + finishing+"'";
+            }else{
+                Query += " WHERE finishing = '" + finishing+"'";
+                conditions = true;
+            }
+        }
+
+        if (wood_type  != null && !wood_type.equals("")){
+            if (conditions) {
+                Query += " AND wood_type = '" + wood_type+"'";
+            }else{
+                Query += " WHERE wood_type = '" + wood_type+"'";
+                conditions = true;
+            }
+        }
+
+        if (quality != null && !quality.equals("")){
+            if (conditions) {
+                Query += " AND quality = '" + quality+"'";
+            }else{
+                Query += " WHERE quality = '" + quality+"'";
+                conditions = true;
+            }
+        }
+
+        if (strength != -1){
+            if (conditions) {
+                Query += " AND size = " + strength;
+            }else{
+                Query += " WHERE size = " + strength;
+                conditions = true;
+            }
+        }
+
+        if (width != -1){
+            if (conditions) {
+                Query += " AND width = " + width;
+            }else{
+                Query += " WHERE width = " + width;
+                conditions = true;
+            }
+        }
+        if (length != -1){
+            if (conditions) {
+                Query += " AND length = " + length;
+            }else{
+                Query += " WHERE length = " + length;
+                conditions = true;
+            }
+        }
+
+
+        System.out.println("query:"+Query);
+
+
+
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM LUMBER");
+            ps = dbConnection.prepareStatement(Query);
             rs = ps.executeQuery();
 
             while (rs.next()) {
