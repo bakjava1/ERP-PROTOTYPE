@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
-
 @RestController
 public class TaskControllerImpl {
-
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static TaskService taskService;
@@ -32,19 +30,24 @@ public class TaskControllerImpl {
 
     }
 
-    public void deleteTask(TaskDTO task) {
-
-    }
-
     @RequestMapping(value="/updateTask",method = RequestMethod.PUT,produces = MediaType.APPLICATION_JSON_VALUE)
     public void updateTask(@RequestBody TaskDTO task) {
         LOG.debug("Atemmpting to Update Task");
         try {
             taskService.updateTask(task);
-        } catch(ServiceLayerException e) {
+        } catch (ServiceLayerException e) {
             LOG.error("Error in Service Layer of Server: " + e.getMessage());
         }
+    }
 
+    @RequestMapping(value="/deleteTask", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteTask(TaskDTO task) {
+        LOG.debug("Deleting task " + task.getId());
+        try {
+            taskService.deleteTask(task);
+        } catch (ServiceLayerException e) {
+            LOG.error("Error in service layer of server: " + e.getMessage());
+        }
     }
 
     public List<TaskDTO> getAllOpenTasks() {

@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 public class OrderControllerImpl implements OrderController {
-
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private RestTemplate restTemplate;
@@ -45,7 +44,6 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     public void deleteOrder(@RequestBody OrderDTO orderDTO) {
-
         LOG.debug("sending order to be deleted to server");
 
         try{

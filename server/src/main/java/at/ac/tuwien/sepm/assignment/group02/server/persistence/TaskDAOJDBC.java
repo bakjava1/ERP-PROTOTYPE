@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
@@ -28,7 +29,88 @@ public class TaskDAOJDBC implements TaskDAO {
 
     @Override
     public void deleteTask(Task task) throws PersistenceLayerException {
+        LOG.debug("deleting task with order number: {}", task.getOrder_id());
 
+        String getLumberForDeletingTask = "SELECT * FROM TASK WHERE ORDERID = ?";
+        String getTotalReservedLumber = "SELECT RESERVED_QUANTITY FROM LUMBER WHERE DESCRIPTION = ? AND FINISHING = ? AND WOOD_TYPE = ? AND QUALITY = ? AND SIZE = ? AND WIDTH = ? AND LENGTH = ?";
+        String getTaskLumberAmount = "SELECT QUANTITY FROM TASK WHERE DESCRIPTION = ? AND FINISHING = ? AND WOOD_TYPE = ? AND QUALITY = ? AND SIZE = ? AND WIDTH = ? AND LENGTH = ?";
+        String deleteLumberReservation = "UPDATE LUMBER SET RESERVED_QUANTITY = ?, ALL_RESERVED = 0 WHERE DESCRIPTION = ? AND FINISHING = ? AND WOOD_TYPE = ? AND QUALITY = ? AND SIZE = ? AND WIDTH = ? AND LENGTH = ?";
+        String deleteTask = "UPDATE TASK SET DELETED = 1 WHERE ORDERID = ?";
+
+        try {
+            //get all types of tasks and lumber by order_id
+            PreparedStatement ps = dbConnection.prepareStatement(getLumberForDeletingTask, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, task.getOrder_id());
+            ps.execute();
+
+            ResultSet rs = ps.getResultSet();
+
+            Lumber lumber;
+            int totalReservedLumber, reservedLumberTask, calculatedReservedLumber = 0;
+            while(rs.next()) {
+                lumber = new Lumber();
+                lumber.setDescription(rs.getString("Description"));
+                lumber.setFinishing(rs.getString("Finishing"));
+                lumber.setWood_type(rs.getString("Wood_Type"));
+                lumber.setQuality(rs.getString("Quality"));
+                lumber.setSize(rs.getInt("Size"));
+                lumber.setWidth(rs.getInt("Width"));
+                lumber.setLength(rs.getInt("Length"));
+
+
+                //get amount of reserved lumber in table lumber for the current task
+                ps = dbConnection.prepareStatement(getTotalReservedLumber);
+                ps.setString(1, lumber.getDescription());
+                ps.setString(2, lumber.getFinishing());
+                ps.setString(3, lumber.getWood_type());
+                ps.setString(4, lumber.getQuality());
+                ps.setInt(5, lumber.getSize());
+                ps.setInt(6, lumber.getWidth());
+                ps.setInt(7, lumber.getLength());
+                ps.execute();
+                ps.getResultSet().next();
+                totalReservedLumber = ps.getResultSet().getInt("RESERVED_QUANTITY");
+
+
+                //get amount of reserved lumber for the current task (table task)
+                ps = dbConnection.prepareStatement(getTaskLumberAmount, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, lumber.getDescription());
+                ps.setString(2, lumber.getFinishing());
+                ps.setString(3, lumber.getWood_type());
+                ps.setString(4, lumber.getQuality());
+                ps.setInt(5, lumber.getSize());
+                ps.setInt(6, lumber.getWidth());
+                ps.setInt(7, lumber.getLength());
+                ps.execute();
+                ps.getResultSet().next();
+                reservedLumberTask = ps.getResultSet().getInt("QUANTITY");
+
+                if(totalReservedLumber > reservedLumberTask) {
+                    calculatedReservedLumber = totalReservedLumber - reservedLumberTask;
+                }
+
+                //set (reduced) amount of reserved lumber in table lumber for the current task
+                ps = dbConnection.prepareStatement(deleteLumberReservation, Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1, calculatedReservedLumber);
+                ps.setString(2, lumber.getDescription());
+                ps.setString(3, lumber.getFinishing());
+                ps.setString(4, lumber.getWood_type());
+                ps.setString(5, lumber.getQuality());
+                ps.setInt(6, lumber.getSize());
+                ps.setInt(7, lumber.getWidth());
+                ps.setInt(8, lumber.getLength());
+                ps.execute();
+
+                //set current task to deleted
+                ps = dbConnection.prepareStatement(deleteTask, Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1, task.getOrder_id());
+                ps.execute();
+
+            }
+        } catch (SQLException e) {
+            LOG.error("SQL Exception: " + e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
     }
 
     @Override

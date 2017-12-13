@@ -31,8 +31,17 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public void deleteTask(TaskDTO task) {
+    public void deleteTask(@RequestBody TaskDTO task) {
+        LOG.debug("sending task to be deleted to server");
 
+        try {
+            restTemplate.postForObject("http://localhost:8080/deleteTask", task, TaskDTO.class);
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+        }
     }
 
     @Override

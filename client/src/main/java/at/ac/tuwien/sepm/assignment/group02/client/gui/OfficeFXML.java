@@ -81,9 +81,6 @@ public class OfficeFXML {
     private Tab tab_order;
 
     @FXML
-    private TextField selectedOrder;
-
-    @FXML
     private TextField tf_timber_amount;
 
     @FXML
@@ -100,7 +97,7 @@ public class OfficeFXML {
     private TaskService taskService;
 
     @Autowired
-    public OfficeFXML(OrderService orderService, TimberService timberService,TaskService taskService){
+    public OfficeFXML(OrderService orderService, TimberService timberService, TaskService taskService){
         this.orderService = orderService;
         this.timberService = timberService;
         this.taskService = taskService;
@@ -109,6 +106,8 @@ public class OfficeFXML {
 
     @FXML
     void initialize() {
+        table_openOrder.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
         col_orderID.setCellValueFactory(new PropertyValueFactory("ID"));
 
         col_taskNr.setCellValueFactory(
@@ -141,17 +140,30 @@ public class OfficeFXML {
     public void deleteOrder() {
         LOG.trace("called deleteOrder");
 
-        //TODO create order correctly and use orderDTO for REST
-        int selectedOrderID = Integer.parseInt(selectedOrder.getText());
         Order order = new Order();
-        order.setID(selectedOrderID);
 
-        try {
-            orderService.deleteOrder(order);
-        } catch (InvalidInputException e) {
-            LOG.warn(e.getMessage());
-        } catch (ServiceLayerException e) {
-            LOG.warn(e.getMessage());
+        if(table_openOrder.getSelectionModel().getSelectedItem() != null) {
+            order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
+
+            Task task = new Task();
+            task.setOrderID(order.getID());
+
+            try {
+                orderService.deleteOrder(order);
+                taskService.deleteTask(task);
+            } catch (InvalidInputException e) {
+                //InvalidInputException is never thrown
+                //the only user input is to select an order
+                //LOG.warn(e.getMessage());
+            } catch (ServiceLayerException e) {
+                LOG.warn(e.getMessage());
+            }
+        } else {
+            Alert noSelection = new Alert(Alert.AlertType.ERROR);
+            noSelection.setTitle("Deletion failed");
+            noSelection.setHeaderText(null);
+            noSelection.setContentText("You have to choose an order to delete it!");
+            noSelection.showAndWait();
         }
 
         updateTable();

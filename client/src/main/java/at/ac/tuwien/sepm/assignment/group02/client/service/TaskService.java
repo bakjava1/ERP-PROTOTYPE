@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 
 import java.util.List;
 
@@ -18,6 +19,15 @@ public interface TaskService {
      * @param task
      */
     void createTask(Task task) throws InvalidInputException, ServiceLayerException;
+
+    /**
+     * 1.2.1 Aufträge löschen
+     * method deletes a given task (identified by its id)
+     * @param task the TaskDTO to be deleted
+     * @throws ServiceLayerException in case the TaskDTO can't be deleted
+     */
+    void deleteTask(Task task) throws ServiceLayerException;
+
 
     /**
      *

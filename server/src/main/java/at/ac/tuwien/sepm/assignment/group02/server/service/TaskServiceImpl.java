@@ -15,15 +15,15 @@ import java.util.List;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-
-    private static TaskDAO taskManagementDAO;
-    private static TaskConverter taskConverter = new TaskConverter();
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @Autowired
-    public TaskServiceImpl(TaskDAO taskManagementDAO){
+    private static TaskDAO taskManagementDAO;
+    private static TaskConverter taskConverter;
 
+    @Autowired
+    public TaskServiceImpl(TaskDAO taskManagementDAO, TaskConverter taskConverter) {
         TaskServiceImpl.taskManagementDAO = taskManagementDAO;
+        TaskServiceImpl.taskConverter = taskConverter;
     }
 
     @Override
@@ -33,7 +33,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTask(TaskDTO task) {
+        Task taskToDelete = taskConverter.convertRestDTOToPlainObject(task);
 
+        try {
+            taskManagementDAO.deleteTask(taskToDelete);
+        } catch (PersistenceLayerException e) {
+            LOG.error("Error while deleting an task");
+        }
     }
 
     @Override
