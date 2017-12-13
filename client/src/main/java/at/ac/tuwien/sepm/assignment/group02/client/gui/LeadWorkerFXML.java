@@ -46,6 +46,11 @@ public class LeadWorkerFXML {
     public void addLumberToTask(ActionEvent actionEvent) {
         try {
             lumberService.addReservedLumberToTask(tf_taskId.getText(),tf_taskAmount.getText());
+            Alert success = new Alert(Alert.AlertType.INFORMATION);
+            success.setTitle("Success");
+            success.setHeaderText(null);
+            success.setContentText("Successfully added Lumber to Task");
+            success.showAndWait();
         } catch(InvalidInputException e) {
             LOG.error("Failed to add Lumber to Task: " + e.getMessage());
             Alert error = new Alert(Alert.AlertType.ERROR);
