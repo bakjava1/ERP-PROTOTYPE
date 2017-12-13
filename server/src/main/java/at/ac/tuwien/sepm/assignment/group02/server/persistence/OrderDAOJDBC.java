@@ -17,11 +17,11 @@ import java.util.List;
 public class OrderDAOJDBC implements OrderDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static Connection dbConnection;
+    private Connection dbConnection;
 
     @Autowired
     public OrderDAOJDBC(Connection dbConnection) {
-        OrderDAOJDBC.dbConnection = dbConnection;
+        this.dbConnection = dbConnection;
     }
 
 
@@ -112,21 +112,7 @@ public class OrderDAOJDBC implements OrderDAO {
 
         } catch (SQLException e) {
             throw new PersistenceLayerException("Database error");
-        } finally {
-            //close connections
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) { /* ignored */}
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) { /* ignored */}
-            }
-
         }
-
         return orderList;
     }
 

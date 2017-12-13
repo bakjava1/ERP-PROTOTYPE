@@ -17,13 +17,13 @@ import java.sql.SQLException;
 public class TimberDAOJDBC implements TimberDAO{
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static Connection dbConnection;
+    private Connection dbConnection;
     private PreparedStatement stmt = null;
     private ResultSet rs = null;
 
     @Autowired
     public TimberDAOJDBC(Connection dbConnection) {
-        TimberDAOJDBC.dbConnection = dbConnection;
+        this.dbConnection = dbConnection;
     }
 
     @Override
