@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TabPane prefHeight="500.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
+<TabPane prefHeight="500.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
    <tabs>
       <Tab text="Bestellungen">
          <content>
@@ -63,6 +63,8 @@
                     </columns>
                   </TableView>
                   <Button layoutX="603.0" layoutY="400.0" mnemonicParsing="false" onAction="#createOrder" text="Bestellung aufnehmen" />
+                  <Button fx:id="btnEditOrder" layoutX="168.0" layoutY="339.0" mnemonicParsing="false" onAction="#editOrderBtnClicked" text="Edit Order" />
+                  <Button fx:id="btnInvoice" layoutX="23.0" layoutY="339.0" mnemonicParsing="false" onAction="#invoiceBtnClicked" text="Abrechnen" />
                 </children>
             </AnchorPane>
          </content>

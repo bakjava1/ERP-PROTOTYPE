@@ -16,6 +16,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -335,5 +337,50 @@ public class OfficeFXML {
             }
         });
 
+    }
+
+    public void editOrderBtnClicked(ActionEvent actionEvent) {
+        LOG.info("editOrderBtn clicked");
+
+        //get the selected order
+        Order selectedOrder = table_openOrder.getSelectionModel().getSelectedItem();
+
+        if(selectedOrder!= null) {
+            try {
+                EditOrderFXML editOrderFXML = new EditOrderFXML();
+                FXMLLoader fxmlLoader = new FXMLLoader(OfficeFXML.class.getResource("/fxml/edit_order.fxml"));
+                fxmlLoader.setControllerFactory(param -> param.isInstance(editOrderFXML) ? editOrderFXML : null);
+
+                Stage stage = new Stage();
+                stage.setTitle("Edit Order");
+                stage.setWidth(500);
+                stage.setHeight(750);
+                stage.centerOnScreen();
+                stage.setScene(new Scene(fxmlLoader.load()));
+                stage.show();
+                editOrderFXML.setSelectedOrder(selectedOrder);
+
+
+            } catch (IOException e) {
+                LOG.error(e.getMessage());
+            }
+        }
+    }
+
+    public void invoiceBtnClicked(ActionEvent actionEvent) {
+        LOG.info("invoice Button clicked");
+
+        //get the selected order
+        Order selectedOrder = table_openOrder.getSelectionModel().getSelectedItem();
+
+        try {
+            orderService.invoiceOrder(selectedOrder);
+        } catch (InvalidInputException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error creating Invoice!");
+            alert.setHeaderText(null);
+            alert.setContentText("Error while trying to invoice Order!\nReason: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 }

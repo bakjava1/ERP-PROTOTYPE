@@ -71,4 +71,10 @@ public class OrderControllerImpl {
     public OrderDTO getOrderById(int order_id) {
         return null;
     }
+
+    @RequestMapping(value="/invoiceOrder",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public void invoiceOrder(@RequestBody OrderDTO orderDTO){
+        LOG.debug("invoice Order " + orderDTO.getID());
+        orderService.invoiceOrder(orderDTO);
+    }
 }

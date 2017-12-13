@@ -38,4 +38,6 @@ public interface OrderController {
      * 1.6.2 Rechnungsdetails (Geschlossene Bestellung) anfordern.
      */
     OrderDTO getOrderById(int order_id) throws PersistenceLayerException;
+
+    void invoiceOrder(OrderDTO orderDTO);
 }

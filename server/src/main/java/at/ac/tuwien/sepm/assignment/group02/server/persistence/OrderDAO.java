@@ -39,4 +39,5 @@ public interface OrderDAO {
      */
     Order getOrderById(int order_id) throws PersistenceLayerException;
 
+    void invoiceOrder(Order order) throws PersistenceLayerException;
 }

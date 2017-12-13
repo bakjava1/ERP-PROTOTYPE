@@ -142,4 +142,22 @@ public class OrderDAOJDBC implements OrderDAO {
     public Order getOrderById(int order_id) throws PersistenceLayerException {
         return null;
     }
+
+    @Override
+    public void invoiceOrder(Order order) throws PersistenceLayerException {
+        String updateSentence = "UPDATE ORDERS SET ISPAID=? WHERE ID=?";
+
+        try {
+            PreparedStatement stmt = dbConnection.prepareStatement(updateSentence);
+            //set to ispaid to true
+            stmt.setInt(1, 1);
+            stmt.setInt(2, order.getID());
+            stmt.execute();
+
+            stmt.close();
+        } catch (SQLException e) {
+            LOG.error("SQLException: {}", e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
+    }
 }
