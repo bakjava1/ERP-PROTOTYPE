@@ -40,7 +40,7 @@ public class MainApplication extends Application {
 
         if(lead) {
             primaryStage.setTitle("Lead Worker");
-            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/lead.fxml"), 640, 480));
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/lead.fxml"), 831, 634));
 
         }
         if(office) {
