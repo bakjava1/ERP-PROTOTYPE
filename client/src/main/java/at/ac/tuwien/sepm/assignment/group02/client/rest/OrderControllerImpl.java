@@ -5,8 +5,8 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -15,7 +15,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@Component
 public class OrderControllerImpl implements OrderController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
