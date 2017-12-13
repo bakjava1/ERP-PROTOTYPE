@@ -19,7 +19,7 @@ public interface LumberService {
      * 2.1.3 (rest/LumberController) Suchfunktionalität implementieren
      * @return
      */
-    List<Lumber> getAll(Filter filter) throws InvalidInputException, ServiceLayerException;
+    List<Lumber> getAll(Lumber filter) throws InvalidInputException, ServiceLayerException;
 
     /**
      * 2.2 Reservierung Schnittholz

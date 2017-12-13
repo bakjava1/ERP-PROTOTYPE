@@ -1,6 +1,18 @@
 CREATE TABLE IF NOT EXISTS LUMBER (
-  ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  NAME VARCHAR(40) NOT NULL
+ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+lager varchar(30) NOT NULL,
+description varchar(50) NOT NULL,
+finishing varchar(30) NOT NULL,
+wood_type varchar(20) NOT NULL,
+quality varchar(20) NOT NULL,
+size integer NOT NULL CHECK(size>0),
+width integer NOT NULL CHECK(width>0),
+length integer NOT NULL CHECK(length>0),
+quantity integer NOT NULL CHECK(quantity>0),
+reserved_quantity integer NOT NULL CHECK(reserved_quantity>0),
+delivered_quantity integer NOT NULL CHECK(delivered_quantity>0),
+all_reserved boolean NOT NULL,
+all_delivered boolean NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS TIMBER (
@@ -45,3 +57,10 @@ MERGE INTO TASK (ID, ORDERID, DESCRIPTION, SIZE, WIDTH, LENGTH, QUANTITY, PRODUC
 
 MERGE INTO TIMBER(ID, FESTMETER, AMOUNT, LENGTH, QUALITY, DIAMETER, PRICE, LAST_EDITED) KEY(ID) VALUES(1, 21.28, 3, 3500, 'B', 240, 100, '2017-12-05 08:00:00');
 MERGE INTO TIMBER(ID, FESTMETER, AMOUNT, LENGTH, QUALITY, DIAMETER, PRICE, LAST_EDITED) KEY(ID) VALUES(2, 203.35, 2, 4000, 'Bb', 370, 150, '2017-12-05 08:00:00');
+
+
+MERGE INTO LUMBER(ID,lager,description,finishing,wood_type,quality,size, width,length,quantity,reserved_quantity,delivered_quantity,
+all_reserved,all_delivered) KEY(ID) VALUES(1, 'Lager1', 'Latten', 'Prismiert','Ta', 'I/III', 22,48,3000,40,50,42,1,0);
+
+MERGE INTO LUMBER(ID,lager,description,finishing,wood_type,quality,size, width,length,quantity,reserved_quantity,delivered_quantity,
+all_reserved,all_delivered) KEY(ID) VALUES(7,'Lager1', 'Kantholz', 'roh-SW','Fi', 'II/IV', 22,48,2500,40,50,42,1,0);

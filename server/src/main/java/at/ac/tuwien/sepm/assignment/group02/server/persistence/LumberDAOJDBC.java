@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil.getConnection;
@@ -31,8 +33,58 @@ public class LumberDAOJDBC implements LumberDAO {
 
 
     @Override
+    public List<Lumber> getAllLumber(Lumber filter) throws PersistenceLayerException {
+        LOG.debug("Get all Lumber from database");
+
+        List<Lumber> lumberList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+
+            //connect to db
+            ps = dbConnection.prepareStatement("SELECT * FROM LUMBER");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Lumber currentLumber = new Lumber(rs.getString("description"),rs.getString("finishing"),
+                        rs.getString("wood_type"),rs.getString("quality"),
+                        rs.getInt("size"),rs.getInt("width"),rs.getInt("length"),
+                        rs.getInt("quantity"),rs.getInt("reserved_quantity"));
+
+
+                lumberList.add(currentLumber);
+            }
+
+            if (lumberList.size() == 0) {
+                //no open order was found
+                throw new PersistenceLayerException("No lumber found");
+            }
+
+        } catch (SQLException e) {
+            throw new PersistenceLayerException("Database error");
+        } finally {
+            //close connections
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+
+        }
+
+        return lumberList;
+    }
+
+    @Override
     public void createLumber(Lumber lumber) throws PersistenceLayerException {
-        LOG.debug("adding product to database: {}", lumber);
+        /*LOG.debug("adding product to database: {}", lumber);
 
         String insertSQL =
                 "INSERT INTO LUMBER " +
@@ -56,10 +108,12 @@ public class LumberDAOJDBC implements LumberDAO {
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLayerException(e.getMessage());
         }
+        */
     }
 
     @Override
     public Lumber readLumberById(int id) throws PersistenceLayerException {
+        /*
         LOG.debug("retrieving lumber from database specified by id: {}", id);
 
         String readSQL = "SELECT " +
@@ -87,10 +141,14 @@ public class LumberDAOJDBC implements LumberDAO {
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLayerException(e.getMessage());
         }
+        */
+        return new Lumber();
     }
 
     @Override
     public void updateLumber(Lumber lumber) throws PersistenceLayerException, SQLException {
+
+        /*
         LOG.debug("Entering update Lumber method with parameter" +lumber);
 
         dbConnection.setAutoCommit(false);
@@ -112,10 +170,12 @@ public class LumberDAOJDBC implements LumberDAO {
             }
         }
 
+        */
     }
 
     @Override
     public void deleteLumber(Lumber lumber) throws PersistenceLayerException, SQLException {
+        /*
         LOG.debug("deleting lumber number {} from database", lumber.getId());
 
         dbConnection.setAutoCommit(false);
@@ -136,12 +196,8 @@ public class LumberDAOJDBC implements LumberDAO {
             getConnection().close();
         }
     }
+    */
 
-    }
-
-    @Override
-    public List<Lumber> getAllLumber(Filter filter) throws PersistenceLayerException {
-        return null;
     }
 
 }

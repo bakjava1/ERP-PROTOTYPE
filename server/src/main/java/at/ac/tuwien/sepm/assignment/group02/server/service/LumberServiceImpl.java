@@ -1,8 +1,11 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.LumberConverter;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
 import org.slf4j.Logger;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,8 +45,27 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public List<LumberDTO> getAllLumber(FilterDTO filter) {
-        return null;
+    public List<LumberDTO> getAllLumber(LumberDTO lumber) {
+        List<Lumber> allLumber = null;
+        List<LumberDTO> allLumberConverted = null;
+        Lumber filter = lumberConverter.convertRestDTOToPlainObject(lumber);
+
+        try{
+            allLumber = lumberManagementDAO.getAllLumber(filter);
+
+        } catch(PersistenceLayerException e) {
+            LOG.error("Error while trying to get objects from Database");
+        }
+
+        if (allLumber!= null) {
+            allLumberConverted = new ArrayList<>();
+
+            for (int i = 0; i < allLumber.size(); i++) {
+                allLumberConverted.add(lumberConverter.convertPlainObjectToRestDTO(allLumber.get(i)));
+            }
+        }
+
+        return allLumberConverted;
     }
 
     @Override

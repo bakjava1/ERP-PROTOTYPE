@@ -25,13 +25,13 @@
                            </font>
                         </Label>
                         <TextField alignment="TOP_CENTER" layoutX="325.0" layoutY="62.0" promptText="Bezeichnung" />
-                        <ChoiceBox layoutX="136.0" layoutY="107.0" prefHeight="27.0" prefWidth="81.0" />
-                        <ChoiceBox layoutX="238.0" layoutY="107.0" prefHeight="27.0" prefWidth="66.0" />
-                        <ChoiceBox layoutX="325.0" layoutY="107.0" prefHeight="27.0" prefWidth="71.0" />
+                        <ChoiceBox fx:id="cb_finishing" layoutX="136.0" layoutY="107.0" prefHeight="27.0" prefWidth="81.0" />
+                        <ChoiceBox fx:id="cb_wood_type" layoutX="238.0" layoutY="107.0" prefHeight="27.0" prefWidth="66.0" />
+                        <ChoiceBox fx:id="cb_quality" layoutX="325.0" layoutY="107.0" prefHeight="27.0" prefWidth="71.0" />
                         <TextField alignment="TOP_CENTER" layoutX="417.0" layoutY="107.0" prefHeight="27.0" prefWidth="75.0" promptText="Stärke" />
                         <TextField alignment="TOP_CENTER" layoutX="511.0" layoutY="107.0" prefHeight="27.0" prefWidth="75.0" promptText="Breite" />
                         <TextField alignment="TOP_CENTER" layoutX="605.0" layoutY="107.0" prefHeight="27.0" prefWidth="75.0" promptText="Länge" />
-                        <Button layoutX="367.0" layoutY="152.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="83.0" text="Suchen">
+                        <Button layoutX="367.0" layoutY="152.0" mnemonicParsing="false" onAction="#onSearchButtonClicked" prefHeight="35.0" prefWidth="83.0" text="Suchen">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -41,17 +41,17 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <TableView layoutX="81.0" layoutY="207.0" prefHeight="297.0" prefWidth="655.0">
+                        <TableView fx:id="table_lumber" layoutX="81.0" layoutY="207.0" prefHeight="297.0" prefWidth="655.0">
                           <columns>
-                            <TableColumn prefWidth="104.31481170654297" text="Bezeichnung" />
-                            <TableColumn prefWidth="91.67002868652344" text="Ausführung" />
-                              <TableColumn prefWidth="67.82998657226562" text="Holzart" />
-                              <TableColumn prefWidth="65.37548828125" text="Qualität" />
-                              <TableColumn prefWidth="61.329925537109375" text="Stärke" />
-                              <TableColumn prefWidth="56.670074462890625" text="Breite" />
-                              <TableColumn prefWidth="58.16241455078125" text="Länge" />
-                              <TableColumn prefWidth="65.8375244140625" text="frei" />
-                              <TableColumn prefWidth="82.33001708984375" text="reserviert" />
+                            <TableColumn fx:id="col_description" prefWidth="104.31481170654297" text="Bezeichnung" />
+                            <TableColumn fx:id="col_finishing" prefWidth="91.67002868652344" text="Ausführung" />
+                              <TableColumn fx:id="col_wood_type" prefWidth="67.82998657226562" text="Holzart" />
+                              <TableColumn fx:id="col_quality" prefWidth="65.37548828125" text="Qualität" />
+                              <TableColumn fx:id="col_size" prefWidth="61.329925537109375" text="Stärke" />
+                              <TableColumn fx:id="col_width" prefWidth="56.670074462890625" text="Breite" />
+                              <TableColumn fx:id="col_length" prefWidth="58.16241455078125" text="Länge" />
+                              <TableColumn fx:id="col_quantity" prefWidth="65.8375244140625" text="frei" />
+                              <TableColumn fx:id="col_reserved_quantity" prefWidth="82.33001708984375" text="reserviert" />
                           </columns>
                         </TableView>
                      </children>
