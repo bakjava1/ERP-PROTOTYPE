@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,7 +27,7 @@ public class LumberServiceImpl implements LumberService {
     private static LumberConverter lumberConverter;
 
     @Autowired
-    public LumberServiceImpl(LumberDAO lumberManagementDAO, LumberConverter lumberConverter){
+    public LumberServiceImpl(LumberDAO lumberManagementDAO, LumberConverter lumberConverter) {
         LumberServiceImpl.lumberManagementDAO = lumberManagementDAO;
         LumberServiceImpl.lumberConverter = lumberConverter;
     }
@@ -38,7 +39,7 @@ public class LumberServiceImpl implements LumberService {
         try {
             return lumberConverter.convertPlainObjectToRestDTO(lumberManagementDAO.readLumberById(id));
         } catch (PersistenceLayerException e) {
-            LOG.warn("helloWorldLumber Persistence Exception: {}",e.getMessage());
+            LOG.warn("helloWorldLumber Persistence Exception: {}", e.getMessage());
         }
 
         return null;
@@ -51,15 +52,33 @@ public class LumberServiceImpl implements LumberService {
         try {
             lumberManagementDAO.createLumber(lumberConverter.convertRestDTOToPlainObject(lumberDTO));
         } catch (PersistenceLayerException e) {
-            LOG.warn("helloWorldLumber Persistence Exception: {}",e.getMessage());
+            LOG.warn("helloWorldLumber Persistence Exception: {}", e.getMessage());
         }
 
     }
 
     @Override
-    public List<LumberDTO> getAllLumber(FilterDTO filter) {
+    public List<LumberDTO> getAllLumber(LumberDTO lumber) {
+        List<Lumber> allLumber = null;
+        List<LumberDTO> allLumberConverted = null;
+        Lumber filter = lumberConverter.convertRestDTOToPlainObject(lumber);
 
-        return null;
+        try {
+            allLumber = lumberManagementDAO.getAllLumber(filter);
+
+        } catch (PersistenceLayerException e) {
+            LOG.error(e.getMessage());
+        }
+
+        if (allLumber != null) {
+            allLumberConverted = new ArrayList<>();
+
+            for (int i = 0; i < allLumber.size(); i++) {
+                allLumberConverted.add(lumberConverter.convertPlainObjectToRestDTO(allLumber.get(i)));
+            }
+        }
+
+        return allLumberConverted;
     }
 
     @Override
@@ -69,13 +88,13 @@ public class LumberServiceImpl implements LumberService {
 
     @Override
     public void updateLumber(LumberDTO lumberDTO) throws ServiceLayerException, SQLException {
-
         try {
             lumberManagementDAO.updateLumber(lumberConverter.convertRestDTOToPlainObject(lumberDTO));
-        }catch (PersistenceLayerException e){
-            LOG.warn("Updating Lumber Persistence Exception: {}",e.getMessage());
+        } catch (PersistenceLayerException e) {
+            LOG.warn("Updating Lumber Persistence Exception: {}", e.getMessage());
         }
     }
+
 
     @Override
     public void removeLumber(LumberDTO lumberDTO) throws SQLException {
@@ -88,6 +107,4 @@ public class LumberServiceImpl implements LumberService {
             LOG.error("Error while deleting an order");
         }
     }
-
-
 }

@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityCreationException;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberService;
@@ -30,20 +31,6 @@ public class LumberControllerImpl {
 
         LumberControllerImpl.lumberService = lumberService;
     }
-
-
-    public void createLumber(LumberDTO lumber) {
-
-    }
-
-    public void reserveLumber(LumberDTO lumber) {
-
-    }
-
-    public List<LumberDTO> getAllLumber(FilterDTO filter) {
-        return null;
-    }
-
 
     @RequestMapping(value="/updateLumber",method = RequestMethod.PUT,produces = MediaType.APPLICATION_JSON_VALUE)
     public void updateLumber(@RequestBody LumberDTO lumberDTO) throws EntityCreationException, SQLException {
@@ -82,4 +69,25 @@ public class LumberControllerImpl {
             throw new EntityNotFoundException("failed to get lumber.");
         }
     }
+
+
+    @RequestMapping(value="/getAllLumber",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<LumberDTO> getAllLumber(@RequestBody LumberDTO filter) throws EntityNotFoundException {
+        LOG.debug("Get all lumber");
+        try {
+            return lumberService.getAllLumber(filter);
+        } catch (ServiceLayerException e) {
+            throw new EntityNotFoundException("failed to get all lumbers.");
+        }
+
+    }
+
+    public void reserveLumber(LumberDTO lumber) {
+
+    }
+
+    public void createLumber(LumberDTO lumber) {
+
+    }
+
 }

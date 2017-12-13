@@ -5,8 +5,11 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import javafx.fxml.FXML;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +18,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,10 +31,10 @@ public class LumberControllerImpl implements LumberController {
 
     private RestTemplate restTemplate;
 
-    public LumberControllerImpl(RestTemplate restTemplate) {
+    @Autowired
+    public LumberControllerImpl(RestTemplate restTemplate){
         this.restTemplate = restTemplate;
     }
-
 
     @Override
     public void createLumber(LumberDTO lumberDTO) {
@@ -43,9 +47,19 @@ public class LumberControllerImpl implements LumberController {
     }
 
     @Override
-    public List<LumberDTO> getAllLumber(FilterDTO filter) {
+    public List<LumberDTO> getAllLumber(@RequestBody LumberDTO filter) {
+        LOG.debug("get lumber");
 
-        return null;
+        List<LumberDTO> lumberList = new ArrayList<>();
+
+        LumberDTO[] lumberArray = restTemplate.postForObject("http://localhost:8080/getAllLumber", filter, LumberDTO[].class);
+
+        for (int i = 0; lumberArray!= null && i < lumberArray.length; i++) {
+            lumberList.add(lumberArray[i]);
+        }
+
+        return lumberList;
+
     }
 
     @Override

@@ -1,5 +1,8 @@
 package at.ac.tuwien.sepm.assignment.group02.rest.entity;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class Lumber {
     private int id;
     private String lager;

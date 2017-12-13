@@ -18,11 +18,6 @@ import java.util.List;
 public interface LumberService {
 
     /**
-     * 3.2.4 Schnittholz ins Lager hinzufügen.
-     */
-    void addLumber(LumberDTO lumberDTO) throws ServiceLayerException;
-
-    /**
      * 2.2.2 Schnittholz bearbeiten
      * @param lumberDTO
      * @throws ServiceLayerException
@@ -33,7 +28,12 @@ public interface LumberService {
      * 2.1.2 Eine tabellarische Übersicht des vorhandenen Schnittholz anzeigen.
      * 2.1.3 Suchfunktionalität implementieren
      */
-    List<LumberDTO> getAllLumber(FilterDTO filter) throws ServiceLayerException;
+    List<LumberDTO> getAllLumber(LumberDTO filter) throws ServiceLayerException;
+
+    /**
+     * Schnittholz aus dem Schnittholzlager entfernen.
+     */
+    void removeLumber(LumberDTO lumberDTO) throws ServiceLayerException;
 
     /**
      * 2.2.2 & 3.2.5 Schnittholz als reserviert markieren.
@@ -41,9 +41,9 @@ public interface LumberService {
     void reserveLumber(LumberDTO lumberDTO) throws ServiceLayerException;
 
     /**
-     * Schnittholz aus dem Schnittholzlager entfernen.
+     * 3.2.4 Schnittholz ins Lager hinzufügen.
      */
-    void removeLumber(LumberDTO lumberDTO) throws ServiceLayerException, SQLException;
+    void addLumber(LumberDTO lumber) throws ServiceLayerException;
 
     /**
      * Hello World!

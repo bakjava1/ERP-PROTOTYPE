@@ -12,7 +12,7 @@ public interface LumberController {
      * 2.1.2 Eine tabellarische Übersicht des vorhandenen Schnittholz anzeigen.
      * 2.1.3 Suchfunktionalität implementieren
      */
-    List<LumberDTO> getAllLumber(FilterDTO filter) throws PersistenceLayerException;
+    List<LumberDTO> getAllLumber(LumberDTO filter) throws PersistenceLayerException;
 
     /**
      * 1.4.3 Schnittholz aus dem Schnittholzlager entfernen.

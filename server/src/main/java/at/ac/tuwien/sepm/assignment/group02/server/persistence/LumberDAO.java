@@ -30,6 +30,6 @@ public interface LumberDAO {
      * 2.1.2 & 2.1.3
      * Returns a list of all lumber that matches the filter.
      */
-    List<Lumber> getAllLumber(Filter filter) throws PersistenceLayerException;
+    List<Lumber> getAllLumber(Lumber filter) throws PersistenceLayerException;
 
 }
