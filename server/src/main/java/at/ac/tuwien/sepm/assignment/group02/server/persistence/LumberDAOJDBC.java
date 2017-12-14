@@ -1,6 +1,8 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,12 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil.getConnection;
 
 /**
  * Created by e0701149 on 20.11.17.
@@ -22,12 +23,12 @@ import java.util.List;
 public class LumberDAOJDBC implements LumberDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private Connection dbConnection;
+    private static Connection dbConnection;
 
 
     @Autowired
     public LumberDAOJDBC(Connection dbConnection){
-        this.dbConnection = dbConnection;
+        LumberDAOJDBC.dbConnection = dbConnection;
     }
 
 
@@ -138,6 +139,19 @@ public class LumberDAOJDBC implements LumberDAO {
 
         } catch (SQLException e) {
             throw new PersistenceLayerException("Database error");
+        } finally {
+            //close connections
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+
         }
 
         return lumberList;
@@ -223,8 +237,11 @@ public class LumberDAOJDBC implements LumberDAO {
         }catch (SQLException e){
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLayerException("Database error");
-        }
-        */
+        } finally {
+            if (getConnection() != null) {
+                getConnection().close();
+            }
+        }*/
     }
 
     @Override
@@ -245,6 +262,9 @@ public class LumberDAOJDBC implements LumberDAO {
         }catch (SQLException e){
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLayerException("Database error");
+        } finally {
+        if (getConnection() != null) {
+            getConnection().close();
         }
     }
     */

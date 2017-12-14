@@ -16,7 +16,7 @@ public class TaskDAOJDBC implements TaskDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private Connection dbConnection;
+    private static Connection dbConnection;
 
     public TaskDAOJDBC(Connection dbConnection) {
         this.dbConnection = dbConnection;
