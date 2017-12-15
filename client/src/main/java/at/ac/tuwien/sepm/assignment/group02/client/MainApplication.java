@@ -45,7 +45,7 @@ public class MainApplication extends Application {
         }
         if(office) {
             primaryStage.setTitle("Office");
-            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/office.fxml"), 900, 500));
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/office.fxml"), 900, 550));
         }
         if(crane) {
             primaryStage.setTitle("Crane Operator");

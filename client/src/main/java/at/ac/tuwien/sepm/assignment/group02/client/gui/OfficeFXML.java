@@ -3,13 +3,13 @@ package at.ac.tuwien.sepm.assignment.group02.client.gui;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.service.CostBenefitService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
-import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_AlertBuilder;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
+import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,12 +23,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -43,6 +42,13 @@ public class OfficeFXML {
     private static Order currentOrder = new Order();
     private static List<Task> currentOrderTaskList = new ArrayList<>();
     private static int currentOrderIndex = 1;
+    private static int currentOrderSum = 0;
+
+    @FXML
+    private Label l_sumorders;
+
+    @FXML
+    private Label kn_result;
 
     @FXML
     private TableColumn col_taskLength;
@@ -95,12 +101,14 @@ public class OfficeFXML {
     private OrderService orderService;
     private TimberService timberService;
     private TaskService taskService;
+    private CostBenefitService costBenefitService;
 
     @Autowired
-    public OfficeFXML(OrderService orderService, TimberService timberService, TaskService taskService){
+    public OfficeFXML(OrderService orderService, TimberService timberService, TaskService taskService, CostBenefitService costBenefitService){
         this.orderService = orderService;
         this.timberService = timberService;
         this.taskService = taskService;
+        this.costBenefitService = costBenefitService;
     }
 
 
@@ -131,6 +139,7 @@ public class OfficeFXML {
 
         ObservableList<Task> orderTasks = FXCollections.observableArrayList();
         table_addedTask.setItems(orderTasks);
+        l_sumorders.setText(currentOrderSum + " €");
 
         initTimberTab();
         updateTable();
@@ -186,13 +195,7 @@ public class OfficeFXML {
         LOG.debug(currentOrder.toString());
         try {
             orderService.addOrder(currentOrder,currentOrderTaskList);
-            ObservableList<Task> orderTasks = FXCollections.observableArrayList();
-            table_addedTask.setItems(orderTasks);
-            currentOrder = new Order();
-            currentOrderTaskList = new ArrayList<>();
-            tf_order_customername.setText("");
-            tf_order_customeraddress.setText("");
-            tf_order_customerUID.setText("");
+            clearCurrentOrder(null);
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setTitle("Creation successful");
             success.setHeaderText(null);
@@ -320,34 +323,85 @@ public class OfficeFXML {
         hb_quality.setSpacing(10);
 
         TextField size = new TextField("");
+        size.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    size.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
         Label l_size =  new Label("Dicke:              ");
         HBox hb_size = new HBox();
         hb_size.getChildren().addAll(l_size, size);
         hb_size.setSpacing(10);
 
         TextField width = new TextField("");
+        width.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    width.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
         Label l_width =  new Label("Breite:             ");
         HBox hb_width = new HBox();
         hb_width.getChildren().addAll(l_width, width);
         hb_width.setSpacing(10);
 
         TextField length = new TextField("");
+        length.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    length.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
         Label l_length =  new Label("Länge:             ");
         HBox hb_length = new HBox();
         hb_length.getChildren().addAll(l_length, length);
         hb_length.setSpacing(10);
 
         TextField quantity = new TextField("");
+        quantity.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    quantity.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
         Label l_quantity =  new Label("Menge:           ");
         HBox hb_quantity = new HBox();
         hb_quantity.getChildren().addAll(l_quantity, quantity);
         hb_quantity.setSpacing(10);
 
-        dialogPane.setContent(new VBox(8,hb_description,hb_finishing,hb_wood_type,hb_quality,hb_size,hb_width,hb_length,hb_quantity));
+        TextField cost = new TextField("");
+        cost.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    cost.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        Label l_cost =  new Label("Preis:                ");
+        HBox hb_cost = new HBox();
+        hb_cost.getChildren().addAll(l_cost, cost);
+        hb_cost.setSpacing(10);
+
+        dialogPane.setContent(new VBox(8,hb_description,hb_finishing,hb_wood_type,hb_quality,hb_size,hb_width,hb_length,hb_quantity,hb_cost));
         Platform.runLater(description::requestFocus);
         dialog.setResultConverter((ButtonType button) -> {
             if (button == ButtonType.OK) {
-                return new UnvalidatedTask(description.getText(),finishing.getText(),wood_type.getText(),quality.getText(),size.getText(),width.getText(),length.getText(),quantity.getText());
+                return new UnvalidatedTask(description.getText(),finishing.getText(),wood_type.getText(),quality.getText(),size.getText(),width.getText(),length.getText(),quantity.getText(),cost.getText());
             }
             return null;
         });
@@ -359,6 +413,8 @@ public class OfficeFXML {
                 currentOrderIndex++;
                 currentOrderTaskList.add(toAdd);
                 table_addedTask.getItems().add(toAdd);
+                currentOrderSum += toAdd.getPrice();
+                l_sumorders.setText(currentOrderSum + " €");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Successfully created Task");
                 alert.setHeaderText(null);
@@ -417,6 +473,38 @@ public class OfficeFXML {
             alert.setHeaderText(null);
             alert.setContentText("Error while trying to invoice Order!\nReason: " + e.getMessage());
             alert.showAndWait();
+        }
+    }
+
+    public void clearCurrentOrder(ActionEvent actionEvent) {
+        ObservableList<Task> orderTasks = FXCollections.observableArrayList();
+        table_addedTask.setItems(orderTasks);
+        currentOrder = new Order();
+        currentOrderTaskList = new ArrayList<>();
+        tf_order_customername.setText("");
+        tf_order_customeraddress.setText("");
+        tf_order_customerUID.setText("");
+        currentOrderSum = 0;
+        l_sumorders.setText(currentOrderSum + " €");
+        kn_result.setText("");
+    }
+
+    public void initiateCostValueFunction(ActionEvent actionEvent) {
+        if(currentOrderTaskList.size() == 0) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("No Tasks to evaluate");
+            error.setHeaderText(null);
+            error.setContentText("There is no Task added to the Order!\nPlease add Tasks to proceed to Cost/Benefit Function");
+            error.showAndWait();
+            return;
+        }
+        int randomized = costBenefitService.costValueFunctionStub(currentOrderSum);
+        if(randomized < 0) {
+            kn_result.setTextFill(Color.web("#dd0000"));
+            kn_result.setText(randomized+"");
+        } else {
+            kn_result.setTextFill(Color.web("#00dd00"));
+            kn_result.setText(randomized+"");
         }
     }
 }

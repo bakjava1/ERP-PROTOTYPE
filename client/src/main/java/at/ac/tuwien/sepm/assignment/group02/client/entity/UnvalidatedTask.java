@@ -10,9 +10,10 @@ public class UnvalidatedTask {
     private String width;
     private String length;
     private String quantity;
+    private String price;
 
 
-    public UnvalidatedTask(String description, String finishing, String wood_type, String quality, String size, String width, String length, String quantity) {
+    public UnvalidatedTask(String description, String finishing, String wood_type, String quality, String size, String width, String length, String quantity,String price) {
         this.description = description;
         this.finishing = finishing;
         this.wood_type = wood_type;
@@ -21,6 +22,7 @@ public class UnvalidatedTask {
         this.width = width;
         this.length = length;
         this.quantity = quantity;
+        this.price = price;
     }
 
     public String getDescription() {
@@ -67,5 +69,9 @@ public class UnvalidatedTask {
                 ", length='" + length + '\'' +
                 ", quantity='" + quantity + '\'' +
                 '}';
+    }
+
+    public String getPrice() {
+        return price;
     }
 }

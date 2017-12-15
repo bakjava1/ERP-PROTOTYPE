@@ -112,7 +112,14 @@ public class Validator {
             LOG.error("Error at Quantity: " + e.getMessage());
             throw new InvalidInputException("Error at Quantity: " + e.getMessage());
         }
-        Task validated = new Task(-1,-1,toValidate.getDescription(),toValidate.getFinishing(),toValidate.getWood_type(),toValidate.getQuality(),validatedSize,validatedWidth,validatedLength,validatedQuantity,0,false);
+        int validatedPrice;
+        try {
+            validatedPrice = validateNumber(toValidate.getPrice());
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Price: " + e.getMessage());
+            throw new InvalidInputException("Error at Price: " + e.getMessage());
+        }
+        Task validated = new Task(-1,-1,toValidate.getDescription(),toValidate.getFinishing(),toValidate.getWood_type(),toValidate.getQuality(),validatedSize,validatedWidth,validatedLength,validatedQuantity,0,false,validatedPrice);
         return validated;
     }
 
@@ -123,8 +130,8 @@ public class Validator {
         }
         try {
             num = Integer.parseInt(toValidate);
-            if (num < 0) {
-                throw new NoValidIntegerException("Negative Integer entered");
+            if (num <= 0) {
+                throw new NoValidIntegerException("Negative Integer or Null entered");
             }
         } catch (NumberFormatException e) {
             LOG.error("No valid Integer entered");
