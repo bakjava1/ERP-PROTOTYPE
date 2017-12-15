@@ -66,13 +66,11 @@ public class OrderDAOJDBC implements OrderDAO {
     public void deleteOrder(Order order) throws PersistenceLayerException {
         LOG.debug("deleting order number {} from database", order.getID());
 
-        String deleteOrder = "UPDATE ORDERS SET DELETED = 1 WHERE ID = ?";
+        String deleteOrder = "UPDATE ORDERS SET isDoneFlag = 1 WHERE ID = ?";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(deleteOrder);
-            System.out.print("");
             ps.setInt(1, order.getID());
-            System.out.print("");
             ps.execute();
 
             ps.close();
