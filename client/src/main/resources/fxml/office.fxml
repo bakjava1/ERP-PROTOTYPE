@@ -61,11 +61,11 @@
                       <TableColumn fx:id="col_taskLength" prefWidth="60.0" text="Länge" />
                     </columns>
                   </TableView>
-                  <Button layoutX="474.0" layoutY="481.0" mnemonicParsing="false" onAction="#createOrder" text="Bestellung aufnehmen" />
+                  <Button fx:id="bt_acceptOrder" layoutX="474.0" layoutY="481.0" mnemonicParsing="false" onAction="#createOrder" style="-fx-background-color: #6cff48;" text="Bestellung aufnehmen" />
                   <Button fx:id="btnEditOrder" layoutX="168.0" layoutY="339.0" mnemonicParsing="false" onAction="#editOrderBtnClicked" text="Edit Order" />
                   <Button fx:id="btnInvoice" layoutX="23.0" layoutY="339.0" mnemonicParsing="false" onAction="#invoiceBtnClicked" text="Abrechnen" />
-                  <Button layoutX="768.0" layoutY="481.0" mnemonicParsing="false" onAction="#clearCurrentOrder" text="Bestellung verwerfen" />
-                  <Button layoutX="594.0" layoutY="407.0" mnemonicParsing="false" onAction="#initiateCostValueFunction" text="Kosten/Nutzen Schätzung" />
+                  <Button layoutX="768.0" layoutY="481.0" mnemonicParsing="false" onAction="#clearCurrentOrder" style="-fx-background-color: #ff5048;" text="Bestellung verwerfen" />
+                  <Button fx:id="bt_deleteOrder" layoutX="594.0" layoutY="407.0" mnemonicParsing="false" onAction="#initiateCostValueFunction" text="Kosten/Nutzen Schätzung" />
                   <Label layoutX="508.0" layoutY="446.0" text="Ergebnis Schätzung">
                      <font>
                         <Font name="System Bold" size="16.0" />

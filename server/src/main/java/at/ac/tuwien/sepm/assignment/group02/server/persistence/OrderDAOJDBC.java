@@ -28,15 +28,14 @@ public class OrderDAOJDBC implements OrderDAO {
     @Override
     public void createOrder(Order order) throws PersistenceLayerException {
         LOG.debug("Creating new Order");
-        String createSentence = "INSERT INTO ORDERS VALUES(default,?,?,?,now(),?,false,false)";
-        String insertTaskSentence = "INSERT INTO TASK VALUES(default,?,?,?,?,?,?,?,?,?,?,false,false);";
+        String createSentence = "INSERT INTO ORDERS VALUES(default,?,?,?,now(),false,false)";
+        String insertTaskSentence = "INSERT INTO TASK VALUES(default,?,?,?,?,?,?,?,?,?,?,?,false,false);";
 
         try{
             PreparedStatement stmt = dbConnection.prepareStatement(createSentence, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1,order.getCustomerName());
             stmt.setString(2,order.getCustomerAddress());
             stmt.setString(3,order.getCustomerUID());
-            stmt.setInt(4,0); //TODO change it to sum when decided
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             rs.next();
@@ -54,6 +53,7 @@ public class OrderDAOJDBC implements OrderDAO {
                 stmt.setInt(8,taskList.get(i).getLength());
                 stmt.setInt(9,taskList.get(i).getQuantity());
                 stmt.setInt(10,0);
+                stmt.setInt(11,taskList.get(i).getPrice());
                 stmt.executeUpdate();
             }
         } catch(SQLException e) {

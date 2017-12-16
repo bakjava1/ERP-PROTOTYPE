@@ -21,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -43,6 +44,12 @@ public class OfficeFXML {
     private static List<Task> currentOrderTaskList = new ArrayList<>();
     private static int currentOrderIndex = 1;
     private static int currentOrderSum = 0;
+
+    @FXML
+    private Button bt_deleteOrder;
+
+    @FXML
+    private Button bt_acceptOrder;
 
     @FXML
     private Label l_sumorders;
@@ -140,7 +147,6 @@ public class OfficeFXML {
         ObservableList<Task> orderTasks = FXCollections.observableArrayList();
         table_addedTask.setItems(orderTasks);
         l_sumorders.setText(currentOrderSum + " €");
-
         initTimberTab();
         updateTable();
     }
@@ -298,29 +304,29 @@ public class OfficeFXML {
         DialogPane dialogPane = dialog.getDialogPane();
         dialogPane.getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.OK);
 
-        Label l_description =  new Label("Beschreibung: ");
-        TextField description = new TextField("");
-        HBox hb_description = new HBox();
-        hb_description.getChildren().addAll(l_description, description);
-        hb_description.setSpacing(10);
+        GridPane gridPane =  new GridPane();
+        gridPane.setHgap(40);
+        gridPane.setVgap(10);
 
-        Label l_finishing =  new Label("Ausführung:    ");
+        Label l_description =  new Label("Beschreibung:");
+        TextField description = new TextField("");
+        gridPane.add(l_description,0,0,2,1);
+        gridPane.add(description,2,0);
+
+        Label l_finishing =  new Label("Ausführung:");
         TextField finishing = new TextField("");
-        HBox hb_finishing = new HBox();
-        hb_finishing.getChildren().addAll(l_finishing, finishing);
-        hb_finishing.setSpacing(10);
+        gridPane.add(l_finishing,0,1,2,1);
+        gridPane.add(finishing,2,1);
 
         TextField wood_type = new TextField("");
-        Label l_wood_type =  new Label("Holzart:           ");
-        HBox hb_wood_type = new HBox();
-        hb_wood_type.getChildren().addAll(l_wood_type, wood_type);
-        hb_wood_type.setSpacing(10);
+        Label l_wood_type =  new Label("Holzart:");
+        gridPane.add(l_wood_type,0,2,2,1);
+        gridPane.add(wood_type,2,2);
 
         TextField quality = new TextField("");
-        Label l_quality =  new Label("Qualität:          ");
-        HBox hb_quality = new HBox();
-        hb_quality.getChildren().addAll(l_quality, quality);
-        hb_quality.setSpacing(10);
+        Label l_quality =  new Label("Qualität:");
+        gridPane.add(l_quality,0,3,2,1);
+        gridPane.add(quality,2,3);
 
         TextField size = new TextField("");
         size.textProperty().addListener(new ChangeListener<String>() {
@@ -332,10 +338,9 @@ public class OfficeFXML {
                 }
             }
         });
-        Label l_size =  new Label("Dicke:              ");
-        HBox hb_size = new HBox();
-        hb_size.getChildren().addAll(l_size, size);
-        hb_size.setSpacing(10);
+        Label l_size =  new Label("Dicke:");
+        gridPane.add(l_size,0,4,2,1);
+        gridPane.add(size,2,4);
 
         TextField width = new TextField("");
         width.textProperty().addListener(new ChangeListener<String>() {
@@ -347,10 +352,9 @@ public class OfficeFXML {
                 }
             }
         });
-        Label l_width =  new Label("Breite:             ");
-        HBox hb_width = new HBox();
-        hb_width.getChildren().addAll(l_width, width);
-        hb_width.setSpacing(10);
+        Label l_width =  new Label("Breite:");
+        gridPane.add(l_width,0,5,2,1);
+        gridPane.add(width,2,5);
 
         TextField length = new TextField("");
         length.textProperty().addListener(new ChangeListener<String>() {
@@ -362,10 +366,9 @@ public class OfficeFXML {
                 }
             }
         });
-        Label l_length =  new Label("Länge:             ");
-        HBox hb_length = new HBox();
-        hb_length.getChildren().addAll(l_length, length);
-        hb_length.setSpacing(10);
+        Label l_length =  new Label("Länge:");
+        gridPane.add(l_length,0,6,2,1);
+        gridPane.add(length,2,6);
 
         TextField quantity = new TextField("");
         quantity.textProperty().addListener(new ChangeListener<String>() {
@@ -377,10 +380,9 @@ public class OfficeFXML {
                 }
             }
         });
-        Label l_quantity =  new Label("Menge:           ");
-        HBox hb_quantity = new HBox();
-        hb_quantity.getChildren().addAll(l_quantity, quantity);
-        hb_quantity.setSpacing(10);
+        Label l_quantity =  new Label("Menge:");
+        gridPane.add(l_quantity,0,7,2,1);
+        gridPane.add(quantity,2,7);
 
         TextField cost = new TextField("");
         cost.textProperty().addListener(new ChangeListener<String>() {
@@ -392,12 +394,12 @@ public class OfficeFXML {
                 }
             }
         });
-        Label l_cost =  new Label("Preis:                ");
-        HBox hb_cost = new HBox();
-        hb_cost.getChildren().addAll(l_cost, cost);
-        hb_cost.setSpacing(10);
+        Label l_cost =  new Label("Preis:");
+        gridPane.add(l_cost,0,8,2,1);
+        gridPane.add(cost,2,8);
 
-        dialogPane.setContent(new VBox(8,hb_description,hb_finishing,hb_wood_type,hb_quality,hb_size,hb_width,hb_length,hb_quantity,hb_cost));
+        dialogPane.setContent(gridPane);
+        //dialogPane.setContent(new VBox(8,hb_description,hb_finishing,hb_wood_type,hb_quality,hb_size,hb_width,hb_length,hb_quantity,hb_cost));
         Platform.runLater(description::requestFocus);
         dialog.setResultConverter((ButtonType button) -> {
             if (button == ButtonType.OK) {

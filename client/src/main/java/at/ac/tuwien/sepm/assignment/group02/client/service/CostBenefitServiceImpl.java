@@ -12,6 +12,7 @@ public class CostBenefitServiceImpl implements CostBenefitService {
         int randomizedValue = (int) Math.floor(Math.random() * evalValue);
         double posOrNeg = Math.random();
         if(posOrNeg > 0.5) { randomizedValue = randomizedValue * -1; }
+        else { if(randomizedValue > sum) { randomizedValue *= -1; } }
         return randomizedValue;
     }
 }

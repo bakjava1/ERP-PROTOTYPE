@@ -20,13 +20,14 @@ public class TaskDTO {
 
     private int quantity;
     private int produced_quantity; // (= reserved lumber)
+    private int price;
     private boolean done; // (true if produced_quantity == quantity)
 
     public TaskDTO() {
 
     }
 
-    public TaskDTO(int id, int order_id, String description, String finishing, String wood_type, String quality, int size, int width, int length, int quantity, int produced_quantity, boolean done) {
+    public TaskDTO(int id, int order_id, String description, String finishing, String wood_type, String quality, int size, int width, int length, int quantity, int produced_quantity, boolean done,int price) {
         this.id = id;
         this.order_id = order_id;
         this.description = description;
@@ -39,6 +40,7 @@ public class TaskDTO {
         this.quantity = quantity;
         this.produced_quantity = produced_quantity;
         this.done = done;
+        this.price = price;
     }
 
     public int getId() {
@@ -135,5 +137,13 @@ public class TaskDTO {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }
