@@ -91,14 +91,16 @@ public class OrderDAOJDBC implements OrderDAO {
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISPAID = 0 AND DELETED = 0 ORDER BY ORDERDATE");
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISPAIDFLAG = 0 AND ISDONEFLAG = 0 ORDER BY ORDER_DATE");
             rs = ps.executeQuery();
 
             while (rs.next()) {
 
 
-                Order currentOrder = new Order(rs.getInt("ID"), rs.getTimestamp("ORDERDATE"));
-                currentOrder.setPaid(false);
+                Order currentOrder = new Order(rs.getInt("ID"));
+                currentOrder.setCustomerName(rs.getString("customer_name"));
+                currentOrder.setGrossAmount(rs.getInt("summe"));
+
 
                 orderList.add(currentOrder);
             }
@@ -109,7 +111,7 @@ public class OrderDAOJDBC implements OrderDAO {
             }
 
         } catch (SQLException e) {
-            throw new PersistenceLayerException("Database error");
+            throw new PersistenceLayerException("Database error:" + e.getMessage());
         }
         return orderList;
     }

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TabPane prefHeight="500.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
+<TabPane prefHeight="500.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
    <tabs>
       <Tab text="Bestellungen">
          <content>
@@ -21,10 +21,10 @@
                   <TableView fx:id="table_openOrder" layoutX="7.0" prefHeight="322.0" prefWidth="460.0">
                     <columns>
                       <TableColumn fx:id="col_orderID" prefWidth="30.0" text="Nr" />
-                      <TableColumn prefWidth="100.0" text="Kundenname" />
-                        <TableColumn prefWidth="100.0" text="Anzahl Aufträge" />
-                        <TableColumn prefWidth="130.0" text="Anzahl Stück Gesamt" />
-                        <TableColumn prefWidth="100.0" text="Summe (Brutto)" />
+                      <TableColumn fx:id="col_costumerName" prefWidth="100.0" text="Kundenname" />
+                        <TableColumn fx:id="col_taskAmount" prefWidth="100.0" text="Anzahl Aufträge" />
+                        <TableColumn fx:id="col_amount" prefWidth="130.0" text="Anzahl Stück Gesamt" />
+                        <TableColumn fx:id="col_grossSum" prefWidth="100.0" text="Summe (Brutto)" />
                     </columns>
                   </TableView>
                   <Label layoutX="573.0" layoutY="14.0" text="Bestellung erstellen">

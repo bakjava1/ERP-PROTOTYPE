@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,14 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static OrderDAO orderManagementDAO;
+    private static TaskDAO taskManagementDAO;
     private static OrderConverter orderConverter;
     private static TaskConverter taskConverter = new TaskConverter();
 
     @Autowired
-    public OrderServiceImpl(OrderDAO orderManagementDAO, OrderConverter orderConverter) {
+    public OrderServiceImpl(OrderDAO orderManagementDAO,TaskDAO taskManagementDAO, OrderConverter orderConverter) {
         OrderServiceImpl.orderManagementDAO = orderManagementDAO;
+        OrderServiceImpl.taskManagementDAO = taskManagementDAO;
         OrderServiceImpl.orderConverter = orderConverter;
     }
 
@@ -66,10 +69,26 @@ public class OrderServiceImpl implements OrderService {
 
 
         try{
+
             allOpen = orderManagementDAO.getAllOpen();
 
+            for (Order currentOrder: allOpen) {
+
+                List<Task> tasks = taskManagementDAO.getTasksByOrderId(currentOrder.getID());
+
+                int quantity = 0;
+                for (Task task: tasks) {
+                    quantity += task.getQuantity();
+                }
+
+                currentOrder.setQuantity(quantity);
+                currentOrder.setTaskAmount(tasks.size());
+
+            }
+
+
         } catch(PersistenceLayerException e) {
-            LOG.error("Error while trying to get objects from Database");
+            LOG.error(e.getMessage());
         }
 
         if (allOpen!= null) {

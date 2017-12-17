@@ -63,15 +63,7 @@ public class OrderControllerImpl implements OrderController {
 
         List<OrderDTO> orderList = new ArrayList<>();
         OrderDTO[] orderArray = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
-/*        try{
-            restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
-        } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-        } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-        }
-*/
+
         for (int i = 0; orderArray!= null && i < orderArray.length; i++) {
             orderList.add(orderArray[i]);
         }

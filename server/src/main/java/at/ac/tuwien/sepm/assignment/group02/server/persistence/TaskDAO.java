@@ -33,4 +33,8 @@ public interface TaskDAO {
      */
     void getTaskById(int task_id) throws PersistenceLayerException;
 
+
+
+    List<Task> getTasksByOrderId(int order_id) throws PersistenceLayerException;
+
 }

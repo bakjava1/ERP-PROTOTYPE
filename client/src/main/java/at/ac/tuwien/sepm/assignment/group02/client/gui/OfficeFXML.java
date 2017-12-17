@@ -90,6 +90,18 @@ public class OfficeFXML {
     private TableColumn col_orderID;
 
     @FXML
+    private TableColumn col_costumerName;
+
+    @FXML
+    private TableColumn col_taskAmount;
+
+    @FXML
+    private TableColumn col_amount;
+
+    @FXML
+    private TableColumn col_grossSum;
+
+    @FXML
     TableView<Order> table_openOrder;
 
     private OrderService orderService;
@@ -109,6 +121,15 @@ public class OfficeFXML {
         table_openOrder.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         col_orderID.setCellValueFactory(new PropertyValueFactory("ID"));
+        col_costumerName.setCellValueFactory(new PropertyValueFactory("customerName"));
+        col_taskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
+        col_amount.setCellValueFactory(new PropertyValueFactory("quantity"));
+        col_grossSum.setCellValueFactory(new PropertyValueFactory("grossAmount"));
+
+
+
+
+
 
         col_taskNr.setCellValueFactory(
                 new PropertyValueFactory<Task, Integer>("id")
