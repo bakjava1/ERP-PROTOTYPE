@@ -103,7 +103,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllClosed() {
         LOG.debug("getAllClosed called");
-        return null;
+        List<OrderDTO> allClosed = null;
+
+        try {
+            allClosed = orderController.getAllClosed();
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
+        }
+
+        List<Order> allClosedConverted = new LinkedList<>();
+
+
+        for (OrderDTO bill: allClosed) {
+            allClosedConverted.add(orderConverter.convertRestDTOToPlainObject(bill));
+        }
+
+        return allClosedConverted;
     }
 
     @Override

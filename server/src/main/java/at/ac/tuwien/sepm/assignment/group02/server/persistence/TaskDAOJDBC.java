@@ -162,7 +162,7 @@ public class TaskDAOJDBC implements TaskDAO {
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM TASK WHERE ORDERID = ?");
+            ps = dbConnection.prepareStatement("SELECT * FROM TASK WHERE ORDERID = ? AND DELETED = 0");
             ps.setInt(1, order_id);
             rs = ps.executeQuery();
 

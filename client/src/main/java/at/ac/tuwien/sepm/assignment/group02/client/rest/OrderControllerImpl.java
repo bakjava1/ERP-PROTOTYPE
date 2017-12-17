@@ -60,14 +60,22 @@ public class OrderControllerImpl implements OrderController {
     @Override
     public List<OrderDTO> getAllOpen() {
         LOG.debug("get all open order");
-
         List<OrderDTO> orderList = new ArrayList<>();
-        OrderDTO[] orderArray = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
 
-        for (int i = 0; orderArray!= null && i < orderArray.length; i++) {
-            orderList.add(orderArray[i]);
+
+        try {
+            OrderDTO[] orderArray = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
+
+
+            for (int i = 0; orderArray!= null && i < orderArray.length; i++) {
+                orderList.add(orderArray[i]);
+            }
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
         }
-
 
         return orderList;
 
@@ -80,7 +88,24 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     public List<OrderDTO> getAllClosed() {
-        return null;
+        LOG.debug("get all closed order");
+        List<OrderDTO> billList = new ArrayList<>();
+
+        try {
+            OrderDTO[] billArray = restTemplate.getForObject("http://localhost:8080/getAllClosed", OrderDTO[].class);
+
+            for (int i = 0; billArray!= null && i < billArray.length; i++) {
+                billList.add(billArray[i]);
+            }
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+        }
+
+
+        return billList;
     }
 
     @Override
@@ -104,6 +129,7 @@ public class OrderControllerImpl implements OrderController {
             //no response payload, probably server not running
             LOG.warn("server is down? - {}", e.getMessage());
         }
+
 
 
     }

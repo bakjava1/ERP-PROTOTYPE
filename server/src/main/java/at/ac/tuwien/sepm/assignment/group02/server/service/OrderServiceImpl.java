@@ -72,25 +72,7 @@ public class OrderServiceImpl implements OrderService {
 
             allOpen = orderManagementDAO.getAllOpen();
 
-            for (Order currentOrder: allOpen) {
-
-                List<Task> tasks = taskManagementDAO.getTasksByOrderId(currentOrder.getID());
-
-                int quantity = 0;
-                for (Task task: tasks) {
-                    quantity += task.getQuantity();
-                }
-
-                currentOrder.setQuantity(quantity);
-
-                if (tasks != null) {
-                    currentOrder.setTaskAmount(tasks.size());
-                }
-                else{
-                    currentOrder.setTaskAmount(0);
-                }
-
-            }
+            setTaskInfo(allOpen);
 
 
         } catch(PersistenceLayerException e) {
@@ -115,8 +97,32 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> getAllClosed() {
-        return null;
+        List<Order> allClosed = null;
+        List<OrderDTO> allClosedConverted = null;
+
+
+        try{
+
+            allClosed = orderManagementDAO.getAllClosed();
+
+            setTaskInfo(allClosed);
+
+
+        } catch(PersistenceLayerException e) {
+            LOG.error(e.getMessage());
+        }
+
+        if (allClosed!= null) {
+            allClosedConverted = new ArrayList<>();
+
+            for (int i = 0; i < allClosed.size(); i++) {
+                allClosedConverted.add(orderConverter.convertPlainObjectToRestDTO(allClosed.get(i)));
+            }
+        }
+
+        return allClosedConverted;
     }
+
 
     @Override
     public OrderDTO getOrderById(int order_id) {
@@ -132,5 +138,30 @@ public class OrderServiceImpl implements OrderService {
         } catch (PersistenceLayerException e) {
             LOG.error("Error while tying to invoice Order: " + e.getMessage());
         }
+    }
+
+
+
+    private void setTaskInfo(List<Order> order) throws PersistenceLayerException {
+
+        for (Order current : order) {
+
+            List<Task> tasks = taskManagementDAO.getTasksByOrderId(current.getID());
+
+            int quantity = 0;
+            for (Task task : tasks) {
+                quantity += task.getQuantity();
+            }
+
+            current.setQuantity(quantity);
+
+            if (tasks != null) {
+                current.setTaskAmount(tasks.size());
+            } else {
+                current.setTaskAmount(0);
+            }
+
+        }
+
     }
 }

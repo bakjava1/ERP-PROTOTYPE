@@ -64,8 +64,14 @@ public class OrderControllerImpl {
 
     public void updateOrder(OrderDTO orderDTO) { }
 
-    public List<OrderDTO> getAllClosed() {
-        return null;
+    @RequestMapping(value="/getAllClosed",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<OrderDTO> getAllClosed() throws EntityNotFoundException {
+        LOG.debug("Get all closed");
+        try {
+            return orderService.getAllClosed();
+        } catch (ServiceLayerException e) {
+            throw new EntityNotFoundException("failed to get all bills");
+        }
     }
 
     public OrderDTO getOrderById(int order_id) {

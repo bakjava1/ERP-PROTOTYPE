@@ -101,10 +101,10 @@ all_reserved,all_delivered) VALUES
 ('Lager1', 'Latten', 'roh','Ta', 'S10/CE/TS', 22,48,3000,40,60,60,0,1);
 
 INSERT INTO ORDERS(customer_name, customer_address,customer_uid, order_date,summe, isPaidFlag, isDoneFlag) VALUES
+('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),564,0,0),
 ('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),564,0,1),
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),564,0,1),
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),564,0,1),
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),564,0,1),
+('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),564,0,0),
+('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),564,0,0),
 ('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),564,0,1),
 ('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),564,0,1),
 ('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),564,0,1),
@@ -116,8 +116,8 @@ width,length,quantity,produced_quantity,done,deleted) VALUES
 (2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0),
 (2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0),
 (2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0),
+(3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0),
+(3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0),
 (2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0),
 (2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0),
 (2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0),
