@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import java.lang.invoke.MethodHandles;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"at.ac.tuwien.sepm.assignment.group02.client", "at.ac.tuwien.sepm.assignment.group02.rest"})
+@ComponentScan(basePackages = {"at.ac.tuwien.sepm.assignment.group02.client"})
 public class MainApplication extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

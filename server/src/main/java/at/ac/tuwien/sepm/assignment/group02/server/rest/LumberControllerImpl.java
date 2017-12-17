@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.SQLException;
@@ -17,6 +19,7 @@ import java.util.List;
 
 
 @RestController
+@Api(value="Lumber Management")
 public class LumberControllerImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -30,6 +33,7 @@ public class LumberControllerImpl {
     }
 
     @RequestMapping(value="/updateLumber",method = RequestMethod.PUT,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Update Lumber")
     public void updateLumber(@RequestBody LumberDTO lumberDTO) throws EntityCreationException, SQLException {
         LOG.debug("Updating the Lumber  with id: " + lumberDTO.getID());
 
@@ -42,6 +46,7 @@ public class LumberControllerImpl {
     }
 
     @RequestMapping(value="/deleteLumber",method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Remove Lumber")
     public void removeLumber(@RequestBody LumberDTO lumberDTO) throws EntityNotFoundException, SQLException {
         LOG.debug("Deleting lumber " + lumberDTO.getID());
         try {

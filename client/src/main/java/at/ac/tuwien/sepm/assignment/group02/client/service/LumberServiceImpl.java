@@ -6,8 +6,8 @@ import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberController;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskController;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.LumberConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.client.converter.LumberConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 
-import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedList;
 import java.util.List;

@@ -1,8 +1,9 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.LumberConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.server.converter.LumberConverter;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
@@ -37,10 +38,8 @@ public class LumberServiceImpl implements LumberService {
             return lumberConverter.convertPlainObjectToRestDTO(lumberManagementDAO.readLumberById(id));
         } catch (PersistenceLayerException e) {
             LOG.warn("helloWorldLumber Persistence Exception: {}", e.getMessage());
+            throw new ResourceNotFoundException();
         }
-
-        return null;
-
     }
 
     @Override
@@ -50,6 +49,7 @@ public class LumberServiceImpl implements LumberService {
             lumberManagementDAO.createLumber(lumberConverter.convertRestDTOToPlainObject(lumberDTO));
         } catch (PersistenceLayerException e) {
             LOG.warn("helloWorldLumber Persistence Exception: {}", e.getMessage());
+            throw new ResourceNotFoundException();
         }
 
     }
@@ -65,6 +65,7 @@ public class LumberServiceImpl implements LumberService {
 
         } catch (PersistenceLayerException e) {
             LOG.error(e.getMessage());
+            throw new ResourceNotFoundException();
         }
 
         if (allLumber != null) {
@@ -89,8 +90,7 @@ public class LumberServiceImpl implements LumberService {
             lumberManagementDAO.updateLumber(lumberConverter.convertRestDTOToPlainObject(lumberDTO));
         } catch (PersistenceLayerException e) {
             LOG.warn("Updating Lumber Persistence Exception: {}", e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ResourceNotFoundException();
         }
     }
 
@@ -104,8 +104,7 @@ public class LumberServiceImpl implements LumberService {
             lumberManagementDAO.deleteLumber(lumberToDelete);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while deleting an order");
-        } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ResourceNotFoundException();
         }
     }
 }

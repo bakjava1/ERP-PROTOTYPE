@@ -2,7 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Assignment;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Assignment;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.converter;
+package at.ac.tuwien.sepm.assignment.group02.server.converter;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 

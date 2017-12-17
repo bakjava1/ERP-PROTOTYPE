@@ -1,24 +1,12 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.restDTO;
+package at.ac.tuwien.sepm.assignment.group02.client.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ApiModel(value = "LumberDTO", description = "LumberDTO")
-public class LumberDTO {
-    /**
-     * declaration of instance variables
-     */
-    @ApiModelProperty(readOnly = true, name = "The automatically generated database id")
+public class Lumber {
     private int id;
-    private  String lager;
+    private String lager;
     private String description;
-    private  String finishing;
-    private  String wood_type;
-    private  String quality;
+    private String finishing;
+    private String wood_type;
+    private String quality;
     private int size;
     private int width;
     private int length;
@@ -29,55 +17,16 @@ public class LumberDTO {
     private boolean all_delivered;
 
     /**
-     * a default constructor
+     * Default constructor
      */
-    public LumberDTO(){
-
+    public Lumber() {
     }
-
-    /**
-     * constructor with parameter, initializes with instances variables.
-     * @param id
-     * @param lager
-     * @param description
-     * @param finishing
-     * @param wood_type
-     * @param quality
-     * @param size
-     * @param width
-     * @param length
-     * @param quantity
-     * @param reserved_quantity
-     * @param delivered_quantity
-     * @param all_reserved
-     * @param all_delivered
-     */
-    public LumberDTO(int id,String lager,String description,String finishing, String wood_type, String quality,
-                          int size,int width,int length,int quantity, int reserved_quantity, int delivered_quantity,
-                          boolean all_reserved, boolean all_delivered) {
-        this.id = id;
-        this.lager=lager;
-        this.description=description;
-        this.finishing=finishing;
-        this.wood_type=wood_type;
-        this.quality=quality;
-        this.size=size;
-        this.width=width;
-        this.length=length;
-        this.quantity=quantity;
-        this.reserved_quantity=reserved_quantity;
-        this.delivered_quantity=delivered_quantity;
-        this.all_reserved=all_reserved;
-        this.all_delivered=all_delivered;
-    }
-
-    //Create Setters and Getters
 
     /**
      * method to retrieve the schnittholz ID
-     * @return a value of id to caller
+     * @return a value of schnittID to caller
      */
-    public int getID() {
+    public int getId() {
         return id;
     }
 
@@ -85,7 +34,7 @@ public class LumberDTO {
      * method to set the schnittholz ID
      * @param id
      */
-    public void setID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -296,61 +245,4 @@ public class LumberDTO {
     public void setAll_delivered(boolean all_delivered) {
         this.all_delivered = all_delivered;
     }
-
-    /**
-     * JavaFX  BEAN Property Methods
-     */
-
-    public SimpleIntegerProperty idProperty(){
-        return new SimpleIntegerProperty(id);
-    }
-
-    public SimpleIntegerProperty sizeProperty(){
-        return new SimpleIntegerProperty(size);
-    }
-
-    public SimpleIntegerProperty lengthProperty(){
-        return new SimpleIntegerProperty(length);
-    }
-    public SimpleIntegerProperty widthProperty(){
-        return new SimpleIntegerProperty(width);
-    }
-    public SimpleIntegerProperty quantityProperty(){
-        return new SimpleIntegerProperty(quantity);
-    }
-    public SimpleIntegerProperty reserved_quantityProperty(){
-        return new SimpleIntegerProperty(reserved_quantity);
-    }
-
-    public SimpleIntegerProperty delivered_quantityProperty(){
-        return new SimpleIntegerProperty(delivered_quantity);
-    }
-
-    public SimpleBooleanProperty all_reservedProperty(){
-        return new SimpleBooleanProperty(all_reserved);
-    }
-    public SimpleBooleanProperty all_deliveredProperty(){
-        return new SimpleBooleanProperty(all_delivered);
-    }
-
-    @Override
-    public String toString() {
-        return "Schnittholz{" +
-                "id=" + id +
-                ", lager='" + lager + '\'' +
-                ", description='" + description + '\'' +
-                ", finishing='" + finishing + '\'' +
-                ", wood_type='" + wood_type + '\'' +
-                ", quality='" + quality + '\'' +
-                ", size=" + size +
-                ", width=" + width +
-                ", length=" + length +
-                ", quantity=" + quantity +
-                ", reserved_quantity=" + reserved_quantity +
-                ", delivered_quantity=" + delivered_quantity +
-                ", all_reserved=" + all_reserved +
-                ", all_delivered=" + all_delivered +
-                '}';
-    }
-
 }

@@ -1,4 +1,4 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.entity;
+package at.ac.tuwien.sepm.assignment.group02.client.entity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

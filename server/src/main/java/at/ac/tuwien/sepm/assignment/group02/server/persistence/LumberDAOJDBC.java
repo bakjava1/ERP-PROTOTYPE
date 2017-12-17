@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -207,7 +207,7 @@ public class LumberDAOJDBC implements LumberDAO {
     }
 
     @Override
-    public void updateLumber(Lumber lumber) throws PersistenceLayerException, SQLException {
+    public void updateLumber(Lumber lumber) throws PersistenceLayerException {
         /*LOG.debug("Entering update Lumber method with parameter" +lumber);
 
         dbConnection.setAutoCommit(false);
@@ -228,7 +228,7 @@ public class LumberDAOJDBC implements LumberDAO {
     }
 
     @Override
-    public void deleteLumber(Lumber lumber) throws PersistenceLayerException, SQLException {
+    public void deleteLumber(Lumber lumber) throws PersistenceLayerException {
         /*
         LOG.debug("deleting lumber number {} from database", lumber.getId());
 

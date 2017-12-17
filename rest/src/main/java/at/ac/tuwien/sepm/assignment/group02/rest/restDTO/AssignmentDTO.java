@@ -4,6 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ApiModel(value = "AssignmentDTO", description = "A simple DTO for restDTO entries via rest")
+@ApiModel(value = "AssignmentDTO", description = "AssignmentDTO")
 public class AssignmentDTO {
 }

@@ -1,12 +1,12 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.converter;
+package at.ac.tuwien.sepm.assignment.group02.server.converter;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Timber;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TimberConverter implements SimpleConverter<Timber, TimberDTO>{
+public class TimberConverter implements SimpleConverter<Timber, TimberDTO> {
 
 
     @Override
