@@ -131,7 +131,7 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public void invoiceOrder(Order order) throws PersistenceLayerException {
-        String updateSentence = "UPDATE ORDERS SET ISPAID=? WHERE ID=?";
+        String updateSentence = "UPDATE ORDERS SET isPaidFlag=? WHERE ID=?";
 
         try {
             PreparedStatement stmt = dbConnection.prepareStatement(updateSentence);

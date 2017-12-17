@@ -384,10 +384,11 @@ public class OfficeFXML {
         try {
             orderService.invoiceOrder(selectedOrder);
         } catch (InvalidInputException e) {
+            //TODO use alertBuilder
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error creating Invoice!");
+            alert.setTitle("Fehler beim Abrechnen!");
             alert.setHeaderText(null);
-            alert.setContentText("Error while trying to invoice Order!\nReason: " + e.getMessage());
+            alert.setContentText("Bestellung konnte nicht erfolgreich abgerechnet werden. Bitte versuchen Sie es erneut!");
             alert.showAndWait();
         }
     }
