@@ -31,7 +31,18 @@ public interface LumberService {
      */
     void reserveLumber(Lumber lumber, int quantity) throws InvalidInputException, ServiceLayerException;
 
+    /**
+     * 1.4.3 Schnittholz   aus   dem   Schnittholzlager   entfernen.
+     * @param lumber
+     * @throws ServiceLayerException
+     */
     public void deleteLumber(Lumber lumber) throws ServiceLayerException;
+
+    /**
+     * 2.2.2  Schnittholz bearbeiten
+     * @param lumber
+     * @throws ServiceLayerException
+     */
     public void updateLumber(Lumber lumber) throws  ServiceLayerException;
 
 

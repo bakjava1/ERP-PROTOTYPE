@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ApiModel(value = "LumberDTO", description = "LumberDTO")
@@ -12,10 +13,9 @@ public class LumberDTO {
     /**
      * declaration of instance variables
      */
-    @ApiModelProperty(readOnly = true, name = "The automatically generated database id")
     private int id;
     private  String lager;
-    private String description;
+    private  String description;
     private  String finishing;
     private  String wood_type;
     private  String quality;
@@ -37,20 +37,6 @@ public class LumberDTO {
 
     /**
      * constructor with parameter, initializes with instances variables.
-     * @param id
-     * @param lager
-     * @param description
-     * @param finishing
-     * @param wood_type
-     * @param quality
-     * @param size
-     * @param width
-     * @param length
-     * @param quantity
-     * @param reserved_quantity
-     * @param delivered_quantity
-     * @param all_reserved
-     * @param all_delivered
      */
     public LumberDTO(int id,String lager,String description,String finishing, String wood_type, String quality,
                           int size,int width,int length,int quantity, int reserved_quantity, int delivered_quantity,
@@ -300,12 +286,30 @@ public class LumberDTO {
     /**
      * JavaFX  BEAN Property Methods
      */
+    public SimpleStringProperty lagerProperty(){
+        return new SimpleStringProperty(lager);
+
+    }
+    public SimpleStringProperty descriptionProperty(){
+        return new SimpleStringProperty(description);
+
+    }public SimpleStringProperty wood_typeProperty(){
+        return new SimpleStringProperty(wood_type);
+
+    }public SimpleStringProperty finishingProperty(){
+        return new SimpleStringProperty(finishing);
+
+    }public SimpleStringProperty qualityProperty() {
+        return new SimpleStringProperty(quality);
+    }
 
     public SimpleIntegerProperty idProperty(){
+
         return new SimpleIntegerProperty(id);
     }
 
     public SimpleIntegerProperty sizeProperty(){
+
         return new SimpleIntegerProperty(size);
     }
 
@@ -331,26 +335,6 @@ public class LumberDTO {
     }
     public SimpleBooleanProperty all_deliveredProperty(){
         return new SimpleBooleanProperty(all_delivered);
-    }
-
-    @Override
-    public String toString() {
-        return "Schnittholz{" +
-                "id=" + id +
-                ", lager='" + lager + '\'' +
-                ", description='" + description + '\'' +
-                ", finishing='" + finishing + '\'' +
-                ", wood_type='" + wood_type + '\'' +
-                ", quality='" + quality + '\'' +
-                ", size=" + size +
-                ", width=" + width +
-                ", length=" + length +
-                ", quantity=" + quantity +
-                ", reserved_quantity=" + reserved_quantity +
-                ", delivered_quantity=" + delivered_quantity +
-                ", all_reserved=" + all_reserved +
-                ", all_delivered=" + all_delivered +
-                '}';
     }
 
 }

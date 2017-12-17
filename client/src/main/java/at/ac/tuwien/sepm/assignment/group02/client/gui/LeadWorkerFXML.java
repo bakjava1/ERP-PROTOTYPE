@@ -77,13 +77,11 @@ public class LeadWorkerFXML {
     TableView<Lumber> table_lumber;
 
 
-
-
-
     private LumberService lumberService;
 
     @Autowired
     public LeadWorkerFXML(LumberService lumberService){
+
         this.lumberService = lumberService;
     }
 
@@ -190,5 +188,8 @@ public class LeadWorkerFXML {
     }
 
 
+    @FXML
+    public void onUpdateButtonClicked(ActionEvent actionEvent){
 
+    }
 }

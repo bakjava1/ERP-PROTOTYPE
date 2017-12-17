@@ -384,4 +384,9 @@ public class OfficeFXML {
             alert.showAndWait();
         }
     }
+
+    @FXML
+    public void onDeleteButtonClicked(){
+
+    }
 }
