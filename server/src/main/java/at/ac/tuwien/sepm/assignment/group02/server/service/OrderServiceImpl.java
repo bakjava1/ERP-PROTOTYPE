@@ -82,7 +82,13 @@ public class OrderServiceImpl implements OrderService {
                 }
 
                 currentOrder.setQuantity(quantity);
-                currentOrder.setTaskAmount(tasks.size());
+
+                if (tasks != null) {
+                    currentOrder.setTaskAmount(tasks.size());
+                }
+                else{
+                    currentOrder.setTaskAmount(0);
+                }
 
             }
 
