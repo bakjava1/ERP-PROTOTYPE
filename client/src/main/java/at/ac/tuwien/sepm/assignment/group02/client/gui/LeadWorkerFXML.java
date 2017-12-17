@@ -99,9 +99,9 @@ public class LeadWorkerFXML {
         col_quantity.setCellValueFactory(new PropertyValueFactory("quantity"));
         col_reserved_quantity.setCellValueFactory(new PropertyValueFactory("reserved_quantity"));
 
-        cb_finishing.setItems(FXCollections.observableArrayList("roh-SW", "Prismiert", "keine Angabe"));
-        cb_wood_type.setItems(FXCollections.observableArrayList("Ta", "Fi", "keine Angabe"));
-        cb_quality.setItems(FXCollections.observableArrayList("I/III", "II/III", "II/IV", "keine Angabe"));
+        cb_finishing.setItems(FXCollections.observableArrayList("keine Angabe", "roh-SW"));
+        cb_wood_type.setItems(FXCollections.observableArrayList("keine Angabe", "Ta", "Fi"));
+        cb_quality.setItems(FXCollections.observableArrayList("keine Angabe", "I/III", "II/III", "II/IV"));
 
 
 
