@@ -1,8 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Assignment;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
 
 import java.util.List;
 
@@ -14,16 +13,16 @@ public interface AssignmentService {
 
     /**
      * 2.4.4 Neue Aufgabe für Kranfahrer erstellen.
-     * @param assignment
+     * @param assignmentDTO
      */
-    void createAssignment(Assignment assignment) throws InvalidInputException, ServiceLayerException;
+    void createAssignment(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 
     /**
      * 3.1 Aufgaben anzeigen
      * 3.1.2 (rest/AssignmentController) Eine tabellarische Übersicht der nicht erledigten Aufgaben anzeigen.
      * @return
      */
-    List<Assignment> getAllOpenAssignments() throws ServiceLayerException;
+    List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 
     /**
      * 3.2 Aufgaben abschließen
@@ -33,9 +32,10 @@ public interface AssignmentService {
      * 3.2.5 (rest/LumberController) Hinzugefügtes Schnittholz bei Bedarf reservieren.
      * 3.2.6 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
      * 3.2.7 Überprüfen ob Auftrag fertig ist (? => (rest/TaskController) getTaskById)
-     * @param assignment
+     * @param assignmentDTO an assignment to mark as done
+     * @throws ServiceLayerException if the assignment couldn't be updated
      */
-    void setDone(Assignment assignment) throws InvalidInputException, ServiceLayerException;
+    void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 
 }
 

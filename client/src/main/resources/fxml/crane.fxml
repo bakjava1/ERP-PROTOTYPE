@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.CraneOperatorFXML">
    <children>
-      <Button layoutX="253.0" layoutY="244.0" mnemonicParsing="false" onAction="#testCraneController" text="Test Controller" />
+      <Button layoutX="253.0" layoutY="244.0" mnemonicParsing="false" onAction="#setDone" text="Mask Assignment as done" />
       <Label layoutX="233.0" layoutY="136.0" text="Crane">
          <font>
             <Font size="52.0" />
