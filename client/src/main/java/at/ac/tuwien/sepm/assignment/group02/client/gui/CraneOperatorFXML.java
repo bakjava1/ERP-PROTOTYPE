@@ -54,7 +54,7 @@ public class CraneOperatorFXML {
         col_assignmentNr.setCellValueFactory(new PropertyValueFactory("id"));
         col_assignmentCreated.setCellValueFactory(new PropertyValueFactory("creation_date"));
         col_assignmentAmount.setCellValueFactory(new PropertyValueFactory("amount"));
-        col_assignmentBoxID.setCellValueFactory(new PropertyValueFactory("boxID"));
+        col_assignmentBoxID.setCellValueFactory(new PropertyValueFactory("box_id"));
 
         ObservableList<AssignmentDTO> assignments = FXCollections.observableArrayList();
         table_assignment.setItems(assignments);
@@ -82,11 +82,13 @@ public class CraneOperatorFXML {
     public void setDone() {
         LOG.info("setDone button pressed");
 
-        //TODO pick the assignmentDTO from a list of existing assignments
-        AssignmentDTO assignmentDTO = new AssignmentDTO();
-        assignmentDTO.setId(1);
-        assignmentDTO.setBox_id(1);
-        assignmentDTO.setAmount(1);
+        // get the selected assignmentDTO from the table
+        AssignmentDTO assignmentDTO = table_assignment.getSelectionModel().getSelectedItem();
+
+        if(assignmentDTO.equals(null)) {
+            AlertBuilder alertBuilder = new AlertBuilder();
+            alertBuilder.showInformationAlert("No Item selected","No Item selected","No Item selected");
+        }
 
         // create a thread and task to prevent ui from freezing
         new Thread(new Task<Integer>() {
@@ -108,6 +110,7 @@ public class CraneOperatorFXML {
             protected void succeeded() {
                 super.succeeded();
                 LOG.debug("set done succeeded with value {}", getValue());
+                table_assignment.getSelectionModel().clearSelection();
 
                 updateTable();
             }
