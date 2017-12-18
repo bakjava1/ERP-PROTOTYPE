@@ -1,11 +1,10 @@
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.AssignmentConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Assignment;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.converter.AssignmentConverter;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Assignment;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.AssignmentDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.AssignmentDAOJDBC;
-import at.ac.tuwien.sepm.assignment.group02.server.rest.AssignmentControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.service.AssignmentService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.AssignmentServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
@@ -20,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 public class AssignmentManagementTest {
