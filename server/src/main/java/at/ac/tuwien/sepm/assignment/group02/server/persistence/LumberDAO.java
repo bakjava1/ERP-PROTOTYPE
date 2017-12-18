@@ -19,10 +19,17 @@ public interface LumberDAO {
     void createLumber(Lumber lumber) throws PersistenceLayerException;
 
     /**
-     * 2.2.2 & 3.2.5 SchnittholzDAO als reserviert markieren.
+     * 2.2.2  Schnittholz bearbeiten
+     * @param lumber
+     * @throws PersistenceLayerException
      */
     void updateLumber(Lumber lumber) throws PersistenceLayerException;
 
+    /**
+     * 1.4.3 Schnittholz   aus   dem   Schnittholzlager   entfernen.
+     * @param lumber
+     * @throws PersistenceLayerException
+     */
     void deleteLumber(Lumber lumber) throws PersistenceLayerException;
 
     /**

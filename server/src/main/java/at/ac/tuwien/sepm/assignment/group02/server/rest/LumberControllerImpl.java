@@ -27,7 +27,7 @@ public class LumberControllerImpl {
     private static LumberService lumberService;
 
     @Autowired
-    public LumberControllerImpl(LumberService lumberService){
+    public LumberControllerImpl(LumberService lumberService) throws EntityCreationException{
 
         LumberControllerImpl.lumberService = lumberService;
     }
@@ -83,6 +83,7 @@ public class LumberControllerImpl {
         }
 
     }
+
 
     public void reserveLumber(LumberDTO lumber) {
 
