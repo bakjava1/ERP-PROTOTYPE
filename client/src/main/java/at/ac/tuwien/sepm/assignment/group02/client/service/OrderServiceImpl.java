@@ -40,14 +40,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void addOrder(Order order, List<Task> tasks) throws InvalidInputException{
         LOG.debug("addOrder called: {},{}", order, tasks);
-        OrderDTO toAdd = orderConverter.convertPlainObjectToRestDTO(order);
         try {
             validator.inputValidationOrder(order);
             List<TaskDTO> convertList = new ArrayList<>();
             for(int i = 0; i < tasks.size();i++) {
                 convertList.add(taskConverter.convertPlainObjectToRestDTO(tasks.get(i)));
             }
-            toAdd = orderConverter.convertPlainObjectToRestDTO(order);
+            OrderDTO toAdd = orderConverter.convertPlainObjectToRestDTO(order);
             toAdd.setTaskList(convertList);
             orderController.createOrder(toAdd);
         } catch (PersistenceLayerException e) {

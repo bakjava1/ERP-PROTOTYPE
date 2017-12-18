@@ -17,26 +17,25 @@ import java.util.List;
 public class OrderDAOJDBC implements OrderDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private Connection dbConnection;
+    private static Connection dbConnection;
 
     @Autowired
     public OrderDAOJDBC(Connection dbConnection) {
-        this.dbConnection = dbConnection;
+        OrderDAOJDBC.dbConnection = dbConnection;
     }
 
 
     @Override
     public void createOrder(Order order) throws PersistenceLayerException {
         LOG.debug("Creating new Order");
-        String createSentence = "INSERT INTO ORDERS VALUES(default,?,?,?,now(),?,false,false)";
-        String insertTaskSentence = "INSERT INTO TASK VALUES(default,?,?,?,?,?,?,?,?,?,?,false,false);";
+        String createSentence = "INSERT INTO ORDERS VALUES(default,?,?,?,now(),false,false)";
+        String insertTaskSentence = "INSERT INTO TASK VALUES(default,?,?,?,?,?,?,?,?,?,?,?,false,false);";
 
         try{
             PreparedStatement stmt = dbConnection.prepareStatement(createSentence, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1,order.getCustomerName());
             stmt.setString(2,order.getCustomerAddress());
             stmt.setString(3,order.getCustomerUID());
-            stmt.setInt(4,0); //TODO change it to sum when decided
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             rs.next();
@@ -54,6 +53,7 @@ public class OrderDAOJDBC implements OrderDAO {
                 stmt.setInt(8,taskList.get(i).getLength());
                 stmt.setInt(9,taskList.get(i).getQuantity());
                 stmt.setInt(10,0);
+                stmt.setInt(11,taskList.get(i).getPrice());
                 stmt.executeUpdate();
             }
         } catch(SQLException e) {
@@ -91,13 +91,13 @@ public class OrderDAOJDBC implements OrderDAO {
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISPAID = 0 AND DELETED = 0 ORDER BY ORDERDATE");
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISPAIDFLAG = 0 AND ISDONEFLAG = 0 ORDER BY ORDER_DATE");
             rs = ps.executeQuery();
 
             while (rs.next()) {
 
 
-                Order currentOrder = new Order(rs.getInt("ID"), rs.getTimestamp("ORDERDATE"));
+                Order currentOrder = new Order(rs.getInt("ID"), rs.getTimestamp("ORDER_DATE"));
                 currentOrder.setPaid(false);
 
                 orderList.add(currentOrder);
@@ -109,8 +109,23 @@ public class OrderDAOJDBC implements OrderDAO {
             }
 
         } catch (SQLException e) {
+            LOG.error("SQL Exception: " +  e.getMessage());
             throw new PersistenceLayerException("Database error");
+        } finally {
+            //close connections
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+
         }
+
         return orderList;
     }
 

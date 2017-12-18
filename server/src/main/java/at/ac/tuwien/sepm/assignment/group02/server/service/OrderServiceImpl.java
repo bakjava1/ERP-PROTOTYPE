@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
             allOpen = orderManagementDAO.getAllOpen();
 
         } catch(PersistenceLayerException e) {
-            LOG.error("Error while trying to get objects from Database");
+            LOG.error("Error while trying to get objects from Database: " + e.getMessage());
         }
 
         if (allOpen!= null) {

@@ -1,14 +1,15 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
-import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
-import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
-import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.service.CostBenefitService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,8 +19,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,19 @@ public class OfficeFXML {
     private static Order currentOrder = new Order();
     private static List<Task> currentOrderTaskList = new ArrayList<>();
     private static int currentOrderIndex = 1;
+    private static int currentOrderSum = 0;
+
+    @FXML
+    private Button bt_deleteOrder;
+
+    @FXML
+    private Button bt_acceptOrder;
+
+    @FXML
+    private Label l_sumorders;
+
+    @FXML
+    private Label kn_result;
 
     @FXML
     private TableColumn col_taskLength;
@@ -88,12 +103,14 @@ public class OfficeFXML {
     private OrderService orderService;
     private TimberService timberService;
     private TaskService taskService;
+    private CostBenefitService costBenefitService;
 
     @Autowired
-    public OfficeFXML(OrderService orderService, TimberService timberService, TaskService taskService){
+    public OfficeFXML(OrderService orderService, TimberService timberService, TaskService taskService, CostBenefitService costBenefitService){
         this.orderService = orderService;
         this.timberService = timberService;
         this.taskService = taskService;
+        this.costBenefitService = costBenefitService;
     }
 
 
@@ -124,7 +141,7 @@ public class OfficeFXML {
 
         ObservableList<Task> orderTasks = FXCollections.observableArrayList();
         table_addedTask.setItems(orderTasks);
-
+        l_sumorders.setText(currentOrderSum + " €");
         initTimberTab();
         updateTable();
     }
@@ -179,13 +196,7 @@ public class OfficeFXML {
         LOG.debug(currentOrder.toString());
         try {
             orderService.addOrder(currentOrder,currentOrderTaskList);
-            ObservableList<Task> orderTasks = FXCollections.observableArrayList();
-            table_addedTask.setItems(orderTasks);
-            currentOrder = new Order();
-            currentOrderTaskList = new ArrayList<>();
-            tf_order_customername.setText("");
-            tf_order_customeraddress.setText("");
-            tf_order_customerUID.setText("");
+            clearCurrentOrder(null);
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setTitle("Creation successful");
             success.setHeaderText(null);
@@ -288,59 +299,106 @@ public class OfficeFXML {
         DialogPane dialogPane = dialog.getDialogPane();
         dialogPane.getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.OK);
 
-        Label l_description =  new Label("Beschreibung: ");
-        TextField description = new TextField("");
-        HBox hb_description = new HBox();
-        hb_description.getChildren().addAll(l_description, description);
-        hb_description.setSpacing(10);
+        GridPane gridPane =  new GridPane();
+        gridPane.setHgap(40);
+        gridPane.setVgap(10);
 
-        Label l_finishing =  new Label("Ausführung:    ");
+        Label l_description =  new Label("Beschreibung:");
+        TextField description = new TextField("");
+        gridPane.add(l_description,0,0,2,1);
+        gridPane.add(description,2,0);
+
+        Label l_finishing =  new Label("Ausführung:");
         TextField finishing = new TextField("");
-        HBox hb_finishing = new HBox();
-        hb_finishing.getChildren().addAll(l_finishing, finishing);
-        hb_finishing.setSpacing(10);
+        gridPane.add(l_finishing,0,1,2,1);
+        gridPane.add(finishing,2,1);
 
         TextField wood_type = new TextField("");
-        Label l_wood_type =  new Label("Holzart:           ");
-        HBox hb_wood_type = new HBox();
-        hb_wood_type.getChildren().addAll(l_wood_type, wood_type);
-        hb_wood_type.setSpacing(10);
+        Label l_wood_type =  new Label("Holzart:");
+        gridPane.add(l_wood_type,0,2,2,1);
+        gridPane.add(wood_type,2,2);
 
         TextField quality = new TextField("");
-        Label l_quality =  new Label("Qualität:          ");
-        HBox hb_quality = new HBox();
-        hb_quality.getChildren().addAll(l_quality, quality);
-        hb_quality.setSpacing(10);
+        Label l_quality =  new Label("Qualität:");
+        gridPane.add(l_quality,0,3,2,1);
+        gridPane.add(quality,2,3);
 
         TextField size = new TextField("");
-        Label l_size =  new Label("Dicke:              ");
-        HBox hb_size = new HBox();
-        hb_size.getChildren().addAll(l_size, size);
-        hb_size.setSpacing(10);
+        size.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    size.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        Label l_size =  new Label("Dicke:");
+        gridPane.add(l_size,0,4,2,1);
+        gridPane.add(size,2,4);
 
         TextField width = new TextField("");
-        Label l_width =  new Label("Breite:             ");
-        HBox hb_width = new HBox();
-        hb_width.getChildren().addAll(l_width, width);
-        hb_width.setSpacing(10);
+        width.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    width.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        Label l_width =  new Label("Breite:");
+        gridPane.add(l_width,0,5,2,1);
+        gridPane.add(width,2,5);
 
         TextField length = new TextField("");
-        Label l_length =  new Label("Länge:             ");
-        HBox hb_length = new HBox();
-        hb_length.getChildren().addAll(l_length, length);
-        hb_length.setSpacing(10);
+        length.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    length.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        Label l_length =  new Label("Länge:");
+        gridPane.add(l_length,0,6,2,1);
+        gridPane.add(length,2,6);
 
         TextField quantity = new TextField("");
-        Label l_quantity =  new Label("Menge:           ");
-        HBox hb_quantity = new HBox();
-        hb_quantity.getChildren().addAll(l_quantity, quantity);
-        hb_quantity.setSpacing(10);
+        quantity.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    quantity.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        Label l_quantity =  new Label("Menge:");
+        gridPane.add(l_quantity,0,7,2,1);
+        gridPane.add(quantity,2,7);
 
-        dialogPane.setContent(new VBox(8,hb_description,hb_finishing,hb_wood_type,hb_quality,hb_size,hb_width,hb_length,hb_quantity));
+        TextField cost = new TextField("");
+        cost.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    cost.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        Label l_cost =  new Label("Preis:");
+        gridPane.add(l_cost,0,8,2,1);
+        gridPane.add(cost,2,8);
+
+        dialogPane.setContent(gridPane);
+        //dialogPane.setContent(new VBox(8,hb_description,hb_finishing,hb_wood_type,hb_quality,hb_size,hb_width,hb_length,hb_quantity,hb_cost));
         Platform.runLater(description::requestFocus);
         dialog.setResultConverter((ButtonType button) -> {
             if (button == ButtonType.OK) {
-                return new UnvalidatedTask(description.getText(),finishing.getText(),wood_type.getText(),quality.getText(),size.getText(),width.getText(),length.getText(),quantity.getText());
+                return new UnvalidatedTask(description.getText(),finishing.getText(),wood_type.getText(),quality.getText(),size.getText(),width.getText(),length.getText(),quantity.getText(),cost.getText());
             }
             return null;
         });
@@ -352,6 +410,8 @@ public class OfficeFXML {
                 currentOrderIndex++;
                 currentOrderTaskList.add(toAdd);
                 table_addedTask.getItems().add(toAdd);
+                currentOrderSum += toAdd.getPrice();
+                l_sumorders.setText(currentOrderSum + " €");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Successfully created Task");
                 alert.setHeaderText(null);
@@ -366,6 +426,34 @@ public class OfficeFXML {
             }
         });
 
+    }
+
+    public void editOrderBtnClicked(ActionEvent actionEvent) {
+        LOG.info("editOrderBtn clicked");
+
+        //get the selected order
+        Order selectedOrder = table_openOrder.getSelectionModel().getSelectedItem();
+
+        if(selectedOrder!= null) {
+            try {
+                EditOrderFXML editOrderFXML = new EditOrderFXML();
+                FXMLLoader fxmlLoader = new FXMLLoader(OfficeFXML.class.getResource("/fxml/edit_order.fxml"));
+                fxmlLoader.setControllerFactory(param -> param.isInstance(editOrderFXML) ? editOrderFXML : null);
+
+                Stage stage = new Stage();
+                stage.setTitle("Edit Order");
+                stage.setWidth(500);
+                stage.setHeight(750);
+                stage.centerOnScreen();
+                stage.setScene(new Scene(fxmlLoader.load()));
+                stage.show();
+                editOrderFXML.setSelectedOrder(selectedOrder);
+
+
+            } catch (IOException e) {
+                LOG.error(e.getMessage());
+            }
+        }
     }
 
     public void invoiceBtnClicked(ActionEvent actionEvent) {
@@ -385,8 +473,35 @@ public class OfficeFXML {
         }
     }
 
-    @FXML
-    public void onDeleteButtonClicked(){
+    public void clearCurrentOrder(ActionEvent actionEvent) {
+        ObservableList<Task> orderTasks = FXCollections.observableArrayList();
+        table_addedTask.setItems(orderTasks);
+        currentOrder = new Order();
+        currentOrderTaskList = new ArrayList<>();
+        tf_order_customername.setText("");
+        tf_order_customeraddress.setText("");
+        tf_order_customerUID.setText("");
+        currentOrderSum = 0;
+        l_sumorders.setText(currentOrderSum + " €");
+        kn_result.setText("");
+    }
 
+    public void initiateCostValueFunction(ActionEvent actionEvent) {
+        if(currentOrderTaskList.size() == 0) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("No Tasks to evaluate");
+            error.setHeaderText(null);
+            error.setContentText("There is no Task added to the Order!\nPlease add Tasks to proceed to Cost/Benefit Function");
+            error.showAndWait();
+            return;
+        }
+        int randomized = costBenefitService.costValueFunctionStub(currentOrderSum);
+        if(randomized < 0) {
+            kn_result.setTextFill(Color.web("#dd0000"));
+            kn_result.setText(randomized+"");
+        } else {
+            kn_result.setTextFill(Color.web("#00dd00"));
+            kn_result.setText(randomized+"");
+        }
     }
 }
