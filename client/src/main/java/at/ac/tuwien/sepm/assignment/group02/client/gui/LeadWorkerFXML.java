@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
+import at.ac.tuwien.sepm.assignment.group02.client.MainApplication;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class LeadWorkerFXML {
@@ -73,8 +75,10 @@ public class LeadWorkerFXML {
     @FXML
     private TableColumn col_description;
 
+
     @FXML
     TableView<Lumber> table_lumber;
+    private TableView<Lumber> lumbersTable;
 
 
     private LumberService lumberService;
@@ -84,6 +88,7 @@ public class LeadWorkerFXML {
 
         this.lumberService = lumberService;
     }
+
 
     @FXML
     void initialize() {
@@ -106,8 +111,6 @@ public class LeadWorkerFXML {
         cb_finishing.getSelectionModel().selectFirst();
         cb_wood_type.getSelectionModel().selectFirst();
         cb_quality.getSelectionModel().selectFirst();
-
-
 
     }
 
@@ -161,7 +164,6 @@ public class LeadWorkerFXML {
             filter.setLength(-1);
         }
 
-
         try {
             allLumber = lumberService.getAll(filter);
         } catch (ServiceLayerException e) {
@@ -177,7 +179,6 @@ public class LeadWorkerFXML {
                 lumberForTable.add(lumber);
             }
 
-
             table_lumber.setItems(lumberForTable);
 
             table_lumber.refresh();
@@ -190,6 +191,52 @@ public class LeadWorkerFXML {
 
     @FXML
     public void onUpdateButtonClicked(ActionEvent actionEvent){
+
+        Lumber selectedLumber=table_lumber.getSelectionModel().getSelectedItem();
+
+        if(selectedLumber!=null){
+
+        }
+
+
+    }
+    @FXML
+    public void onDeleteButtonClicked(){
+
+    Lumber lumber= new Lumber();
+
+
+                    if(table_lumber.getSelectionModel().getSelectedItem() != null) {
+                        lumber.setId(table_lumber.getSelectionModel().getSelectedItem().getId());
+
+                        try {
+
+                            lumberService.deleteLumber(lumber);
+                            table_lumber.getItems().remove(lumber);
+                        } catch (ServiceLayerException e) {
+                            e.printStackTrace();
+                        }
+                           /* Alert noSelection = new Alert(Alert.AlertType.ERROR);
+                            noSelection.setTitle("Deletion failed");
+                            noSelection.setHeaderText(null);
+                            noSelection.setContentText("You have to choose a lumber to delete it!");
+                            noSelection.showAndWait();*/
+                        }
+
+                       // int selectedIndex = table_lumber.getSelectionModel().getSelectedIndex();
+                        //if (selectedIndex>=0) {
+                       // table_lumber.getItems().remove(selectedIndex);
+                      // }else {
+                        // Nothing selected.
+                       /* Alert alert = new Alert(Alert.AlertType.WARNING);
+                       //  alert.initOwner(lumberService.getPrimaryStage());
+                        alert.setTitle("No Selection");
+                        alert.setHeaderText("No Person Selected");
+                        alert.setContentText("Please select a person in the table.");
+
+                        alert.showAndWait();
+
+                       }*/
 
     }
 }
