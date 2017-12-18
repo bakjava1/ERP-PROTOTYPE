@@ -27,6 +27,7 @@ width integer NOT NULL CHECK(width>0),
 length integer NOT NULL CHECK(length>0),
 quantity integer NOT NULL CHECK(quantity>0),
 reserved_quantity integer NOT NULL CHECK(reserved_quantity>0),
+delivered_quantity integer NOT NULL CHECK(delivered_quantity>0),
 all_reserved boolean NOT NULL,
 all_delivered boolean NOT NULL
 );

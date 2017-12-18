@@ -97,8 +97,11 @@ public class OrderDAOJDBC implements OrderDAO {
             while (rs.next()) {
 
 
-                Order currentOrder = new Order(rs.getInt("ID"), rs.getTimestamp("ORDER_DATE"));
-                currentOrder.setPaid(false);
+                Order currentOrder = new Order();
+                currentOrder.setID(rs.getInt("ID"));
+                currentOrder.setCustomerName(rs.getString("customer_name"));
+                currentOrder.setGrossAmount(rs.getInt("summe"));
+
 
                 orderList.add(currentOrder);
             }
@@ -125,7 +128,6 @@ public class OrderDAOJDBC implements OrderDAO {
             }
 
         }
-
         return orderList;
     }
 
@@ -136,7 +138,39 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public List<Order> getAllClosed() throws PersistenceLayerException {
-        return null;
+        LOG.debug("Get all closed Order from database");
+
+        List<Order> billList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+
+            //connect to db
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = 1 ORDER BY ORDER_DATE");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+
+                Order currentBill = new Order();
+                currentBill.setID(rs.getInt("ID"));
+                currentBill.setCustomerName(rs.getString("customer_name"));
+                currentBill.setGrossAmount(rs.getInt("summe"));
+
+
+                billList.add(currentBill);
+            }
+
+            if (billList.size() == 0) {
+                //no closed order was found
+                throw new PersistenceLayerException("No open orders found");
+            }
+
+        } catch (SQLException e) {
+            throw new PersistenceLayerException("Database error:" + e.getMessage());
+        }
+        return billList;
     }
 
     @Override
