@@ -36,19 +36,31 @@ public class AddTimberTest {
 
         timberBoxErrorWrongID = new Timber();
         timberBoxErrorWrongID.setBox_id(42);
+
+        timberAmountError = new Timber();
+        timberAmountError.setBox_id(1);
+        timberAmountError.setAmount(-1);
+
+        timberNoError = new Timber();
+        timberNoError.setBox_id(1);
+        timberNoError.setAmount(20);
     }
 
 
-    @Test
-    public void testAddTimberService() throws InvalidInputException, ServiceLayerException {
+    @Test(expected = ServiceLayerException.class)
+    public void testAddTimberServiceAmountNegative() throws InvalidInputException, ServiceLayerException {
 
+        LOG.debug("add timber test with negative amount");
+        Mockito.when(timberService.getNumberOfBoxes()).thenReturn(30);
 
+        timberService.addTimber(timberAmountError);
 
     }
 
     @Test(expected=ServiceLayerException.class)
     public void testGetNumberOfBoxesNegative() throws ServiceLayerException, InvalidInputException {
 
+        LOG.debug("get number of boxes test with negative id");
         Mockito.when(timberService.getNumberOfBoxes()).thenReturn(30);
 
         timberService.addTimber(timberBoxErrorNegative);
@@ -57,9 +69,19 @@ public class AddTimberTest {
     @Test(expected=ServiceLayerException.class)
     public void testGetNumberOfBoxesWrongID() throws ServiceLayerException, InvalidInputException {
 
+        LOG.debug("get number of boxes test with id that is higher than number of boxes");
         Mockito.when(timberService.getNumberOfBoxes()).thenReturn(30);
 
         timberService.addTimber(timberBoxErrorWrongID);
+    }
+
+    @Test
+    public void testAddTimberServiceNoError() throws ServiceLayerException, InvalidInputException {
+
+        LOG.debug("add timber test with no error");
+        Mockito.when(timberService.getNumberOfBoxes()).thenReturn(30);
+
+        timberService.addTimber(timberNoError);
     }
 
     @Test
