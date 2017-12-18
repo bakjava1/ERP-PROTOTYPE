@@ -49,6 +49,7 @@ public class OrderManagementTest {
         orderDAO = new OrderDAOJDBC(dbConnection);
         mockOrderDAO = mock(OrderDAOJDBC.class);
 
+        activateOrders();
         order1.setID(1);
         order2.setID(2);
         order3.setID(3);
@@ -104,7 +105,7 @@ public class OrderManagementTest {
     @Ignore
     @Test (expected = PersistenceLayerException.class)
     public void deleteOrderPersistenceLayer_should_get_errorMessage_when_persistenceLayer_throws_Exception() throws SQLException, PersistenceLayerException {
-        String SQLStatement = "UPDATE ORDERS SET DELETED = 1 WHERE ID = ?";
+        String SQLStatement = "UPDATE ORDERS SET isDoneFlag = 1 WHERE ID = ?";
         when(fakeDBConnection.prepareStatement(SQLStatement)).thenThrow(new PersistenceLayerException("Database error"));
         //doThrow(new PersistenceLayerException("Database error")).when(mockOrderDAO).deleteOrder(order1);
         try {
@@ -127,10 +128,23 @@ public class OrderManagementTest {
 
 
 
+    private static void activateOrders() {
+        String activateOrders = "UPDATE ORDERS SET isDoneFlag = 0 WHERE ID = 1 or ID = 2 or ID = 3 or ID = 4 or ID = 5 or ID = 6";
+
+        PreparedStatement ps = null;
+        try {
+            ps = dbConnection.prepareStatement(activateOrders);
+            ps.execute();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("error at preparing tests for deleting orders" + e.getMessage());
+        }
+    }
+
 
     private int getActiveOrders() {
         int count = 0;
-        String getOrder = "SELECT COUNT(ID) FROM ORDERS WHERE DELETED = 0";
+        String getOrder = "SELECT COUNT(ID) FROM ORDERS WHERE isDoneFlag = 0";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(getOrder);
@@ -146,7 +160,7 @@ public class OrderManagementTest {
 
             return count;
         } catch (SQLException e) {
-            System.out.println("SQLException: {}" + e.getMessage());
+            System.out.println("error at testing for active orders: " + e.getMessage());
         }
 
         return count;

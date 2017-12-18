@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @RestController
 public class AssignmentControllerImpl {
@@ -33,6 +34,18 @@ public class AssignmentControllerImpl {
             assignmentService.setDone(assignmentDTO);
         } catch (ServiceLayerException e) {
             LOG.error("Error in Service Layer of Server: " + e.getMessage());
+            throw new ResourceNotFoundException(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value="/getAllOpenAssignments",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<AssignmentDTO> getAllOpenAssignments() {
+        LOG.debug("get all open assignments called in server assignment controller");
+
+        try {
+            return assignmentService.getAllOpenAssignments();
+        } catch (ServiceLayerException e) {
+            LOG.warn("error while getting all open assignments in server service layer", e.getMessage());
             throw new ResourceNotFoundException(e.getMessage());
         }
     }

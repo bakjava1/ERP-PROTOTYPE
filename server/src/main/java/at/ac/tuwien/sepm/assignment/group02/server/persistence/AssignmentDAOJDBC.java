@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 @Component
@@ -33,7 +35,32 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
 
     @Override
     public List<Assignment> getAllAssignments() throws PersistenceLayerException {
-        return null;
+        LOG.debug("get all assignments called in server persistence layer");
+
+        List<Assignment> assignmentList = new LinkedList<>();
+        Assignment assignment;
+        String getAllOpenAssignments = "SELECT ID, CREATION_DATE, AMOUNT, BOX_ID FROM ASSIGNMENT WHERE ISDONE = 0";
+
+        try {
+            PreparedStatement ps = dbConnection.prepareStatement(getAllOpenAssignments);
+            ps.execute();
+
+            ResultSet rs = ps.getResultSet();
+
+            while(rs.next()) {
+                assignment = new Assignment();
+                assignment.setId(rs.getInt("ID"));
+                assignment.setCreation_date(rs.getDate("CREATION_DATE").toString());
+                assignment.setAmount(rs.getInt("AMOUNT"));
+                assignment.setBox_id(rs.getInt("BOX_ID"));
+                assignmentList.add(assignment);
+            }
+        } catch (SQLException e) {
+            LOG.warn("SQLException: {}", e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
+
+        return assignmentList;
     }
 
     @Override

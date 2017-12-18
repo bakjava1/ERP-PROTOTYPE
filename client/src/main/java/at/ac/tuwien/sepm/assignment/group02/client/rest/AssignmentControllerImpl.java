@@ -12,6 +12,8 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -31,7 +33,16 @@ public class AssignmentControllerImpl implements AssignmentController {
 
     @Override
     public List<AssignmentDTO> getAllOpenAssignments() throws PersistenceLayerException {
-        return null;
+        LOG.debug("get all open assignments called in client assignment controller");
+
+        List<AssignmentDTO> assignmentList = new ArrayList<>();
+        AssignmentDTO[] assignmentArray = restTemplate.getForObject("http://localhost:8080/getAllOpenAssignments", AssignmentDTO[].class);
+
+        if(assignmentArray != null) {
+            assignmentList.addAll(Arrays.asList(assignmentArray));
+        }
+
+        return assignmentList;
     }
 
     @Override
