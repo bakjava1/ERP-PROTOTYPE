@@ -39,5 +39,5 @@ public interface OrderController {
      */
     OrderDTO getOrderById(int order_id) throws PersistenceLayerException;
 
-    void invoiceOrder(OrderDTO orderDTO);
+    void invoiceOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 }

@@ -43,74 +43,73 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public void deleteOrder(@RequestBody OrderDTO orderDTO) {
+    public void deleteOrder(@RequestBody OrderDTO orderDTO) throws PersistenceLayerException {
         LOG.debug("sending order to be deleted to server");
 
         try{
-            restTemplate.postForObject("http://localhost:8080/deleteOrder", orderDTO, OrderDTO.class);
-
+            restTemplate.put("http://localhost:8080/deleteOrder", orderDTO, OrderDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("Connection Problem with Server");
         } catch(RestClientException e){
             //no response payload, probably server not running
             LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("Connection Problem with Server");
         }
     }
 
     @Override
-    public List<OrderDTO> getAllOpen() {
+    public List<OrderDTO> getAllOpen() throws PersistenceLayerException {
         LOG.debug("get all open order");
 
         List<OrderDTO> orderList = new ArrayList<>();
-        OrderDTO[] orderArray = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
-/*        try{
-            restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
+        OrderDTO[] orderArray; // = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
+        try{
+            orderArray = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("Connection Problem with Server");
         } catch(RestClientException e){
             //no response payload, probably server not running
             LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("Connection Problem with Server");
         }
-*/
+
         for (int i = 0; orderArray!= null && i < orderArray.length; i++) {
             orderList.add(orderArray[i]);
         }
 
-
         return orderList;
+    }
+
+    @Override
+    public void updateOrder(OrderDTO orderDTO) throws PersistenceLayerException {
 
     }
 
     @Override
-    public void updateOrder(OrderDTO orderDTO) {
-
-    }
-
-    @Override
-    public List<OrderDTO> getAllClosed() {
+    public List<OrderDTO> getAllClosed() throws PersistenceLayerException {
         return null;
     }
 
     @Override
-    public OrderDTO getOrderById(int order_id) {
+    public OrderDTO getOrderById(int order_id) throws PersistenceLayerException  {
         return null;
     }
 
     @Override
-    public void invoiceOrder(OrderDTO orderDTO){
-
+    public void invoiceOrder(OrderDTO orderDTO) throws PersistenceLayerException {
         LOG.debug("sending order that will be invoiced on server");
 
-        RestTemplate restTemplate = new RestTemplate();
-
         try{
-            restTemplate.postForObject("http://localhost:8080/invoiceOrder", orderDTO, OrderDTO.class);
-
+            restTemplate.put("http://localhost:8080/invoiceOrder", orderDTO, OrderDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("Connection Problem with Server");
         } catch(RestClientException e){
             //no response payload, probably server not running
             LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("Connection Problem with Server");
         }
 
 

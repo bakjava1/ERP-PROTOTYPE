@@ -1,10 +1,11 @@
 package at.ac.tuwien.sepm.assignment.group02.server.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityCreationException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TimberService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.lang.invoke.MethodHandles;
 
 
 @RestController
+@Api(value="(Round) Timber Controller")
 public class TimberControllerImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -25,42 +27,60 @@ public class TimberControllerImpl {
     private static TimberService timberService;
 
     @Autowired
-    public TimberControllerImpl(TimberService timberService) throws EntityCreationException {
-
+    public TimberControllerImpl(TimberService timberService){
         TimberControllerImpl.timberService = timberService;
     }
 
-    @RequestMapping(value="/createTimber",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-    public void createTimber(@RequestBody TimberDTO timberDTO) throws EntityCreationException {
-        LOG.debug("Trying creation of Timber in box: " + timberDTO.getBox_id());
 
+    @RequestMapping(value="/createTimber", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "create timber")
+    public void createTimber(@RequestBody TimberDTO timberDTO) throws ResourceNotFoundException {
+        LOG.debug("Trying creation of Timber in box: " + timberDTO.getBox_id());
         try {
             timberService.addTimber(timberDTO);
         } catch (ServiceLayerException e) {
-            throw new EntityCreationException("failed to add timber.");
+            LOG.error(e.getMessage());
+            throw new ResourceNotFoundException("failed to add timber.");
         }
-
-
     }
 
-    public void deleteTimber(TimberDTO timberDTO) {
-
+    /*
+    @RequestMapping(value="/deleteTimber", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "delete timber")
+    public void deleteTimber(TimberDTO timberDTO) throws ResourceNotFoundException {
+        LOG.debug("deleting timber " + timberDTO.toString());
+        try {
+            timberService.removeTimber(timberDTO);
+        } catch (ServiceLayerException e) {
+            LOG.error(e.getMessage());
+            throw new ResourceNotFoundException("Failed to delete timber.");
+        }
     }
+    */
 
-
-
-    public TimberDTO getTimberById(int timber_id) {
-        return null;
+    /*
+    @RequestMapping(value="/getTimberById/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get Timber By Id")
+    public TimberDTO getTimberById(int timber_id) throws ResourceNotFoundException {
+        LOG.debug("called getOrderById");
+        try {
+            return timberService.getTimberById(timber_id);
+        } catch (ServiceLayerException e) {
+            LOG.error(e.getMessage());
+            throw new ResourceNotFoundException("failed to get order by id.");
+        }
     }
+    */
 
     @RequestMapping(value="/getNumberOfBoxes",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-    public int getNumberOfBoxes() throws EntityNotFoundException{
+    @ApiOperation(value = "get number of boxes")
+    public int getNumberOfBoxes() throws ResourceNotFoundException {
         LOG.debug("Trying return number of boxes");
-
         try {
             return timberService.numberOfBoxes();
         } catch (ServiceLayerException e) {
-            throw new EntityNotFoundException("failed to return number of boxes");
+            LOG.error(e.getMessage());
+            throw new ResourceNotFoundException("failed to return number of boxes");
         }
     }
 }

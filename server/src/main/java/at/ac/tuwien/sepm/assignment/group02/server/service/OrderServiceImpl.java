@@ -99,13 +99,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void invoiceOrder(OrderDTO orderDTO) {
+    public void invoiceOrder(OrderDTO orderDTO) throws ServiceLayerException {
         Order order = orderConverter.convertRestDTOToPlainObject(orderDTO);
 
         try {
             orderManagementDAO.invoiceOrder(order);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while tying to invoice Order: " + e.getMessage());
+            throw new ServiceLayerException("couldn't edit order");
         }
     }
 }

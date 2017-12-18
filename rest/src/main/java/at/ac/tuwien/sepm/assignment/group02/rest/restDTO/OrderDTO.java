@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.assignment.group02.rest.restDTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +10,7 @@ public class OrderDTO {
 
     private int id;
     private int invoiceNumber;
-    private Timestamp orderDate;
+    private String orderDate;
     private Date deliveryDate;
     private Date invoiceDate;
     private String customerName;
@@ -30,7 +29,7 @@ public class OrderDTO {
         this.invoiceNumber = this.id;
     }
 
-    public OrderDTO(int id, Timestamp orderDate) {
+    public OrderDTO(int id, String orderDate) {
         this.id = id;
         this.invoiceNumber = this.id;
         this.orderDate = orderDate;
@@ -45,11 +44,11 @@ public class OrderDTO {
         return this.id;
     }
 
-    public Timestamp getOrderDate() {
+    public String getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
     }
 
