@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerEx
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAOJDBC;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
@@ -53,7 +54,7 @@ public class InvoiceOrderTest {
         orderDAO = new OrderDAOJDBC(dbConnection);
         orderDAOMock = mock(OrderDAOJDBC.class);
 
-        orderService = new OrderServiceImpl(orderDAO, new OrderConverter());
+        orderService = new OrderServiceImpl(orderDAO, new TaskDAOJDBC(dbConnection),new OrderConverter());
 
         orderDTONoError.setPaid(false);
         orderDTONoError.setCustomerName("Max Mustermmann");

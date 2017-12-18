@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundExce
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAOJDBC;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.rest.OrderControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderServiceImpl;
@@ -62,7 +63,7 @@ public class OrderManagementTest {
         orderDTO3.setID(6);
 
         orderConverter = new OrderConverter();
-        orderService = new OrderServiceImpl(orderDAO, orderConverter);
+        orderService = new OrderServiceImpl(orderDAO, new TaskDAOJDBC(dbConnection) ,orderConverter);
         orderController = new OrderControllerImpl(orderService);
 
         LOG.debug("order management test setup completed");
