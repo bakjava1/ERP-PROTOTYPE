@@ -30,13 +30,24 @@ public class TimberServiceImpl implements TimberService{
     @Override
     public void addTimber(Timber timber) throws ServiceLayerException{
 
-        TimberConverter timberConverter = new TimberConverter();
+        try {
+            if(timber.getBox_id()>timberController.getNumberOfBoxes() || timber.getBox_id()<0)
+                throw new ServiceLayerException("error finding box with given id");
 
+            if(timber.getAmount()<0)
+                throw new ServiceLayerException("error cannot add negative amount of timber");
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
+
+        TimberConverter timberConverter = new TimberConverter();
         TimberDTO timberDTO = timberConverter.convertPlainObjectToRestDTO(timber);
         try {
             timberController.createTimber(timberDTO);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
     }
 

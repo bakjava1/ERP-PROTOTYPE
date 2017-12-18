@@ -64,5 +64,5 @@ public interface OrderService {
      * @param selectedOrder
      * @throws InvalidInputException
      */
-    void invoiceOrder(Order selectedOrder) throws InvalidInputException;
+    void invoiceOrder(Order selectedOrder) throws InvalidInputException, ServiceLayerException;
 }

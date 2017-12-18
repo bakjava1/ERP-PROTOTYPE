@@ -1,14 +1,10 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
-import javafx.fxml.FXML;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,19 +43,30 @@ public class LumberControllerImpl implements LumberController {
     }
 
     @Override
-    public List<LumberDTO> getAllLumber(@RequestBody LumberDTO filter) {
+    public List<LumberDTO> getAllLumber(@RequestBody LumberDTO filter) throws PersistenceLayerException {
         LOG.debug("get lumber");
 
         List<LumberDTO> lumberList = new ArrayList<>();
 
-        LumberDTO[] lumberArray = restTemplate.postForObject("http://localhost:8080/getAllLumber", filter, LumberDTO[].class);
+//        LumberDTO[] lumberArray = restTemplate.postForObject("http://localhost:8080/getAllLumber", filter, LumberDTO[].class);
+        LumberDTO[] lumberArray;
+
+        try {
+            lumberArray = restTemplate.getForObject("http://localhost:8080/getAllLumber", LumberDTO[].class);
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("Connection Problem with Server");
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("Connection Problem with Server");
+        }
 
         for (int i = 0; lumberArray!= null && i < lumberArray.length; i++) {
             lumberList.add(lumberArray[i]);
         }
 
         return lumberList;
-
     }
 
     @Override
@@ -67,7 +74,8 @@ public class LumberControllerImpl implements LumberController {
         LOG.debug("Sending request for lumber updating to server");
 
         try {
-            restTemplate.postForObject("http://localhost:8080/updateLumber", lumberDTO, OrderDTO.class);
+            //restTemplate.postForObject("http://localhost:8080/updateLumber", lumberDTO, OrderDTO.class);
+            restTemplate.put("http://localhost:8080/updateLumber", lumberDTO, OrderDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");
@@ -79,34 +87,51 @@ public class LumberControllerImpl implements LumberController {
     }
 
     @Override
-    public void removeLumber(@RequestBody LumberDTO lumberDTO) {
+    public void removeLumber(@RequestBody LumberDTO lumberDTO) throws PersistenceLayerException {
 
             LOG.debug("sending lumber to be deleted to server");
 
             try{
-                restTemplate.postForObject("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
+                //restTemplate.postForObject("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
                 //restTemplate.delete("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
+                restTemplate.put("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
 
             } catch(HttpStatusCodeException e){
                 LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+                throw new PersistenceLayerException("Connection Problem with Server");
             } catch(RestClientException e){
                 //no response payload, probably server not running
                 LOG.warn("server is down? - {}", e.getMessage());
+                throw new PersistenceLayerException("Connection Problem with Server");
             }
         }
 
 
     /**
-     * HELLO WORLD example
+     *
+     * @param id int id of lumber to get
+     * @return
+     * @throws PersistenceLayerException
      */
     @Override
-    public LumberDTO getLumberById(@RequestParam(value="id", defaultValue="0") int id) {
+    public LumberDTO getLumberById(@RequestParam(value="id", defaultValue="0") int id) throws PersistenceLayerException {
         LOG.debug("called getLumber");
 
-        RestTemplate restTemplate = new RestTemplate();
+        LumberDTO lumberDTO;
 
-        return restTemplate.getForObject(
-                "http://localhost:8080/getLumberById/{id}",
-                LumberDTO.class, id);
+        try {
+            lumberDTO = restTemplate.getForObject(
+                    "http://localhost:8080/getLumberById/{id}",
+                    LumberDTO.class, id);
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("Connection Problem with Server");
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("Connection Problem with Server");
+        }
+
+        return lumberDTO;
     }
 }

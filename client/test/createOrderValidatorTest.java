@@ -1,4 +1,3 @@
-package main.createOrder;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;

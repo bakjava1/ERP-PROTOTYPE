@@ -33,6 +33,10 @@ public class TimberServiceImpl implements TimberService{
 
         Timber timber = timberConverter.convertRestDTOToPlainObject(timberDTO);
 
+        if(timber.getAmount()<0){
+            throw new ServiceLayerException("Error: added amount is negative");
+        }
+
         try {
             timberManagementDAO.createTimber(timber);
         } catch (PersistenceLayerException e) {

@@ -39,5 +39,5 @@ public interface OrderService {
      */
     OrderDTO getOrderById(int order_id) throws ServiceLayerException;
 
-    void invoiceOrder(OrderDTO orderDTO);
+    void invoiceOrder(OrderDTO orderDTO) throws ServiceLayerException;
 }

@@ -126,6 +126,7 @@
 
 
     <build>
+        <testSourceDirectory>${project.basedir}/test</testSourceDirectory>
         <plugins>
 
             <!--

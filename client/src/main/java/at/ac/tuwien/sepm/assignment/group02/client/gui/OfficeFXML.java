@@ -21,7 +21,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +103,7 @@ public class OfficeFXML {
     private TimberService timberService;
     private TaskService taskService;
     private CostBenefitService costBenefitService;
+    private AlertBuilder alertBuilder = new AlertBuilder();
 
     @Autowired
     public OfficeFXML(OrderService orderService, TimberService timberService, TaskService taskService, CostBenefitService costBenefitService){
@@ -257,7 +257,12 @@ public class OfficeFXML {
             int tes = cb_timber_box.getSelectionModel().getSelectedIndex();
             Timber timber = new Timber(cb_timber_box.getSelectionModel().getSelectedIndex()+1, Integer.parseInt(tf_timber_amount.getText()));
             try {
-                timberService.addTimber(timber);
+                boolean addTimberConfirmation = alertBuilder.showConfirmationAlert("Rundholz hinzufügen", "Wollen Sie " + timber.getAmount() + " Stück Rundholz zu Box " + timber.getBox_id() + " hinzufügen?", "");
+                if(addTimberConfirmation){
+                    timberService.addTimber(timber);
+                    tf_timber_amount.setText("");
+                    cb_timber_box.getSelectionModel().clearSelection();
+                }
             } catch (InvalidInputException e) {
                 LOG.error("Invalid Input Error: " + e.getMessage());
             } catch (ServiceLayerException e) {
@@ -437,10 +442,16 @@ public class OfficeFXML {
         try {
             orderService.invoiceOrder(selectedOrder);
         } catch (InvalidInputException e) {
+            //TODO use alertBuilder
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error creating Invoice!");
+            alert.setTitle("Fehler beim Abrechnen!");
             alert.setHeaderText(null);
-            alert.setContentText("Error while trying to invoice Order!\nReason: " + e.getMessage());
+            alert.setContentText("Bestellung konnte nicht erfolgreich abgerechnet werden. Bitte versuchen Sie es erneut!");
+            alert.showAndWait();
+        } catch (ServiceLayerException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            //TODO alertBuilder
+            alert.setTitle("Fehler beim Abrechnen!");
             alert.showAndWait();
         }
     }
