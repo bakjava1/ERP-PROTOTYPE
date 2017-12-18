@@ -66,6 +66,10 @@ public class OrderControllerImpl implements OrderController {
         OrderDTO[] orderArray; // = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
         try{
             orderArray = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
+
+            for (int i = 0; orderArray!= null && i < orderArray.length; i++) {
+                orderList.add(orderArray[i]);
+            }
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");
@@ -80,6 +84,7 @@ public class OrderControllerImpl implements OrderController {
         }
 
         return orderList;
+
     }
 
     @Override
@@ -89,7 +94,24 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     public List<OrderDTO> getAllClosed() throws PersistenceLayerException {
-        return null;
+        LOG.debug("get all closed order");
+        List<OrderDTO> billList = new ArrayList<>();
+
+        try {
+            OrderDTO[] billArray = restTemplate.getForObject("http://localhost:8080/getAllClosed", OrderDTO[].class);
+
+            for (int i = 0; billArray!= null && i < billArray.length; i++) {
+                billList.add(billArray[i]);
+            }
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+        }
+
+
+        return billList;
     }
 
     @Override
@@ -111,6 +133,7 @@ public class OrderControllerImpl implements OrderController {
             LOG.warn("server is down? - {}", e.getMessage());
             throw new PersistenceLayerException("Connection Problem with Server");
         }
+
 
 
     }

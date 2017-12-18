@@ -97,7 +97,38 @@ public class OfficeFXML {
     private TableColumn col_orderID;
 
     @FXML
+    private TableColumn col_costumerName;
+
+    @FXML
+    private TableColumn col_taskAmount;
+
+    @FXML
+    private TableColumn col_amount;
+
+    @FXML
+    private TableColumn col_grossSum;
+
+
+    @FXML
+    private TableColumn col_billID;
+
+    @FXML
+    private TableColumn col_billCostumerName;
+
+    @FXML
+    private TableColumn col_billTaskAmount;
+
+    @FXML
+    private TableColumn col_billAmount;
+
+    @FXML
+    private TableColumn col_billGrossSum;
+
+    @FXML
     TableView<Order> table_openOrder;
+
+    @FXML
+    TableView<Order> table_bill;
 
     private OrderService orderService;
     private TimberService timberService;
@@ -119,6 +150,23 @@ public class OfficeFXML {
         table_openOrder.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         col_orderID.setCellValueFactory(new PropertyValueFactory("ID"));
+        col_costumerName.setCellValueFactory(new PropertyValueFactory("customerName"));
+        col_taskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
+        col_amount.setCellValueFactory(new PropertyValueFactory("quantity"));
+        col_grossSum.setCellValueFactory(new PropertyValueFactory("grossAmount"));
+
+
+
+        table_bill.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        col_billID.setCellValueFactory(new PropertyValueFactory("ID"));
+        col_billCostumerName.setCellValueFactory(new PropertyValueFactory("customerName"));
+        col_billTaskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
+        col_billAmount.setCellValueFactory(new PropertyValueFactory("quantity"));
+        col_billGrossSum.setCellValueFactory(new PropertyValueFactory("grossAmount"));
+
+
+
 
         col_taskNr.setCellValueFactory(
                 new PropertyValueFactory<Task, Integer>("id")
@@ -144,6 +192,7 @@ public class OfficeFXML {
         l_sumorders.setText(currentOrderSum + " €");
         initTimberTab();
         updateTable();
+        updateBillTable();
     }
 
     @FXML
@@ -240,6 +289,37 @@ public class OfficeFXML {
         }
 
     }
+
+
+    private void updateBillTable() {
+
+        List<Order> allClosed = null;
+        ObservableList<Order> closedOrderForTable;
+
+        try {
+            allClosed = orderService.getAllClosed();
+        } catch (ServiceLayerException e) {
+            LOG.warn(e.getMessage());
+        }
+
+        if (allClosed != null) {
+
+            closedOrderForTable = FXCollections.observableArrayList();
+
+            for (Order bill: allClosed) {
+                closedOrderForTable.add(bill);
+            }
+
+            table_bill.setItems(closedOrderForTable);
+            table_bill.refresh();
+        } else {
+            table_bill.refresh();
+        }
+
+    }
+
+
+
 
     @FXML
     public void addTimber(ActionEvent actionEvent){

@@ -62,11 +62,12 @@ public class LumberControllerImpl implements LumberController {
             throw new PersistenceLayerException("Connection Problem with Server");
         }
 
-        for (int i = 0; lumberArray!= null && i < lumberArray.length; i++) {
-            lumberList.add(lumberArray[i]);
-        }
+            for (int i = 0; lumberArray!= null && i < lumberArray.length; i++) {
+                lumberList.add(lumberArray[i]);
+            }
 
         return lumberList;
+
     }
 
     @Override
