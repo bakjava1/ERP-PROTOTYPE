@@ -95,6 +95,7 @@ public class OfficeFXML {
     private OrderService orderService;
     private TimberService timberService;
     private TaskService taskService;
+    private AlertBuilder alertBuilder = new AlertBuilder();
 
     @Autowired
     public OfficeFXML(OrderService orderService, TimberService timberService, TaskService taskService){
@@ -250,10 +251,14 @@ public class OfficeFXML {
             alert.showAndWait();
         }
         else{
-            int tes = cb_timber_box.getSelectionModel().getSelectedIndex();
             Timber timber = new Timber(cb_timber_box.getSelectionModel().getSelectedIndex()+1, Integer.parseInt(tf_timber_amount.getText()));
             try {
-                timberService.addTimber(timber);
+                boolean addTimberConfirmation = alertBuilder.showConfirmationAlert("Rundholz hinzufügen", "Wollen Sie " + timber.getAmount() + " Stück Rundholz zu Box " + timber.getBox_id() + " hinzufügen?", "");
+                if(addTimberConfirmation){
+                    timberService.addTimber(timber);
+                    tf_timber_amount.setText("");
+                    cb_timber_box.getSelectionModel().clearSelection();
+                }
             } catch (InvalidInputException e) {
                 LOG.error("Invalid Input Error: " + e.getMessage());
             } catch (ServiceLayerException e) {
