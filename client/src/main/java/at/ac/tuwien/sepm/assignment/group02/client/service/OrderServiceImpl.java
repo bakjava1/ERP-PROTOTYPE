@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
@@ -116,8 +117,20 @@ public class OrderServiceImpl implements OrderService {
     public void invoiceOrder(Order selectedOrder) throws InvalidInputException {
 
         if(selectedOrder==null){
-            throw new InvalidInputException("");
+            throw new InvalidInputException("Selected Order is null");
         }
+        if(selectedOrder.isPaid()){
+            throw new InvalidInputException("Order already invoiced");
+        }
+        //check if customer information is missing
+        if(selectedOrder.getCustomerName().isEmpty() || selectedOrder.getCustomerAddress().isEmpty() || selectedOrder.getCustomerUID().isEmpty()){
+            throw new InvalidInputException("Customer information missing for selected order");
+        }
+        if(selectedOrder.getNetAmount()<=0){
+            throw new InvalidInputException("net price for selected order is negative or empty");
+        }
+
+
         int netAmount = selectedOrder.getNetAmount();
         //TODO get tax rate from properties file
         int taxAmount = netAmount * (20/100);

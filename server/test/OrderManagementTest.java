@@ -64,6 +64,7 @@ public class OrderManagementTest {
         LOG.debug("order management test setup completed");
     }
 
+    @Ignore
     @Test
     public void testDeleteOrder_server_persistenceLayer() throws PersistenceLayerException {
         LOG.debug("testing for order deletion in server persistence layer");
@@ -82,6 +83,7 @@ public class OrderManagementTest {
         assertEquals(orderCountBeforeDeletion, orderCountAfterDeletion);
     }
 
+    @Ignore
     @Test
     public void testDeleteOrder_server_restController() throws EntityNotFoundException {
         LOG.debug("testing for order deletion in server rest controller");
