@@ -100,7 +100,7 @@ public class OrderDAOJDBC implements OrderDAO {
                 Order currentOrder = new Order();
                 currentOrder.setID(rs.getInt("ID"));
                 currentOrder.setCustomerName(rs.getString("customer_name"));
-                currentOrder.setGrossAmount(rs.getInt("summe"));
+                //currentOrder.setGrossAmount(rs.getInt("summe"));
 
 
                 orderList.add(currentOrder);
@@ -156,7 +156,7 @@ public class OrderDAOJDBC implements OrderDAO {
                 Order currentBill = new Order();
                 currentBill.setID(rs.getInt("ID"));
                 currentBill.setCustomerName(rs.getString("customer_name"));
-                currentBill.setGrossAmount(rs.getInt("summe"));
+                //currentBill.setGrossAmount(rs.getInt("summe"));
 
 
                 billList.add(currentBill);

@@ -74,7 +74,7 @@ public class LumberControllerImpl {
     }
 
 
-    @RequestMapping(value="/getAllLumber",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/getAllLumber",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all lumber")
     public List<LumberDTO> getAllLumber(@RequestBody LumberDTO filter) throws ResourceNotFoundException {
         LOG.debug("Get all lumber");

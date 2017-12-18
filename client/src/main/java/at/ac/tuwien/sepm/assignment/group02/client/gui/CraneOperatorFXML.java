@@ -67,6 +67,8 @@ public class CraneOperatorFXML {
             allOpenAssignments = assignmentService.getAllOpenAssignments();
         } catch (ServiceLayerException e) {
             LOG.warn("error while updating assignment table for crane operator");
+            AlertBuilder alertBuilder = new AlertBuilder();
+            alertBuilder.showErrorAlert("An Error occured", "Assignment Service", "Not possible to update table.");
         }
 
         ObservableList<AssignmentDTO> assignmentObservableList = FXCollections.observableArrayList();
@@ -83,12 +85,13 @@ public class CraneOperatorFXML {
         LOG.info("setDone button pressed");
 
         // get the selected assignmentDTO from the table
-        AssignmentDTO assignmentDTO = table_assignment.getSelectionModel().getSelectedItem();
-
-        if(assignmentDTO.equals(null)) {
+        if(table_assignment.getSelectionModel().getSelectedItem() == null) {
             AlertBuilder alertBuilder = new AlertBuilder();
-            alertBuilder.showInformationAlert("No Item selected","No Item selected","No Item selected");
+            alertBuilder.showInformationAlert("No Item selected", "No Item selected", "No Item selected");
+            return;
         }
+
+        AssignmentDTO assignmentDTO = table_assignment.getSelectionModel().getSelectedItem();
 
         // create a thread and task to prevent ui from freezing
         new Thread(new Task<Integer>() {

@@ -52,7 +52,7 @@ public class LumberControllerImpl implements LumberController {
         LumberDTO[] lumberArray;
 
         try {
-            lumberArray = restTemplate.getForObject("http://localhost:8080/getAllLumber", LumberDTO[].class);
+            lumberArray = restTemplate.postForObject("http://localhost:8080/getAllLumber", filter, LumberDTO[].class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");
