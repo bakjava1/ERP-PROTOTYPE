@@ -18,9 +18,11 @@ public interface AssignmentDAO {
     List<Assignment> getAllAssignments() throws PersistenceLayerException;
 
     /**
-     * 3.2.2 Aufgabe als erledigt markieren.
+     * mark a given assignment as done
+     * @param assignment the assignment to be marked as done
+     * @throws PersistenceLayerException thrown if the assignment couldn't be updated
      */
-    void updateAssignment(Assignment assignment) throws PersistenceLayerException;
+    void setAssignmentDone(Assignment assignment) throws PersistenceLayerException;
     void deleteAssignment(int id) throws PersistenceLayerException;
 
 }

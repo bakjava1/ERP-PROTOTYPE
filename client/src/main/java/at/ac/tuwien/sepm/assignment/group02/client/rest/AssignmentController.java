@@ -18,7 +18,9 @@ public interface AssignmentController {
     List<AssignmentDTO> getAllOpenAssignments() throws PersistenceLayerException;
 
     /**
-     * 3.2.2 Aufgabe als erledigt markieren.
+     * method marks an assignment as done
+     * @param assignmentDTO the assignmentDTO to be marked as done
+     * @throws PersistenceLayerException thrown in case the assignment couldn't be updated
      */
     void setDone(AssignmentDTO assignmentDTO) throws PersistenceLayerException;
 

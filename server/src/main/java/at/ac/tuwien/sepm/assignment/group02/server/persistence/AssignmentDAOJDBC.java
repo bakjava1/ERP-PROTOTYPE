@@ -37,7 +37,7 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
     }
 
     @Override
-    public void updateAssignment(Assignment assignment) throws PersistenceLayerException {
+    public void setAssignmentDone(Assignment assignment) throws PersistenceLayerException {
         LOG.debug("called updateAssignment: {}", assignment.toString());
         String updateStatement = "UPDATE ASSIGNMENT SET isDone = TRUE WHERE ID = ?";
 

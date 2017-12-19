@@ -25,15 +25,9 @@ public interface AssignmentService {
     List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 
     /**
-     * 3.2 Aufgaben abschließen
-     * 3.2.2 (rest/AssignmentController) Aufgabe als erledigt markieren.
-     * 3.2.3 (rest/TimberController) Rundholz aus dem Lager entfernen.
-     * 3.2.4 (rest/LumberController) Schnittholz ins Lager hinzufügen.
-     * 3.2.5 (rest/LumberController) Hinzugefügtes Schnittholz bei Bedarf reservieren.
-     * 3.2.6 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
-     * 3.2.7 Überprüfen ob Auftrag fertig ist (? => (rest/TaskController) getTaskById)
+     * method marks an assignment as done
      * @param assignmentDTO an assignment to mark as done
-     * @throws ServiceLayerException if the assignment couldn't be updated
+     * @throws ServiceLayerException if the assignment couldn't be marked as done
      */
     void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 

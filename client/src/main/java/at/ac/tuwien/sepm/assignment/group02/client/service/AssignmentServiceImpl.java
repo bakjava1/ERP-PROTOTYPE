@@ -72,12 +72,5 @@ public class AssignmentServiceImpl implements AssignmentService {
             throw new ServiceLayerException("error on persistence layer.");
         }
 
-        // 3.2.3 (rest/TimberController) Rundholz aus dem Lager entfernen.
-        // 3.2.4 (rest/LumberController) Schnittholz ins Lager hinzufügen.
-        // 3.2.5 (rest/LumberController) Hinzugefügtes Schnittholz bei Bedarf reservieren.
-        // 3.2.6 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
-        // 3.2.7 Überprüfen ob Auftrag fertig ist (? => (rest/TaskController) getTaskById)
-
-
     }
 }
