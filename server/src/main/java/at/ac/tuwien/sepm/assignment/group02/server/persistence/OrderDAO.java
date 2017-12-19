@@ -14,6 +14,8 @@ public interface OrderDAO {
 
     /**
      * 1.2.2 Bestellung löschen.
+     * @param order order to be deleted
+     * @throws PersistenceLayerException if the database is not available
      */
     void deleteOrder(Order order) throws PersistenceLayerException;
 

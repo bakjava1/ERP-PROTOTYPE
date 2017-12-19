@@ -26,7 +26,9 @@ public interface OrderService {
      * 1.2 Bestellung löschen
      * 1.2.1 (rest/TaskController) Verknüpfte Aufträge löschen
      * 1.2.2 (rest/OrderController) Bestehende Bestellung löschen
-     * @param order
+     * @param order to be deleted
+     * @throws InvalidInputException is actually never thrown (no wrong input possible)
+     * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
      */
     void deleteOrder(Order order) throws InvalidInputException, ServiceLayerException;
 

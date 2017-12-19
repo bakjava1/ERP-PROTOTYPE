@@ -42,6 +42,11 @@ public class OrderControllerImpl {
         }
     }
 
+    /**
+     * rest interface for deleting an order
+     * @param orderDTO order to be deleted
+     * @throws ResourceNotFoundException if an error occurs in the service layer
+     */
     @RequestMapping(value="/deleteOrder", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "delete order")
     public void deleteOrder(@RequestBody OrderDTO orderDTO) throws ResourceNotFoundException {

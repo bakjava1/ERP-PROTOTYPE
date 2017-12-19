@@ -20,7 +20,8 @@ public interface AssignmentService {
     /**
      * 3.1 Aufgaben anzeigen
      * 3.1.2 (rest/AssignmentController) Eine tabellarische Übersicht der nicht erledigten Aufgaben anzeigen.
-     * @return
+     * @throws ServiceLayerException is thrown if the server is not available
+     * @return list of all open assignments to be shown in the crane overview
      */
     List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 

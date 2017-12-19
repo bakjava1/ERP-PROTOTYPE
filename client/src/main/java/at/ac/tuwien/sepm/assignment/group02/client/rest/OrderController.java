@@ -14,6 +14,8 @@ public interface OrderController {
 
     /**
      * 1.2.2 Bestellung löschen.
+     * @param orderDTO order to be deleted
+     * @throws PersistenceLayerException if the server is not available
      */
     void deleteOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 

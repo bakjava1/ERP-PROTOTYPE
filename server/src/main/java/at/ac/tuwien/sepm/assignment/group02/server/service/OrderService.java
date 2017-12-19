@@ -14,6 +14,8 @@ public interface OrderService {
 
     /**
      * 1.2.2 Bestellung löschen.
+     * @param orderDTO order to be deleted
+     * @throws ServiceLayerException if the database is not available for the persistence layer
      */
     void deleteOrder(OrderDTO orderDTO) throws ServiceLayerException;
 
