@@ -4,25 +4,37 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputExcept
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_SpringFXMLLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class LeadWorkerFXML {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    @FXML
+    private AnchorPane ap;
 
     @FXML
     private TextField tf_description;
@@ -77,6 +89,7 @@ public class LeadWorkerFXML {
 
 
     private LumberService lumberService;
+    private AnnotationConfigApplicationContext context;
 
     @Autowired
     public LeadWorkerFXML(LumberService lumberService){
@@ -189,6 +202,74 @@ public class LeadWorkerFXML {
 
     @FXML
     public void onUpdateButtonClicked(ActionEvent actionEvent){
+
+    }
+
+    @FXML
+    public void optimisationBtnClicked(ActionEvent actionEvent) {
+        LOG.info("optimisationBtn clicked");
+
+        new Thread(new Task<>() {
+            @Override
+            protected Object call() throws Exception {
+
+                //TODO not able to debug autowiring not working
+                /*TimeUnit.SECONDS.sleep(6);
+                try {
+                    Stage stage = new Stage();
+                    stage.setTitle("Optimierungsalgorithmus");
+
+                    context = new AnnotationConfigApplicationContext();
+                    context.getBeanFactory().registerSingleton("stage", (Stage) ap.getScene().getWindow());
+                    context.scan("at.ac.tuwien.sepm.assignment.group02.client");
+                    context.refresh();
+                    context.start();
+
+                    ExampleQSE_SpringFXMLLoader fxmlLoader = context.getBean(ExampleQSE_SpringFXMLLoader.class);
+
+                    stage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/optimisation.fxml"), 950, 680));
+                    stage.centerOnScreen();
+                    stage.show();
+
+                } catch (IOException e) {
+                    LOG.error(e.getMessage());
+
+                }*/
+
+                TimeUnit.SECONDS.sleep(6);
+
+                return null;
+            }
+
+            @Override
+            protected void succeeded(){
+                try {
+
+                    OptimisationFXML optimisationFXML    = new OptimisationFXML();
+                    FXMLLoader fxmlLoader = new FXMLLoader(OfficeFXML.class.getResource("/fxml/optimisation.fxml"));
+                    fxmlLoader.setControllerFactory(param -> param.isInstance(optimisationFXML) ? optimisationFXML : null);
+
+                    Stage stage = new Stage();
+                    stage.setTitle("Optimierungsalgorithmus");
+                    stage.setWidth(950);
+                    stage.setHeight(680);
+                    stage.centerOnScreen();
+                    stage.setScene(new Scene(fxmlLoader.load()));
+                    stage.show();
+
+                } catch (IOException e) {
+                    LOG.error(e.getMessage());
+
+                }
+
+            }
+
+            @Override
+            protected void failed(){
+
+            }
+        }, "optimisation-algorithm").start();
+
 
     }
 }
