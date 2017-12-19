@@ -87,26 +87,27 @@ INSERT INTO TIMBER(festmeter,amount,length, quality,diameter,price,last_edited) 
 
 INSERT INTO LUMBER(lager,description,finishing,wood_type,quality,size,
 width,length,quantity,reserved_quantity,all_reserved,all_delivered) VALUES
-('Lager1', 'Latten', 'Prismiert','Ta', 'I/III', 22,48,3000,40,50,1,0),
-('Lager1', 'Staffel', 'Prismiert','Ta', 'II/IV', 22,48,2000,40,42,1,0),
-('Lager1', 'Kantholz', 'Prismiert','Fi/Ta', 'I/III', 22,48,5000,100,50,1,1),
-('Lager1', 'Schnittholz','Prismiert','Ta','S10/CE/TS', 22,48,1000,40,42,1,0),
-('Lager1', 'Latten', 'roh-SW','Fi', 'I/III', 22,48,3000,40,50,1,0),
-('Lager1', 'Staffel', 'roh-SW','Ta', 'S10/CE/TS', 22,48,6000,40,42,1,0),
-('Lager1', 'Kantholz', 'roh-SW','Fi', 'II/IV', 22,48,2500,40,50,1,0),
-('Lager1', 'Schnittholz', 'roh-SW','Fi/Ta', 'I/III', 22,48,2100,50,42,1,0),
-('Lager1', 'Latten', 'Prismiert','Ta', 'I/III', 22,48,1500,40,50,1,0),
-('Lager1', 'Latten', 'roh','Ta', 'S10/CE/TS', 22,48,3000,40,60,0,1);
+('Lager1', 'Latten', 'Prismiert','Fi', 'O', 23,48,3000,40,50,1,0),
+('Lager2', 'Staffel', 'prismiert','Ta', 'I', 32,120,3000,40,42,1,0),
+('Lager3', 'Kantholz', 'roh','Fi/Ta', 'II', 23,48,5000,100,50,1,1),
+('Lager4', 'Schnittholz','gehobelt','Lä','III', 20,48,4000,40,42,1,0),
+('Lager1', 'Hobelware', 'prismiert','Ki', 'IV', 100,90,4500,40,50,1,0),
+('Lager2', 'KVH', 'trocken','fi', 'V', 22,48,4000,40,42,1,0),
+('Lager3', 'Kurzware', 'lutro','Ta', 'O/III', 22,48,3000,40,50,1,0),
+('Lager3', 'Kantholz', 'frisch','Fi/Ta', 'III/IV', 98,98,3500,50,42,1,0),
+('Lager5', 'hobelware', 'imprägniert','Ta', 'III/V', 22,48,3000,40,50,1,0),
+('Lager5', 'kvh', 'gehobelt','Ta', 'O/III', 98,48,4000,40,60,0,1);
+
 
 INSERT INTO ORDERS(customer_name, customer_address,customer_uid, order_date, isPaidFlag, isDoneFlag) VALUES
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,0),
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,0),
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,0),
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,1),
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,0),
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,1),
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,0),
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,1);
+('Wagner', 'Ausstellungstrasse 1',1,now(),1,0),
+('Gruber', 'Ausstellungstrasse 2',2,now(),1,1),
+('Winkler', 'Ausstellungstrasse 3',3,now(),1,0),
+('Weber', 'Ausstellungstrasse 4',4,now(),1,1),
+('Huber', 'Ausstellungstrasse 5',5,now(),0,0),
+('Bauer', 'Ausstellungstrasse 6',6,now(),0,1),
+('Wimmer', 'Ausstellungstrasse 7',7,now(),0,0),
+('Müller', 'Ausstellungstrasse 8',8,now(),0,1);
 
 
 INSERT INTO task(orderid,description,finishing,wood_type,quality,size,
@@ -118,12 +119,16 @@ width,length,quantity,produced_quantity,sum,done,deleted) VALUES
 (5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
 (6,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
 (1,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
-(4,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
-(6,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(7,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0);
+(1, 'Latten', 'Prismiert','Fi', 'O', 23,48,3000,40,50,20,1,1),
+(2, 'Staffel', 'prismiert','Ta', 'I', 32,120,3000,40,42,30,1,0),
+(3, 'Kantholz', 'roh','Fi/Ta', 'II', 23,48,5000,100,50,40,1,1),
+(4, 'Schnittholz','gehobelt','Lä','III', 20,48,4000,40,42,50,1,0),
+(5, 'Hobelware', 'prismiert','Ki', 'IV', 100,90,4500,40,50,60,1,1),
+(6, 'KVH', 'trocken','fi', 'V', 22,48,4000,40,42,70,0,0),
+(7, 'Kurzware', 'lutro','Ta', 'O/III', 22,48,3000,40,50,1000,0,1),
+(8, 'Kantholz', 'frisch','Fi/Ta', 'III/IV', 98,98,3500,50,42,20000,0,1),
+(8, 'hobelware', 'imprägniert','Ta', 'III/V', 22,48,3000,40,50,100,0,0),
+(8, 'kvh', 'gehobelt','Ta', 'O/III', 98,48,4000,40,60,90,0,1);
 
 INSERT INTO ASSIGNMENT(creation_date, amount,box_ID, isDone) VALUES
 (now(),2,3,0),
