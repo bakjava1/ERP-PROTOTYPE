@@ -9,6 +9,9 @@ public interface OrderService {
 
     /**
      * 1.1.2 Bestellung mit allen relevanten Daten + eindeutigem Schlüssel (id) erstellen.
+     * @param orderDTO order to be created
+     * @throws ServiceLayerException if an error occurs in the service layer or below (persistence)
+     * @Invariant order got validated
      */
     void createOrder(OrderDTO orderDTO) throws ServiceLayerException;
 
