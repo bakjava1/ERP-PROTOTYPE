@@ -202,20 +202,25 @@ public class OfficeFXML {
         Order order = new Order();
 
         if(table_openOrder.getSelectionModel().getSelectedItem() != null) {
-            order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
+            AlertBuilder confirmDeletion = new AlertBuilder();
+            boolean confirmed = confirmDeletion.showConfirmationAlert("Bestellung löschen", null, "Möchten Sie die Bestellung wirklich löschen?");
 
-            Task task = new Task();
-            task.setOrder_id(order.getID());
+            if(confirmed) {
+                order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
 
-            try {
-                orderService.deleteOrder(order);
-                taskService.deleteTask(task);
-            } catch (InvalidInputException e) {
-                //InvalidInputException is never thrown
-                //the only user input is to select an order
-                //LOG.warn(e.getMessage());
-            } catch (ServiceLayerException e) {
-                LOG.warn(e.getMessage());
+                Task task = new Task();
+                task.setOrder_id(order.getID());
+
+                try {
+                    orderService.deleteOrder(order);
+                    taskService.deleteTask(task);
+                } catch (InvalidInputException e) {
+                    //InvalidInputException is never thrown
+                    //the only user input is to select an order
+                    //LOG.warn(e.getMessage());
+                } catch (ServiceLayerException e) {
+                    LOG.warn(e.getMessage());
+                }
             }
         } else {
             Alert noSelection = new Alert(Alert.AlertType.ERROR);
