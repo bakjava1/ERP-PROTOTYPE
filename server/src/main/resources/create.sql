@@ -100,7 +100,7 @@ width,length,quantity,reserved_quantity,all_reserved,all_delivered) VALUES
 
 INSERT INTO ORDERS(customer_name, customer_address,customer_uid, order_date, isPaidFlag, isDoneFlag) VALUES
 ('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,0),
-('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,1),
+('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,0),
 ('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,0),
 ('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,1),
 ('Herr Fischer', 'Ausstellungstrasse 7/9',12345,now(),0,0),
@@ -111,19 +111,19 @@ INSERT INTO ORDERS(customer_name, customer_address,customer_uid, order_date, isP
 
 INSERT INTO task(orderid,description,finishing,wood_type,quality,size,
 width,length,quantity,produced_quantity,sum,done,deleted) VALUES
+(1,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
 (2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
+(3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
+(4,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
+(5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
+(6,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
+(1,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
 (2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0);
+(3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
+(4,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
+(5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
+(6,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
+(7,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0);
 
 INSERT INTO ASSIGNMENT(creation_date, amount,box_ID, isDone) VALUES
 (now(),2,3,0),

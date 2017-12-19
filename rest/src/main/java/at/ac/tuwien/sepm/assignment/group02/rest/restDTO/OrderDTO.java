@@ -25,8 +25,6 @@ public class OrderDTO {
     private int taxAmount;
 
 
-    private int quantity;
-    private int taskAmount;
 
     public OrderDTO() {
         this.id = -1;
@@ -136,19 +134,7 @@ public class OrderDTO {
         this.taxAmount = taxAmount;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 
-    public int getTaskAmount() {
-        return taskAmount;
-    }
 
-    public void setTaskAmount(int taskAmount) {
-        this.taskAmount = taskAmount;
-    }
 }
