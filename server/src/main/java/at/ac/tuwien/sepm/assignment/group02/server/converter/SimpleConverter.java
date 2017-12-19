@@ -1,4 +1,4 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.converter;
+package at.ac.tuwien.sepm.assignment.group02.server.converter;
 
 import org.springframework.core.convert.ConversionException;
 

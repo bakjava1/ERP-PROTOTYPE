@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import java.lang.invoke.MethodHandles;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"at.ac.tuwien.sepm.assignment.group02.client", "at.ac.tuwien.sepm.assignment.group02.rest"})
+@ComponentScan(basePackages = {"at.ac.tuwien.sepm.assignment.group02.client"})
 public class MainApplication extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -45,11 +45,11 @@ public class MainApplication extends Application {
         }
         if(office) {
             primaryStage.setTitle("Office");
-            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/office.fxml"), 900, 500));
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/office.fxml"), 900, 550));
         }
         if(crane) {
             primaryStage.setTitle("Crane Operator");
-            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/crane.fxml"), 640, 480));
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/crane.fxml"), 610, 625));
         }
 
         primaryStage.centerOnScreen();

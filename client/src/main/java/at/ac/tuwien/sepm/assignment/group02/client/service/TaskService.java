@@ -3,8 +3,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.service;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 
 import java.util.List;
 

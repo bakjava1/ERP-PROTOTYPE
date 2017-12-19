@@ -1,5 +1,5 @@
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.TaskConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
@@ -45,6 +45,7 @@ public class TaskManagementTest {
         dbConnection = DBUtil.getConnection();
         taskDAO = new TaskDAOJDBC(dbConnection);
 
+        activateTasks();
         task1.setId(1);
         task1.setOrder_id(1);
         task2.setId(2);
@@ -134,6 +135,17 @@ public class TaskManagementTest {
 
 
 
+    private static void activateTasks() {
+        String activateTasks = "UPDATE TASK SET DELETED = 0 WHERE ID = 1 OR ID = 2 OR ID = 3 OR ID = 4 OR ID = 5";
+
+        try {
+            PreparedStatement ps = dbConnection.prepareStatement(activateTasks);
+            ps.execute();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("error at preparing test cases for deleting tasks");
+        }
+    }
 
     private int getActiveTasks() {
         int count = 0;
@@ -153,7 +165,7 @@ public class TaskManagementTest {
 
             return count;
         } catch (SQLException e) {
-            System.out.println("SQLException: {}" + e.getMessage());
+            System.out.println("error at testing for deleting tasks " + e.getMessage());
         }
 
         return count;
@@ -180,7 +192,7 @@ public class TaskManagementTest {
 
             return amount;
         } catch (SQLException e) {
-            System.out.println("SQLException: {}" + e.getMessage());
+            System.out.println("error at testing for deleting tasks and reduce reserved lumber amount " + e.getMessage());
         }
 
         return amount;

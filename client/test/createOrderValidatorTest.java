@@ -1,7 +1,7 @@
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
 import org.junit.*;
 
 public class createOrderValidatorTest {

@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 
 public interface TimberDAO {

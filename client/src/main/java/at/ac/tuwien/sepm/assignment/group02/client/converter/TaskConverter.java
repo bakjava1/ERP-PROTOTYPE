@@ -1,6 +1,6 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.converter;
+package at.ac.tuwien.sepm.assignment.group02.client.converter;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

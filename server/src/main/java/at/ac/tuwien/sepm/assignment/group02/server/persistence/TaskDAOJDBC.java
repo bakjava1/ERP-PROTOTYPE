@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -16,7 +17,7 @@ public class TaskDAOJDBC implements TaskDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private Connection dbConnection;
+    private static Connection dbConnection;
 
     public TaskDAOJDBC(Connection dbConnection) {
         this.dbConnection = dbConnection;
@@ -146,4 +147,43 @@ public class TaskDAOJDBC implements TaskDAO {
     public void getTaskById(int task_id) throws PersistenceLayerException {
 
     }
+
+
+    @Override
+    public List<Task> getTasksByOrderId(int order_id) throws PersistenceLayerException {
+
+        LOG.debug("Get tasks by orderId from database");
+
+        List<Task> taskList = new ArrayList<>();
+        PreparedStatement ps;
+        ResultSet rs;
+
+        try {
+
+            //connect to db
+            ps = dbConnection.prepareStatement("SELECT * FROM TASK WHERE ORDERID = ? AND DELETED = 0");
+            ps.setInt(1, order_id);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Task currentTask = new Task();
+                currentTask.setQuantity(rs.getInt("quantity"));
+
+                taskList.add(currentTask);
+            }
+
+            if (taskList.size() == 0) {
+                throw new PersistenceLayerException("No tasks found");
+            }
+
+        } catch (SQLException e) {
+            throw new PersistenceLayerException("Database error:" + e.getMessage());
+        }
+        return taskList;
+
+
+    }
+
+
 }

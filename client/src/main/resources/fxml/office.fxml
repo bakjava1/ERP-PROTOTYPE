@@ -11,41 +11,41 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TabPane prefHeight="500.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
+<TabPane prefHeight="550.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
    <tabs>
       <Tab text="Bestellungen">
          <content>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="900.0">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="900.0">
                 <children>
                     <Button fx:id="deleteOrderButton" layoutX="382.0" layoutY="339.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
                   <TableView fx:id="table_openOrder" layoutX="7.0" prefHeight="322.0" prefWidth="460.0">
                     <columns>
                       <TableColumn fx:id="col_orderID" prefWidth="30.0" text="Nr" />
-                      <TableColumn prefWidth="100.0" text="Kundenname" />
-                        <TableColumn prefWidth="100.0" text="Anzahl Aufträge" />
-                        <TableColumn prefWidth="130.0" text="Anzahl Stück Gesamt" />
-                        <TableColumn prefWidth="100.0" text="Summe (Brutto)" />
+                      <TableColumn fx:id="col_costumerName" prefWidth="100.0" text="Kundenname" />
+                        <TableColumn fx:id="col_taskAmount" prefWidth="100.0" text="Anzahl Aufträge" />
+                        <TableColumn fx:id="col_amount" prefWidth="130.0" text="Anzahl Stück Gesamt" />
+                        <TableColumn fx:id="col_grossSum" prefWidth="100.0" text="Summe (Brutto)" />
                     </columns>
                   </TableView>
-                  <Label layoutX="573.0" layoutY="14.0" text="Bestellung erstellen">
+                  <Label layoutX="573.0" layoutY="-1.0" text="Bestellung erstellen">
                      <font>
                         <Font name="System Bold" size="21.0" />
                      </font>
                   </Label>
-                  <Label layoutX="511.0" layoutY="67.0" text="Name">
+                  <Label layoutX="515.0" layoutY="35.0" text="Name">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="tf_order_customername" layoutX="706.0" layoutY="64.0" />
-                  <TextField fx:id="tf_order_customeraddress" layoutX="706.0" layoutY="103.0" />
-                  <TextField fx:id="tf_order_customerUID" layoutX="706.0" layoutY="140.0" />
-                  <Label layoutX="511.0" layoutY="106.0" text="Adresse">
+                  <TextField fx:id="tf_order_customername" layoutX="706.0" layoutY="35.0" />
+                  <TextField fx:id="tf_order_customeraddress" layoutX="706.0" layoutY="70.0" />
+                  <TextField fx:id="tf_order_customerUID" layoutX="706.0" layoutY="105.0" />
+                  <Label layoutX="515.0" layoutY="70.0" text="Adresse">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label layoutX="511.0" layoutY="143.0" text="Kunden UID">
+                  <Label layoutX="515.0" layoutY="105.0" text="Kunden UID">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -61,15 +61,55 @@
                       <TableColumn fx:id="col_taskLength" prefWidth="60.0" text="Länge" />
                     </columns>
                   </TableView>
-                  <Button layoutX="603.0" layoutY="400.0" mnemonicParsing="false" onAction="#createOrder" text="Bestellung aufnehmen" />
+                  <Button fx:id="bt_acceptOrder" layoutX="474.0" layoutY="481.0" mnemonicParsing="false" onAction="#createOrder" style="-fx-background-color: #6cff48;" text="Bestellung aufnehmen" />
                   <Button fx:id="btnInvoice" layoutX="23.0" layoutY="339.0" mnemonicParsing="false" onAction="#invoiceBtnClicked" text="Abrechnen" />
+                  <Button layoutX="768.0" layoutY="481.0" mnemonicParsing="false" onAction="#clearCurrentOrder" style="-fx-background-color: #ff5048;" text="Bestellung verwerfen" />
+                  <Button fx:id="bt_deleteOrder" layoutX="594.0" layoutY="407.0" mnemonicParsing="false" onAction="#initiateCostValueFunction" text="Kosten/Nutzen Schätzung" />
+                  <Label layoutX="508.0" layoutY="446.0" text="Ergebnis Schätzung">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="kn_result" layoutX="710.0" layoutY="450.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="608.0" layoutY="153.0" text="Summe:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="l_sumorders" layoutX="673.0" layoutY="153.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                 </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab text="Rechnungen">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TableView fx:id="table_bill" prefHeight="396.0" prefWidth="901.0">
+                     <columns>
+                        <TableColumn fx:id="col_billID" prefWidth="81.14146518707275" text="Nr" />
+                        <TableColumn fx:id="col_billCostumerName" prefWidth="168.85856246948242" text="Kundenname" />
+                        <TableColumn fx:id="col_billTaskAmount" prefWidth="229.28248596191406" text="Anzahl Aufträge" />
+                        <TableColumn fx:id="col_billAmount" prefWidth="224.2665252685547" text="Anzahl Stück Gesamt" />
+                        <TableColumn fx:id="col_billGrossSum" prefWidth="197.61981201171875" text="Summe (Brutto)" />
+                     </columns>
+                  </TableView>
+                  <Button layoutX="707.0" layoutY="408.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="162.0" text="Rechnung anzeigen" />
+               </children>
             </AnchorPane>
          </content>
       </Tab>
       <Tab text="Rundholz">
          <content>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="900.0">
                <children>
                   <Button layoutX="253.0" layoutY="143.0" mnemonicParsing="false" onAction="#addTimber" text="Speichern" />
                   <ChoiceBox fx:id="cb_timber_box" layoutX="220.0" layoutY="48.0" prefHeight="26.0" prefWidth="171.0" />

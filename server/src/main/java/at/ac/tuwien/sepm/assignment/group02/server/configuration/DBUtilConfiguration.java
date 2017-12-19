@@ -11,7 +11,6 @@ public class DBUtilConfiguration {
 
     @Bean
     public Connection getDBConnection() {
-        // Logic to create your Storage instance.
         return DBUtil.getConnection();
     }
 

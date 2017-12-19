@@ -1,5 +1,5 @@
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.TimberConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
+import at.ac.tuwien.sepm.assignment.group02.server.converter.TimberConverter;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityCreationException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;

@@ -5,15 +5,12 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerEx
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.TaskConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
-import at.ac.tuwien.sepm.assignment.group02.rest.exceptions.EntityCreationException;
+import at.ac.tuwien.sepm.assignment.group02.client.converter.OrderConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.converter.TaskConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +41,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void addOrder(Order order, List<Task> tasks) throws InvalidInputException{
         LOG.debug("addOrder called: {},{}", order, tasks);
-        OrderDTO toAdd = orderConverter.convertPlainObjectToRestDTO(order);
         try {
             validator.inputValidationOrder(order);
             List<TaskDTO> convertList = new ArrayList<>();
             for(int i = 0; i < tasks.size();i++) {
                 convertList.add(taskConverter.convertPlainObjectToRestDTO(tasks.get(i)));
             }
-            toAdd = orderConverter.convertPlainObjectToRestDTO(order);
+            OrderDTO toAdd = orderConverter.convertPlainObjectToRestDTO(order);
             toAdd.setTaskList(convertList);
             orderController.createOrder(toAdd);
         } catch (PersistenceLayerException e) {
@@ -104,7 +100,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllClosed() {
         LOG.debug("getAllClosed called");
-        return null;
+        List<OrderDTO> allClosed = null;
+
+        try {
+            allClosed = orderController.getAllClosed();
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
+        }
+
+        List<Order> allClosedConverted = new LinkedList<>();
+
+
+        for (OrderDTO bill: allClosed) {
+            allClosedConverted.add(orderConverter.convertRestDTOToPlainObject(bill));
+        }
+
+        return allClosedConverted;
     }
 
     @Override
@@ -114,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void invoiceOrder(Order selectedOrder) throws InvalidInputException {
+    public void invoiceOrder(Order selectedOrder) throws InvalidInputException, ServiceLayerException {
 
         if(selectedOrder==null){
             throw new InvalidInputException("Selected Order is null");
@@ -122,7 +133,8 @@ public class OrderServiceImpl implements OrderService {
         if(selectedOrder.isPaid()){
             throw new InvalidInputException("Order already invoiced");
         }
-        //check if customer information is missing
+
+        //check if customer information is missing //TODO throws null-pointer exception
         if(selectedOrder.getCustomerName().isEmpty() || selectedOrder.getCustomerAddress().isEmpty() || selectedOrder.getCustomerUID().isEmpty()){
             throw new InvalidInputException("Customer information missing for selected order");
         }
@@ -140,6 +152,10 @@ public class OrderServiceImpl implements OrderService {
         selectedOrder.setDeliveryDate(new Date());
         OrderDTO orderDTO = orderConverter.convertPlainObjectToRestDTO(selectedOrder);
 
-        orderController.invoiceOrder(orderDTO);
+        try {
+            orderController.invoiceOrder(orderDTO);
+        } catch (PersistenceLayerException e) {
+            throw new ServiceLayerException(e.getMessage());
+        }
     }
 }

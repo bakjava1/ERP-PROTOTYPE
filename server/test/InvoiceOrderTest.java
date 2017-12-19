@@ -1,17 +1,19 @@
 
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.TaskConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.converter.OrderConverter;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAOJDBC;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
-import org.junit.*;
-import org.mockito.Mockito;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +54,7 @@ public class InvoiceOrderTest {
         orderDAO = new OrderDAOJDBC(dbConnection);
         orderDAOMock = mock(OrderDAOJDBC.class);
 
-        orderService = new OrderServiceImpl(orderDAO, new OrderConverter());
+        orderService = new OrderServiceImpl(orderDAO, new TaskDAOJDBC(dbConnection),new OrderConverter());
 
         orderDTONoError.setPaid(false);
         orderDTONoError.setCustomerName("Max Mustermmann");

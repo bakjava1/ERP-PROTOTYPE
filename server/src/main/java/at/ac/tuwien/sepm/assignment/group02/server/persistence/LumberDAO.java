@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Filter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 
 import java.sql.SQLException;
@@ -20,11 +19,18 @@ public interface LumberDAO {
     void createLumber(Lumber lumber) throws PersistenceLayerException;
 
     /**
-     * 2.2.2 & 3.2.5 SchnittholzDAO als reserviert markieren.
+     * 2.2.2  Schnittholz bearbeiten
+     * @param lumber
+     * @throws PersistenceLayerException
      */
-    void updateLumber(Lumber lumber) throws PersistenceLayerException, SQLException;
+    void updateLumber(Lumber lumber) throws PersistenceLayerException;
 
-    void deleteLumber(Lumber lumber) throws PersistenceLayerException, SQLException;
+    /**
+     * 1.4.3 Schnittholz   aus   dem   Schnittholzlager   entfernen.
+     * @param lumber
+     * @throws PersistenceLayerException
+     */
+    void deleteLumber(Lumber lumber) throws PersistenceLayerException;
 
     /**
      * 2.1.2 & 2.1.3

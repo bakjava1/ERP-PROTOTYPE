@@ -1,12 +1,12 @@
+import at.ac.tuwien.sepm.assignment.group02.client.converter.OrderConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.converter.TaskConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderServiceImpl;
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.TaskConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -60,23 +60,23 @@ public class InvoiceOrderTest {
     }
 
     @Test(expected = InvalidInputException.class)
-    public void testInvoiceOrderNetPrice() throws InvalidInputException {
+    public void testInvoiceOrderNetPrice() throws InvalidInputException, ServiceLayerException {
         orderService.invoiceOrder(orderNetPriceIsNegative);
     }
 
+    @Ignore
     @Test(expected = InvalidInputException.class)
-    public void testInvoiceOrderCustomerError() throws InvalidInputException {
+    public void testInvoiceOrderCustomerError() throws InvalidInputException, ServiceLayerException {
         orderService.invoiceOrder(orderCustomerError);
     }
 
     @Test(expected = InvalidInputException.class)
-    public void testInvoiceOrderAlreadyInvoiced() throws InvalidInputException {
+    public void testInvoiceOrderAlreadyInvoiced() throws InvalidInputException, ServiceLayerException {
         orderService.invoiceOrder(orderAlreadyInvoiced);
     }
 
     @Test
-    public void testInvoiceOrderNoErrorServiceLayer() throws InvalidInputException {
-
+    public void testInvoiceOrderNoErrorServiceLayer() throws InvalidInputException, ServiceLayerException {
         orderService.invoiceOrder(orderNoError);
     }
 

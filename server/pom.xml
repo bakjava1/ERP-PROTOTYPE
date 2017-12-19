@@ -24,12 +24,12 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.1.11</logback.version>
         <springboot.version>1.5.8.RELEASE</springboot.version>
+        <springfox-swagger.version>2.7.0</springfox-swagger.version>
         <jackson.version>2.9.2</jackson.version>
         <h2.version>1.4.196</h2.version>
 
         <!-- test dependencies -->
         <junit.version>4.12</junit.version>
-        <mockito-all.version>2.0.2-beta</mockito-all.version>
 
         <!-- plugins  -->
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
@@ -71,6 +71,17 @@
         </dependency>
 
         <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
@@ -108,13 +119,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>${mockito-all.version}</version>
             <scope>test</scope>
         </dependency>
 

@@ -1,18 +1,17 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.entity;
-
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+package at.ac.tuwien.sepm.assignment.group02.server.entity;
 
 public class Lumber {
-    private int id;
+
+
+    private int id; // (primary key autoincrement)
     private String lager;
-    private String description;
-    private String finishing;
-    private String wood_type;
-    private String quality;
-    private int size;
-    private int width;
-    private int length;
+    private String description; // artikelbezeichnung; (Latten, Staffel, Kantholz, Schnittholz, ...)
+    private String finishing; // ausfuehrung; (roh, roh-SW, prismiert, ...)
+    private String wood_type; // holzart; (Fi, Ta, Fi/Ta, ...)
+    private String quality; // (I/III, S10/CE/TS, II/IV, ...)
+    private int size; // staerke oder dicke des schnittholzes (z.B. 24mm)
+    private int width; // (z.B. 48mm)
+    private int length; // (z.B. 3000 mm)
     private int quantity;
     private int reserved_quantity;
     private int delivered_quantity;
@@ -25,6 +24,28 @@ public class Lumber {
     public Lumber() {
     }
 
+
+    /**
+     * constructor with parameter, initializes with instances variables.
+     */
+    public Lumber(int id,String lager,String description,String finishing, String wood_type, String quality,
+                     int size,int width,int length,int quantity, int reserved_quantity, int delivered_quantity,
+                     boolean all_reserved, boolean all_delivered) {
+        this.id = id;
+        this.lager=lager;
+        this.description=description;
+        this.finishing=finishing;
+        this.wood_type=wood_type;
+        this.quality=quality;
+        this.size=size;
+        this.width=width;
+        this.length=length;
+        this.quantity=quantity;
+        this.reserved_quantity=reserved_quantity;
+        this.delivered_quantity=delivered_quantity;
+        this.all_reserved=all_reserved;
+        this.all_delivered=all_delivered;
+    }
     /**
      * method to retrieve the schnittholz ID
      * @return a value of schnittID to caller

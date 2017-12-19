@@ -1,4 +1,4 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.entity;
+package at.ac.tuwien.sepm.assignment.group02.client.entity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -23,11 +23,19 @@ public class Order {
     private int netAmount;
     private int taxAmount;
 
+    private int quantity;
+    private int taskAmount;
+
+
     public Order() {
         this.id = -1;
         this.orderDate = null;
         this.isPaid = false;
         this.taskList = new ArrayList<>();
+    }
+
+    public Order(int ID) {
+        this.id = ID;
     }
 
     public Order(int id, Timestamp orderDate) {
@@ -132,6 +140,22 @@ public class Order {
 
     public void setTaxAmount(int taxAmount) {
         this.taxAmount = taxAmount;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getTaskAmount() {
+        return taskAmount;
+    }
+
+    public void setTaskAmount(int taskAmount) {
+        this.taskAmount = taskAmount;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 
 import java.util.List;
@@ -32,5 +32,9 @@ public interface TaskDAO {
      * 3.2.7 maybe not needed.
      */
     void getTaskById(int task_id) throws PersistenceLayerException;
+
+
+
+    List<Task> getTasksByOrderId(int order_id) throws PersistenceLayerException;
 
 }

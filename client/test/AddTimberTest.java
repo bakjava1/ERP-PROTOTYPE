@@ -1,17 +1,17 @@
+import at.ac.tuwien.sepm.assignment.group02.client.converter.TimberConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TimberController;
-import at.ac.tuwien.sepm.assignment.group02.client.rest.TimberControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberServiceImpl;
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.TimberConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.lang.invoke.MethodHandles;
 
 

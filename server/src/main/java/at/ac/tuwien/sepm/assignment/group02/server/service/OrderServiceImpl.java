@@ -1,14 +1,15 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.TaskConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.server.converter.OrderConverter;
+import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,14 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static OrderDAO orderManagementDAO;
+    private static TaskDAO taskManagementDAO;
     private static OrderConverter orderConverter;
     private static TaskConverter taskConverter = new TaskConverter();
 
     @Autowired
-    public OrderServiceImpl(OrderDAO orderManagementDAO, OrderConverter orderConverter) {
+    public OrderServiceImpl(OrderDAO orderManagementDAO,TaskDAO taskManagementDAO, OrderConverter orderConverter) {
         OrderServiceImpl.orderManagementDAO = orderManagementDAO;
+        OrderServiceImpl.taskManagementDAO = taskManagementDAO;
         OrderServiceImpl.orderConverter = orderConverter;
     }
 
@@ -68,8 +71,11 @@ public class OrderServiceImpl implements OrderService {
         try{
             allOpen = orderManagementDAO.getAllOpen();
 
+            setTaskInfo(allOpen);
+
+
         } catch(PersistenceLayerException e) {
-            LOG.error("Error while trying to get objects from Database");
+            LOG.error("Error while trying to get objects from Database: " + e.getMessage());
         }
 
         if (allOpen!= null) {
@@ -90,7 +96,30 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> getAllClosed() {
-        return null;
+        List<Order> allClosed = null;
+        List<OrderDTO> allClosedConverted = null;
+
+
+        try{
+
+            allClosed = orderManagementDAO.getAllClosed();
+
+            setTaskInfo(allClosed);
+
+
+        } catch(PersistenceLayerException e) {
+            LOG.error(e.getMessage());
+        }
+
+        if (allClosed!= null) {
+            allClosedConverted = new ArrayList<>();
+
+            for (int i = 0; i < allClosed.size(); i++) {
+                allClosedConverted.add(orderConverter.convertPlainObjectToRestDTO(allClosed.get(i)));
+            }
+        }
+
+        return allClosedConverted;
     }
 
     @Override
@@ -99,13 +128,39 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void invoiceOrder(OrderDTO orderDTO) {
+    public void invoiceOrder(OrderDTO orderDTO) throws ServiceLayerException {
         Order order = orderConverter.convertRestDTOToPlainObject(orderDTO);
 
         try {
             orderManagementDAO.invoiceOrder(order);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while tying to invoice Order: " + e.getMessage());
+            throw new ServiceLayerException("couldn't edit order");
         }
+    }
+
+
+
+    private void setTaskInfo(List<Order> order) throws PersistenceLayerException {
+
+        for (Order current : order) {
+
+            List<Task> tasks = taskManagementDAO.getTasksByOrderId(current.getID());
+
+            int quantity = 0;
+            for (Task task : tasks) {
+                quantity += task.getQuantity();
+            }
+
+            current.setQuantity(quantity);
+
+            if (tasks != null) {
+                current.setTaskAmount(tasks.size());
+            } else {
+                current.setTaskAmount(0);
+            }
+
+        }
+
     }
 }

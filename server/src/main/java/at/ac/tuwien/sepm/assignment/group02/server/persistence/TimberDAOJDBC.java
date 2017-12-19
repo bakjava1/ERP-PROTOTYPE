@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Timber;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,13 +17,13 @@ import java.sql.SQLException;
 public class TimberDAOJDBC implements TimberDAO{
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private Connection dbConnection;
+    private static Connection dbConnection;
     private PreparedStatement stmt = null;
     private ResultSet rs = null;
 
     @Autowired
     public TimberDAOJDBC(Connection dbConnection) {
-        this.dbConnection = dbConnection;
+        TimberDAOJDBC.dbConnection = dbConnection;
     }
 
     @Override

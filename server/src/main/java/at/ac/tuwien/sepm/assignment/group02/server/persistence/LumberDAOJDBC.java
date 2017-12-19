@@ -1,7 +1,8 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -207,32 +208,69 @@ public class LumberDAOJDBC implements LumberDAO {
     }
 
     @Override
-    public void updateLumber(Lumber lumber) throws PersistenceLayerException, SQLException {
-        /*LOG.debug("Entering update Lumber method with parameter" +lumber);
+    public void updateLumber(Lumber lumber) throws PersistenceLayerException {
+        LOG.debug("Entering update Lumber method with parameter:{}" ,lumber);
+        checkIfLumberIsNull(lumber);
 
-        dbConnection.setAutoCommit(false);
+        try {
+            dbConnection.setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        String updateLumber="UPDATE LUMBER SET NAME=1 WHERE ID=?";
+        String updateLumber="UPDATE Lumber SET lager=?, description=?, finishing=?, wood_type=?, quality=?," +
+                "size=?, length=?, width=?, quantity=?, reserved_quantity=?, delivered_quantity=?,all_reserved=?,all_delivered=? WHERE ID=?";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(updateLumber);
-            ps.setString(1,lumber.getContent());
+            ResultSet rs= dbConnection.createStatement().executeQuery("SELECT * FROM Lumber WHERE id=" +lumber.getId());
+
+            if(!rs.next()){
+                LOG.debug("Lumber with id {} doesn't exist.",lumber.getId());
+            }
+
+            ps.setInt(1,lumber.getId());
+            ps.setString(2,lumber.getLager());
+            ps.setString(3,lumber.getDescription());
+            ps.setString(4, lumber.getFinishing());
+            ps.setString(5, lumber.getWood_type());
+            ps.setString(6, lumber.getQuality());
+            ps.setInt(7, lumber.getSize());
+            ps.setInt(8, lumber.getLength());
+            ps.setInt(9, lumber.getWidth());
+            ps.setInt(10, lumber.getQuantity());
+            ps.setInt(11, lumber.getReserved_quantity());
+            ps.setInt(12, lumber.getDelivered_quantity());
+            ps.setBoolean(13, lumber.isAll_reserved());
+            ps.setBoolean(14, lumber.isAll_delivered());
             ps.executeUpdate();
+            dbConnection.commit();
+            LOG.debug("Successfuly updated lumber in the table Lumber {}", lumber);
             ps.close();
 
         }catch (SQLException e){
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLayerException("Database error");
         }
-        */
-    }
+        try {
+            dbConnection.rollback();
+
+    }catch (SQLException e1){
+            LOG.error("SQLException: {}", e1.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
+            }
 
     @Override
-    public void deleteLumber(Lumber lumber) throws PersistenceLayerException, SQLException {
-        /*
+    public void deleteLumber(Lumber lumber) throws PersistenceLayerException {
+
         LOG.debug("deleting lumber number {} from database", lumber.getId());
 
-        dbConnection.setAutoCommit(false);
+        try {
+            dbConnection.setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         String deleteLumber= "DELETE FROM LUMBER WHERE ID=?";
 
@@ -247,8 +285,14 @@ public class LumberDAOJDBC implements LumberDAO {
             throw new PersistenceLayerException("Database error");
         }
     }
-    */
 
+
+    private void checkIfLumberIsNull(Lumber lumber) throws ResourceNotFoundException {
+               if(lumber == null){
+                        LOG.debug("Lumber is null.");
+                        throw new ResourceNotFoundException("Lumber can't be null.");
+                    }
+            }
     }
 
-}
+

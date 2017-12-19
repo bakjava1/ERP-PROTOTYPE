@@ -1,12 +1,12 @@
-package at.ac.tuwien.sepm.assignment.group02.rest.converter;
+package at.ac.tuwien.sepm.assignment.group02.server.converter;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LumberConverter implements SimpleConverter<Lumber, LumberDTO>{
+public class LumberConverter implements SimpleConverter<Lumber, LumberDTO> {
 
     @Override
     public LumberDTO convertPlainObjectToRestDTO(Lumber pojo) {

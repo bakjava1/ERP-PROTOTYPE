@@ -1,16 +1,14 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.ResourceAccessException;
 
