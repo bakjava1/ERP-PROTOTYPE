@@ -54,6 +54,7 @@ public class AssignmentServiceImpl implements AssignmentService {
             allOpenAssignments = assignmentController.getAllOpenAssignments();
         } catch (PersistenceLayerException e) {
             LOG.warn("Error while getting all open assignments in client service layer: ", e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
 
         /*

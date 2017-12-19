@@ -24,6 +24,10 @@ public class OrderDTO {
     private int netAmount;
     private int taxAmount;
 
+
+    private int quantity;
+    private int taskAmount;
+
     public OrderDTO() {
         this.id = -1;
         this.invoiceNumber = this.id;
@@ -130,5 +134,21 @@ public class OrderDTO {
 
     public void setTaxAmount(int taxAmount) {
         this.taxAmount = taxAmount;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getTaskAmount() {
+        return taskAmount;
+    }
+
+    public void setTaskAmount(int taskAmount) {
+        this.taskAmount = taskAmount;
     }
 }
