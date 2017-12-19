@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDTO> getAllOpen() {
         List<Order> allOpen = null;
-        List<OrderDTO> allOpenConverted = null;
+        List<OrderDTO> allOpenConverted = new ArrayList<>();
 
 
         try{
@@ -78,12 +78,9 @@ public class OrderServiceImpl implements OrderService {
             LOG.error("Error while trying to get objects from Database: " + e.getMessage());
         }
 
-        if (allOpen!= null) {
-            allOpenConverted = new ArrayList<>();
 
-            for (int i = 0; i < allOpen.size(); i++) {
-                allOpenConverted.add(orderConverter.convertPlainObjectToRestDTO(allOpen.get(i)));
-            }
+        for (int i = 0; allOpen!=null && i < allOpen.size(); i++) {
+            allOpenConverted.add(orderConverter.convertPlainObjectToRestDTO(allOpen.get(i)));
         }
 
         return allOpenConverted;

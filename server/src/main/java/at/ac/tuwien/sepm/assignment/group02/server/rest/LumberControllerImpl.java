@@ -81,7 +81,7 @@ public class LumberControllerImpl {
         try {
             return lumberService.getAllLumber(filter);
         } catch (ServiceLayerException e) {
-            throw new ResourceNotFoundException("failed to get all lumbers.");
+            throw new ResourceNotFoundException("failed to get all lumbers."+ e.getMessage());
         }
 
     }

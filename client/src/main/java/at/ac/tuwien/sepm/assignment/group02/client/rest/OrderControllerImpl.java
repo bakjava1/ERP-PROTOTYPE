@@ -79,10 +79,6 @@ public class OrderControllerImpl implements OrderController {
             throw new PersistenceLayerException("Connection Problem with Server");
         }
 
-        for (int i = 0; orderArray!= null && i < orderArray.length; i++) {
-            orderList.add(orderArray[i]);
-        }
-
         return orderList;
 
     }

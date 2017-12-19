@@ -138,7 +138,8 @@ public class LumberDAOJDBC implements LumberDAO {
             }
 
         } catch (SQLException e) {
-            throw new PersistenceLayerException("Database error");
+
+            throw new PersistenceLayerException("Database error:"+ e.getMessage());
         }
 
         return lumberList;
