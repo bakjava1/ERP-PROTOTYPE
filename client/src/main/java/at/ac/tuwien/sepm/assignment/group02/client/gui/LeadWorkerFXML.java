@@ -165,8 +165,6 @@ public class LeadWorkerFXML {
             allLumber = lumberService.getAll(filter);
         } catch (ServiceLayerException e) {
             LOG.warn(e.getMessage());
-        } catch (InvalidInputException e) {
-            LOG.warn(e.getMessage());
         }
 
         if (allLumber != null) {

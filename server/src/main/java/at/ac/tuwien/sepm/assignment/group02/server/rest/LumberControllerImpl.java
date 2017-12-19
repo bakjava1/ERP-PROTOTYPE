@@ -26,7 +26,7 @@ public class LumberControllerImpl {
     private static LumberService lumberService;
 
     @Autowired
-    public LumberControllerImpl(LumberService lumberService) throws EntityCreationException{
+    public LumberControllerImpl(LumberService lumberService) throws EntityCreationException {
 
         LumberControllerImpl.lumberService = lumberService;
     }

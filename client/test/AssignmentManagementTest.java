@@ -37,16 +37,10 @@ public class AssignmentManagementTest {
         LOG.debug("assignment management test setup initiated");
 
         assignmentController = mock(AssignmentController.class);
-        timberController = mock(TimberController.class);
-        lumberController = mock(LumberController.class);
-        taskController = mock(TaskController.class);
         validateAssignmentDTO = mock(ValidateAssignmentDTO.class);
 
         assignmentService = new AssignmentServiceImpl(
                  assignmentController,
-                 timberController,
-                 lumberController,
-                 taskController,
                  validateAssignmentDTO);
 
         LOG.debug("assignment management test setup completed");
