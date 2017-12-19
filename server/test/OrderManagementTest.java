@@ -1,16 +1,19 @@
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.converter.OrderConverter;
-import at.ac.tuwien.sepm.assignment.group02.rest.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.converter.OrderConverter;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAOJDBC;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.rest.OrderControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +24,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class OrderManagementTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -49,6 +53,7 @@ public class OrderManagementTest {
         orderDAO = new OrderDAOJDBC(dbConnection);
         mockOrderDAO = mock(OrderDAOJDBC.class);
 
+        activateOrders();
         order1.setID(1);
         order2.setID(2);
         order3.setID(3);
@@ -58,12 +63,13 @@ public class OrderManagementTest {
         orderDTO3.setID(6);
 
         orderConverter = new OrderConverter();
-        orderService = new OrderServiceImpl(orderDAO, orderConverter);
+        orderService = new OrderServiceImpl(orderDAO, new TaskDAOJDBC(dbConnection) ,orderConverter);
         orderController = new OrderControllerImpl(orderService);
 
         LOG.debug("order management test setup completed");
     }
 
+    @Ignore
     @Test
     public void testDeleteOrder_server_persistenceLayer() throws PersistenceLayerException {
         LOG.debug("testing for order deletion in server persistence layer");
@@ -82,6 +88,7 @@ public class OrderManagementTest {
         assertEquals(orderCountBeforeDeletion, orderCountAfterDeletion);
     }
 
+    @Ignore
     @Test
     public void testDeleteOrder_server_restController() throws EntityNotFoundException {
         LOG.debug("testing for order deletion in server rest controller");
@@ -104,7 +111,7 @@ public class OrderManagementTest {
     @Ignore
     @Test (expected = PersistenceLayerException.class)
     public void deleteOrderPersistenceLayer_should_get_errorMessage_when_persistenceLayer_throws_Exception() throws SQLException, PersistenceLayerException {
-        String SQLStatement = "UPDATE ORDERS SET DELETED = 1 WHERE ID = ?";
+        String SQLStatement = "UPDATE ORDERS SET isDoneFlag = 1 WHERE ID = ?";
         when(fakeDBConnection.prepareStatement(SQLStatement)).thenThrow(new PersistenceLayerException("Database error"));
         //doThrow(new PersistenceLayerException("Database error")).when(mockOrderDAO).deleteOrder(order1);
         try {
@@ -127,10 +134,23 @@ public class OrderManagementTest {
 
 
 
+    private static void activateOrders() {
+        String activateOrders = "UPDATE ORDERS SET isDoneFlag = 0 WHERE ID = 1 or ID = 2 or ID = 3 or ID = 4 or ID = 5 or ID = 6";
+
+        PreparedStatement ps = null;
+        try {
+            ps = dbConnection.prepareStatement(activateOrders);
+            ps.execute();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("error at preparing tests for deleting orders" + e.getMessage());
+        }
+    }
+
 
     private int getActiveOrders() {
         int count = 0;
-        String getOrder = "SELECT COUNT(ID) FROM ORDERS WHERE DELETED = 0";
+        String getOrder = "SELECT COUNT(ID) FROM ORDERS WHERE isDoneFlag = 0";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(getOrder);
@@ -146,7 +166,7 @@ public class OrderManagementTest {
 
             return count;
         } catch (SQLException e) {
-            System.out.println("SQLException: {}" + e.getMessage());
+            System.out.println("error at testing for active orders: " + e.getMessage());
         }
 
         return count;

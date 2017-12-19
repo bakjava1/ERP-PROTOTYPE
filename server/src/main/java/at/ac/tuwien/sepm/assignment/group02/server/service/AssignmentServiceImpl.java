@@ -13,17 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
 public class AssignmentServiceImpl implements AssignmentService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static AssignmentDAO assignmentDAO;
+    private static AssignmentDAO assignmentManagementDAO;
     private static AssignmentConverter assignmentConverter;
 
     @Autowired
-    public AssignmentServiceImpl(AssignmentDAO assignmentDAO, AssignmentConverter assignmentConverter) {
-        AssignmentServiceImpl.assignmentDAO = assignmentDAO;
+    public AssignmentServiceImpl(AssignmentDAO assignmentManagementDAO, AssignmentConverter assignmentConverter) {
+        AssignmentServiceImpl.assignmentManagementDAO = assignmentManagementDAO;
         AssignmentServiceImpl.assignmentConverter = assignmentConverter;
     }
 
@@ -34,7 +35,22 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException {
-        return null;
+        LOG.debug("get all open assignments called in server service layer");
+
+        List<Assignment> allOpenAssignments = new LinkedList<>();
+        List<AssignmentDTO> allOpenAssignmentsConverted = new LinkedList<>();
+
+        try {
+            allOpenAssignments = assignmentManagementDAO.getAllAssignments();
+        } catch (PersistenceLayerException e) {
+            LOG.warn("error while getting all open assignments in server persistence layer", e.getMessage());
+        }
+
+        for(Assignment assignment : allOpenAssignments) {
+            allOpenAssignmentsConverted.add(assignmentConverter.convertPlainObjectToRestDTO(assignment));
+        }
+
+        return allOpenAssignmentsConverted;
     }
 
     @Override
@@ -42,7 +58,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         LOG.debug("called setDone");
         Assignment toUpdate = assignmentConverter.convertRestDTOToPlainObject(assignmentDTO);
         try {
-            assignmentDAO.updateAssignment(toUpdate);
+            assignmentManagementDAO.updateAssignment(toUpdate);
         } catch (EntityNotFoundException e){
             LOG.error("Entity Not Found: " + e.getMessage());
             throw new ServiceLayerException("entity not found");

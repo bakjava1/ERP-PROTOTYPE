@@ -47,7 +47,24 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException {
-        return null;
+        LOG.debug("getAllOpenAssignments called in ");
+        List<AssignmentDTO> allOpenAssignments = null;
+
+        try {
+            allOpenAssignments = assignmentController.getAllOpenAssignments();
+        } catch (PersistenceLayerException e) {
+            LOG.warn("Error while getting all open assignments in client service layer: ", e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
+
+        /*
+        List<AssignmentDTO> allOpenAssignmentsConverted = new LinkedList<>();
+
+        for(AssignmentDTO assignmentDTO : allOpenAssignments) {
+            allOpenAssignmentsConverted.add(assignmentConverter.convertRestDTOToPlainObject(assignmentDTO));
+        }*/
+
+        return allOpenAssignments;//Converted;
     }
 
     @Override

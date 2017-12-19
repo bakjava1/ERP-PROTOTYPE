@@ -20,7 +20,7 @@ public interface LumberService {
      * @param lumberDTO
      * @throws ServiceLayerException
      */
-    public void updateLumber(LumberDTO lumberDTO) throws ServiceLayerException;
+    void updateLumber(LumberDTO lumberDTO) throws ServiceLayerException;
 
     /**
      * 2.1.2 Eine tabellarische Übersicht des vorhandenen Schnittholz anzeigen.
@@ -44,6 +44,7 @@ public interface LumberService {
     void addLumber(LumberDTO lumber) throws ServiceLayerException;
 
     /**
+     * Hello World!
      * get lumber specified by id
      * @param id int id of lumber to get
      * @return LumberDTO specified by id

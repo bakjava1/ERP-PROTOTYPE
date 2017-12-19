@@ -2,18 +2,33 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.CraneOperatorFXML">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="610.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.CraneOperatorFXML">
    <children>
-      <Button layoutX="253.0" layoutY="244.0" mnemonicParsing="false" onAction="#setDone" text="Mask Assignment as done" />
       <Label layoutX="233.0" layoutY="136.0" text="Crane">
+      </Label>
+      <Button layoutX="233.0" layoutY="542.0" mnemonicParsing="false" onAction="#setDone" text="Erledigt">
+          <font>
+              <Font size="30.0" />
+          </font>
+      </Button>
+
+      <Label layoutX="226.0" layoutY="14.0" text="Aufgaben">
          <font>
-            <Font size="52.0" />
+            <Font size="36.0" />
          </font>
       </Label>
-      <Label fx:id="crane_label" layoutX="286.0" layoutY="320.0" />
+      <TableView fx:id="table_assignment" layoutX="14.0" layoutY="67.0" prefHeight="457.0" prefWidth="583.0">
+          <columns>
+          <TableColumn fx:id="col_assignmentNr" prefWidth="75.0" text="Nr" />
+          <TableColumn fx:id="col_assignmentCreated" prefWidth="268.0" text="Eingang" />
+            <TableColumn fx:id="col_assignmentAmount" prefWidth="138.0" text="RH Anzahl" />
+            <TableColumn fx:id="col_assignmentBoxID" prefWidth="100.0" text="BoxNr" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>
