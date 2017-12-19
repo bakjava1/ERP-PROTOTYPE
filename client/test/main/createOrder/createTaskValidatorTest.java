@@ -1,6 +1,6 @@
 package main.createOrder;
 
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import org.junit.*;
@@ -8,22 +8,44 @@ import org.junit.*;
 public class createTaskValidatorTest {
 
     private static Validator validator;
-    private static Task task;
+    private static UnvalidatedTask task;
 
     @BeforeClass
     public static void setUp() {
         validator =  new Validator();
     }
 
-    @Before
-    public void beforeMethod() {
-        task = new Task();
+
+    @Test(expected = InvalidInputException.class)
+    public void testEmptyTaskFailedValidation() throws InvalidInputException{
+        task = new UnvalidatedTask(null,null,null,null,null,null,null,null,null);
+        validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
-    public void testEmptyOrderFailedValidation() throws InvalidInputException{
-
+    public void testTaskNoDescriptionFailedValidation() throws InvalidInputException{
+        task = new UnvalidatedTask("","b","c","d","1","2","3","4","5");
+        validator.inputValidationTask(task);
     }
+
+    @Test(expected = InvalidInputException.class)
+    public void testTaskNoFinishingFailedValidation() throws InvalidInputException{
+        task = new UnvalidatedTask("a","","c","d","1","2","3","4","5");
+        validator.inputValidationTask(task);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testTaskNoWoodTypeFailedValidation() throws InvalidInputException{
+        task = new UnvalidatedTask("a","b","","d","1","2","3","4","5");
+        validator.inputValidationTask(task);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testTaskNoQualityFailedValidation() throws InvalidInputException{
+        task = new UnvalidatedTask("a","b","c","","1","2","3","4","5");
+        validator.inputValidationTask(task);
+    }
+
 
     @After
     public void afterMethod() {
