@@ -22,7 +22,7 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <TableView fx:id="table_assignment" layoutX="14.0" layoutY="67.0" prefHeight="457.0" prefWidth="583.0">
+      <TableView fx:id="table_assignment" layoutX="14.0" layoutY="67.0" prefHeight="457.0" prefWidth="583.0" style="-fx-font-size: 200%">
           <columns>
           <TableColumn fx:id="col_assignmentNr" prefWidth="75.0" text="Nr" />
           <TableColumn fx:id="col_assignmentCreated" prefWidth="268.0" text="Eingang" />
