@@ -134,7 +134,10 @@ public class OrderServiceImpl implements OrderService {
             throw new InvalidInputException("Order already invoiced");
         }
 
-        //check if customer information is missing //TODO throws null-pointer exception
+        //check if customer information is missing //TODO throws null-pointer exception because table gets not initialized correctly
+        if(selectedOrder.getCustomerName()== null || selectedOrder.getCustomerAddress()==null || selectedOrder.getCustomerUID()==null){
+            throw new InvalidInputException("Customer information is null for selected order");
+        }
         if(selectedOrder.getCustomerName().isEmpty() || selectedOrder.getCustomerAddress().isEmpty() || selectedOrder.getCustomerUID().isEmpty()){
             throw new InvalidInputException("Customer information missing for selected order");
         }

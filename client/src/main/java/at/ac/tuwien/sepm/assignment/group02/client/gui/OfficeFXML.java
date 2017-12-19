@@ -525,8 +525,8 @@ public class OfficeFXML {
             //TODO use alertBuilder
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Fehler beim Abrechnen!");
-            alert.setHeaderText(null);
-            alert.setContentText("Bestellung konnte nicht erfolgreich abgerechnet werden. Bitte versuchen Sie es erneut!");
+            alert.setHeaderText("Bestellung konnte nicht erfolgreich abgerechnet werden. Bitte versuchen Sie es erneut!");
+            alert.setContentText("Grund: " + e.getMessage());
             alert.showAndWait();
         } catch (ServiceLayerException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
