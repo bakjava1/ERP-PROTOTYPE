@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.client.validation;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.NoValidIntegerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,20 +16,30 @@ public class ValidateAssignmentDTO implements ValidateInput<AssignmentDTO> {
     @Override
     public boolean isValid(AssignmentDTO input) throws InvalidInputException {
         LOG.debug("validating input");
-        if (input.getId() < 0) {
+
+        int id = input.getId();
+        int amount = input.getAmount();
+        int box_id = input.getBox_id();
+
+        if (id < 0) {
             LOG.warn("input.getId() is negative");
             throw new InvalidInputException("id must not be negative");
         }
+        isNumber(id+"");
 
-        if (input.getAmount() < 1) {
+        if (amount < 1) {
             LOG.warn("input.getAmount() less than 1");
             throw new InvalidInputException("amount must be greater than zero");
         }
+        isNumber(amount+"");
 
-        if (input.getBox_id() < 0) {
+
+        if (box_id < 0) {
             LOG.warn("input.getBox_id() is negative");
             throw new InvalidInputException("box id must not be negative");
         }
+        isNumber(box_id+"");
+
 
         /* TODO: validate Date
         if (input.getCreation_date().before(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()))) {
@@ -38,5 +49,17 @@ public class ValidateAssignmentDTO implements ValidateInput<AssignmentDTO> {
         */
 
         return true;
+    }
+
+    private void isNumber(String string) throws NoValidIntegerException {
+        try {
+            int num = Integer.parseInt(string);
+            if (num <= 0) {
+                throw new NoValidIntegerException("Negative Integer or Null entered");
+            }
+        } catch (NumberFormatException e) {
+            LOG.error("No valid Integer entered");
+            throw new NoValidIntegerException("No valid Integer entered");
+        }
     }
 }

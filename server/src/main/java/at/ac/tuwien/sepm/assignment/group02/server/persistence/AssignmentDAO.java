@@ -26,7 +26,7 @@ public interface AssignmentDAO {
      * @param assignment
      * @throws PersistenceLayerException
      */
-    void updateAssignment(Assignment assignment) throws PersistenceLayerException;
+    void setAssignmentDone(Assignment assignment) throws PersistenceLayerException;
 
     /**
      * delete an assignment

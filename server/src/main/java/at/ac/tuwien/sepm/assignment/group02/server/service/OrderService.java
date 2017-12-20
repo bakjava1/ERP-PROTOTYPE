@@ -9,15 +9,16 @@ public interface OrderService {
 
     /**
      * create an order and a task with all theire relevant data
-     * @param orderDTO
-     * @throws ServiceLayerException
+     * @param orderDTO order to be created
+     * @throws ServiceLayerException if an error occurs in the service layer or below (persistence)
+     * @Invariant order got validated
      */
     void createOrder(OrderDTO orderDTO) throws ServiceLayerException;
 
     /**
      * delete an order
-     * @param orderDTO
-     * @throws ServiceLayerException
+     * @param orderDTO order to be deleted
+     * @throws ServiceLayerException if the database is not available for the persistence layer
      */
     void deleteOrder(OrderDTO orderDTO) throws ServiceLayerException;
 

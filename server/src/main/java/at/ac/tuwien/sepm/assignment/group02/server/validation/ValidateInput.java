@@ -1,6 +1,6 @@
-package at.ac.tuwien.sepm.assignment.group02.client.validation;
+package at.ac.tuwien.sepm.assignment.group02.server.validation;
 
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.InvalidInputException;
 
 public interface ValidateInput<A> {
 

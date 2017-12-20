@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,16 +27,16 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public void createTask(TaskDTO task) {
+    public void createTask(TaskDTO task) throws PersistenceLayerException {
 
     }
 
     @Override
-    public void deleteTask(@RequestBody TaskDTO task) {
+    public void deleteTask(@RequestBody TaskDTO task) throws PersistenceLayerException {
         LOG.debug("sending task to be deleted to server");
 
         try {
-            restTemplate.postForObject("http://localhost:8080/deleteTask", task, TaskDTO.class);
+            restTemplate.put("http://localhost:8080/deleteTask", task, TaskDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
         } catch(RestClientException e){
@@ -45,7 +46,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public void updateTask(@RequestBody TaskDTO task) {
+    public void updateTask(@RequestBody TaskDTO task) throws PersistenceLayerException {
         LOG.info("Attempting to update Task");
         try {
             restTemplate.put("http://localhost:8080/updateTask", task, TaskDTO.class);
@@ -58,12 +59,12 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public List<TaskDTO> getAllOpenTasks() {
+    public List<TaskDTO> getAllOpenTasks() throws PersistenceLayerException {
         return null;
     }
 
     @Override
-    public void getTaskById(int task_id) {
+    public void getTaskById(int task_id) throws PersistenceLayerException {
 
     }
 }

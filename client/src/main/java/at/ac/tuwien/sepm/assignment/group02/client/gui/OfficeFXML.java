@@ -21,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,20 +201,25 @@ public class OfficeFXML {
         Order order = new Order();
 
         if(table_openOrder.getSelectionModel().getSelectedItem() != null) {
-            order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
+            AlertBuilder confirmDeletion = new AlertBuilder();
+            boolean confirmed = confirmDeletion.showConfirmationAlert("Bestellung löschen", null, "Möchten Sie die Bestellung wirklich löschen?");
 
-            Task task = new Task();
-            task.setOrder_id(order.getID());
+            if(confirmed) {
+                order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
 
-            try {
-                orderService.deleteOrder(order);
-                taskService.deleteTask(task);
-            } catch (InvalidInputException e) {
-                //InvalidInputException is never thrown
-                //the only user input is to select an order
-                //LOG.warn(e.getMessage());
-            } catch (ServiceLayerException e) {
-                LOG.warn(e.getMessage());
+                Task task = new Task();
+                task.setOrder_id(order.getID());
+
+                try {
+                    orderService.deleteOrder(order);
+                    taskService.deleteTask(task);
+                } catch (InvalidInputException e) {
+                    //InvalidInputException is never thrown
+                    //the only user input is to select an order
+                    //LOG.warn(e.getMessage());
+                } catch (ServiceLayerException e) {
+                    LOG.warn(e.getMessage());
+                }
             }
         } else {
             Alert noSelection = new Alert(Alert.AlertType.ERROR);
@@ -228,6 +234,15 @@ public class OfficeFXML {
 
     @FXML
     public void createOrder(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Sind sie sich sicher?");
+        alert.setHeaderText(null);
+        alert.setContentText("Wollen sie diese Bestellung wirklich erstellen?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() != ButtonType.OK){
+            return;
+        }
         LOG.info("createOrder called");
         if(currentOrderTaskList.size() == 0) {
             Alert error = new Alert(Alert.AlertType.ERROR);
@@ -390,16 +405,85 @@ public class OfficeFXML {
         gridPane.add(description,2,0);
 
         Label l_finishing =  new Label("Ausführung:");
-        TextField finishing = new TextField("");
+        ComboBox<String> finishing =  new ComboBox<>();
+        finishing.setItems(FXCollections.observableArrayList( "roh", "gehobelt", "besäumt", "prismiert", "trocken","lutro","frisch", "imprägniert"));
+        finishing.setMaxWidth(200);
+        finishing.getSelectionModel().selectFirst();
+        finishing.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                ListCell cell = new ListCell<String>() {
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        getListView().setMaxWidth(200);
+                        if (!empty) {
+                            setText(item);
+                        } else {
+                            setText(null);
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
         gridPane.add(l_finishing,0,1,2,1);
         gridPane.add(finishing,2,1);
 
-        TextField wood_type = new TextField("");
+        ComboBox<String> wood_type =  new ComboBox<>();
+        wood_type.setItems(FXCollections.observableArrayList(  "Fi", "Ta", "Lä", "Ki", "Zi"));
+        wood_type.setMaxWidth(200);
+        wood_type.getSelectionModel().selectFirst();
+        wood_type.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                ListCell cell = new ListCell<String>() {
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        getListView().setMaxWidth(200);
+                        if (!empty) {
+                            setText(item);
+                        } else {
+                            setText(null);
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
         Label l_wood_type =  new Label("Holzart:");
         gridPane.add(l_wood_type,0,2,2,1);
         gridPane.add(wood_type,2,2);
 
-        TextField quality = new TextField("");
+        ComboBox<String> quality =  new ComboBox<>();
+        quality.setItems(FXCollections.observableArrayList(  "O","I","II","III","IV","V", "O/III", "III/IV", "III/V"));
+        quality.setMaxWidth(200);
+        quality.getSelectionModel().selectFirst();
+        quality.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                ListCell cell = new ListCell<String>() {
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        getListView().setMaxWidth(200);
+                        if (!empty) {
+                            setText(item);
+                        } else {
+                            setText(null);
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
         Label l_quality =  new Label("Qualität:");
         gridPane.add(l_quality,0,3,2,1);
         gridPane.add(quality,2,3);
@@ -479,7 +563,7 @@ public class OfficeFXML {
         Platform.runLater(description::requestFocus);
         dialog.setResultConverter((ButtonType button) -> {
             if (button == ButtonType.OK) {
-                return new UnvalidatedTask(description.getText(),finishing.getText(),wood_type.getText(),quality.getText(),size.getText(),width.getText(),length.getText(),quantity.getText(),cost.getText());
+                return new UnvalidatedTask(description.getText(),finishing.getSelectionModel().getSelectedItem(),wood_type.getSelectionModel().getSelectedItem(),quality.getSelectionModel().getSelectedItem(),size.getText(),width.getText(),length.getText(),quantity.getText(),cost.getText());
             }
             return null;
         });
@@ -536,6 +620,17 @@ public class OfficeFXML {
     }
 
     public void clearCurrentOrder(ActionEvent actionEvent) {
+        if(actionEvent != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Sind sie sich sicher?");
+            alert.setHeaderText(null);
+            alert.setContentText("Wollen sie diese Bestellung wirklich verwerfen?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() != ButtonType.OK) {
+                return;
+            }
+        }
         ObservableList<Task> orderTasks = FXCollections.observableArrayList();
         table_addedTask.setItems(orderTasks);
         currentOrder = new Order();
