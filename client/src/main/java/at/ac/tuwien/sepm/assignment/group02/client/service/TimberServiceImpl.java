@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TimberController;
@@ -28,20 +29,19 @@ public class TimberServiceImpl implements TimberService{
     }
 
     @Override
-    public void addTimber(Timber timber) throws ServiceLayerException{
+    public void addTimber(Timber timber) throws ServiceLayerException, InvalidInputException{
 
         try {
             if(timber.getBox_id()>timberController.getNumberOfBoxes() || timber.getBox_id()<0)
-                throw new ServiceLayerException("error finding box with given id");
+                throw new InvalidInputException("error finding box with given id");
 
             if(timber.getAmount()<0)
-                throw new ServiceLayerException("error cannot add negative amount of timber");
+                throw new InvalidInputException("error cannot add negative amount of timber");
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
             throw new ServiceLayerException(e.getMessage());
         }
 
-        TimberConverter timberConverter = new TimberConverter();
         TimberDTO timberDTO = timberConverter.convertPlainObjectToRestDTO(timber);
         try {
             timberController.createTimber(timberDTO);
@@ -56,8 +56,8 @@ public class TimberServiceImpl implements TimberService{
         try {
             return timberController.getNumberOfBoxes();
         } catch (PersistenceLayerException e) {
-            LOG.warn(e.getMessage());
+            LOG.error(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
-        return 0;
     }
 }

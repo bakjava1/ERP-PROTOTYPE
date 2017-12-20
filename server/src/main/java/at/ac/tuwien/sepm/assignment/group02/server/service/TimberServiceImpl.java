@@ -46,11 +46,6 @@ public class TimberServiceImpl implements TimberService{
     }
 
     @Override
-    public void updateTimber(TimberDTO timberDTO) {
-
-    }
-
-    @Override
     public int numberOfBoxes() throws ServiceLayerException {
         try {
             return timberManagementDAO.getNumberOfBoxes();
