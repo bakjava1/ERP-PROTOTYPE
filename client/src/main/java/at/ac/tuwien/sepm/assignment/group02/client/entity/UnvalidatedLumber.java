@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.entity;
 
-public class Lumber {
+public class UnvalidatedLumber {
 
 
     private int id; // (primary key autoincrement)
@@ -9,9 +9,9 @@ public class Lumber {
     private String finishing; // ausfuehrung; (roh, roh-SW, prismiert, ...)
     private String wood_type; // holzart; (Fi, Ta, Fi/Ta, ...)
     private String quality; // (I/III, S10/CE/TS, II/IV, ...)
-    private int size; // staerke oder dicke des schnittholzes (z.B. 24mm)
-    private int width; // (z.B. 48mm)
-    private int length; // (z.B. 3000 mm)
+    private String size; // staerke oder dicke des schnittholzes (z.B. 24mm)
+    private String width; // (z.B. 48mm)
+    private String length; // (z.B. 3000 mm)
     private int quantity; //Anzahl Schnittholz
     private int reserved_quantity; //Anzahl reservierten Schnittholzes
     private int delivered_quantity; //Anzahl geliefertes Schnittholzes
@@ -21,13 +21,13 @@ public class Lumber {
     /**
      * Default constructor
      */
-    public Lumber() {
+    public UnvalidatedLumber() {
     }
 
 
-    public Lumber(int id,String lager,String description,String finishing, String wood_type, String quality,
-                  int size,int width,int length,int quantity, int reserved_quantity, int delivered_quantity,
-                  boolean all_reserved, boolean all_delivered) {
+    public UnvalidatedLumber(int id, String lager, String description, String finishing, String wood_type, String quality,
+                             String size, String width, String length, int quantity, int reserved_quantity, int delivered_quantity,
+                             boolean all_reserved, boolean all_delivered) {
         this.id = id;
         this.lager=lager;
         this.description=description;
@@ -144,7 +144,7 @@ public class Lumber {
      * method to retrieve the size
      * @return a value of size to caller
      */
-    public int getSize() {
+    public String getSize() {
         return size;
     }
 
@@ -152,7 +152,7 @@ public class Lumber {
      * method to set size
      * @param size
      */
-    public void setSize(int size) {
+    public void setSize(String size) {
         this.size = size;
     }
 
@@ -160,7 +160,7 @@ public class Lumber {
      * method to retrieve the width
      * @return a value of the width to caller
      */
-    public int getWidth() {
+    public String getWidth() {
         return width;
     }
 
@@ -168,7 +168,7 @@ public class Lumber {
      * method to set  width
      * @param width
      */
-    public void setWidth(int width) {
+    public void setWidth(String width) {
         this.width = width;
     }
 
@@ -176,7 +176,7 @@ public class Lumber {
      * method to retrieve the length
      * @return a valuef of length to caller
      */
-    public int getLength() {
+    public String getLength() {
         return length;
     }
 
@@ -184,7 +184,7 @@ public class Lumber {
      * method to set length
      * @param length
      */
-    public void setLength(int length) {
+    public void setLength(String length) {
         this.length = length;
     }
 
@@ -268,23 +268,5 @@ public class Lumber {
         this.all_delivered = all_delivered;
     }
 
-    @Override
-    public String toString() {
-        return "Lumber{" +
-                "id=" + id +
-                ", lager='" + lager + '\'' +
-                ", description='" + description + '\'' +
-                ", finishing='" + finishing + '\'' +
-                ", wood_type='" + wood_type + '\'' +
-                ", quality='" + quality + '\'' +
-                ", size=" + size +
-                ", width=" + width +
-                ", length=" + length +
-                ", quantity=" + quantity +
-                ", reserved_quantity=" + reserved_quantity +
-                ", delivered_quantity=" + delivered_quantity +
-                ", all_reserved=" + all_reserved +
-                ", all_delivered=" + all_delivered +
-                '}';
-    }
+
 }

@@ -29,6 +29,7 @@ import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -145,7 +146,6 @@ public class OfficeFXML {
         this.costBenefitService = costBenefitService;
     }
 
-
     @FXML
     void initialize() {
         table_openOrder.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -155,7 +155,6 @@ public class OfficeFXML {
         col_taskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
         col_amount.setCellValueFactory(new PropertyValueFactory("quantity"));
         col_grossSum.setCellValueFactory(new PropertyValueFactory("grossAmount"));
-
 
 
         table_bill.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -295,6 +294,7 @@ public class OfficeFXML {
 
             for (Order order: allOpen) {
                 openOrderForTable.add(order);
+
             }
 
             table_openOrder.setItems(openOrderForTable);
@@ -334,25 +334,18 @@ public class OfficeFXML {
     }
 
 
-
-
     @FXML
     public void addTimber(ActionEvent actionEvent){
-        //TODO catch exception (InvalidInputException by Lucia)
+
         if(tf_timber_amount.getText().isEmpty() || cb_timber_box.getSelectionModel().getSelectedIndex()==-1){
             LOG.error("No Input");
-
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Input Error");
-            alert.setHeaderText("No Input");
-            alert.setContentText("Please use only valid input!");
-            alert.showAndWait();
+            alertBuilder.showErrorAlert("Fehler bei Eingabe", "Eigabe unvollständig.", "Bitte nur gültige Eingaben benützen!");
         }
         else{
-            int tes = cb_timber_box.getSelectionModel().getSelectedIndex();
             Timber timber = new Timber(cb_timber_box.getSelectionModel().getSelectedIndex()+1, Integer.parseInt(tf_timber_amount.getText()));
             try {
-                boolean addTimberConfirmation = alertBuilder.showConfirmationAlert("Rundholz hinzufügen", "Wollen Sie " + timber.getAmount() + " Stück Rundholz zu Box " + timber.getBox_id() + " hinzufügen?", "");
+                boolean addTimberConfirmation = alertBuilder.showConfirmationAlert("Rundholz hinzufügen", "Wollen Sie " +
+                        timber.getAmount() + " Stück Rundholz zu Box " + timber.getBox_id() + " hinzufügen?", "");
                 if(addTimberConfirmation){
                     timberService.addTimber(timber);
                     tf_timber_amount.setText("");
@@ -603,23 +596,29 @@ public class OfficeFXML {
         //get the selected order
         Order selectedOrder = table_openOrder.getSelectionModel().getSelectedItem();
 
+        //TODO remove
+        selectedOrder.setCustomerAddress("fas");
+        selectedOrder.setCustomerName("asdf");
+        selectedOrder.setCustomerUID("adsf");
+        selectedOrder.setOrderDate(new Date());
+        List<Task> testTaskList = new ArrayList<>();
+        Task testTask = new Task();
+        testTask.setPrice(2400);
+        testTaskList.add(testTask);
+        selectedOrder.setTaskList(testTaskList);
+
         try {
             orderService.invoiceOrder(selectedOrder);
+            updateBillTable();
         } catch (InvalidInputException e) {
             //TODO use alertBuilder
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Fehler beim Abrechnen!");
-            alert.setHeaderText(null);
-            alert.setContentText("Bestellung konnte nicht erfolgreich abgerechnet werden. Bitte versuchen Sie es erneut!");
-            alert.showAndWait();
+            alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Bestellung konnte nicht erfolgreich abgerechnet werden!", e.getMessage());
         } catch (ServiceLayerException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            //TODO alertBuilder
-            alert.setTitle("Fehler beim Abrechnen!");
-            alert.showAndWait();
+            alertBuilder.showErrorAlert("Fehler beim Abrechnen!", "", "");
         }
 
         updateTable();
+        updateBillTable();
 
     }
 

@@ -8,7 +8,6 @@ import java.util.List;
 public interface TaskService {
 
     /**
-     * 1.1.3 Aufträge erstellen
      * method creates a new task
      * @param task the TaskDTO to be created
      * @throws ServiceLayerException in case the TaskDTO can't be created
@@ -16,7 +15,6 @@ public interface TaskService {
     void createTask(TaskDTO task) throws ServiceLayerException;
 
     /**
-     * 1.2.1 Aufträge löschen
      * method deletes a given task (identified by its id)
      * @param task the TaskDTO to be deleted
      * @throws ServiceLayerException in case the TaskDTO can't be deleted
@@ -24,7 +22,7 @@ public interface TaskService {
     void deleteTask(TaskDTO task) throws ServiceLayerException;
 
     /**
-     * 2.2.3 & 3.2.6 (method used to add lumber to task)
+     * method used to add lumber to task
      * method updates the values of a given task (identified by its id)
      * @param task the updated version of the TaskDTO
      * @throws ServiceLayerException in case the TaskDTO can't be updated
@@ -32,7 +30,6 @@ public interface TaskService {
     void updateTask(TaskDTO task) throws ServiceLayerException;
 
     /**
-     * 2.5.2
      * method returns all open tasks
      * @return a List of TaskDTO that are marked as open tasks
      * @throws ServiceLayerException in case the TaskDTO can't be returned
@@ -40,7 +37,6 @@ public interface TaskService {
     List<TaskDTO> getAllOpenTasks() throws ServiceLayerException;
 
     /**
-     * 3.2.7 maybe not needed.
      * method returns a TaskDTO defined by the task id
      * @param task_id integer defining the id of the task
      * @return TaskDTO with specified task_id

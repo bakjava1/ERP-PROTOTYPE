@@ -6,10 +6,13 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateAssignmentDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -24,13 +27,29 @@ public class AssignmentClientServiceImplTest_setDone {
     private ValidateAssignmentDTO validateAssignmentDTO;
 
 
-    /**
-     * method marks an assignment as done
-     * assignmentDTO an assignment to mark as done
-     * ServiceLayerException if the assignment couldn't be marked as done
-     *
-     *     void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException;
-     */
+    @Test
+    public void getAllOpenAssignments_works() throws Exception {
+
+        AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
+
+        List<AssignmentDTO> assignmentDTOList;
+        assignmentDTOList = assignmentService.getAllOpenAssignments();
+
+        doReturn(assignmentDTOList).when(assignmentController).getAllOpenAssignments();
+        verify(assignmentController, times(1)).getAllOpenAssignments();
+
+        Assert.assertSame(assignmentDTOList, assignmentService.getAllOpenAssignments());
+    }
+
+    @Test(expected = ServiceLayerException.class)
+    public void getAllOpenAssignments_restLayerException() throws Exception {
+
+        AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
+
+        doThrow(PersistenceLayerException.class).when(assignmentController).getAllOpenAssignments();
+
+        assignmentService.getAllOpenAssignments();
+    }
 
     @Test
     public void testSetDone_works() throws Exception {
@@ -59,7 +78,7 @@ public class AssignmentClientServiceImplTest_setDone {
     }
 
     @Test(expected = ServiceLayerException.class)
-    public void testSetDone_restControllerException() throws Exception {
+    public void testSetDone_restLayerException() throws Exception {
         AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
 
         AssignmentDTO assignmentDTO = new AssignmentDTO();

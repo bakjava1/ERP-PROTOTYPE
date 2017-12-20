@@ -12,16 +12,16 @@ import java.util.List;
 public interface AssignmentService {
 
     /**
-     * 2.4.4 Neue Aufgabe für Kranfahrer erstellen.
+     * create a new assignment for crane
      * @param assignmentDTO
+     * @throws ServiceLayerException
      */
     void createAssignment(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 
     /**
-     * 3.1 Aufgaben anzeigen
-     * 3.1.2 (rest/AssignmentController) Eine tabellarische Übersicht der nicht erledigten Aufgaben anzeigen.
-     * @throws ServiceLayerException is thrown if the server is not available
-     * @return list of all open assignments to be shown in the crane overview
+     * retrieve all open assignments overviewing not finihsing assignments
+     * @return a list of assignments
+     * @throws ServiceLayerException
      */
     List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 

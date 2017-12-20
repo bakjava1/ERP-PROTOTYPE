@@ -1,22 +1,30 @@
-package at.ac.tuwien.sepm.assignment.group02.client.entity;
+package at.ac.tuwien.sepm.assignment.group02.rest.entity;
+
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 public class Lumber {
 
 
-    private int id; // (primary key autoincrement)
-    private String lager;
-    private String description; // artikelbezeichnung; (Latten, Staffel, Kantholz, Schnittholz, ...)
-    private String finishing; // ausfuehrung; (roh, roh-SW, prismiert, ...)
-    private String wood_type; // holzart; (Fi, Ta, Fi/Ta, ...)
-    private String quality; // (I/III, S10/CE/TS, II/IV, ...)
-    private int size; // staerke oder dicke des schnittholzes (z.B. 24mm)
-    private int width; // (z.B. 48mm)
-    private int length; // (z.B. 3000 mm)
-    private int quantity; //Anzahl Schnittholz
-    private int reserved_quantity; //Anzahl reservierten Schnittholzes
-    private int delivered_quantity; //Anzahl geliefertes Schnittholzes
-    private boolean all_reserved; //boolean ob alles schnittholz reserviert ist , ob es in Übersicht Schnittholz zum reservieren noch auftaucht
-    private boolean all_delivered; //boolean ob alles Schnittholz geliefert wurde, wenn true derzeit dieses schnittholz im lager
+    /**
+     * declaration of instance variables
+     */
+    private int id;
+    private  String lager;
+    private  String description;
+    private  String finishing;
+    private  String wood_type;
+    private  String quality;
+    private int size;
+    private int width;
+    private int length;
+    private int quantity;
+    private int reserved_quantity;
+    private int delivered_quantity;
+    private boolean all_reserved;
+    private boolean all_delivered;
+    private String content;
 
     /**
      * Default constructor
@@ -24,11 +32,27 @@ public class Lumber {
     public Lumber() {
     }
 
-
+    /**
+     * constructor with parameter, initializes with instances variables.
+     * @param id
+     * @param lager
+     * @param description
+     * @param finishing
+     * @param wood_type
+     * @param quality
+     * @param size
+     * @param width
+     * @param length
+     * @param quantity
+     * @param reserved_quantity
+     * @param delivered_quantity
+     * @param all_reserved
+     * @param all_delivered
+     */
     public Lumber(int id,String lager,String description,String finishing, String wood_type, String quality,
-                  int size,int width,int length,int quantity, int reserved_quantity, int delivered_quantity,
-                  boolean all_reserved, boolean all_delivered) {
-        this.id = id;
+                       int size,int width,int length,int quantity, int reserved_quantity, int delivered_quantity,
+                       boolean all_reserved, boolean all_delivered) {
+        this.id=id;
         this.lager=lager;
         this.description=description;
         this.finishing=finishing;
@@ -44,22 +68,22 @@ public class Lumber {
         this.all_delivered=all_delivered;
     }
 
+    //Create Setters and Getters
+
     /**
-     * method to retrieve the schnittholz ID
-     * @return a value of schnittID to caller
+     * Method to retrieve the id
+     * @return a value of id to caller
      */
     public int getId() {
         return id;
     }
-
     /**
-     * method to set the schnittholz ID
+     * Methode to set the id
      * @param id
      */
     public void setId(int id) {
-        this.id = id;
+        this.id = id;  // store the id
     }
-
     /**
      * method to retrieve the lager
      * @return a value of lager to caller
@@ -268,9 +292,63 @@ public class Lumber {
         this.all_delivered = all_delivered;
     }
 
+    /**
+     * JavaFX  BEAN Property Methods
+     */
+
+    public SimpleStringProperty lagerProperty(){
+        return new SimpleStringProperty(lager);
+    }
+
+    public SimpleStringProperty descriptionProperty(){
+        return new SimpleStringProperty(description);
+    }
+    public SimpleStringProperty finishingProperty(){
+        return new SimpleStringProperty(finishing);
+    }
+    public SimpleStringProperty wood_typeProperty(){
+        return new SimpleStringProperty(wood_type);
+    }
+    public SimpleStringProperty qualityProperty(){
+        return new SimpleStringProperty(quality);
+    }
+
+
+    public SimpleIntegerProperty lumberIDProperty(){
+        return new SimpleIntegerProperty(id);
+    }
+
+    public SimpleIntegerProperty sizeProperty(){
+        return new SimpleIntegerProperty(size);
+    }
+
+    public SimpleIntegerProperty lengthProperty(){
+        return new SimpleIntegerProperty(length);
+    }
+    public SimpleIntegerProperty widthProperty(){
+        return new SimpleIntegerProperty(width);
+    }
+    public SimpleIntegerProperty quantityProperty(){
+        return new SimpleIntegerProperty(quantity);
+    }
+    public SimpleIntegerProperty reserved_quantityProperty(){
+        return new SimpleIntegerProperty(reserved_quantity);
+    }
+
+    public SimpleIntegerProperty delivered_quantityProperty(){
+        return new SimpleIntegerProperty(delivered_quantity);
+    }
+
+    public SimpleBooleanProperty all_reservedProperty(){
+        return new SimpleBooleanProperty(all_reserved);
+    }
+    public SimpleBooleanProperty all_deliveredProperty(){
+        return new SimpleBooleanProperty(all_delivered);
+    }
+
     @Override
     public String toString() {
-        return "Lumber{" +
+        return "Schnittholz{" +
                 "id=" + id +
                 ", lager='" + lager + '\'' +
                 ", description='" + description + '\'' +
@@ -287,4 +365,26 @@ public class Lumber {
                 ", all_delivered=" + all_delivered +
                 '}';
     }
+
+
+    /**
+     * Method to retrieve the content
+     * @return a value of content to caller
+     */
+    public String getContent() {
+
+        return content;
+    }
+
+    /**
+     * Method to set a content
+     * @param content
+     */
+    public void setContent(String content)
+    {
+
+        this.content = content; //store the content
+    }
+
+
 }

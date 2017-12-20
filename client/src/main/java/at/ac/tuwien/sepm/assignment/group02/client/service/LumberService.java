@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
@@ -13,45 +14,52 @@ import java.util.List;
 public interface LumberService {
 
     /**
-     * 2.1 Übersicht + Suchfunktion
-     * 2.1.2 (rest/LumberController) Eine tabellarische Übersicht des vorhandenen Schnittholz anzeigen.
-     * 2.1.3 (rest/LumberController) Suchfunktionalität implementieren
-     * @return
+     * retrieve all lumbers
+     * @param filter
+     * @return list of searched lumber
+     * @param filter an UnvalidatedLumber object with the parameter to be searched
+     * @throws InvalidInputException if the search parameters are not valid
+     * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
      */
-    List<Lumber> getAll(Lumber filter) throws InvalidInputException, ServiceLayerException;
+    List<Lumber> getAll(UnvalidatedLumber filter) throws InvalidInputException, ServiceLayerException;
 
     /**
-     * 2.2 Reservierung Schnittholz
-     * 2.2.1 Schnittholz aus einer Übersicht für Reservierung auswählen
-     * 2.2.2 (rest/LumberController) Ausgewähltes Schnittholz als reserviert markieren.
-     * 2.2.3 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
-     * 2.2.4 Überprüfen ob Auftrag fertig ist.
+     * choose a lumber from the list and mark it as reserved
      * @param lumber
      * @param quantity
+     * @throws InvalidInputException
+     * @throws ServiceLayerException
      */
     void reserveLumber(Lumber lumber, int quantity) throws InvalidInputException, ServiceLayerException;
 
     /**
-     * 1.4.3 Schnittholz   aus   dem   Schnittholzlager   entfernen.
+     * delete a lumber from the store
      * @param lumber
      * @throws ServiceLayerException
      */
     public void deleteLumber(Lumber lumber) throws ServiceLayerException;
 
     /**
-     * 2.2.2  Schnittholz bearbeiten
+     * update a lumber
      * @param lumber
      * @throws ServiceLayerException
      */
     public void updateLumber(Lumber lumber) throws  ServiceLayerException;
 
-
-    // just an example
+    /**
+     * get an id of lumber
+     * @param id
+     * @return an id of lumber
+     * @throws InvalidInputException
+     */
     Lumber getLumber(int id) throws InvalidInputException;
 
     /**
-     * temporär funktion zu 2.2.3 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
+     * add a reserved lumber to task
+     * @param id
+     * @param quantity
+     * @throws InvalidInputException
+     * @throws ServiceLayerException
      */
-
     void addReservedLumberToTask(String id, String quantity) throws InvalidInputException, ServiceLayerException;
 }

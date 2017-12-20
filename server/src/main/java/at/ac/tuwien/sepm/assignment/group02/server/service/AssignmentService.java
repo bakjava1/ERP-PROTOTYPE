@@ -12,31 +12,23 @@ import java.util.List;
 public interface AssignmentService {
 
     /**
-     * 2.4.4
      * This method creates a new assignment for the crane operator
+     * @param assignmentDTO
+     * @throws ServiceLayerException
      */
     void addAssignment(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 
     /**
-     * 3.1.2 Alle nicht erledigten Aufgaben anfordern.
-     * @throws ServiceLayerException if the database is not available for the persistence layer
-     * @return list of all open assignments to be shown in the assignment overview for crane
+     * retrieve all open assignments
+     * @return a list of all open assignments
+     * @throws ServiceLayerException
      */
     List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 
     /**
-     * mark a given assignment as done
-     * method receives an assignmentDTO and converts it to an assignment object
-     * if conversion is valid the object is passed onto the persistence layer
-     *
-     * it invokes the reduction of the according amount of round timber from timber,
-     * increases the amount of lumber accordingly,
-     * reserves the added amount of lumber in case (?)
-     * and adds the reserved amount of lumber to the task.
-     * finally the method checks if the task is finished.
-     *
-     * @param assignmentDTO the assignment to be marked as done
-     * @throws ServiceLayerException thrown if the assignment couldn't be updated
+     * mark an assignment as done
+     * @param assignmentDTO
+     * @throws ServiceLayerException
      */
     void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 

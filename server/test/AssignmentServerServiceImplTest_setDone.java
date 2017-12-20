@@ -34,8 +34,6 @@ public class AssignmentServerServiceImplTest_setDone {
         AssignmentService assignmentService
                 = new AssignmentServiceImpl(assignmentManagementDAO, assignmentConverter, validateAssignment);
 
-        //doReturn(true).when(validateAssignment).isValid(any(Assignment.class));
-
         assignmentService.setDone(any(AssignmentDTO.class));
 
         verify(assignmentConverter, times(1)).convertRestDTOToPlainObject(any(AssignmentDTO.class));

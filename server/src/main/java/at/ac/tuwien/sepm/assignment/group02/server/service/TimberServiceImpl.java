@@ -46,7 +46,7 @@ public class TimberServiceImpl implements TimberService{
     }
 
     @Override
-    public void updateTimber(TimberDTO timberDTO) {
+    public void updateTimber(TimberDTO timberDTO) throws ServiceLayerException {
 
     }
 

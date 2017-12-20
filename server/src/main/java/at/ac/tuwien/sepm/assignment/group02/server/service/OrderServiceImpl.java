@@ -65,27 +65,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> getAllOpen() {
-        List<Order> allOpen = null;
-        List<OrderDTO> allOpenConverted = null;
 
+        List<OrderDTO> allOpenConverted = new ArrayList<>();
 
         try{
-            allOpen = orderManagementDAO.getAllOpen();
+            List<Order> allOpen = orderManagementDAO.getAllOpen();
 
-            setTaskInfo(allOpen);
+            for (int i = 0; allOpen!=null && i < allOpen.size(); i++) {
+                allOpenConverted.add(orderConverter.convertPlainObjectToRestDTO(allOpen.get(i)));
+            }
 
+            setTaskInfo(allOpenConverted);
 
         } catch(PersistenceLayerException e) {
             LOG.error("Error while trying to get objects from Database: " + e.getMessage());
         }
 
-        if (allOpen!= null) {
-            allOpenConverted = new ArrayList<>();
-
-            for (int i = 0; i < allOpen.size(); i++) {
-                allOpenConverted.add(orderConverter.convertPlainObjectToRestDTO(allOpen.get(i)));
-            }
-        }
 
         return allOpenConverted;
     }
@@ -97,28 +92,25 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> getAllClosed() {
-        List<Order> allClosed = null;
-        List<OrderDTO> allClosedConverted = null;
-
+        List<OrderDTO> allClosedConverted =  new ArrayList<>();
 
         try{
 
-            allClosed = orderManagementDAO.getAllClosed();
+            List<Order> allClosed = orderManagementDAO.getAllClosed();
 
-            setTaskInfo(allClosed);
+            if (allClosed!= null) {
+
+                for (int i = 0; i < allClosed.size(); i++) {
+                    allClosedConverted.add(orderConverter.convertPlainObjectToRestDTO(allClosed.get(i)));
+                }
+                setTaskInfo(allClosedConverted);
+            }
 
 
         } catch(PersistenceLayerException e) {
             LOG.error(e.getMessage());
         }
 
-        if (allClosed!= null) {
-            allClosedConverted = new ArrayList<>();
-
-            for (int i = 0; i < allClosed.size(); i++) {
-                allClosedConverted.add(orderConverter.convertPlainObjectToRestDTO(allClosed.get(i)));
-            }
-        }
 
         return allClosedConverted;
     }
@@ -141,24 +133,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    private void setTaskInfo(List<OrderDTO> order) throws PersistenceLayerException {
 
-    private void setTaskInfo(List<Order> order) throws PersistenceLayerException {
+        for (OrderDTO current : order) {
 
-        for (Order current : order) {
+            List<Task> tasks = null;
+            try {
+                tasks = taskManagementDAO.getTasksByOrderId(current.getID());
+            }catch (Exception e){
 
-            List<Task> tasks = taskManagementDAO.getTasksByOrderId(current.getID());
-
-            int quantity = 0;
-            for (Task task : tasks) {
-                quantity += task.getQuantity();
             }
-
-            current.setQuantity(quantity);
+            List<TaskDTO> convertedTasks = new ArrayList<>();
 
             if (tasks != null) {
-                current.setTaskAmount(tasks.size());
-            } else {
-                current.setTaskAmount(0);
+                for (Task task : tasks) {
+                    convertedTasks.add(taskConverter.convertPlainObjectToRestDTO(task));
+                }
+
+                current.setTaskList(convertedTasks);
+            }
+            else{
+                //order.remove(current);
             }
 
         }

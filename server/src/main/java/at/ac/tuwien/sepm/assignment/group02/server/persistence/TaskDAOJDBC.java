@@ -169,6 +169,7 @@ public class TaskDAOJDBC implements TaskDAO {
 
                 Task currentTask = new Task();
                 currentTask.setQuantity(rs.getInt("quantity"));
+                currentTask.setPrice(rs.getInt("sum"));
 
                 taskList.add(currentTask);
             }
