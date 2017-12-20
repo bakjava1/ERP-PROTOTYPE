@@ -66,7 +66,7 @@ public class AssignmentControllerImpl implements AssignmentController {
     @Override
     public void setDone(@RequestBody AssignmentDTO assignmentDTO) throws PersistenceLayerException {
         try {
-            restTemplate.put("http://localhost:8080/updateAssignment", assignmentDTO, AssignmentDTO.class);
+            restTemplate.put("http://localhost:8080/setAssignmentDone", assignmentDTO, AssignmentDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("HttpStatusCodeException");

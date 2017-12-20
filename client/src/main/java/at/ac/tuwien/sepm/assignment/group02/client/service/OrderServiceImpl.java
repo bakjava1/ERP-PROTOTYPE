@@ -133,7 +133,7 @@ public class OrderServiceImpl implements OrderService {
         if(selectedOrder.isPaid()){
             throw new InvalidInputException("Order already invoiced");
         }
-
+/*
         //check if customer information is missing //TODO throws null-pointer exception
         if(selectedOrder.getCustomerName().isEmpty() || selectedOrder.getCustomerAddress().isEmpty() || selectedOrder.getCustomerUID().isEmpty()){
             throw new InvalidInputException("Customer information missing for selected order");
@@ -141,7 +141,7 @@ public class OrderServiceImpl implements OrderService {
         if(selectedOrder.getNetAmount()<=0){
             throw new InvalidInputException("net price for selected order is negative or empty");
         }
-
+*/
 
         int netAmount = selectedOrder.getNetAmount();
         //TODO get tax rate from properties file

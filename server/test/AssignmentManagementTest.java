@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.persistence.AssignmentDAOJDBC
 import at.ac.tuwien.sepm.assignment.group02.server.service.AssignmentService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.AssignmentServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateAssignment;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,6 +32,7 @@ public class AssignmentManagementTest {
 
     private static AssignmentService assignmentService;
     private static AssignmentConverter assignmentConverter;
+    private static ValidateAssignment validateAssignment;
 
     @BeforeClass
     public static void setup() {
@@ -39,7 +41,7 @@ public class AssignmentManagementTest {
         assignmentDAO = new AssignmentDAOJDBC(dbConnection);
 
         assignmentConverter = new AssignmentConverter();
-        assignmentService = new AssignmentServiceImpl(assignmentDAO, assignmentConverter);
+        assignmentService = new AssignmentServiceImpl(assignmentDAO, assignmentConverter, validateAssignment);
 
         LOG.debug("assignment management test setup completed");
     }

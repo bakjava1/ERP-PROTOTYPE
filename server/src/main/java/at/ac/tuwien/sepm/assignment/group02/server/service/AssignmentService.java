@@ -25,7 +25,18 @@ public interface AssignmentService {
     List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 
     /**
-     * 3.2.2 Aufgabe als erledigt markieren.
+     * mark a given assignment as done
+     * method receives an assignmentDTO and converts it to an assignment object
+     * if conversion is valid the object is passed onto the persistence layer
+     *
+     * it invokes the reduction of the according amount of round timber from timber,
+     * increases the amount of lumber accordingly,
+     * reserves the added amount of lumber in case (?)
+     * and adds the reserved amount of lumber to the task.
+     * finally the method checks if the task is finished.
+     *
+     * @param assignmentDTO the assignment to be marked as done
+     * @throws ServiceLayerException thrown if the assignment couldn't be updated
      */
     void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 

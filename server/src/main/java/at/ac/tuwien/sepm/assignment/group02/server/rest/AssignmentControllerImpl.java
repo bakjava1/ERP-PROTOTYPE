@@ -29,10 +29,15 @@ public class AssignmentControllerImpl {
         this.assignmentService = assignmentService;
     }
 
-    @RequestMapping(value="/updateAssignment", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "update assignments")
-    public void updateAssignment(@RequestBody AssignmentDTO assignmentDTO) throws ResourceNotFoundException {
-        LOG.debug("called updateAssignment");
+    /**
+     * method marks a given assignment as done
+     * @param assignmentDTO the assignment to be marked as done
+     * @throws ResourceNotFoundException thrown if the assignment couldn't be updated. (HttpStatusCode 404)
+     */
+    @RequestMapping(value="/setAssignmentDone", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "mark assignment as done")
+    public void setAssignmentDone(@RequestBody AssignmentDTO assignmentDTO) throws ResourceNotFoundException {
+        LOG.debug("called setAssignmentDone");
         try {
             assignmentService.setDone(assignmentDTO);
         } catch (ServiceLayerException e) {
