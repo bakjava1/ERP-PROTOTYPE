@@ -55,10 +55,6 @@ public class Validator {
             LOG.error("Error at Customer UID: " + e.getMessage());
             throw new InvalidInputException("Error at Customer UID: " + e.getMessage());
         }
-        //TODO maybe not working anymore --> if statement is new
-        if(toValidate.getTaskList() == null || toValidate.getTaskList().size()==0){
-            throw new InvalidInputException("Error at Tasks for Order: No Tasks");
-        }
     }
 
     public void inputValidationTaskOnOrder(Task toValidate) throws InvalidInputException {

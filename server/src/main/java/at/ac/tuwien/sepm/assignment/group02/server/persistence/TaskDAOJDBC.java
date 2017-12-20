@@ -170,6 +170,17 @@ public class TaskDAOJDBC implements TaskDAO {
                 Task currentTask = new Task();
                 currentTask.setQuantity(rs.getInt("quantity"));
                 currentTask.setPrice(rs.getInt("sum"));
+                currentTask.setOrder_id(rs.getInt("orderid"));
+                currentTask.setDescription(rs.getString("description"));
+                currentTask.setFinishing(rs.getString("finishing"));
+                currentTask.setWood_type(rs.getString("wood_type"));
+                currentTask.setQuality(rs.getString("quality"));
+                currentTask.setSize(rs.getInt("size"));
+                currentTask.setWidth(rs.getInt("width"));
+                currentTask.setLength(rs.getInt("length"));
+                currentTask.setProduced_quantity(rs.getInt("produced_quantity"));
+                currentTask.setDone(rs.getBoolean("done"));
+                currentTask.setId(rs.getInt("id"));
 
                 taskList.add(currentTask);
             }

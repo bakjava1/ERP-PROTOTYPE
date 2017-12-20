@@ -39,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addOrder(Order order, List<Task> tasks) throws InvalidInputException{
+    public void addOrder(Order order, List<Task> tasks) throws ServiceLayerException {
         LOG.debug("addOrder called: {},{}", order, tasks);
         try {
             validator.inputValidationOrder(order);
@@ -52,6 +52,7 @@ public class OrderServiceImpl implements OrderService {
             orderController.createOrder(toAdd);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         } catch(InvalidInputException e) {
             //TODO maybe add another exception like Failed TaskCreationException
             LOG.error("Input Validation failed: " + e.getMessage());
@@ -119,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void invoiceOrder(Order selectedOrder) throws InvalidInputException, ServiceLayerException {
+    public void invoiceOrder(Order selectedOrder) throws ServiceLayerException {
 
         validator.inputValidationOrder(selectedOrder);
 
