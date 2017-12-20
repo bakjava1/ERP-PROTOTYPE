@@ -537,6 +537,7 @@ public class OfficeFXML {
         }
 
         updateTable();
+        updateBillTable();
 
     }
 

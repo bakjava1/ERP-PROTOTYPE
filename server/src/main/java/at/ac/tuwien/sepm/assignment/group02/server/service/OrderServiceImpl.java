@@ -136,14 +136,25 @@ public class OrderServiceImpl implements OrderService {
 
         for (OrderDTO current : order) {
 
-            List<Task> tasks = taskManagementDAO.getTasksByOrderId(current.getID());
+            List<Task> tasks = null;
+            try {
+                tasks = taskManagementDAO.getTasksByOrderId(current.getID());
+            }catch (Exception e){
+
+            }
             List<TaskDTO> convertedTasks = new ArrayList<>();
 
-            for (Task task: tasks) {
-                convertedTasks.add(taskConverter.convertPlainObjectToRestDTO(task));
+            if (tasks != null) {
+                for (Task task : tasks) {
+                    convertedTasks.add(taskConverter.convertPlainObjectToRestDTO(task));
+                }
+
+                current.setTaskList(convertedTasks);
+            }
+            else{
+                //order.remove(current);
             }
 
-            current.setTaskList(convertedTasks);
         }
 
     }

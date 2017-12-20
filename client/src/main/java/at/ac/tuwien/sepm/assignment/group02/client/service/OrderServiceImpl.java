@@ -128,10 +128,12 @@ public class OrderServiceImpl implements OrderService {
             throw new InvalidInputException("Order already invoiced");
         }
 
+        /*
         //check if customer information is missing //TODO throws null-pointer exception
         if(selectedOrder.getCustomerName().isEmpty() || selectedOrder.getCustomerAddress().isEmpty() || selectedOrder.getCustomerUID().isEmpty()){
             throw new InvalidInputException("Customer information missing for selected order");
         }
+        */
         if(selectedOrder.getNetAmount()<=0){
             throw new InvalidInputException("net price for selected order is negative or empty");
         }
@@ -155,20 +157,20 @@ public class OrderServiceImpl implements OrderService {
 
 
 
-    private List<Order> convertTaskLists(List<OrderDTO> allClosed){
+    private List<Order> convertTaskLists(List<OrderDTO> allOrder){
         List<Order> allConverted = new LinkedList<>();
 
-        for (OrderDTO currentBill: allClosed) {
-            Order bill = orderConverter.convertRestDTOToPlainObject(currentBill);
+        for (OrderDTO currentOrder: allOrder) {
+            Order order = orderConverter.convertRestDTOToPlainObject(currentOrder);
             List<Task> tasksConverted = new LinkedList<>();
 
-            for (TaskDTO task: currentBill.getTaskList()) {
+            for (TaskDTO task: currentOrder.getTaskList()) {
                 tasksConverted.add(taskConverter.convertRestDTOToPlainObject(task));
             }
 
-            bill.setTaskList(tasksConverted);
+            order.setTaskList(tasksConverted);
 
-            allConverted.add(bill);
+            allConverted.add(order);
         }
 
         return allConverted;

@@ -119,16 +119,16 @@ width,length,quantity,produced_quantity,sum,done,deleted) VALUES
 (5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
 (6,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
 (1,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,0,0),
-(1, 'Latten', 'Prismiert','Fi', 'O', 23,48,3000,40,50,20,1,1),
+(1, 'Latten', 'Prismiert','Fi', 'O', 23,48,3000,40,50,20,1,0),
 (2, 'Staffel', 'prismiert','Ta', 'I', 32,120,3000,40,42,30,1,0),
-(3, 'Kantholz', 'roh','Fi/Ta', 'II', 23,48,5000,100,50,40,1,1),
+(3, 'Kantholz', 'roh','Fi/Ta', 'II', 23,48,5000,100,50,40,1,0),
 (4, 'Schnittholz','gehobelt','Lä','III', 20,48,4000,40,42,50,1,0),
-(5, 'Hobelware', 'prismiert','Ki', 'IV', 100,90,4500,40,50,60,1,1),
+(5, 'Hobelware', 'prismiert','Ki', 'IV', 100,90,4500,40,50,60,1,0),
 (6, 'KVH', 'trocken','fi', 'V', 22,48,4000,40,42,70,0,0),
 (7, 'Kurzware', 'lutro','Ta', 'O/III', 22,48,3000,40,50,1000,0,1),
-(8, 'Kantholz', 'frisch','Fi/Ta', 'III/IV', 98,98,3500,50,42,20000,0,1),
+(8, 'Kantholz', 'frisch','Fi/Ta', 'III/IV', 98,98,3500,50,42,20000,0,0),
 (8, 'hobelware', 'imprägniert','Ta', 'III/V', 22,48,3000,40,50,100,0,0),
-(8, 'kvh', 'gehobelt','Ta', 'O/III', 98,48,4000,40,60,90,0,1);
+(8, 'kvh', 'gehobelt','Ta', 'O/III', 98,48,4000,40,60,90,0,0);
 
 INSERT INTO ASSIGNMENT(creation_date, amount,box_ID, isDone) VALUES
 (now(),2,3,0),
