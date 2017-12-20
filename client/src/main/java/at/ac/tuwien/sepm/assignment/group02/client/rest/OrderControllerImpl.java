@@ -98,7 +98,7 @@ public class OrderControllerImpl implements OrderController {
         List<OrderDTO> billList = new ArrayList<>();
 
         try {
-            OrderDTO[] billArray = restTemplate.getForObject("http://localhost:8080/getAllClosed", OrderDTO[].class);
+            OrderDTO[] billArray = restTemplate.getForObject("http://localhost:8080/getAllClosedOrders", OrderDTO[].class);
 
             for (int i = 0; billArray!= null && i < billArray.length; i++) {
                 billList.add(billArray[i]);

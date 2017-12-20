@@ -534,6 +534,9 @@ public class OfficeFXML {
             alert.setTitle("Fehler beim Abrechnen!");
             alert.showAndWait();
         }
+
+        updateTable();
+
     }
 
     public void clearCurrentOrder(ActionEvent actionEvent) {
