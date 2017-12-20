@@ -22,8 +22,6 @@ public class Order {
     private int netAmount;
     private int taxAmount;
 
-    private int quantity;
-    private int taskAmount;
 
 
     public Order() {
@@ -118,7 +116,7 @@ public class Order {
     }
 
     public int getGrossAmount() {
-        return grossAmount;
+        return (int)(this.netAmount*1.20);
     }
 
     public void setGrossAmount(int grossAmount) {
@@ -142,20 +140,23 @@ public class Order {
     }
 
     public int getQuantity() {
+        int quantity = 0;
+
+        for (Task task: taskList) {
+            quantity+= task.getQuantity();
+        }
+
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public int getTaskAmount() {
-        return taskAmount;
+        if (taskList != null){
+            return taskList.size();
+        }
+
+        return 0;
     }
 
-    public void setTaskAmount(int taskAmount) {
-        this.taskAmount = taskAmount;
-    }
 
     @Override
     public String toString() {

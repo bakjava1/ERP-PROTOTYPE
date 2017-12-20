@@ -45,42 +45,42 @@ public class LumberDAOJDBC implements LumberDAO {
 
 
         boolean conditions = false;
-        String description = filter.getDescription();
-        String finishing = filter.getFinishing();
-        String wood_type = filter.getWood_type();
-        String quality = filter.getQuality();
+        String description = filter.getDescription() == null? null :filter.getDescription().toLowerCase();
+        String finishing = filter.getFinishing() == null? null: filter.getFinishing().toLowerCase();
+        String wood_type = filter.getWood_type() == null? null: filter.getWood_type().toLowerCase();
+        String quality = filter.getQuality() == null? null : filter.getQuality().toLowerCase();
         int strength = filter.getSize();
         int width = filter.getWidth();
         int length = filter.getLength();
 
         if (description != null && !description.equals("")){
-            Query += " WHERE description = '" + description+"'";
+            Query += " WHERE (LOWER(description) LIKE '"+description+"%' OR LOWER(description) LIKE '%"+description+"')";
             conditions = true;
 
         }
         if (finishing != null && !finishing.equals("")){
             if (conditions) {
-                Query += " AND finishing = '" + finishing+"'";
+                Query += " AND (LOWER(finishing) LIKE '"+finishing+"%' OR LOWER(finishing) LIKE '%"+finishing+"')";
             }else{
-                Query += " WHERE finishing = '" + finishing+"'";
+                Query += " WHERE (LOWER(finishing) LIKE '"+finishing+"%' OR LOWER(finishing) LIKE '%"+finishing+"')";
                 conditions = true;
             }
         }
 
         if (wood_type  != null && !wood_type.equals("")){
             if (conditions) {
-                Query += " AND wood_type = '" + wood_type+"'";
+                Query += " AND (LOWER(wood_type) LIKE '"+wood_type+"%' OR LOWER(wood_type) LIKE '%"+wood_type+"')";
             }else{
-                Query += " WHERE wood_type = '" + wood_type+"'";
+                Query += " WHERE (LOWER(wood_type) LIKE '"+wood_type+"%' OR LOWER(wood_type) LIKE '%"+wood_type+"')";
                 conditions = true;
             }
         }
 
         if (quality != null && !quality.equals("")){
             if (conditions) {
-                Query += " AND quality = '" + quality+"'";
+                Query += " AND (LOWER(quality) LIKE '"+quality+"%' OR LOWER(quality) LIKE '%"+quality+"')";
             }else{
-                Query += " WHERE quality = '" + quality+"'";
+                Query += " WHERE (LOWER(quality) LIKE '"+quality+"%' OR LOWER(quality) LIKE '%"+quality+"')";
                 conditions = true;
             }
         }
@@ -138,7 +138,8 @@ public class LumberDAOJDBC implements LumberDAO {
             }
 
         } catch (SQLException e) {
-            throw new PersistenceLayerException("Database error");
+
+            throw new PersistenceLayerException("Database error:"+ e.getMessage());
         }
 
         return lumberList;

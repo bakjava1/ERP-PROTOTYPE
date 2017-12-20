@@ -32,8 +32,8 @@ public interface OrderService {
 
     /**
      *  retrieve all orders from data base
-     * @return a list of all open orders
-     * @throws ServiceLayerException
+     * @return list of all open order
+     * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
      */
     List<Order> getAllOpen() throws ServiceLayerException;
 
@@ -47,8 +47,8 @@ public interface OrderService {
 
     /**
      * retrieve all clossed orders
-     * @return a list of all closed orders
-     * @throws ServiceLayerException
+     * @return list of all closed order
+     * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
      */
     List<Order> getAllClosed() throws ServiceLayerException;
 

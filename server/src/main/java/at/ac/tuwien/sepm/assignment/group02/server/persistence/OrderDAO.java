@@ -23,8 +23,8 @@ public interface OrderDAO {
 
     /**
      * retrieve all open orders
-     * @return a list of all open orders
-     * @throws PersistenceLayerException
+     * @return list of all open orders
+     * @throws PersistenceLayerException if the database is not available
      */
     List<Order> getAllOpen() throws PersistenceLayerException;
 
@@ -37,8 +37,8 @@ public interface OrderDAO {
 
     /**
      * all closed orders equal request of invoice
-     * @return a lis of all closed orders
-     * @throws PersistenceLayerException
+     * @return list of all closed orders
+     * @throws PersistenceLayerException if the database is not available
      */
     List<Order> getAllClosed() throws PersistenceLayerException;
 

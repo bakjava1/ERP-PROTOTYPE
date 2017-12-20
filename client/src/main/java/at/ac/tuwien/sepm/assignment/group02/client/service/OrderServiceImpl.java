@@ -81,14 +81,10 @@ public class OrderServiceImpl implements OrderService {
             LOG.warn(e.getMessage());
         }
 
-        List<Order> allOpenConverted = new LinkedList<>();
+        List<Order> convertedOrders = convertTaskLists(allOpen);
+        setNetPrice(convertedOrders);
 
-
-        for (OrderDTO order: allOpen) {
-            allOpenConverted.add(orderConverter.convertRestDTOToPlainObject(order));
-        }
-
-        return allOpenConverted;
+        return convertedOrders;
 
     }
 
@@ -108,14 +104,12 @@ public class OrderServiceImpl implements OrderService {
             LOG.warn(e.getMessage());
         }
 
-        List<Order> allClosedConverted = new LinkedList<>();
 
+        List<Order> convertedOrders = convertTaskLists(allClosed);
 
-        for (OrderDTO bill: allClosed) {
-            allClosedConverted.add(orderConverter.convertRestDTOToPlainObject(bill));
-        }
+        setNetPrice(convertedOrders);
 
-        return allClosedConverted;
+        return convertedOrders;
     }
 
     @Override
@@ -155,5 +149,44 @@ public class OrderServiceImpl implements OrderService {
         } catch (PersistenceLayerException e) {
             throw new ServiceLayerException(e.getMessage());
         }
+    }
+
+
+
+    private List<Order> convertTaskLists(List<OrderDTO> allOrder){
+        List<Order> allConverted = new LinkedList<>();
+
+        for (OrderDTO currentOrder: allOrder) {
+            Order order = orderConverter.convertRestDTOToPlainObject(currentOrder);
+            List<Task> tasksConverted = new LinkedList<>();
+
+            for (TaskDTO task: currentOrder.getTaskList()) {
+                tasksConverted.add(taskConverter.convertRestDTOToPlainObject(task));
+            }
+
+            order.setTaskList(tasksConverted);
+
+            allConverted.add(order);
+        }
+
+        return allConverted;
+    }
+
+
+    private void setNetPrice(List<Order> orders) {
+
+        for (Order order : orders) {
+
+            int sum = 0;
+
+            for (Task task : order.getTaskList()) {
+                sum += task.getPrice();
+
+            }
+
+            order.setNetAmount(sum);
+
+        }
+
     }
 }

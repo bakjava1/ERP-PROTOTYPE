@@ -24,8 +24,8 @@ public interface OrderService {
 
     /**
      * retrieve all orders from data base
-     * @return a list of all open orders
-     * @throws ServiceLayerException
+     * @return list of all open orders
+     * @throws ServiceLayerException if the database is not available for the persistence layer
      */
     List<OrderDTO> getAllOpen() throws ServiceLayerException;
 
@@ -38,8 +38,8 @@ public interface OrderService {
 
     /**
      * retrieve all closed orders equal
-     * @return a list of all closed orders
-     * @throws ServiceLayerException
+     * @return list of all closed orders
+     * @throws ServiceLayerException if the database is not available for the persistence layer
      */
     List<OrderDTO> getAllClosed() throws ServiceLayerException;
 

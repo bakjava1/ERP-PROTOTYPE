@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
@@ -15,11 +16,12 @@ public interface LumberService {
     /**
      * retrieve all lumbers
      * @param filter
-     * @return a list of lumber
-     * @throws InvalidInputException
-     * @throws ServiceLayerException
+     * @return list of searched lumber
+     * @param filter an UnvalidatedLumber object with the parameter to be searched
+     * @throws InvalidInputException if the search parameters are not valid
+     * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
      */
-    List<Lumber> getAll(Lumber filter) throws InvalidInputException, ServiceLayerException;
+    List<Lumber> getAll(UnvalidatedLumber filter) throws InvalidInputException, ServiceLayerException;
 
     /**
      * choose a lumber from the list and mark it as reserved

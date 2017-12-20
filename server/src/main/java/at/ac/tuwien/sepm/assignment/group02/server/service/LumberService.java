@@ -24,9 +24,9 @@ public interface LumberService {
 
     /**
      * retrieve all existing lumbers
-     * @param filter
-     * @return a list of all lumbers
-     * @throws ServiceLayerException
+     * @param filter an object of Class LumberDTO with search paramaters for the requested list
+     * @return a list of all lumber that matches the filter.
+     * @throws ServiceLayerException if the database is not available for the persistence layer
      */
     List<LumberDTO> getAllLumber(LumberDTO filter) throws ServiceLayerException;
 

@@ -294,6 +294,7 @@ public class OfficeFXML {
 
             for (Order order: allOpen) {
                 openOrderForTable.add(order);
+
             }
 
             table_openOrder.setItems(openOrderForTable);
@@ -617,6 +618,7 @@ public class OfficeFXML {
         }
 
         updateTable();
+        updateBillTable();
 
     }
 

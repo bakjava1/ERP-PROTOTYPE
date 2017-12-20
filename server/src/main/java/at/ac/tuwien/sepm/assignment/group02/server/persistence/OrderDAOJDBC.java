@@ -92,7 +92,7 @@ public class OrderDAOJDBC implements OrderDAO {
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISPAIDFLAG = 0 AND ISDONEFLAG = 0 ORDER BY ORDER_DATE");
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = 0 AND ISPAIDFLAG = 0 ORDER BY ORDER_DATE");
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -148,7 +148,7 @@ public class OrderDAOJDBC implements OrderDAO {
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = 1 ORDER BY ORDER_DATE");
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = 0 AND ISPAIDFLAG = 1 ORDER BY ORDER_DATE");
             rs = ps.executeQuery();
 
             while (rs.next()) {
