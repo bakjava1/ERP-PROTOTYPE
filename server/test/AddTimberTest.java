@@ -28,10 +28,8 @@ public class AddTimberTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static Connection dbConnection;
-    private static Connection fakeDBConnection;
 
     private static TimberDAO timberDAO;
-    private static TimberDAO timberDAOMock;
 
     private static TimberService timberService;
     private static TimberService timberServiceMock;
@@ -50,13 +48,10 @@ public class AddTimberTest {
     public static void setup() {
         LOG.debug("add timber test setup initiated");
         dbConnection = DBUtil.getConnection();
-        fakeDBConnection = mock(Connection.class);
 
         timberDAO = new TimberDAOJDBC(dbConnection);
-        timberDAOMock = mock(TimberDAOJDBC.class);
 
         timberService = new TimberServiceImpl(timberDAO, new TimberConverter());
-        timberServiceMock = new TimberServiceImpl(timberDAOMock, new TimberConverter());
 
         timberController = new TimberControllerImpl(timberService);
 
@@ -99,7 +94,6 @@ public class AddTimberTest {
     }
 
     //TODO test not working properly: error in db
-    @Ignore
     @Test
     public void testAddTimberController() throws PersistenceLayerException, EntityCreationException {
         int startAmount = getTimberAmount();
@@ -119,7 +113,6 @@ public class AddTimberTest {
     }
     
     //TODO test not working properly: error in db
-    @Ignore
     @Test
     public void testAddTimberService() throws PersistenceLayerException, ServiceLayerException {
         int startAmount = getTimberAmount();
