@@ -83,7 +83,6 @@ public class InvoiceOrderTest {
         orderDTONoError.setCustomerUID("123456");
         orderDTONoError.setOrderDate(new java.util.Date());
         orderDTONoError.setPaid(false);
-        orderDTONoError.setQuantity(12);
         orderDTONoError.setTaskList(new ArrayList<TaskDTO>());
 
         orderAlreadyInvoiced.setPaid(true);
