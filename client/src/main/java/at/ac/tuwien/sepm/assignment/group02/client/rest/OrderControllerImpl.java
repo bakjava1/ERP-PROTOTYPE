@@ -80,8 +80,6 @@ public class OrderControllerImpl implements OrderController {
             throw new PersistenceLayerException("Connection Problem with Server");
         }
 
-
-
         return orderList;
 
     }
