@@ -23,7 +23,7 @@ public interface OrderService {
      * @throws InvalidInputException if input is invalid
      * @throws ServiceLayerException if an error occured in the service layer
      */
-    void addOrder(Order order, List<Task> tasks) throws InvalidInputException, ServiceLayerException;
+    void addOrder(Order order, List<Task> tasks) throws ServiceLayerException;
 
     /**
      * 1.2 Bestellung löschen

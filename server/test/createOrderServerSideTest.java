@@ -166,8 +166,15 @@ public class createOrderServerSideTest {
         Assert.assertEquals(size + 1,databaseSizeTasks());
     }
 
+    @Test(expected = PersistenceLayerException.class)
+    public void testPersistenceLayerExceptionWhenDatabaseNotAvaiable() throws PersistenceLayerException {
+        DBUtil.closeConnection();
+        orderDAO.createOrder(order);
+    }
+
     @After
     public void tearDown() {
+        DBUtil.closeConnection();
         orderService = null;
         taskDAO = null;
         orderDAO = null;

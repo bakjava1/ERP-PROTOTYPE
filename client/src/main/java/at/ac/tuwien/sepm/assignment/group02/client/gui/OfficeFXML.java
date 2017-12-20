@@ -261,13 +261,6 @@ public class OfficeFXML {
             success.setHeaderText(null);
             success.setContentText("Order created successfully!");
             success.showAndWait();
-        } catch (InvalidInputException e) {
-            LOG.warn(e.getMessage());
-            Alert error = new Alert(Alert.AlertType.ERROR);
-            error.setTitle("Creation failed");
-            error.setHeaderText(null);
-            error.setContentText("Order Creation failed!");
-            error.showAndWait();
         } catch (ServiceLayerException e) {
             LOG.warn(e.getMessage());
         }
