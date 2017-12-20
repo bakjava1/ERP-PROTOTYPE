@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -514,20 +515,25 @@ public class OfficeFXML {
         //get the selected order
         Order selectedOrder = table_openOrder.getSelectionModel().getSelectedItem();
 
+        //TODO remove
+        selectedOrder.setCustomerAddress("fas");
+        selectedOrder.setCustomerName("asdf");
+        selectedOrder.setCustomerUID("adsf");
+        selectedOrder.setOrderDate(new Date());
+        List<Task> testTaskList = new ArrayList<>();
+        Task testTask = new Task();
+        testTask.setPrice(2400);
+        testTaskList.add(testTask);
+        selectedOrder.setTaskList(testTaskList);
+
         try {
             orderService.invoiceOrder(selectedOrder);
+            updateBillTable();
         } catch (InvalidInputException e) {
             //TODO use alertBuilder
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Fehler beim Abrechnen!");
-            alert.setHeaderText(null);
-            alert.setContentText("Bestellung konnte nicht erfolgreich abgerechnet werden. Bitte versuchen Sie es erneut!");
-            alert.showAndWait();
+            alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Bestellung konnte nicht erfolgreich abgerechnet werden!", e.getMessage());
         } catch (ServiceLayerException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            //TODO alertBuilder
-            alert.setTitle("Fehler beim Abrechnen!");
-            alert.showAndWait();
+            alertBuilder.showErrorAlert("Fehler beim Abrechnen!", "", "");
         }
 
         updateTable();

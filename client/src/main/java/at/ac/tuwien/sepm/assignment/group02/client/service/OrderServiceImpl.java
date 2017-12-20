@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
@@ -127,29 +128,27 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void invoiceOrder(Order selectedOrder) throws InvalidInputException, ServiceLayerException {
 
-        if(selectedOrder==null){
-            throw new InvalidInputException("Selected Order is null");
-        }
+        validator.inputValidationOrder(selectedOrder);
+
         if(selectedOrder.isPaid()){
             throw new InvalidInputException("Order already invoiced");
         }
 
-        //check if customer information is missing //TODO throws null-pointer exception
-        if(selectedOrder.getCustomerName().isEmpty() || selectedOrder.getCustomerAddress().isEmpty() || selectedOrder.getCustomerUID().isEmpty()){
-            throw new InvalidInputException("Customer information missing for selected order");
-        }
-        if(selectedOrder.getNetAmount()<=0){
-            throw new InvalidInputException("net price for selected order is negative or empty");
+        int netSumTasks = 0;
+        for(Task task : selectedOrder.getTaskList()){
+            validator.inputValidationTaskOnOrder(task);
+            netSumTasks += task.getPrice();
         }
 
 
-        int netAmount = selectedOrder.getNetAmount();
+        selectedOrder.setNetAmount(netSumTasks);
         //TODO get tax rate from properties file
-        int taxAmount = netAmount * (20/100);
-        int grossAmount = netAmount + taxAmount;
+        double taxAmount = (double)netSumTasks * (20.0/100.0);
+        int grossAmount = netSumTasks + (int)taxAmount;
         selectedOrder.setGrossAmount(grossAmount);
-        selectedOrder.setTaxAmount(taxAmount);
+        selectedOrder.setTaxAmount((int)taxAmount);
         selectedOrder.setDeliveryDate(new Date());
+        selectedOrder.setInvoiceDate(new Date());
         OrderDTO orderDTO = orderConverter.convertPlainObjectToRestDTO(selectedOrder);
 
         try {

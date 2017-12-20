@@ -39,5 +39,11 @@ public interface OrderDAO {
      */
     Order getOrderById(int order_id) throws PersistenceLayerException;
 
+    /**
+     * takes an orders and marks it as invoiced and sets necessary fields to create an invoice
+     * @author Philipp Klein
+     * @param order order that will be invoiced
+     * @throws PersistenceLayerException when error executing update of order
+     */
     void invoiceOrder(Order order) throws PersistenceLayerException;
 }
