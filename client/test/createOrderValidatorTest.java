@@ -1,4 +1,5 @@
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
@@ -108,12 +109,14 @@ public class createOrderValidatorTest {
         order.setCustomerName("test");
         order.setCustomerAddress("test");
         order.setCustomerUID("test");
+        Task temp  = new Task();
+        order.addTask(temp);
         try {
             validator.inputValidationOrder(order);
         } catch(InvalidInputException e) {
             success = false;
         }
-        Assert.assertEquals(success,true);
+        Assert.assertEquals(true,success);
     }
 
     @After
