@@ -22,6 +22,7 @@ public class AssignmentClientControllerImplTest_setDone {
     @Mock
     private RestTemplate restTemplate;
 
+
     @Test
     public void testSetDone_works() throws PersistenceLayerException {
         AssignmentController assignmentController = new AssignmentControllerImpl(restTemplate);

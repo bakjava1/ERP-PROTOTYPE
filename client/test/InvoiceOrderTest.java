@@ -9,7 +9,6 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderServiceImpl;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -60,22 +59,22 @@ public class InvoiceOrderTest {
     }
 
     @Test(expected = InvalidInputException.class)
-    public void testInvoiceOrderNetPrice() throws InvalidInputException, ServiceLayerException {
+    public void testInvoiceOrderNetPrice() throws ServiceLayerException {
         orderService.invoiceOrder(orderNetPriceIsNegative);
     }
 
     @Test(expected = InvalidInputException.class)
-    public void testInvoiceOrderCustomerError() throws InvalidInputException, ServiceLayerException {
+    public void testInvoiceOrderCustomerError() throws ServiceLayerException {
         orderService.invoiceOrder(orderCustomerError);
     }
 
     @Test(expected = InvalidInputException.class)
-    public void testInvoiceOrderAlreadyInvoiced() throws InvalidInputException, ServiceLayerException {
+    public void testInvoiceOrderAlreadyInvoiced() throws ServiceLayerException {
         orderService.invoiceOrder(orderAlreadyInvoiced);
     }
 
     @Test(expected = InvalidInputException.class)
-    public void testInvoiceOrderNoErrorServiceLayer() throws InvalidInputException, ServiceLayerException {
+    public void testInvoiceOrderNoErrorServiceLayer() throws ServiceLayerException {
         orderService.invoiceOrder(orderNoError);
     }
 

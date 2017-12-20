@@ -175,7 +175,7 @@ public class LeadWorkerFXML {
     public void optimisationBtnClicked(ActionEvent actionEvent) {
         LOG.info("optimisationBtn clicked");
 
-        new Thread(new Task<>() {
+        new Thread(new Task<Object>() {
             @Override
             protected Object call() throws Exception {
 

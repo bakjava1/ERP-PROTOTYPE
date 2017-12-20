@@ -104,9 +104,11 @@ public class OrderControllerImpl implements OrderController {
             }
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("Connection Problem with Server");
         } catch(RestClientException e){
             //no response payload, probably server not running
             LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("Connection Problem with Server");
         }
 
 

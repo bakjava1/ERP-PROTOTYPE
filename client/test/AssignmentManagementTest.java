@@ -27,9 +27,6 @@ public class AssignmentManagementTest {
     private static AssignmentController assignmentController;
     private static AssignmentService assignmentService;
 
-    private static TimberController timberController;
-    private static LumberController lumberController;
-    private static TaskController taskController;
     private static ValidateAssignmentDTO validateAssignmentDTO;
 
     @BeforeClass

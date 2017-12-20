@@ -60,6 +60,11 @@ public class TimberDAOJDBC implements TimberDAO{
     }
 
     @Override
+    public void updateTimber(Timber timber) throws PersistenceLayerException {
+
+    }
+
+    @Override
     public int getNumberOfBoxes() throws PersistenceLayerException {
         int numberOfBoxes = 0;
         String countSentence = "SELECT COUNT(*) FROM TIMBER";

@@ -1,23 +1,22 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.NoValidIntegerException;
+import at.ac.tuwien.sepm.assignment.group02.client.converter.LumberConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.NoValidIntegerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberController;
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskController;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
-import at.ac.tuwien.sepm.assignment.group02.client.converter.LumberConverter;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 
-import javax.xml.bind.ValidationException;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,13 +50,12 @@ public class LumberServiceImpl implements LumberService {
         } catch (PersistenceLayerException e) {
             e.printStackTrace();
         }
-        Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
 
-        return lumber;
+        return lumberConverter.convertRestDTOToPlainObject(lumberDTO);
     }
 
     @Override
-    public void addReservedLumberToTask(String id, String quantity) throws InvalidInputException,ServiceLayerException {
+    public void addReservedLumberToTask(String id, String quantity) throws ServiceLayerException {
         try {
             int[] validated = validator.temporaryAddTaskToLumberValidation(id,quantity);
             TaskDTO toAdd = new TaskDTO();
@@ -74,7 +72,7 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public List<Lumber> getAll(UnvalidatedLumber filter)throws InvalidInputException, ServiceLayerException {
+    public List<Lumber> getAll(UnvalidatedLumber filter)throws ServiceLayerException {
         LOG.debug("getAllSchnittholz called");
         List<LumberDTO> allLumber = null;
 
@@ -116,9 +114,9 @@ public class LumberServiceImpl implements LumberService {
 
         try {
             validateLumber(lumber);
-        } catch (InvalidInputException e) {
-            e.printStackTrace();
         } catch (NoValidIntegerException e) {
+            e.printStackTrace();
+        } catch (InvalidInputException e) {
             e.printStackTrace();
         }
         LumberDTO lumberToDelete = lumberConverter.convertPlainObjectToRestDTO(lumber);
@@ -135,9 +133,9 @@ public class LumberServiceImpl implements LumberService {
         LOG.debug("updateLumber called: {}", lumber);
         try {
             validateLumber(lumber);
-        } catch (InvalidInputException e) {
-            e.printStackTrace();
         } catch (NoValidIntegerException e) {
+            e.printStackTrace();
+        } catch (InvalidInputException e) {
             e.printStackTrace();
         }
         LumberDTO toUpdate = lumberConverter.convertPlainObjectToRestDTO(lumber);
@@ -149,7 +147,7 @@ public class LumberServiceImpl implements LumberService {
 
     }
 
-    public void validateLumber(Lumber lumber) throws InvalidInputException,NoValidIntegerException{
+    private void validateLumber(Lumber lumber) throws InvalidInputException {
         LOG.debug("Validating lumber: {}",lumber);
 
         if(lumber==null){
