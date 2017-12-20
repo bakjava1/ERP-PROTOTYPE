@@ -17,7 +17,10 @@ public interface LumberService {
      * 2.1 Übersicht + Suchfunktion
      * 2.1.2 (rest/LumberController) Eine tabellarische Übersicht des vorhandenen Schnittholz anzeigen.
      * 2.1.3 (rest/LumberController) Suchfunktionalität implementieren
-     * @return
+     * @return list of searched lumber
+     * @param filter an UnvalidatedLumber object with the parameter to be searched
+     * @throws InvalidInputException if the search parameters are not valid
+     * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
      */
     List<Lumber> getAll(UnvalidatedLumber filter) throws InvalidInputException, ServiceLayerException;
 

@@ -19,7 +19,8 @@ public interface OrderController {
 
     /**
      * 1.3.1 Alle offenen Bestellungen anfordern.
-     * @return
+     * @return list of all open Order
+     * @throws PersistenceLayerException if the server is not available
      */
     List<OrderDTO> getAllOpen() throws PersistenceLayerException;
 
@@ -30,7 +31,8 @@ public interface OrderController {
 
     /**
      * 1.5.1 Alle geschlossenen Bestellungen == Rechnugen anfordern.
-     * @return
+     * @return list of all closed Order
+     * @throws PersistenceLayerException if the server is not available
      */
     List<OrderDTO> getAllClosed() throws PersistenceLayerException;
 

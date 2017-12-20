@@ -19,7 +19,8 @@ public interface OrderDAO {
 
     /**
      * 1.3.1 Alle offenen Bestellungen anfordern.
-     * @return
+     * @return list of all open orders
+     * @throws PersistenceLayerException if the database is not available
      */
     List<Order> getAllOpen() throws PersistenceLayerException;
 
@@ -30,7 +31,8 @@ public interface OrderDAO {
 
     /**
      * 1.5.1 Alle geschlossenen Bestellungen == Rechnugen anfordern.
-     * @return
+     * @return list of all closed orders
+     * @throws PersistenceLayerException if the database is not available
      */
     List<Order> getAllClosed() throws PersistenceLayerException;
 

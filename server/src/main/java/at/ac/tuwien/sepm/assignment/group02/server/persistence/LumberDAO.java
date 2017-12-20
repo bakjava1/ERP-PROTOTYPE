@@ -34,7 +34,9 @@ public interface LumberDAO {
 
     /**
      * 2.1.2 & 2.1.3
-     * Returns a list of all lumber that matches the filter.
+     * @param filter a object of Lumber with search parameters
+     * @return  a list of all lumber that matches the filter.
+     * @throws PersistenceLayerException if the database is not available
      */
     List<Lumber> getAllLumber(Lumber filter) throws PersistenceLayerException;
 

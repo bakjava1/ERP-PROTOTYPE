@@ -19,7 +19,8 @@ public interface OrderService {
 
     /**
      * 1.3.1 Alle offenen Bestellungen anfordern.
-     * @return
+     * @return list of all open orders
+     * @throws ServiceLayerException if the database is not available for the persistence layer
      */
     List<OrderDTO> getAllOpen() throws ServiceLayerException;
 
@@ -30,7 +31,8 @@ public interface OrderService {
 
     /**
      * 1.5.1 Alle geschlossenen Bestellungen == Rechnugen anfordern.
-     * @return
+     * @return list of all closed orders
+     * @throws ServiceLayerException if the database is not available for the persistence layer
      */
     List<OrderDTO> getAllClosed() throws ServiceLayerException;
 

@@ -32,7 +32,8 @@ public interface OrderService {
 
     /**
      * 1.3 Übersicht Bestellungen
-     * @return
+     * @return list of all open order
+     * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
      */
     List<Order> getAllOpen() throws ServiceLayerException;
 
@@ -47,7 +48,8 @@ public interface OrderService {
     /**
      * 1.5 Übersicht Rechnungen
      * (rest/OrderController)
-     * @return
+     * @return list of all closed order
+     * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
      */
     List<Order> getAllClosed() throws ServiceLayerException;
 
