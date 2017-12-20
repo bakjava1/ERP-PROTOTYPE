@@ -1,15 +1,14 @@
 package at.ac.tuwien.sepm.assignment.group02.client.validation;
 
-import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.*;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.EmptyInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.NoValidIntegerException;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.ValidationException;
 import java.lang.invoke.MethodHandles;
 
 @Service
@@ -145,4 +144,84 @@ public class Validator {
             throw new EmptyInputException("Empty Field");
         }
     }
+
+
+    public Lumber validateLumber(UnvalidatedLumber filter) throws InvalidInputException{
+
+        String description = filter.getDescription().trim();
+        String finishing = filter.getFinishing().trim().equals("keine Angabe")? "" :
+                filter.getFinishing().trim();
+        String wood_type = filter.getWood_type().trim().equals("keine Angabe")? "" :
+                filter.getWood_type().trim();
+        String quality = filter.getQuality().trim().equals("keine Angabe")? "" :
+                filter.getQuality().trim();
+        String strength = filter.getSize().trim();
+        String width = filter.getWidth().trim();
+        String length = filter.getLength().trim();
+
+        Lumber validatedLumber = new Lumber();
+
+        if (!description.equals("")){
+            validatedLumber.setDescription(description);
+        }
+        if (!finishing.equals("")){
+            validatedLumber.setFinishing(finishing);
+        }
+
+        if (!wood_type.equals("")){
+            validatedLumber.setWood_type(wood_type);
+        }
+
+        if (!quality.equals("")){
+            validatedLumber.setQuality(quality);
+        }
+
+        if (!strength.equals("")){
+            if (strength.matches("^\\d+$")) {
+                if (strength.length() < 10) {
+                    validatedLumber.setSize(Integer.parseInt(strength));
+                }else{
+                    throw new InvalidInputException("Die angegebene Stärke ist zu groß.");
+                }
+            }
+            else{
+                throw new InvalidInputException("Die angegebene Stärke ist keine positive ganze Zahl.");
+            }
+        }else{
+            validatedLumber.setSize(-1);
+        }
+
+        if (!width.equals("")){
+            if (width.matches("^\\d+$")) {
+                if (width.length() < 10) {
+                    validatedLumber.setWidth(Integer.parseInt(width));
+                }else{
+                    throw new InvalidInputException("Die angegebene Breite ist zu groß.");
+                }
+            }else{
+                throw new InvalidInputException("Die angegebene Breite ist keine positive ganze Zahl.");
+            }
+        }else{
+            validatedLumber.setWidth(-1);
+        }
+
+        if (!length.equals("")){
+            if (length.matches("^\\d+$")) {
+                if (length.length() < 10) {
+                    validatedLumber.setLength(Integer.parseInt(length));
+                }else{
+                    throw new InvalidInputException("Die angegebene Länge ist zu groß.");
+                }
+            }else{
+                throw new InvalidInputException("Die angegebene Länge ist keine positive ganze Zahl.");
+            }
+        }else{
+            validatedLumber.setLength(-1);
+        }
+
+        return validatedLumber;
+
+    }
+
+
 }

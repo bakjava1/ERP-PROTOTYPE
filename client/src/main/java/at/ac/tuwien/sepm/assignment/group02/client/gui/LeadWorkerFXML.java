@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
@@ -113,52 +114,16 @@ public class LeadWorkerFXML {
 
     @FXML
     public void onSearchButtonClicked(ActionEvent actionEvent) {
-        Lumber filter = new Lumber();
+        UnvalidatedLumber filter = new UnvalidatedLumber();
         List<Lumber> allLumber = null;
 
-        String description = tf_description.getText().trim();
-        String finishing = cb_finishing.getSelectionModel().getSelectedItem().toString().equals("keine Angabe")? "" :
-                cb_finishing.getSelectionModel().getSelectedItem().toString();
-        String wood_type = cb_wood_type.getSelectionModel().getSelectedItem().toString().equals("keine Angabe")? "" :
-                cb_wood_type.getSelectionModel().getSelectedItem().toString();
-        String quality = cb_quality.getSelectionModel().getSelectedItem().toString().equals("keine Angabe")? "" :
-                cb_quality.getSelectionModel().getSelectedItem().toString();
-        String strength = tf_strength.getText().trim();
-        String width = tf_width.getText().trim();
-        String length = tf_length.getText().trim();
-
-        if (!description.equals("")){
-            filter.setDescription(description);
-        }
-        if (!finishing.equals("")){
-            filter.setFinishing(finishing);
-        }
-
-        if (!wood_type.equals("")){
-            filter.setWood_type(wood_type);
-        }
-
-        if (!quality.equals("")){
-            filter.setQuality(quality);
-        }
-
-        if (!strength.equals("")){
-            filter.setSize(Integer.parseInt(strength));
-        }else{
-            filter.setSize(-1);
-        }
-
-        if (!width.equals("")){
-            filter.setWidth(Integer.parseInt(width));
-        }else{
-            filter.setWidth(-1);
-        }
-
-        if (!length.equals("")){
-            filter.setLength(Integer.parseInt(length));
-        }else{
-            filter.setLength(-1);
-        }
+        filter.setDescription(tf_description.getText().trim());
+        filter.setFinishing(cb_finishing.getSelectionModel().getSelectedItem().toString().trim());
+        filter.setWood_type(cb_wood_type.getSelectionModel().getSelectedItem().toString().trim());
+        filter.setQuality(cb_quality.getSelectionModel().getSelectedItem().toString().trim());
+        filter.setSize(tf_strength.getText().trim());
+        filter.setWidth(tf_width.getText().trim());
+        filter.setLength(tf_length.getText().trim());
 
 
         try {
@@ -167,6 +132,11 @@ public class LeadWorkerFXML {
             LOG.warn(e.getMessage());
         } catch (InvalidInputException e) {
             LOG.warn(e.getMessage());
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Eingabe nicht korrekt");
+            error.setHeaderText(null);
+            error.setContentText(e.getMessage());
+            error.showAndWait();
         }
 
         if (allLumber != null) {

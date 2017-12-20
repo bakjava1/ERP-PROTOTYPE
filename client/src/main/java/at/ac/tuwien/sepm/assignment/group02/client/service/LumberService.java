@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
@@ -18,7 +19,7 @@ public interface LumberService {
      * 2.1.3 (rest/LumberController) Suchfunktionalität implementieren
      * @return
      */
-    List<Lumber> getAll(Lumber filter) throws InvalidInputException, ServiceLayerException;
+    List<Lumber> getAll(UnvalidatedLumber filter) throws InvalidInputException, ServiceLayerException;
 
     /**
      * 2.2 Reservierung Schnittholz

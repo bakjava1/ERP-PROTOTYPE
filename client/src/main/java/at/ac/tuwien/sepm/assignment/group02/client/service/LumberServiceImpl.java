@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberController;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 
+import javax.xml.bind.ValidationException;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,17 +79,24 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public List<Lumber> getAll(Lumber filter) {
-
+    public List<Lumber> getAll(UnvalidatedLumber filter)throws InvalidInputException, ServiceLayerException {
         LOG.debug("getAllSchnittholz called");
-
         List<LumberDTO> allLumber = null;
-        LumberDTO filterDTO = lumberConverter.convertPlainObjectToRestDTO(filter);
 
         try {
+
+        Lumber validatedLumber = validator.validateLumber(filter);
+
+        LumberDTO filterDTO = lumberConverter.convertPlainObjectToRestDTO(validatedLumber);
+
+
             allLumber = lumberController.getAllLumber(filterDTO);
+        } catch(InvalidInputException e) {
+            LOG.error("Failed to validate Input: " + e.getMessage());
+            throw new InvalidInputException(e.getMessage());
         } catch (PersistenceLayerException e) {
-            LOG.warn(e.getMessage());
+            LOG.warn("Failed to get all Lumber"+e.getMessage());
+            throw new ServiceLayerException("Server Problems");
         }
 
         List<Lumber> allLumberConverted = new LinkedList<>();
