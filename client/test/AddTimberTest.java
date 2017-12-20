@@ -6,12 +6,14 @@ import at.ac.tuwien.sepm.assignment.group02.client.rest.TimberController;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateInput;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateTimber;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
 

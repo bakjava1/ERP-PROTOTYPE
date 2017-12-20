@@ -34,6 +34,7 @@ public class TimberServiceImpl implements TimberService{
     @Override
     public void addTimber(Timber timber) throws ServiceLayerException, InvalidInputException{
 
+        //TODO get Number of Boxes from properties file and do not get if from database
         try {
             if(timber.getBox_id()>timberController.getNumberOfBoxes())
                 throw new InvalidInputException("Error in Timber Box: Box ID is bigger than number of boxes");
