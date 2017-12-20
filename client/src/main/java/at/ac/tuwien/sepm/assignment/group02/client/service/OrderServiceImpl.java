@@ -141,18 +141,27 @@ public class OrderServiceImpl implements OrderService {
         if(selectedOrder.getCustomerName().isEmpty() || selectedOrder.getCustomerAddress().isEmpty() || selectedOrder.getCustomerUID().isEmpty()){
             throw new InvalidInputException("Customer information missing for selected order");
         }
-        if(selectedOrder.getNetAmount()<=0){
-            throw new InvalidInputException("net price for selected order is negative or empty");
+        if(selectedOrder.getTaskList() == null || selectedOrder.getTaskList().isEmpty()){
+            throw new InvalidInputException("no tasks for this order");
+        }
+
+        int netSumTasks = 0;
+        for(Task task : selectedOrder.getTaskList()){
+            if(task.getPrice() <= 0){
+                throw new InvalidInputException("price for a task is negative or zero");
+            }
+            netSumTasks += task.getPrice();
         }
 
 
-        int netAmount = selectedOrder.getNetAmount();
+        selectedOrder.setNetAmount(netSumTasks);
         //TODO get tax rate from properties file
-        int taxAmount = netAmount * (20/100);
-        int grossAmount = netAmount + taxAmount;
+        double taxAmount = (double)netSumTasks * (20.0/100.0);
+        int grossAmount = netSumTasks + (int)taxAmount;
         selectedOrder.setGrossAmount(grossAmount);
-        selectedOrder.setTaxAmount(taxAmount);
+        selectedOrder.setTaxAmount((int)taxAmount);
         selectedOrder.setDeliveryDate(new Date());
+        selectedOrder.setInvoiceDate(new Date());
         OrderDTO orderDTO = orderConverter.convertPlainObjectToRestDTO(selectedOrder);
 
         try {

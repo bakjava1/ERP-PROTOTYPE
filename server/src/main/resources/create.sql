@@ -37,6 +37,11 @@ customer_name varchar(50) NOT NULL,
 customer_address varchar(50) NOT NULL,
 customer_uid varchar(10) NOT NULL,
 order_date datetime NOT NULL,
+delivery_date TIMESTAMP,
+invoice_date TIMESTAMP,
+gross_amount INTEGER DEFAULT(0),
+net_amount INTEGER DEFAULT(0),
+tax_amount INTEGER DEFAULT(0),
 isPaidFlag boolean NOT NULL,
 isDoneFlag boolean NOT NULL
 );
