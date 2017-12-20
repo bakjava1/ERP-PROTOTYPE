@@ -52,7 +52,7 @@ public class AssignmentManagementTest {
         assignmentDAO = new AssignmentDAOJDBC(dbConnection);
 
         assignmentConverter = new AssignmentConverter();
-        assignmentService = new AssignmentServiceImpl(assignmentDAO, assignmentConverter);
+        assignmentService = new AssignmentServiceImpl(assignmentDAO, assignmentConverter, validateAssignment);
     }
 
     @Test (expected = PersistenceLayerException.class)
