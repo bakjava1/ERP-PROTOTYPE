@@ -40,19 +40,19 @@ public class Validator {
 
     public void inputValidationOrder(Order toValidate) throws InvalidInputException {
         try {
-            validateText(toValidate.getCustomerName());
+            validateText(toValidate.getCustomerName(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Name: " + e.getMessage());
             throw new InvalidInputException("Error at Customer Name: " + e.getMessage());
         }
         try {
-            validateText(toValidate.getCustomerAddress());
+            validateText(toValidate.getCustomerAddress(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Address: " + e.getMessage());
             throw new InvalidInputException("Error at Customer Address: " + e.getMessage());
         }
         try {
-            validateText(toValidate.getCustomerUID());
+            validateText(toValidate.getCustomerUID(),10);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer UID: " + e.getMessage());
             throw new InvalidInputException("Error at Customer UID: " + e.getMessage());
@@ -61,25 +61,25 @@ public class Validator {
 
     public Task inputValidationTask(UnvalidatedTask toValidate) throws InvalidInputException {
         try {
-            validateText(toValidate.getDescription());
+            validateText(toValidate.getDescription(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Description: " + e.getMessage());
             throw new InvalidInputException("Error at Description: " + e.getMessage());
         }
         try {
-            validateText(toValidate.getFinishing());
+            validateText(toValidate.getFinishing(),15);
         }catch(EmptyInputException e) {
             LOG.error("Error at Finishing: " + e.getMessage());
             throw new InvalidInputException("Error at Finishing: " + e.getMessage());
         }
         try {
-            validateText(toValidate.getWood_type());
+            validateText(toValidate.getWood_type(),10);
         }catch(EmptyInputException e) {
             LOG.error("Error at Wood Type: " + e.getMessage());
             throw new InvalidInputException("Error at Wood Type: " + e.getMessage());
         }
         try {
-            validateText(toValidate.getQuality());
+            validateText(toValidate.getQuality(),10);
         }catch(EmptyInputException e) {
             LOG.error("Error at Quality: " + e.getMessage());
             throw new InvalidInputException("Error at Quality: " + e.getMessage());
@@ -140,9 +140,12 @@ public class Validator {
         return num;
     }
 
-    private void validateText(String toValidate) throws EmptyInputException {
+    private void validateText(String toValidate, int length) throws EmptyInputException {
         if(toValidate == null || toValidate.length() == 0) {
             throw new EmptyInputException("Empty Field");
+        }
+        if(toValidate.length() > length && length != -1) {
+            throw new EmptyInputException("Input too long");
         }
     }
 }

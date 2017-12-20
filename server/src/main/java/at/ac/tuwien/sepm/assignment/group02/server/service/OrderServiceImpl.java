@@ -25,13 +25,14 @@ public class OrderServiceImpl implements OrderService {
     private static OrderDAO orderManagementDAO;
     private static TaskDAO taskManagementDAO;
     private static OrderConverter orderConverter;
-    private static TaskConverter taskConverter = new TaskConverter();
+    private static TaskConverter taskConverter;
 
     @Autowired
-    public OrderServiceImpl(OrderDAO orderManagementDAO,TaskDAO taskManagementDAO, OrderConverter orderConverter) {
+    public OrderServiceImpl(OrderDAO orderManagementDAO,TaskDAO taskManagementDAO, OrderConverter orderConverter, TaskConverter taskConverter) {
         OrderServiceImpl.orderManagementDAO = orderManagementDAO;
         OrderServiceImpl.taskManagementDAO = taskManagementDAO;
         OrderServiceImpl.orderConverter = orderConverter;
+        OrderServiceImpl.taskConverter = taskConverter;
     }
 
     @Override

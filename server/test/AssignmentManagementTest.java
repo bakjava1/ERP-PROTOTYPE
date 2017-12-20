@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.service.AssignmentService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.AssignmentServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateAssignment;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -43,6 +44,23 @@ public class AssignmentManagementTest {
         assignmentService = new AssignmentServiceImpl(assignmentDAO, assignmentConverter, validateAssignment);
 
         LOG.debug("assignment management test setup completed");
+    }
+
+    @Before
+    public void initDBConnection() {
+        dbConnection = DBUtil.getConnection();
+        assignmentDAO = new AssignmentDAOJDBC(dbConnection);
+
+        assignmentConverter = new AssignmentConverter();
+        assignmentService = new AssignmentServiceImpl(assignmentDAO, assignmentConverter, validateAssignment);
+    }
+
+    @Test (expected = PersistenceLayerException.class)
+    public void getAllAssignments_throws_Exception_in_persistenceLayer_withoutDB() throws PersistenceLayerException {
+        LOG.debug("testing get all open assignments for exception when DB is not available");
+
+        DBUtil.closeConnection();
+        assignmentDAO.getAllAssignments();
     }
 
     @Test

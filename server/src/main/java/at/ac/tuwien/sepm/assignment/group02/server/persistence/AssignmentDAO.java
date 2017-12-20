@@ -14,6 +14,8 @@ public interface AssignmentDAO {
 
     /**
      * 3.1.2 Alle nicht erledigten Aufgaben anfordern.
+     * @return list of all open assignments to be shown in the assignment overview for crane
+     * @throws PersistenceLayerException if the database is not available
      */
     List<Assignment> getAllAssignments() throws PersistenceLayerException;
 

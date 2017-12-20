@@ -14,6 +14,8 @@ public interface AssignmentController {
 
     /**
      * 3.1.2 Alle nicht erledigten Aufgaben anfordern.
+     * @return list of all open assignments to be shown in the assignment overview for crane
+     * @throws PersistenceLayerException if the server is not available
      */
     List<AssignmentDTO> getAllOpenAssignments() throws PersistenceLayerException;
 

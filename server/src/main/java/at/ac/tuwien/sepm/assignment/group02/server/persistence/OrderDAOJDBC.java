@@ -42,6 +42,7 @@ public class OrderDAOJDBC implements OrderDAO {
             int id = rs.getInt(1);
             List<Task> taskList = order.getTaskList();
             for(int i = 0; i < taskList.size();i++) {
+                LOG.debug("Creating Task for Order");
                 stmt = dbConnection.prepareStatement(insertTaskSentence);
                 stmt.setInt(1,id);
                 stmt.setString(2,taskList.get(i).getDescription());

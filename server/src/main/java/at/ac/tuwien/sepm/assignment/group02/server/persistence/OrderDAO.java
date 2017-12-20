@@ -9,11 +9,16 @@ public interface OrderDAO {
 
     /**
      * 1.1.2 Bestellung mit allen relevanten Daten + eindeutigem Schlüssel (id) erstellen.
+     * @param order order to be created
+     * @throws PersistenceLayerException if an error with the database occured (e.g. SQLException)
+     * @Invariant order got validated
      */
     void createOrder(Order order) throws PersistenceLayerException;
 
     /**
      * 1.2.2 Bestellung löschen.
+     * @param order order to be deleted
+     * @throws PersistenceLayerException if the database is not available
      */
     void deleteOrder(Order order) throws PersistenceLayerException;
 

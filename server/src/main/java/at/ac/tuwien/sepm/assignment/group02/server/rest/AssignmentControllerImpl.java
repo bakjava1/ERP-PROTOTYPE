@@ -46,6 +46,11 @@ public class AssignmentControllerImpl {
         }
     }
 
+    /**
+     * rest interface for getting all open assignments
+     * @return list of all open assignments for the assignment overview for crane
+     * @throws ResourceNotFoundException if the database is not available for the persistence layer
+     */
     @RequestMapping(value="/getAllOpenAssignments",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all open assignments")
     public List<AssignmentDTO> getAllOpenAssignments() throws ResourceNotFoundException {
