@@ -8,27 +8,37 @@ import java.util.List;
 public interface TaskController {
 
     /**
-     * 1.1.3 Aufträge erstellen
+     * create a new task
+     * @param task
+     * @throws PersistenceLayerException
      */
     void createTask(TaskDTO task) throws PersistenceLayerException;
 
     /**
-     * 1.2.1 Aufträge löschen
+     * delete a task
+     * @param task
+     * @throws PersistenceLayerException
      */
     void deleteTask(TaskDTO task) throws PersistenceLayerException;
 
     /**
-     * 2.2.3 & 3.2.6 Reserviertes Schnittholz dem Auftrag hinzufügen.
+     * adding a reserved lumber to the task
+     * @param task
+     * @throws PersistenceLayerException
      */
     void updateTask(TaskDTO task) throws PersistenceLayerException;
 
     /**
-     * 2.5.2 Eine tabellarische Übersicht der vorhandenen Aufträge anzeigen.
+     * showing an overview for the existing task
+     * @return a list of tasks
+     * @throws PersistenceLayerException
      */
     List<TaskDTO> getAllOpenTasks() throws PersistenceLayerException;
 
     /**
-     * 3.2.7 maybe not needed.
+     * get a task by its id
+     * @param task_id
+     * @throws PersistenceLayerException
      */
     void getTaskById(int task_id) throws PersistenceLayerException;
 

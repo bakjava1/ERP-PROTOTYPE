@@ -12,28 +12,35 @@ import java.util.List;
  * VALIDATION HAPPENS ON THIS LAYER
  */
 public interface TaskService {
+
     /**
-     * 1.1.3 Auftrag Erstellung mit allen relevanten Daten + eindeutigem Schlüssel (id)
-     * und Verbindung zu Bestellung (relationale Datenbank)
+     * create a task with all relevant data
      * @param task
+     * @throws InvalidInputException
+     * @throws ServiceLayerException
      */
     void createTask(Task task) throws InvalidInputException, ServiceLayerException;
 
     /**
-     * 1.2.1 Aufträge löschen
      * method deletes a given task (identified by its id)
      * @param task the TaskDTO to be deleted
-     * @throws ServiceLayerException in case the TaskDTO can't be deleted
+     * @throws ServiceLayerException
      */
     void deleteTask(Task task) throws ServiceLayerException;
 
-
     /**
-     *
-     * @return
+     * get all open task
+     * @return a list of all open tasks
+     * @throws ServiceLayerException
      */
     List<Task> getAllOpenTasks() throws ServiceLayerException;
 
+    /**
+     * validate task input
+     * @param toValidate
+     * @return a confirmation of validation
+     * @throws InvalidInputException
+     */
     Task validateTaskInput(UnvalidatedTask toValidate) throws InvalidInputException;
 
 }

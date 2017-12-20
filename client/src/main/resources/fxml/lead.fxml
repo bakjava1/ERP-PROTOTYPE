@@ -25,9 +25,9 @@
                            </font>
                         </Label>
                         <TextField fx:id="tf_description" alignment="TOP_CENTER" layoutX="325.0" layoutY="62.0" promptText="Bezeichnung" />
-                        <ChoiceBox fx:id="cb_finishing" layoutX="136.0" layoutY="107.0" prefHeight="27.0" prefWidth="81.0" />
-                        <ChoiceBox fx:id="cb_wood_type" layoutX="238.0" layoutY="107.0" prefHeight="27.0" prefWidth="66.0" />
-                        <ChoiceBox fx:id="cb_quality" layoutX="325.0" layoutY="107.0" prefHeight="27.0" prefWidth="71.0" />
+                        <ChoiceBox fx:id="cb_finishing" layoutX="13.0" layoutY="107.0" prefHeight="27.0" prefWidth="119.0" />
+                        <ChoiceBox fx:id="cb_wood_type" layoutX="141.0" layoutY="107.0" prefHeight="27.0" prefWidth="129.0" />
+                        <ChoiceBox fx:id="cb_quality" layoutX="279.0" layoutY="107.0" prefHeight="27.0" prefWidth="128.0" />
                         <TextField fx:id="tf_strength" alignment="TOP_CENTER" layoutX="417.0" layoutY="107.0" prefHeight="27.0" prefWidth="75.0" promptText="Stärke" />
                         <TextField fx:id="tf_width" alignment="TOP_CENTER" layoutX="511.0" layoutY="107.0" prefHeight="27.0" prefWidth="75.0" promptText="Breite" />
                         <TextField fx:id="tf_length" alignment="TOP_CENTER" layoutX="605.0" layoutY="107.0" prefHeight="27.0" prefWidth="75.0" promptText="Länge" />

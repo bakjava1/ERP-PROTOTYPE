@@ -8,21 +8,23 @@ import java.util.List;
 public interface AssignmentController {
 
     /**
-     * 2.4.4 Neue Aufgabe für Kranfahrer erstellen.
+     * create a new assignment for crane
+     * @param assignmentDTO
+     * @throws PersistenceLayerException
      */
     void createAssignment(AssignmentDTO assignmentDTO) throws PersistenceLayerException;
 
     /**
-     * 3.1.2 Alle nicht erledigten Aufgaben anfordern.
-     * @return list of all open assignments to be shown in the assignment overview for crane
-     * @throws PersistenceLayerException if the server is not available
+     * retrieve all not finished assignments
+     * @return a list of all open assignments
+     * @throws PersistenceLayerException
      */
     List<AssignmentDTO> getAllOpenAssignments() throws PersistenceLayerException;
 
     /**
-     * method marks an assignment as done
-     * @param assignmentDTO the assignmentDTO to be marked as done
-     * @throws PersistenceLayerException thrown in case the assignment couldn't be updated
+     * to mark an assignment as done
+     * @param assignmentDTO
+     * @throws PersistenceLayerException
      */
     void setDone(AssignmentDTO assignmentDTO) throws PersistenceLayerException;
 

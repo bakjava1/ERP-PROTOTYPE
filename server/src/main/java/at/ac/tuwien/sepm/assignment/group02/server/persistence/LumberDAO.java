@@ -14,27 +14,31 @@ public interface LumberDAO {
     Lumber readLumberById(int id) throws PersistenceLayerException;
 
     /**
-     * 3.2.4 SchnittholzDAO ins Lager hinzufügen.
+     * inserte a new lumber in lumber sotore
+     * @param lumber
+     * @throws PersistenceLayerException
      */
     void createLumber(Lumber lumber) throws PersistenceLayerException;
 
     /**
-     * 2.2.2  Schnittholz bearbeiten
+     * update an existing lumber
      * @param lumber
      * @throws PersistenceLayerException
      */
     void updateLumber(Lumber lumber) throws PersistenceLayerException;
 
     /**
-     * 1.4.3 Schnittholz   aus   dem   Schnittholzlager   entfernen.
+     * delete lumber from the lumber store.
      * @param lumber
      * @throws PersistenceLayerException
      */
     void deleteLumber(Lumber lumber) throws PersistenceLayerException;
 
     /**
-     * 2.1.2 & 2.1.3
-     * Returns a list of all lumber that matches the filter.
+     * retrieve all lumber from data base
+     * @param filter
+     * @return a list of lumbers
+     * @throws PersistenceLayerException
      */
     List<Lumber> getAllLumber(Lumber filter) throws PersistenceLayerException;
 

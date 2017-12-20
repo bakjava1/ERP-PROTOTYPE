@@ -6,9 +6,6 @@ import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerExcept
 /**
  * TimberDTO Management / RoundTimber Management
  *
- * CONVERSION HAPPENS ON THIS LAYER
- * VALIDATION HAPPENS ON THIS LAYER
- *
  * Service Layer for management of timber boxes on server
  */
 public interface TimberService {
@@ -24,6 +21,12 @@ public interface TimberService {
      */
     void addTimber(TimberDTO timberDTO) throws ServiceLayerException;
 
+    /**
+     * This method removes round timber from the round timber store.
+     * @param timberDTO timberDTO to be updated/removed
+     * @throws ServiceLayerException if timberDTO couldn't be updated/removed
+     */
+    void updateTimber(TimberDTO timberDTO) throws ServiceLayerException;
 
     /**
      * This method returns the number of boxes currently existing.

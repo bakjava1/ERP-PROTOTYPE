@@ -14,53 +14,50 @@ import java.util.List;
 public interface OrderService {
 
     /**
-     * 1.1 Bestellung anlegen
-     * 1.1.2 (rest/OrderController) Bestellung Erstellung mit allen relevanten Daten + eindeutigem Schlüssel (id)
-     * 1.1.3 (rest/TaskController) Aufträge Erstellung mit allen relevanten Daten + eindeutigem Schlüssel (id)
-     * und Verbindung zu Bestellung (relationale Datenbank)
-     * @param order order to be created
-     * @param tasks task to be created
-     * @throws InvalidInputException if input is invalid
-     * @throws ServiceLayerException if an error occured in the service layer
+     * create an order and a task with all theire relevant data
+     * @param order
+     * @param tasks
+     * @throws InvalidInputException
+     * @throws ServiceLayerException
      */
     void addOrder(Order order, List<Task> tasks) throws InvalidInputException, ServiceLayerException;
 
     /**
-     * 1.2 Bestellung löschen
-     * 1.2.1 (rest/TaskController) Verknüpfte Aufträge löschen
-     * 1.2.2 (rest/OrderController) Bestehende Bestellung löschen
-     * @param order to be deleted
-     * @throws InvalidInputException is actually never thrown (no wrong input possible)
-     * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
+     * delete an order
+     * @param order
+     * @throws InvalidInputException
+     * @throws ServiceLayerException
      */
     void deleteOrder(Order order) throws InvalidInputException, ServiceLayerException;
 
     /**
-     * 1.3 Übersicht Bestellungen
-     * @return
+     *  retrieve all orders from data base
+     * @return a list of all open orders
+     * @throws ServiceLayerException
      */
     List<Order> getAllOpen() throws ServiceLayerException;
 
     /**
-     * 1.4 Abrechnen von Bestellung
-     * 1.4.2 (rest/OrderController) Abzurechnende Bestellung bearbeiten (Abgerechnet Flag setzten, zusätzliche Werte speichern)
-     * 1.4.3 (rest/LumberController) Schnittholz aus dem Schnittholzlager entfernen.
+     * update an order, put flag and save additional values
      * @param order
+     * @throws InvalidInputException
+     * @throws ServiceLayerException
      */
     void closeOrder(Order order) throws InvalidInputException, ServiceLayerException;
 
     /**
-     * 1.5 Übersicht Rechnungen
-     * (rest/OrderController)
-     * @return
+     * retrieve all clossed orders
+     * @return a list of all closed orders
+     * @throws ServiceLayerException
      */
     List<Order> getAllClosed() throws ServiceLayerException;
 
     /**
-     * 1.6 Detailansicht Rechnungen
-     * (rest/OrderController)
+     * get an invoice by its id
      * @param order_id
-     * @return
+     * @return the invoice
+     * @throws InvalidInputException
+     * @throws ServiceLayerException
      */
     Order getReceiptById(int order_id) throws InvalidInputException, ServiceLayerException;
 

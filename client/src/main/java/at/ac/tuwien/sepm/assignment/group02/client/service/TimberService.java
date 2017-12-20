@@ -7,9 +7,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
 /**
  * TimberDTO Management / RoundTimber Management
  *
- * Conversion of timber to timberDTO on this layer
  * Validation of timber on this layer
- *
  * Service Layer for management of timber boxes on client
  */
 public interface TimberService {

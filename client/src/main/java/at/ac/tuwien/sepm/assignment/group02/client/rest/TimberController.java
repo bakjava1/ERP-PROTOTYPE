@@ -11,7 +11,7 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 public interface TimberController {
 
     /**
-     * This method adds new round timber to the timber store.
+     * This method adds new round timber to the round timber store.
      * @author Philipp Klein
      * @param timberDTO TimberDTO to update
      * @throws PersistenceLayerException if error in server or no connection to server
@@ -26,7 +26,7 @@ public interface TimberController {
     void deleteTimber(TimberDTO timberDTO) throws PersistenceLayerException;
 
     /**
-     *
+     * get a timber by its id
      * @param timber_id id of timber
      * @return timberDTO with {@code timber_id}
      * @throws PersistenceLayerException if error in server or no connection to server

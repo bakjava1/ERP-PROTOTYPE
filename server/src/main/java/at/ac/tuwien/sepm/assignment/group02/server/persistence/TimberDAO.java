@@ -18,6 +18,12 @@ public interface TimberDAO {
      */
     void createTimber(Timber timber) throws PersistenceLayerException;
 
+    /**
+     * This method updates a round timber record.
+     * @param timber the updated round timber entity
+     * @throws PersistenceLayerException
+     */
+    void updateTimber(Timber timber) throws PersistenceLayerException;
 
     /**
      * This method returns the number of boxes currently existing in the database.
