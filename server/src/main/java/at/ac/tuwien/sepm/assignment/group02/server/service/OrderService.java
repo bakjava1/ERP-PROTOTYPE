@@ -39,5 +39,11 @@ public interface OrderService {
      */
     OrderDTO getOrderById(int order_id) throws ServiceLayerException;
 
+    /**
+     * takes an orderDTO converts it into an order and invoices it
+     * @author Philipp Klein
+     * @param orderDTO orderDTO that will be invoiced
+     * @throws ServiceLayerException if error when trying to invoice order
+     */
     void invoiceOrder(OrderDTO orderDTO) throws ServiceLayerException;
 }
