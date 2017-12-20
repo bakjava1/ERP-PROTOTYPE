@@ -54,7 +54,7 @@ public class TaskControllerImpl {
         }
     }
 
-    @RequestMapping(value="/deleteTask", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/deleteTask", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "delete task")
     public void deleteTask(TaskDTO task) throws ResourceNotFoundException {
         LOG.debug("Deleting task " + task.getId());
