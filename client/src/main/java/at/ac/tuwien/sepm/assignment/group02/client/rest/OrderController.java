@@ -9,6 +9,9 @@ public interface OrderController {
 
     /**
      * 1.1.2 Bestellung mit allen relevanten Daten + eindeutigem Schlüssel (id) erstellen.
+     * @param orderDTO order to be created
+     * @throws PersistenceLayerException if an error at the server occurs or if the server is unreachable
+     * @Invariant order got validated
      */
     void createOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 

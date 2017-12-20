@@ -18,7 +18,10 @@ public interface OrderService {
      * 1.1.2 (rest/OrderController) Bestellung Erstellung mit allen relevanten Daten + eindeutigem Schlüssel (id)
      * 1.1.3 (rest/TaskController) Aufträge Erstellung mit allen relevanten Daten + eindeutigem Schlüssel (id)
      * und Verbindung zu Bestellung (relationale Datenbank)
-     * @param order
+     * @param order order to be created
+     * @param tasks task to be created
+     * @throws InvalidInputException if input is invalid
+     * @throws ServiceLayerException if an error occured in the service layer
      */
     void addOrder(Order order, List<Task> tasks) throws InvalidInputException, ServiceLayerException;
 
