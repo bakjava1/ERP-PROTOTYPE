@@ -149,7 +149,12 @@ public class OrderServiceImpl implements OrderService {
         selectedOrder.setTaxAmount((int)taxAmount);
         selectedOrder.setDeliveryDate(new Date());
         selectedOrder.setInvoiceDate(new Date());
+
+
+        validator.inputValidationInvoice(selectedOrder);
+
         OrderDTO orderDTO = orderConverter.convertPlainObjectToRestDTO(selectedOrder);
+
 
         try {
             orderController.invoiceOrder(orderDTO);

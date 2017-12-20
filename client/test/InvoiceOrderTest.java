@@ -1,21 +1,32 @@
 import at.ac.tuwien.sepm.assignment.group02.client.converter.OrderConverter;
 import at.ac.tuwien.sepm.assignment.group02.client.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderServiceImpl;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InvoiceOrderTest {
 
@@ -26,12 +37,20 @@ public class InvoiceOrderTest {
     private static Order orderNetPriceIsNegative = new Order();
     private static Order orderCustomerError = new Order();
 
+    private static OrderDTO orderDTONoError = new OrderDTO();
+
+    private static RestTemplate restTemplate;
+    private static OrderController orderController;
+
     private static OrderController orderControllerMock = Mockito.mock(OrderControllerImpl.class);
     private static OrderService orderService = new OrderServiceImpl(orderControllerMock, new OrderConverter(), new TaskConverter());
 
     @BeforeClass
     public static void setup(){
         LOG.debug("invoice order setup initiated");
+
+        restTemplate = Mockito.mock(RestTemplate.class);
+        orderController = new OrderControllerImpl(restTemplate);
 
         orderNoError.setPaid(false);
         orderNoError.setCustomerName("Max Mustermmann");
@@ -54,6 +73,19 @@ public class InvoiceOrderTest {
         orderNetPriceIsNegative.setID(1);
         orderNetPriceIsNegative.setNetAmount(-2);
 
+        orderDTONoError.setID(1);
+        orderDTONoError.setTaxAmount(12);
+        orderDTONoError.setNetAmount(111);
+        orderDTONoError.setGrossAmount(123);
+        orderDTONoError.setInvoiceDate(new java.util.Date());
+        orderDTONoError.setDeliveryDate(new java.util.Date());
+        orderDTONoError.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
+        orderDTONoError.setCustomerName("Max Mustermann");
+        orderDTONoError.setCustomerUID("123456");
+        orderDTONoError.setOrderDate(new java.util.Date());
+        orderDTONoError.setPaid(false);
+        orderDTONoError.setQuantity(12);
+        orderDTONoError.setTaskList(new ArrayList<TaskDTO>());
 
         orderAlreadyInvoiced.setPaid(true);
 
@@ -79,6 +111,31 @@ public class InvoiceOrderTest {
         orderService.invoiceOrder(orderNoError);
     }
 
+    @Test
+    public void testInvoiceOrderServicePositive() throws InvalidInputException, ServiceLayerException {
+        orderService.invoiceOrder(orderNoError);
+    }
+
+    @Test(expected = PersistenceLayerException.class)
+    public void testInvoiceOrderPersistenceServerIsDown() throws PersistenceLayerException{
+        Mockito.doThrow(new HttpServerErrorException(HttpStatus.BAD_GATEWAY)).when(restTemplate).put("http://localhost:8080/invoiceOrder", orderDTONoError, OrderDTO.class);
+        orderController.invoiceOrder(orderDTONoError);
+        Mockito.verify(restTemplate, Mockito.times(1)).put("http://localhost:8080/invoiceOrder", orderDTONoError, OrderDTO.class);
+    }
+
+    @Test(expected = PersistenceLayerException.class)
+    public void testInvoiceOrderPersistenceRestClientException() throws PersistenceLayerException{
+        Mockito.doThrow(RestClientException.class).when(restTemplate).put("http://localhost:8080/invoiceOrder", orderDTONoError, OrderDTO.class);
+        orderController.invoiceOrder(orderDTONoError);
+        Mockito.verify(restTemplate, Mockito.times(1)).put("http://localhost:8080/invoiceOrder", orderDTONoError, OrderDTO.class);
+    }
+
+    @Test
+    public void testInvoiceOrderPersistencePositive() throws PersistenceLayerException{
+        Mockito.doNothing().when(restTemplate).put("http://localhost:8080/invoiceOrder", orderDTONoError, OrderDTO.class);
+        orderController.invoiceOrder(orderDTONoError);
+        //Mockito.verify(restTemplate, Mockito.times(1)).put("http://localhost:8080/invoiceOrder", orderDTONoError, OrderDTO.class);
+    }
 
     @AfterClass
     public static void teardown(){

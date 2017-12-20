@@ -5,12 +5,14 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerExcept
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TimberController;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberServiceImpl;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateTimber;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
 
@@ -23,7 +25,7 @@ public class AddTimberTest {
     private static Timber timberAmountError;
     private static Timber timberNoError;
     private static TimberController timberControllerMock = Mockito.mock(TimberController.class);
-    private static TimberService timberService = new TimberServiceImpl(timberControllerMock, new TimberConverter());
+    private static TimberService timberService = new TimberServiceImpl(timberControllerMock, new TimberConverter(), new ValidateTimber());
 
     @BeforeClass
     public static void setup(){
@@ -47,7 +49,7 @@ public class AddTimberTest {
     }
 
 
-    @Test(expected = ServiceLayerException.class)
+    @Test(expected = InvalidInputException.class)
     public void testAddTimberServiceAmountNegative() throws InvalidInputException, ServiceLayerException {
 
         LOG.debug("add timber test with negative amount");
@@ -57,7 +59,7 @@ public class AddTimberTest {
 
     }
 
-    @Test(expected=ServiceLayerException.class)
+    @Test(expected=InvalidInputException.class)
     public void testGetNumberOfBoxesNegative() throws ServiceLayerException, InvalidInputException {
 
         LOG.debug("get number of boxes test with negative id");
@@ -66,7 +68,7 @@ public class AddTimberTest {
         timberService.addTimber(timberBoxErrorNegative);
     }
 
-    @Test(expected=ServiceLayerException.class)
+    @Test(expected=InvalidInputException.class)
     public void testGetNumberOfBoxesWrongID() throws ServiceLayerException, InvalidInputException {
 
         LOG.debug("get number of boxes test with id that is higher than number of boxes");
