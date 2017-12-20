@@ -6,24 +6,22 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateAssignmentDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.Mockito.*;
 
-public class AssignmentServiceImplTest {
+// @RunWith attach a runner to initialize the test data
+@RunWith(MockitoJUnitRunner.class)
+public class AssignmentClientServiceImplTest_setDone {
 
     @Mock
-    AssignmentController assignmentController;
+    private AssignmentController assignmentController;
 
     @Mock
-    ValidateAssignmentDTO validateAssignmentDTO;
-
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
+    private ValidateAssignmentDTO validateAssignmentDTO;
 
 
     /**
@@ -36,12 +34,17 @@ public class AssignmentServiceImplTest {
 
     @Test
     public void testSetDone_works() throws Exception {
+
         AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
 
         AssignmentDTO assignmentDTO = new AssignmentDTO();
         assignmentDTO.setDone(false);
+
         assignmentService.setDone(assignmentDTO);
+
+        verify(validateAssignmentDTO, times(1)).isValid(assignmentDTO);
         verify(assignmentController, times(1)).setDone(assignmentDTO);
+
     }
 
     @Test(expected = InvalidInputException.class)
@@ -53,8 +56,6 @@ public class AssignmentServiceImplTest {
         doThrow(InvalidInputException.class).when(validateAssignmentDTO).isValid(assignmentDTO); // throws InvalidInputException
 
         assignmentService.setDone(assignmentDTO);
-
-        verify(assignmentController, never()).setDone(assignmentDTO);
     }
 
     @Test(expected = ServiceLayerException.class)
@@ -64,7 +65,7 @@ public class AssignmentServiceImplTest {
         AssignmentDTO assignmentDTO = new AssignmentDTO();
         assignmentDTO.setDone(false);
         doThrow(new PersistenceLayerException("server error")).when(assignmentController).setDone(assignmentDTO);
-        verify(assignmentController, never()).setDone(assignmentDTO);
+
         assignmentService.setDone(assignmentDTO);
     }
 
