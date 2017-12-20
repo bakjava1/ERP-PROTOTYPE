@@ -65,9 +65,12 @@ public interface OrderService {
     Order getReceiptById(int order_id) throws InvalidInputException, ServiceLayerException;
 
     /**
-     * 1.4.2 Erstellen der benoetigten Daten um Bestellung abzurechnen
-     * @param selectedOrder
-     * @throws InvalidInputException
+     * takes an orders and invoices it, calculates the necessary prices and removes reserved lumber
+     * converts order to an orderDTO
+     * @author Philipp Klein
+     * @param selectedOrder order that will be invoiced
+     * @throws InvalidInputException if selectedOrder is not initialized correctly
+     * @throws ServiceLayerException if error when trying to execute command
      */
     void invoiceOrder(Order selectedOrder) throws InvalidInputException, ServiceLayerException;
 }

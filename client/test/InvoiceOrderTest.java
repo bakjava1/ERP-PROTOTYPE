@@ -64,7 +64,6 @@ public class InvoiceOrderTest {
         orderService.invoiceOrder(orderNetPriceIsNegative);
     }
 
-    @Ignore
     @Test(expected = InvalidInputException.class)
     public void testInvoiceOrderCustomerError() throws InvalidInputException, ServiceLayerException {
         orderService.invoiceOrder(orderCustomerError);
@@ -75,7 +74,7 @@ public class InvoiceOrderTest {
         orderService.invoiceOrder(orderAlreadyInvoiced);
     }
 
-    @Test
+    @Test(expected = InvalidInputException.class)
     public void testInvoiceOrderNoErrorServiceLayer() throws InvalidInputException, ServiceLayerException {
         orderService.invoiceOrder(orderNoError);
     }

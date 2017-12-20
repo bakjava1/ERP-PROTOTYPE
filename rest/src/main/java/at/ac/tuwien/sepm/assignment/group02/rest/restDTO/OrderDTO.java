@@ -10,7 +10,7 @@ public class OrderDTO {
 
     private int id;
     private int invoiceNumber;
-    private String orderDate;
+    private Date orderDate;
     private Date deliveryDate;
     private Date invoiceDate;
     private String customerName;
@@ -33,7 +33,7 @@ public class OrderDTO {
         this.invoiceNumber = this.id;
     }
 
-    public OrderDTO(int id, String orderDate) {
+    public OrderDTO(int id, Date orderDate) {
         this.id = id;
         this.invoiceNumber = this.id;
         this.orderDate = orderDate;
@@ -48,11 +48,11 @@ public class OrderDTO {
         return this.id;
     }
 
-    public String getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(String orderDate) {
+    public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 

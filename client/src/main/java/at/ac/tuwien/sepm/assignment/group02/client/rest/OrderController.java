@@ -44,5 +44,11 @@ public interface OrderController {
      */
     OrderDTO getOrderById(int order_id) throws PersistenceLayerException;
 
+    /**
+     * takes an ordersDTO and sends it to the server
+     * @author Philipp Klein
+     * @param orderDTO orderDTO that will be invoiced
+     * @throws PersistenceLayerException if selectedOrder cannot be stored because of error in server, or no connection to server
+     */
     void invoiceOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 }

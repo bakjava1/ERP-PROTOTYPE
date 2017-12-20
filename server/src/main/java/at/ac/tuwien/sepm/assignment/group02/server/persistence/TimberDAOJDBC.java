@@ -52,16 +52,10 @@ public class TimberDAOJDBC implements TimberDAO{
         } catch(SQLException e) {
             LOG.error("SQL Exception: " + e.getMessage());
             throw new PersistenceLayerException("Database Error");
-
         }
         finally {
             closeStatement();
         }
-
-    }
-
-    @Override
-    public void updateTimber(Timber timber){
 
     }
 
@@ -87,8 +81,10 @@ public class TimberDAOJDBC implements TimberDAO{
 
     private void closeStatement() throws PersistenceLayerException {
         try {
-            stmt.close();
-            rs.close();
+            if(stmt != null)
+                stmt.close();
+            if(rs!=null)
+                rs.close();
         } catch (SQLException e) {
             LOG.error("SQL Exception: " + e.getMessage());
             throw new PersistenceLayerException("Database Error");

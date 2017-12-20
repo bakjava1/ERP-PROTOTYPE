@@ -181,13 +181,20 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public void invoiceOrder(Order order) throws PersistenceLayerException {
-        String updateSentence = "UPDATE ORDERS SET isPaidFlag=? WHERE ID=?";
+        String updateSentence = "UPDATE ORDERS SET isPaidFlag=?, delivery_date=?, invoice_date=?, gross_amount=?, net_amount=?, tax_amount=? WHERE ID=?";
+
+        //TODO prices get not written because not clear how they are working now
 
         try {
             PreparedStatement stmt = dbConnection.prepareStatement(updateSentence);
-            //set to ispaid to true
+            //set necessary fields in order
             stmt.setInt(1, 1);
-            stmt.setInt(2, order.getID());
+            stmt.setTimestamp(2, new Timestamp(order.getDeliveryDate().getTime()));
+            stmt.setTimestamp(3,  new Timestamp(order.getInvoiceDate().getTime()));
+            stmt.setInt(4, order.getGrossAmount());
+            stmt.setInt(5, order.getNetAmount());
+            stmt.setInt(6, order.getTaxAmount());
+            stmt.setInt(7, order.getID());
             stmt.execute();
 
             stmt.close();
