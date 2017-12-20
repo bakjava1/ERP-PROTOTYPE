@@ -323,21 +323,16 @@ public class OfficeFXML {
 
     @FXML
     public void addTimber(ActionEvent actionEvent){
-        //TODO catch exception (InvalidInputException by Lucia)
+
         if(tf_timber_amount.getText().isEmpty() || cb_timber_box.getSelectionModel().getSelectedIndex()==-1){
             LOG.error("No Input");
-
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Input Error");
-            alert.setHeaderText("No Input");
-            alert.setContentText("Please use only valid input!");
-            alert.showAndWait();
+            alertBuilder.showErrorAlert("Fehler bei Eingabe", "Eigabe unvollständig.", "Bitte nur gültige Eingaben benützen!");
         }
         else{
-            int tes = cb_timber_box.getSelectionModel().getSelectedIndex();
             Timber timber = new Timber(cb_timber_box.getSelectionModel().getSelectedIndex()+1, Integer.parseInt(tf_timber_amount.getText()));
             try {
-                boolean addTimberConfirmation = alertBuilder.showConfirmationAlert("Rundholz hinzufügen", "Wollen Sie " + timber.getAmount() + " Stück Rundholz zu Box " + timber.getBox_id() + " hinzufügen?", "");
+                boolean addTimberConfirmation = alertBuilder.showConfirmationAlert("Rundholz hinzufügen", "Wollen Sie " +
+                        timber.getAmount() + " Stück Rundholz zu Box " + timber.getBox_id() + " hinzufügen?", "");
                 if(addTimberConfirmation){
                     timberService.addTimber(timber);
                     tf_timber_amount.setText("");

@@ -1,10 +1,12 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TimberController;
 import at.ac.tuwien.sepm.assignment.group02.client.converter.TimberConverter;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateInput;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,28 +22,27 @@ public class TimberServiceImpl implements TimberService{
 
     private static TimberController timberController;
     private static TimberConverter timberConverter;
+    private static ValidateInput<Timber> timberValidator;
 
     @Autowired
-    public TimberServiceImpl(TimberController timberController, TimberConverter timberConverter){
+    public TimberServiceImpl(TimberController timberController, TimberConverter timberConverter, ValidateInput<Timber> timberValidator){
         TimberServiceImpl.timberController = timberController;
         TimberServiceImpl.timberConverter = timberConverter;
+        TimberServiceImpl.timberValidator = timberValidator;
     }
 
     @Override
-    public void addTimber(Timber timber) throws ServiceLayerException{
+    public void addTimber(Timber timber) throws ServiceLayerException, InvalidInputException{
 
         try {
-            if(timber.getBox_id()>timberController.getNumberOfBoxes() || timber.getBox_id()<0)
-                throw new ServiceLayerException("error finding box with given id");
-
-            if(timber.getAmount()<0)
-                throw new ServiceLayerException("error cannot add negative amount of timber");
+            if(timber.getBox_id()>timberController.getNumberOfBoxes())
+                throw new InvalidInputException("Error in Timber Box: Box ID is bigger than number of boxes");
+            timberValidator.isValid(timber);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
             throw new ServiceLayerException(e.getMessage());
         }
 
-        TimberConverter timberConverter = new TimberConverter();
         TimberDTO timberDTO = timberConverter.convertPlainObjectToRestDTO(timber);
         try {
             timberController.createTimber(timberDTO);
@@ -56,8 +57,8 @@ public class TimberServiceImpl implements TimberService{
         try {
             return timberController.getNumberOfBoxes();
         } catch (PersistenceLayerException e) {
-            LOG.warn(e.getMessage());
+            LOG.error(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
-        return 0;
     }
 }
