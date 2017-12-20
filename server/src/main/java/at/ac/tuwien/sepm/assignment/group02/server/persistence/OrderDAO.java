@@ -8,36 +8,52 @@ import java.util.List;
 public interface OrderDAO {
 
     /**
-     * 1.1.2 Bestellung mit allen relevanten Daten + eindeutigem Schlüssel (id) erstellen.
+     * create an order and a task with all theire relevant data
+     * @param order
+     * @throws PersistenceLayerException
      */
     void createOrder(Order order) throws PersistenceLayerException;
 
     /**
-     * 1.2.2 Bestellung löschen.
+     * delete an existing order from the data base
+     * @param order
+     * @throws PersistenceLayerException
      */
     void deleteOrder(Order order) throws PersistenceLayerException;
 
     /**
-     * 1.3.1 Alle offenen Bestellungen anfordern.
-     * @return
+     * retrieve all open orders
+     * @return a list of all open orders
+     * @throws PersistenceLayerException
      */
     List<Order> getAllOpen() throws PersistenceLayerException;
 
     /**
-     * 1.4.2 Abzurechnende Bestellung bearbeiten (Abgerechnet Flag setzten, zusätzliche Werte speichern)
+     * update an existing order, put flag and save additional values
+     * @param order
+     * @throws PersistenceLayerException
      */
     void updateOrder(Order order) throws PersistenceLayerException;
 
     /**
-     * 1.5.1 Alle geschlossenen Bestellungen == Rechnugen anfordern.
-     * @return
+     * all closed orders equal request of invoice
+     * @return a lis of all closed orders
+     * @throws PersistenceLayerException
      */
     List<Order> getAllClosed() throws PersistenceLayerException;
 
     /**
-     * 1.6.2 Rechnungsdetails (Geschlossene Bestellung) anfordern.
+     * get order by its id
+     * @param order_id
+     * @return an order with its id
+     * @throws PersistenceLayerException
      */
     Order getOrderById(int order_id) throws PersistenceLayerException;
 
+    /**
+     * get an invoice of oder
+     * @param order
+     * @throws PersistenceLayerException
+     */
     void invoiceOrder(Order order) throws PersistenceLayerException;
 }

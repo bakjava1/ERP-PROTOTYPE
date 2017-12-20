@@ -8,19 +8,31 @@ import java.util.List;
 public interface AssignmentDAO {
 
     /**
-     * 2.4.4 Neue Aufgabe für Kranfahrer erstellen.
+     * insert a new assignment for cran
+     * @param assignment
+     * @throws PersistenceLayerException
      */
     void createAssignment(Assignment assignment) throws PersistenceLayerException;
 
     /**
-     * 3.1.2 Alle nicht erledigten Aufgaben anfordern.
+     * retrieve all not done assignments
+     * @return a list of all assignments
+     * @throws PersistenceLayerException
      */
     List<Assignment> getAllAssignments() throws PersistenceLayerException;
 
     /**
-     * 3.2.2 Aufgabe als erledigt markieren.
+     * update an assignment and mark it as a done
+     * @param assignment
+     * @throws PersistenceLayerException
      */
     void updateAssignment(Assignment assignment) throws PersistenceLayerException;
+
+    /**
+     * delete an assignment
+     * @param id
+     * @throws PersistenceLayerException
+     */
     void deleteAssignment(int id) throws PersistenceLayerException;
 
 }

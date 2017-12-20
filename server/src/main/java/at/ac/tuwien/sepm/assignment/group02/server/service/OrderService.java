@@ -8,36 +8,52 @@ import java.util.List;
 public interface OrderService {
 
     /**
-     * 1.1.2 Bestellung mit allen relevanten Daten + eindeutigem Schlüssel (id) erstellen.
+     * create an order and a task with all theire relevant data
+     * @param orderDTO
+     * @throws ServiceLayerException
      */
     void createOrder(OrderDTO orderDTO) throws ServiceLayerException;
 
     /**
-     * 1.2.2 Bestellung löschen.
+     * delete an order
+     * @param orderDTO
+     * @throws ServiceLayerException
      */
     void deleteOrder(OrderDTO orderDTO) throws ServiceLayerException;
 
     /**
-     * 1.3.1 Alle offenen Bestellungen anfordern.
-     * @return
+     * retrieve all orders from data base
+     * @return a list of all open orders
+     * @throws ServiceLayerException
      */
     List<OrderDTO> getAllOpen() throws ServiceLayerException;
 
     /**
-     * 1.4.2 Abzurechnende Bestellung bearbeiten (Abgerechnet Flag setzten, zusätzliche Werte speichern)
+     * update an order, put flag and save additional values
+     * @param orderDTO
+     * @throws ServiceLayerException
      */
     void updateOrder(OrderDTO orderDTO) throws ServiceLayerException;
 
     /**
-     * 1.5.1 Alle geschlossenen Bestellungen == Rechnugen anfordern.
-     * @return
+     * retrieve all closed orders equal
+     * @return a list of all closed orders
+     * @throws ServiceLayerException
      */
     List<OrderDTO> getAllClosed() throws ServiceLayerException;
 
     /**
-     * 1.6.2 Rechnungsdetails (Geschlossene Bestellung) anfordern.
+     * get an order by its id
+     * @param order_id
+     * @return an order with its id
+     * @throws ServiceLayerException
      */
     OrderDTO getOrderById(int order_id) throws ServiceLayerException;
 
+    /**
+     * get an invoice for the order
+     * @param orderDTO
+     * @throws ServiceLayerException
+     */
     void invoiceOrder(OrderDTO orderDTO) throws ServiceLayerException;
 }

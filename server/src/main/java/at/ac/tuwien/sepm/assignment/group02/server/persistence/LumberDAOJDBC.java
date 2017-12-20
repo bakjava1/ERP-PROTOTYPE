@@ -218,8 +218,7 @@ public class LumberDAOJDBC implements LumberDAO {
             e.printStackTrace();
         }
         String selectStatement = "SELECT QUANTITY,RESERVED_QUANTITY FROM LUMBER WHERE ID = ?";
-        String updateLumber="UPDATE Lumber SET lager=?, description=?, finishing=?, wood_type=?, quality=?," +
-                "size=?, length=?, width=?, quantity=?, reserved_quantity=?, delivered_quantity=?,all_reserved=?,all_delivered=? WHERE ID=?";
+        String updateLumber=    "UPDATE Lumber SET quantity=?, reserved_quantity=? WHERE ID=?";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(updateLumber);
@@ -254,21 +253,7 @@ public class LumberDAOJDBC implements LumberDAO {
             ps.setInt(2,currentReservedQuantity);
             ps.setInt(3,lumber.getId());
             ps.executeUpdate();
-           /* ps.setInt(1,lumber.getId());
-            ps.setString(2,lumber.getLager());
-            ps.setString(3,lumber.getDescription());
-            ps.setString(4, lumber.getFinishing());
-            ps.setString(5, lumber.getWood_type());
-            ps.setString(6, lumber.getQuality());
-            ps.setInt(7, lumber.getSize());
-            ps.setInt(8, lumber.getLength());
-            ps.setInt(9, lumber.getWidth());
-            ps.setInt(10, lumber.getQuantity());
-            ps.setInt(11, lumber.getReserved_quantity());
-            ps.setInt(12, lumber.getDelivered_quantity());
-            ps.setBoolean(13, lumber.isAll_reserved());
-            ps.setBoolean(14, lumber.isAll_delivered());
-            ps.executeUpdate();*/
+
             dbConnection.commit();
             LOG.debug("Successfuly updated lumber in the table Lumber {}", lumber);
             ps.close();
@@ -293,7 +278,7 @@ public class LumberDAOJDBC implements LumberDAO {
 
 
         String selectStatement = "SELECT QUANTITY,RESERVED_QUANTITY FROM LUMBER WHERE ID = ?";
-        String deleteLumber= "UPDATE LUMBER SET QUANTITY = ? , RESERVED_QUANTITY = ? WHERE ID = ?";
+        String deleteLumber=    "UPDATE LUMBER SET QUANTITY = ? , RESERVED_QUANTITY = ? WHERE ID = ?";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(selectStatement);

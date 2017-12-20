@@ -144,7 +144,6 @@ public class OfficeFXML {
         this.costBenefitService = costBenefitService;
     }
 
-
     @FXML
     void initialize() {
         table_openOrder.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -154,7 +153,6 @@ public class OfficeFXML {
         col_taskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
         col_amount.setCellValueFactory(new PropertyValueFactory("quantity"));
         col_grossSum.setCellValueFactory(new PropertyValueFactory("grossAmount"));
-
 
 
         table_bill.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -317,8 +315,6 @@ public class OfficeFXML {
         }
 
     }
-
-
 
 
     @FXML
