@@ -57,6 +57,52 @@ public class Validator {
             LOG.error("Error at Customer UID: " + e.getMessage());
             throw new InvalidInputException("Error at Customer UID: " + e.getMessage());
         }
+        //TODO maybe not working anymore --> if statement is new
+        if(toValidate.getTaskList() == null || toValidate.getTaskList().size()==0){
+            throw new InvalidInputException("Error at Tasks for Order: No Tasks");
+        }
+    }
+
+    public void inputValidationTaskOnOrder(Task toValidate) throws InvalidInputException {
+        try {
+            validateText(toValidate.getDescription());
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Task Description: " + e.getMessage());
+            throw new InvalidInputException("Error at Task Description: " + e.getMessage());
+        }
+        try {
+            validateText(toValidate.getFinishing());
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Task Finishing: " + e.getMessage());
+            throw new InvalidInputException("Error at Task Finishing: " + e.getMessage());
+        }
+        try {
+            validateText(toValidate.getWood_type());
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Task Wood Type: " + e.getMessage());
+            throw new InvalidInputException("Error at Task Wood Type: " + e.getMessage());
+        }
+        try {
+            validateText(toValidate.getQuality());
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Task Quality: " + e.getMessage());
+            throw new InvalidInputException("Error at Task Quality: " + e.getMessage());
+        }
+        if(toValidate.getSize()<=0){LOG.error("Error at Task Size: Size <= 0");
+            throw new InvalidInputException("Error at Task Size: Size <= 0");
+        }
+        if(toValidate.getWidth()<=0){LOG.error("Error at Task Width: Width <= 0");
+            throw new InvalidInputException("Error at Task Width: Width <= 0");
+        }
+        if(toValidate.getLength()<=0){LOG.error("Error at Task Length: Length <= 0");
+            throw new InvalidInputException("Error at Task Length: Length <= 0");
+        }
+        if(toValidate.getQuantity()<=0){LOG.error("Error at Task Quantity: Quantity <= 0");
+            throw new InvalidInputException("Error at Task Quantity: Quantity <= 0");
+        }
+        if(toValidate.getPrice()<=0){LOG.error("Error at Task Price: Price <= 0");
+            throw new InvalidInputException("Error at Task Price: Price <= 0");
+        }
     }
 
     public Task inputValidationTask(UnvalidatedTask toValidate) throws InvalidInputException {

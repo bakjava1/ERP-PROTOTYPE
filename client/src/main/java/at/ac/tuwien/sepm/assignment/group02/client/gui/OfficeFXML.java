@@ -536,16 +536,9 @@ public class OfficeFXML {
             updateBillTable();
         } catch (InvalidInputException e) {
             //TODO use alertBuilder
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Fehler beim Abrechnen!");
-            alert.setHeaderText("Bestellung konnte nicht erfolgreich abgerechnet werden. Bitte versuchen Sie es erneut!");
-            alert.setContentText("Grund: " + e.getMessage());
-            alert.showAndWait();
+            alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Bestellung konnte nicht erfolgreich abgerechnet werden!", e.getMessage());
         } catch (ServiceLayerException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            //TODO alertBuilder
-            alert.setTitle("Fehler beim Abrechnen!");
-            alert.showAndWait();
+            alertBuilder.showErrorAlert("Fehler beim Abrechnen!", "", "");
         }
 
         updateTable();

@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
@@ -127,29 +128,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void invoiceOrder(Order selectedOrder) throws InvalidInputException, ServiceLayerException {
 
-        if(selectedOrder==null){
-            throw new InvalidInputException("Selected Order is null");
-        }
+        validator.inputValidationOrder(selectedOrder);
+
         if(selectedOrder.isPaid()){
             throw new InvalidInputException("Order already invoiced");
         }
 
-        //check if customer information is missing //TODO throws null-pointer exception because table gets not initialized correctly
-        if(selectedOrder.getCustomerName()== null || selectedOrder.getCustomerAddress()==null || selectedOrder.getCustomerUID()==null){
-            throw new InvalidInputException("Customer information is null for selected order");
-        }
-        if(selectedOrder.getCustomerName().isEmpty() || selectedOrder.getCustomerAddress().isEmpty() || selectedOrder.getCustomerUID().isEmpty()){
-            throw new InvalidInputException("Customer information missing for selected order");
-        }
-        if(selectedOrder.getTaskList() == null || selectedOrder.getTaskList().isEmpty()){
-            throw new InvalidInputException("no tasks for this order");
-        }
-
         int netSumTasks = 0;
         for(Task task : selectedOrder.getTaskList()){
-            if(task.getPrice() <= 0){
-                throw new InvalidInputException("price for a task is negative or zero");
-            }
+            validator.inputValidationTaskOnOrder(task);
             netSumTasks += task.getPrice();
         }
 
