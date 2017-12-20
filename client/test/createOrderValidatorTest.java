@@ -40,6 +40,17 @@ public class createOrderValidatorTest {
     }
 
     @Test(expected = InvalidInputException.class)
+    public void testOrderWithTooLongCustomerNameFailedValidation() throws InvalidInputException {
+        String tooLong = "";
+        for(int i = 0; i < 55;i++)
+            tooLong += "a";
+        order.setCustomerAddress(tooLong);
+        order.setCustomerAddress("b");
+        order.setCustomerUID("c");
+        validator.inputValidationOrder(order);
+    }
+
+    @Test(expected = InvalidInputException.class)
     public void testOrderWithNoCustomerAddressFailedValidation() throws InvalidInputException{
         order.setCustomerName("test");
         order.setCustomerUID("test");
@@ -55,6 +66,17 @@ public class createOrderValidatorTest {
     }
 
     @Test(expected = InvalidInputException.class)
+    public void testOrderWithTooLongCustomerAddressFailedValidation() throws InvalidInputException {
+        String tooLong = "";
+        for(int i = 0; i < 55;i++)
+            tooLong += "a";
+        order.setCustomerAddress("a");
+        order.setCustomerAddress(tooLong);
+        order.setCustomerUID("c");
+        validator.inputValidationOrder(order);
+    }
+
+    @Test(expected = InvalidInputException.class)
     public void testOrderWithNoCustomerUIDFailedValidation() throws InvalidInputException{
         order.setCustomerAddress("test");
         order.setCustomerName("test");
@@ -66,6 +88,17 @@ public class createOrderValidatorTest {
         order.setCustomerName("test");
         order.setCustomerAddress("test");
         order.setCustomerUID("");
+        validator.inputValidationOrder(order);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testOrderWithTooLongCustomerUIDFailedValidation() throws InvalidInputException {
+        String tooLong = "";
+        for(int i = 0; i < 15;i++)
+            tooLong += "a";
+        order.setCustomerAddress("a");
+        order.setCustomerAddress("b");
+        order.setCustomerUID(tooLong);
         validator.inputValidationOrder(order);
     }
 

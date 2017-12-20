@@ -1,5 +1,6 @@
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.OrderConverter;
+import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
@@ -44,6 +45,7 @@ public class OrderManagementTest {
     private static OrderControllerImpl orderController;
     private static OrderService orderService;
     private static OrderConverter orderConverter;
+    private static TaskConverter taskConverter;
 
     @BeforeClass
     public static void setup() {
@@ -63,7 +65,8 @@ public class OrderManagementTest {
         orderDTO3.setID(6);
 
         orderConverter = new OrderConverter();
-        orderService = new OrderServiceImpl(orderDAO, new TaskDAOJDBC(dbConnection) ,orderConverter);
+        taskConverter = new TaskConverter();
+        orderService = new OrderServiceImpl(orderDAO, new TaskDAOJDBC(dbConnection) ,orderConverter,taskConverter);
         orderController = new OrderControllerImpl(orderService);
 
         LOG.debug("order management test setup completed");
