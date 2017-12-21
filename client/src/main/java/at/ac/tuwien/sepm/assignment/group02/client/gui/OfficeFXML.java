@@ -603,7 +603,7 @@ public class OfficeFXML {
             return;
         }
 
-        boolean accept = alertBuilder.showConfirmationAlert("Rechnung abrechnen", "Wollen Sie die Rechnung mit Nummer " + selectedOrder.getID() + " löschen?", "");
+        boolean accept = alertBuilder.showConfirmationAlert("Rechnung abrechnen", "Wollen Sie die Rechnung mit Nummer " + selectedOrder.getID() + " abrechnen?", "");
         if(accept){
             try {
                 orderService.invoiceOrder(selectedOrder);
