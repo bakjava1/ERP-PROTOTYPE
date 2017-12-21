@@ -154,7 +154,7 @@ public class OfficeFXML {
         col_costumerName.setCellValueFactory(new PropertyValueFactory("customerName"));
         col_taskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
         col_amount.setCellValueFactory(new PropertyValueFactory("quantity"));
-        col_grossSum.setCellValueFactory(new PropertyValueFactory("grossAmount"));
+        col_grossSum.setCellValueFactory(new PropertyValueFactory("netAmount"));
 
 
         table_bill.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -163,7 +163,7 @@ public class OfficeFXML {
         col_billCostumerName.setCellValueFactory(new PropertyValueFactory("customerName"));
         col_billTaskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
         col_billAmount.setCellValueFactory(new PropertyValueFactory("quantity"));
-        col_billGrossSum.setCellValueFactory(new PropertyValueFactory("grossAmount"));
+        col_billGrossSum.setCellValueFactory(new PropertyValueFactory("netAmount"));
 
 
 
