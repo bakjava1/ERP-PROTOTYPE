@@ -88,7 +88,10 @@ public class TaskDAOJDBC implements TaskDAO {
 
                 if(totalReservedLumber > reservedLumberTask) {
                     calculatedReservedLumber = totalReservedLumber - reservedLumberTask;
-                }
+                } /*else {
+                //TODO add else
+                    calculatedReservedLumber = totalReservedLumber;
+                }*/
 
                 //set (reduced) amount of reserved lumber in table lumber for the current task
                 ps = dbConnection.prepareStatement(deleteLumberReservation, Statement.RETURN_GENERATED_KEYS);

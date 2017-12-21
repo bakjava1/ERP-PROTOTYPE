@@ -224,11 +224,9 @@ public class OfficeFXML {
             }
         } else {
             Alert noSelection = new Alert(Alert.AlertType.ERROR);
-            noSelection.setTitle("Fehler beim löschen");
-            //noSelection.setTitle("Deletion failed");
+            noSelection.setTitle("Deletion failed");
             noSelection.setHeaderText(null);
-            noSelection.setContentText("Sie müssen ein Bestellung auswählen um es zu löschen!");
-            //noSelection.setContentText("You have to choose an order to delete it!");
+            noSelection.setContentText("You have to choose an order to delete it!");
             noSelection.showAndWait();
         }
 
@@ -249,11 +247,9 @@ public class OfficeFXML {
         LOG.info("createOrder called");
         if(currentOrderTaskList.size() == 0) {
             Alert error = new Alert(Alert.AlertType.ERROR);
-            error.setTitle("Keine Bestellung inzugefügt");
-            //error.setTitle("No Tasks added");
+            error.setTitle("No Tasks added");
             error.setHeaderText(null);
-            error.setContentText("Keine Auftrag ist in die Bestellung inzugefügt");
-            //error.setContentText("There is not Task added to the Order");
+            error.setContentText("There is not Task added to the Order");
             error.showAndWait();
             return;
         }
@@ -265,20 +261,16 @@ public class OfficeFXML {
             orderService.addOrder(currentOrder,currentOrderTaskList);
             clearCurrentOrder(null);
             Alert success = new Alert(Alert.AlertType.INFORMATION);
-            success.setTitle("Erstellung erfolgreich");
-            //success.setTitle("Creation successful");
+            success.setTitle("Creation successful");
             success.setHeaderText(null);
-            success.setContentText("Bestellung erstellt erfolgreich!");
-            //success.setContentText("Order created successfully!");
+            success.setContentText("Order created successfully!");
             success.showAndWait();
         } catch (InvalidInputException e) {
             LOG.warn(e.getMessage());
             Alert error = new Alert(Alert.AlertType.ERROR);
-            error.setTitle("Erstellung erfolglos");
-            //error.setTitle("Creation failed");
+            error.setTitle("Creation failed");
             error.setHeaderText(null);
-            error.setContentText("Fehler beim Bestellungserstellung!");
-            //error.setContentText("Order Creation failed!");
+            error.setContentText("Order Creation failed!");
             error.showAndWait();
         } catch (ServiceLayerException e) {
             LOG.warn(e.getMessage());
@@ -302,6 +294,7 @@ public class OfficeFXML {
 
             for (Order order: allOpen) {
                 openOrderForTable.add(order);
+
             }
 
             table_openOrder.setItems(openOrderForTable);
@@ -343,25 +336,16 @@ public class OfficeFXML {
 
     @FXML
     public void addTimber(ActionEvent actionEvent){
-        //TODO catch exception (InvalidInputException by Lucia)
+
         if(tf_timber_amount.getText().isEmpty() || cb_timber_box.getSelectionModel().getSelectedIndex()==-1){
             LOG.error("No Input");
-
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Fehler beim Angabe");
-            //alert.setTitle("Input Error");
-            alert.setHeaderText("Keine Angabe");
-            //alert.setHeaderText("No Input");
-            alert.setContentText("Verwenden Sie bitte nur gültigue Angabe!");
-            //alert.setContentText("Please use only valid input!");
-            alert.showAndWait();
             alertBuilder.showErrorAlert("Fehler bei Eingabe", "Eigabe unvollständig.", "Bitte nur gültige Eingaben benützen!");
         }
         else{
-            int tes = cb_timber_box.getSelectionModel().getSelectedIndex();
             Timber timber = new Timber(cb_timber_box.getSelectionModel().getSelectedIndex()+1, Integer.parseInt(tf_timber_amount.getText()));
             try {
-                boolean addTimberConfirmation = alertBuilder.showConfirmationAlert("Rundholz hinzufügen", "Wollen Sie " + timber.getAmount() + " Stück Rundholz zu Box " + timber.getBox_id() + " hinzufügen?", "");
+                boolean addTimberConfirmation = alertBuilder.showConfirmationAlert("Rundholz hinzufügen", "Wollen Sie " +
+                        timber.getAmount() + " Stück Rundholz zu Box " + timber.getBox_id() + " hinzufügen?", "");
                 if(addTimberConfirmation){
                     timberService.addTimber(timber);
                     tf_timber_amount.setText("");
@@ -612,23 +596,25 @@ public class OfficeFXML {
         //get the selected order
         Order selectedOrder = table_openOrder.getSelectionModel().getSelectedItem();
 
+        //check if something selected from table
+        if(selectedOrder == null){
+            LOG.warn("no order selected from database");
+            alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Keine Bestellung wurde ausgewählt", "Bitte eine abzurechnende Bestellung aus der Tabelle auswählen!");
+            return;
+        }
+
         try {
             orderService.invoiceOrder(selectedOrder);
+            updateBillTable();
+            updateTable();
         } catch (InvalidInputException e) {
-            //TODO use alertBuilder
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Fehler beim Abrechnen!");
-            alert.setHeaderText(null);
-            alert.setContentText("Bestellung konnte nicht erfolgreich abgerechnet werden. Bitte versuchen Sie es erneut!");
-            alert.showAndWait();
+            alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Bestellung konnte nicht erfolgreich abgerechnet werden!", e.getMessage());
         } catch (ServiceLayerException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            //TODO alertBuilder
-            alert.setTitle("Fehler beim Abrechnen!");
-            alert.showAndWait();
+            alertBuilder.showErrorAlert("Fehler beim Abrechnen!", "", "");
         }
 
         updateTable();
+        updateBillTable();
 
     }
 

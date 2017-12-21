@@ -92,7 +92,7 @@ INSERT INTO TIMBER(festmeter,amount,length, quality,diameter,price,last_edited) 
 
 INSERT INTO LUMBER(lager,description,finishing,wood_type,quality,size,
 width,length,quantity,reserved_quantity,all_reserved,all_delivered) VALUES
-('Lager1', 'Latten', 'Prismiert','Fi', 'O', 23,48,3000,40,50,1,0),
+('Lager1', 'Latten', 'Prismiert','Ta', 'I/III', 22,48,3000,60,50,1,0),
 ('Lager2', 'Staffel', 'prismiert','Ta', 'I', 32,120,3000,40,42,1,0),
 ('Lager3', 'Kantholz', 'roh','Fi/Ta', 'II', 23,48,5000,100,50,1,1),
 ('Lager4', 'Schnittholz','gehobelt','Lä','III', 20,48,4000,40,42,1,0),
@@ -119,7 +119,7 @@ INSERT INTO task(orderid,description,finishing,wood_type,quality,size,
 width,length,quantity,produced_quantity,sum,done,deleted) VALUES
 (1,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
 (1,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
+(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,50,50,25,1,0),
 (3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
 (3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
 (4,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),

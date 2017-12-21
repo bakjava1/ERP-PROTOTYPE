@@ -4,6 +4,8 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.*;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.EmptyInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.NoValidIntegerException;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,38 @@ public class Validator {
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer UID: " + e.getMessage());
             throw new InvalidInputException("Error at Customer UID: " + e.getMessage());
+        }
+    }
+
+    public void inputValidationInvoice(Order invoice) throws InvalidInputException{
+        inputValidationOrder(invoice);
+        if(invoice.getTaskList()==null || invoice.getTaskList().size()==0){
+            LOG.error("Error in Invoice: No Tasks");
+            throw new InvalidInputException("Error in Invoice: No Tasks");
+        }
+        if(invoice.getDeliveryDate() == null){
+            LOG.error("Error in Invoice: No Delivery Date");
+            throw new InvalidInputException("Error in Invoice: No Delivery Date");
+        }
+        if(invoice.getInvoiceDate() == null){
+            LOG.error("Error in Invoice: No Invoice Date");
+            throw new InvalidInputException("Error in Invoice: No Invoice Date");
+        }
+        if(invoice.getOrderDate() == null){
+            LOG.error("Error in Invoice: No Order Date");
+            throw new InvalidInputException("Error in Invoice: No Order Date");
+        }
+        if(invoice.getGrossAmount()<0){
+            LOG.error("Error in Invoice: Gross Amount is negative");
+            throw new InvalidInputException("Error in Invoice: Gross Amount is negative");
+        }
+        if(invoice.getTaxAmount()<0){
+            LOG.error("Error in Invoice: Gross Amount is negative");
+            throw new InvalidInputException("Error in Invoice: Gross Amount is negative");
+        }
+        if(invoice.getNetAmount()<0){
+            LOG.error("Error in Invoice: Net Amount is negative");
+            throw new InvalidInputException("Error in Invoice: Net Amount is negative");
         }
     }
 

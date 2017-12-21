@@ -28,7 +28,8 @@ public class AssignmentManagementTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static AssignmentController assignmentController;
-    private static AssignmentService assignmentService;
+    private static AssignmentController mockAssignmentController;
+    private static AssignmentService assignmentService, assignmentServiceEmptyList;
     private static ValidateAssignmentDTO validateAssignmentDTO;
     private static RestTemplate restTemplate;
 
@@ -40,28 +41,26 @@ public class AssignmentManagementTest {
 
         restTemplate = mock(RestTemplate.class);
         assignmentController = new AssignmentControllerImpl(restTemplate);
+        mockAssignmentController = mock(AssignmentControllerImpl.class);
         validateAssignmentDTO = mock(ValidateAssignmentDTO.class);
 
-        assignmentService = new AssignmentServiceImpl(
-                 assignmentController,
-                 validateAssignmentDTO);
+        assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
+        assignmentServiceEmptyList = new AssignmentServiceImpl(mockAssignmentController, validateAssignmentDTO);
 
         assignmentDTO = new AssignmentDTO[0];
 
         LOG.debug("assignment management test setup completed");
     }
 
-    @Ignore
     @Test
     public void testAssignmentOverview_client_serviceLayer_EmptyList() throws PersistenceLayerException, ServiceLayerException {
         LOG.debug("testing for an empty assignment overview in client service layer");
         List<AssignmentDTO> assignmentList = new ArrayList<>();
 
-        when(assignmentController.getAllOpenAssignments()).thenReturn(assignmentList);
-        assertEquals(0, assignmentService.getAllOpenAssignments().size());
+        when(mockAssignmentController.getAllOpenAssignments()).thenReturn(assignmentList);
+        assertEquals(0, assignmentServiceEmptyList.getAllOpenAssignments().size());
     }
 
-    @Ignore
     @Test
     public void testAssignmentOverview_client_serviceLayer() throws PersistenceLayerException, ServiceLayerException {
         LOG.debug("testing for assignment overview in client serice layer");
@@ -72,29 +71,24 @@ public class AssignmentManagementTest {
         assignmentArray[0] = assignment1;
         assignmentArray[1] = assignment2;
 
-        //when(assignmentController.getAllOpenAssignments()).thenReturn(assignmentList);
-        when(restTemplate.getForObject(any(), eq(AssignmentDTO[].class))).thenReturn(assignmentArray);
+        when(restTemplate.getForObject("http://localhost:8080/getAllOpenAssignments", AssignmentDTO[].class)).thenReturn(assignmentArray);
         assertEquals(2, assignmentService.getAllOpenAssignments().size());
     }
 
-    @Ignore
     @Test (expected = PersistenceLayerException.class)
     public void getAllOpenAssignments_throws_RestClientException() throws PersistenceLayerException, ServiceLayerException {
         LOG.debug("get all open assignments throws rest client exception in client rest interface");
 
-        doThrow(RestClientException.class).when(restTemplate).getForObject(any(), eq(AssignmentDTO[].class));
+        doThrow(RestClientException.class).when(restTemplate).getForObject("http://localhost:8080/getAllOpenAssignments", AssignmentDTO[].class);
 
         assignmentController.getAllOpenAssignments();
     }
 
-    @Ignore
     @Test (expected = PersistenceLayerException.class)
     public void getAllOpenAssignments_throws_HttpStatusCodeException() throws PersistenceLayerException, ServiceLayerException {
         LOG.debug("get all open assignments throws http status code exception in client rest interface");
 
-        //doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).getForObject(any(), eq(assignmentDTO.getClass()));
-        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).getForObject(any(), any());
-
+        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).getForObject("http://localhost:8080/getAllOpenAssignments", AssignmentDTO[].class);
 
         assignmentController.getAllOpenAssignments();
     }
