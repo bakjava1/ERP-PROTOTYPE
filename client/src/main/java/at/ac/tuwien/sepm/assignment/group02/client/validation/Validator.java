@@ -61,6 +61,10 @@ public class Validator {
 
     public void inputValidationInvoice(Order invoice) throws InvalidInputException{
         inputValidationOrder(invoice);
+        if(invoice.getTaskList()==null || invoice.getTaskList().size()==0){
+            LOG.error("Error in Invoice: No Tasks");
+            throw new InvalidInputException("Error in Invoice: No Tasks");
+        }
         if(invoice.getDeliveryDate() == null){
             LOG.error("Error in Invoice: No Delivery Date");
             throw new InvalidInputException("Error in Invoice: No Delivery Date");

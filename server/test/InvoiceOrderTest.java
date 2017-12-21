@@ -39,7 +39,6 @@ public class InvoiceOrderTest {
 
     private static Order orderNoError1 = new Order();
     private static Order orderNoError2 = new Order();
-    private static Order orderNoError3 = new Order();
 
 
     @BeforeClass
@@ -58,7 +57,7 @@ public class InvoiceOrderTest {
         orderDTONoError.setCustomerName("Max Mustermmann");
         orderDTONoError.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
         orderDTONoError.setCustomerUID("1234567890");
-        orderDTONoError.setID(1);
+        orderDTONoError.setID(5);
         orderDTONoError.setNetAmount(123456);
         orderDTONoError.setDeliveryDate(new java.util.Date());
         orderDTONoError.setInvoiceDate(new java.util.Date());
@@ -67,7 +66,7 @@ public class InvoiceOrderTest {
         orderDTONoError.setTaxAmount(12);
 
 
-        orderNoError1.setID(2);
+        orderNoError1.setID(7);
         orderNoError1.setPaid(false);
         orderNoError1.setCustomerName("Max Mustermmann");
         orderNoError1.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
@@ -79,7 +78,7 @@ public class InvoiceOrderTest {
         orderNoError1.setNetAmount(111);
         orderNoError1.setTaxAmount(12);
 
-        orderNoError2.setID(3);
+        orderNoError2.setID(8);
         orderNoError2.setPaid(false);
         orderNoError2.setCustomerName("Max Mustermmann");
         orderNoError2.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
@@ -91,18 +90,6 @@ public class InvoiceOrderTest {
         orderNoError2.setNetAmount(111);
         orderNoError2.setTaxAmount(12);
 
-        orderNoError3.setID(4);
-        orderNoError3.setPaid(false);
-        orderNoError3.setCustomerName("Max Mustermmann");
-        orderNoError3.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
-        orderNoError3.setCustomerUID("1234567890");
-        orderNoError3.setNetAmount(123456);
-        orderNoError3.setDeliveryDate(new java.util.Date());
-        orderNoError3.setInvoiceDate(new java.util.Date());
-        orderNoError3.setGrossAmount(123);
-        orderNoError3.setNetAmount(111);
-        orderNoError3.setTaxAmount(12);
-
         LOG.debug("invoice order setup finished ");
     }
 
@@ -113,8 +100,6 @@ public class InvoiceOrderTest {
         orderDAO.invoiceOrder(orderNoError1);
         beforeInvoice--;
         orderDAO.invoiceOrder(orderNoError2);
-        beforeInvoice--;
-        orderDAO.invoiceOrder(orderNoError3);
         beforeInvoice--;
 
         int afterInvoice = countOpenOrders();

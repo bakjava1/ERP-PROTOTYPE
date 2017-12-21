@@ -116,7 +116,7 @@ public class Order {
     }
 
     public int getGrossAmount() {
-        return (int)(this.netAmount*1.20);
+        return grossAmount;
     }
 
     public void setGrossAmount(int grossAmount) {

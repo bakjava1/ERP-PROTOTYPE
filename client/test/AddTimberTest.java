@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateInput;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateTimber;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ public class AddTimberTest {
     private static Timber timberAmountError;
     private static Timber timberNoError;
     private static TimberController timberControllerMock = Mockito.mock(TimberController.class);
-    private static ValidateInput<Timber> timberValidator = Mockito.mock(ValidateInput.class);
+    private static ValidateTimber timberValidator = new ValidateTimber();
     private static TimberService timberService = new TimberServiceImpl(timberControllerMock, new TimberConverter(), timberValidator);
 
     @BeforeClass
@@ -49,7 +50,6 @@ public class AddTimberTest {
         timberNoError.setBox_id(1);
         timberNoError.setAmount(20);
     }
-
 
     @Test(expected = ServiceLayerException.class)
     public void testAddTimberServiceAmountNegative() throws InvalidInputException, ServiceLayerException {

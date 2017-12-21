@@ -56,7 +56,22 @@ public class InvoiceOrderTest {
         orderNoError.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
         orderNoError.setCustomerUID("1234567890");
         orderNoError.setID(1);
-        orderNoError.setNetAmount(123456);
+        orderNoError.setOrderDate(new java.util.Date());
+        Task temp = new Task();
+        temp.setDescription("test");
+        temp.setDone(false);
+        temp.setFinishing("test");
+        temp.setId(1);
+        temp.setLength(12);
+        temp.setSize(12);
+        temp.setOrder_id(1);
+        temp.setPrice(21);
+        temp.setProduced_quantity(0);
+        temp.setQuality("test");
+        temp.setQuantity(12);
+        temp.setWidth(12);
+        temp.setWood_type("test");
+        orderNoError.addTask(temp);
 
         orderCustomerError.setPaid(false);
         orderCustomerError.setCustomerName("");
@@ -104,13 +119,8 @@ public class InvoiceOrderTest {
         orderService.invoiceOrder(orderAlreadyInvoiced);
     }
 
-    @Test(expected = InvalidInputException.class)
-    public void testInvoiceOrderNoErrorServiceLayer() throws ServiceLayerException {
-        orderService.invoiceOrder(orderNoError);
-    }
-
     @Test
-    public void testInvoiceOrderServicePositive() throws InvalidInputException, ServiceLayerException {
+    public void testInvoiceOrderServicePositive() throws ServiceLayerException {
         orderService.invoiceOrder(orderNoError);
     }
 
