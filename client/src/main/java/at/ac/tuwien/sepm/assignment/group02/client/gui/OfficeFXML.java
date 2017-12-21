@@ -603,18 +603,19 @@ public class OfficeFXML {
             return;
         }
 
-        try {
-            orderService.invoiceOrder(selectedOrder);
-            updateBillTable();
-            updateTable();
-        } catch (InvalidInputException e) {
-            alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Bestellung konnte nicht erfolgreich abgerechnet werden!", e.getMessage());
-        } catch (ServiceLayerException e) {
-            alertBuilder.showErrorAlert("Fehler beim Abrechnen!", "", "");
+        boolean accept = alertBuilder.showConfirmationAlert("Rechnung abrechnen", "Wollen Sie die Rechnung mit Nummer " + selectedOrder.getID() + " löschen?", "");
+        if(accept){
+            try {
+                orderService.invoiceOrder(selectedOrder);
+                updateBillTable();
+                updateTable();
+                alertBuilder.showInformationAlert("Rechnung abgerechnet", "Rechnung mit Nummer " + selectedOrder.getID() + " erfolgreich abgerechnet!","");
+            } catch (InvalidInputException e) {
+                alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Bestellung konnte nicht erfolgreich abgerechnet werden!", e.getMessage());
+            } catch (ServiceLayerException e) {
+                alertBuilder.showErrorAlert("Fehler beim Abrechnen!", "", "");
+            }
         }
-
-        updateTable();
-        updateBillTable();
 
     }
 
