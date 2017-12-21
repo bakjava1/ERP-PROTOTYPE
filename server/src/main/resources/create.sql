@@ -106,11 +106,11 @@ width,length,quantity,reserved_quantity,all_reserved,all_delivered) VALUES
 
 INSERT INTO ORDERS(customer_name, customer_address,customer_uid, order_date, isPaidFlag, isDoneFlag) VALUES
 ('Wagner', 'Ausstellungstrasse 1',1,now(),1,0),
-('Gruber', 'Ausstellungstrasse 2',2,now(),1,1),
+('Gruber', 'Ausstellungstrasse 2',2,now(),1,0),
 ('Winkler', 'Ausstellungstrasse 3',3,now(),1,0),
 ('Weber', 'Ausstellungstrasse 4',4,now(),1,1),
 ('Huber', 'Ausstellungstrasse 5',5,now(),0,0),
-('Bauer', 'Ausstellungstrasse 6',6,now(),0,1),
+('Bauer', 'Ausstellungstrasse 6',6,now(),0,0),
 ('Wimmer', 'Ausstellungstrasse 7',7,now(),0,0),
 ('Müller', 'Ausstellungstrasse 8',8,now(),0,1);
 
