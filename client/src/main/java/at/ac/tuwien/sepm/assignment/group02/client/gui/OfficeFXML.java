@@ -596,22 +596,18 @@ public class OfficeFXML {
         //get the selected order
         Order selectedOrder = table_openOrder.getSelectionModel().getSelectedItem();
 
-        //TODO remove
-        selectedOrder.setCustomerAddress("fas");
-        selectedOrder.setCustomerName("asdf");
-        selectedOrder.setCustomerUID("adsf");
-        selectedOrder.setOrderDate(new Date());
-        List<Task> testTaskList = new ArrayList<>();
-        Task testTask = new Task();
-        testTask.setPrice(2400);
-        testTaskList.add(testTask);
-        selectedOrder.setTaskList(testTaskList);
+        //check if something selected from table
+        if(selectedOrder == null){
+            LOG.warn("no order selected from database");
+            alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Keine Bestellung wurde ausgewählt", "Bitte eine abzurechnende Bestellung aus der Tabelle auswählen!");
+            return;
+        }
 
         try {
             orderService.invoiceOrder(selectedOrder);
             updateBillTable();
+            updateTable();
         } catch (InvalidInputException e) {
-            //TODO use alertBuilder
             alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Bestellung konnte nicht erfolgreich abgerechnet werden!", e.getMessage());
         } catch (ServiceLayerException e) {
             alertBuilder.showErrorAlert("Fehler beim Abrechnen!", "", "");
