@@ -645,7 +645,12 @@ public class OfficeFXML {
             error.showAndWait();
             return;
         }
-        int randomized = costBenefitService.costValueFunctionStub(currentOrderSum);
+        int randomized;
+        try {
+            randomized = costBenefitService.costValueFunctionStub(currentOrderSum,currentOrderTaskList);
+        } catch(ServiceLayerException e) {
+            return;
+        }
         if(randomized < 0) {
             kn_result.setTextFill(Color.web("#dd0000"));
             kn_result.setText(randomized+"");
