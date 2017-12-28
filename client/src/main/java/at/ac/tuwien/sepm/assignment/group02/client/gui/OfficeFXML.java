@@ -647,8 +647,9 @@ public class OfficeFXML {
         }
         int randomized;
         try {
-            randomized = costBenefitService.costValueFunctionStub(currentOrderSum,currentOrderTaskList);
+            randomized = costBenefitService.costValueFunction(currentOrderSum,currentOrderTaskList);
         } catch(ServiceLayerException e) {
+            alertBuilder.showErrorAlert("Fehler bei Kosten/Nutzen Schätzung", null, "Ein Fehler trat bei der Kosten/Nutzen Schätzung auf\n Reason: " + e.getMessage());
             return;
         }
         if(randomized < 0) {
