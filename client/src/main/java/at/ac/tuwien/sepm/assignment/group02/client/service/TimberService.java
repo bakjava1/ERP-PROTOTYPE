@@ -7,26 +7,27 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
 /**
  * TimberDTO Management / RoundTimber Management
  *
- * CONVERSION HAPPENS ON THIS LAYER
- * VALIDATION HAPPENS ON THIS LAYER
+ * Validation of timber on this layer
+ * Service Layer for management of timber boxes on client
  */
 public interface TimberService {
 
     /**
-     * 1.8 Rundholz anlegen
-     * 1.8.2 (rest/TimberController) Hinzufügen von neuem Rundholz
      * This method adds new round timber to the timber store.
-     * (On server side this method might create a new timber record on persistence level,
-     * or an existing timber record will be updated with the values of the timber parameter passed)
+     * @author Philipp Klein
      * @param timber Timber entity to create or update
+     * @throws InvalidInputException    if box number is greater than number of boxes
+     *                                  or amount of added timber is negative
+     * @throws ServiceLayerException    if could not add timber to the timber store
      */
     void addTimber(Timber timber) throws InvalidInputException, ServiceLayerException;
 
 
     /**
-     * This method returns the number of boxes currently existing.
+     * Returns the number of boxes currently existing.
+     * @author Philipp Klein
      * @return number of boxes
-     * @throws ServiceLayerException
+     * @throws ServiceLayerException if error getting number of boxes
      */
     int getNumberOfBoxes() throws ServiceLayerException;
 }

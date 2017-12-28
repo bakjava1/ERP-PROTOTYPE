@@ -1,28 +1,38 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class LeadWorkerFXML {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    @FXML
+    private AnchorPane ap;
 
     @FXML
     private TextField tf_description;
@@ -113,59 +123,28 @@ public class LeadWorkerFXML {
 
     @FXML
     public void onSearchButtonClicked(ActionEvent actionEvent) {
-        Lumber filter = new Lumber();
+        UnvalidatedLumber filter = new UnvalidatedLumber();
         List<Lumber> allLumber = null;
 
-        String description = tf_description.getText().trim();
-        String finishing = cb_finishing.getSelectionModel().getSelectedItem().toString().equals("keine Angabe")? "" :
-                cb_finishing.getSelectionModel().getSelectedItem().toString();
-        String wood_type = cb_wood_type.getSelectionModel().getSelectedItem().toString().equals("keine Angabe")? "" :
-                cb_wood_type.getSelectionModel().getSelectedItem().toString();
-        String quality = cb_quality.getSelectionModel().getSelectedItem().toString().equals("keine Angabe")? "" :
-                cb_quality.getSelectionModel().getSelectedItem().toString();
-        String strength = tf_strength.getText().trim();
-        String width = tf_width.getText().trim();
-        String length = tf_length.getText().trim();
-
-        if (!description.equals("")){
-            filter.setDescription(description);
-        }
-        if (!finishing.equals("")){
-            filter.setFinishing(finishing);
-        }
-
-        if (!wood_type.equals("")){
-            filter.setWood_type(wood_type);
-        }
-
-        if (!quality.equals("")){
-            filter.setQuality(quality);
-        }
-
-        if (!strength.equals("")){
-            filter.setSize(Integer.parseInt(strength));
-        }else{
-            filter.setSize(-1);
-        }
-
-        if (!width.equals("")){
-            filter.setWidth(Integer.parseInt(width));
-        }else{
-            filter.setWidth(-1);
-        }
-
-        if (!length.equals("")){
-            filter.setLength(Integer.parseInt(length));
-        }else{
-            filter.setLength(-1);
-        }
+        filter.setDescription(tf_description.getText().trim());
+        filter.setFinishing(cb_finishing.getSelectionModel().getSelectedItem().toString().trim());
+        filter.setWood_type(cb_wood_type.getSelectionModel().getSelectedItem().toString().trim());
+        filter.setQuality(cb_quality.getSelectionModel().getSelectedItem().toString().trim());
+        filter.setSize(tf_strength.getText().trim());
+        filter.setWidth(tf_width.getText().trim());
+        filter.setLength(tf_length.getText().trim());
 
 
         try {
             allLumber = lumberService.getAll(filter);
-        } catch (ServiceLayerException e) {
-            LOG.warn(e.getMessage());
         } catch (InvalidInputException e) {
+            LOG.warn(e.getMessage());
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Eingabe nicht korrekt");
+            error.setHeaderText(null);
+            error.setContentText(e.getMessage());
+            error.showAndWait();
+        } catch (ServiceLayerException e) {
             LOG.warn(e.getMessage());
         }
 
@@ -189,6 +168,74 @@ public class LeadWorkerFXML {
 
     @FXML
     public void onUpdateButtonClicked(ActionEvent actionEvent){
+
+    }
+
+    @FXML
+    public void optimisationBtnClicked(ActionEvent actionEvent) {
+        LOG.info("optimisationBtn clicked");
+
+        new Thread(new Task<Object>() {
+            @Override
+            protected Object call() throws Exception {
+
+                //TODO not able to debug autowiring not working
+                /*TimeUnit.SECONDS.sleep(6);
+                try {
+                    Stage stage = new Stage();
+                    stage.setTitle("Optimierungsalgorithmus");
+
+                    context = new AnnotationConfigApplicationContext();
+                    context.getBeanFactory().registerSingleton("stage", (Stage) ap.getScene().getWindow());
+                    context.scan("at.ac.tuwien.sepm.assignment.group02.client");
+                    context.refresh();
+                    context.start();
+
+                    ExampleQSE_SpringFXMLLoader fxmlLoader = context.getBean(ExampleQSE_SpringFXMLLoader.class);
+
+                    stage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/optimisation.fxml"), 950, 680));
+                    stage.centerOnScreen();
+                    stage.show();
+
+                } catch (IOException e) {
+                    LOG.error(e.getMessage());
+
+                }*/
+
+                TimeUnit.SECONDS.sleep(6);
+
+                return null;
+            }
+
+            @Override
+            protected void succeeded(){
+                try {
+
+                    OptimisationFXML optimisationFXML    = new OptimisationFXML();
+                    FXMLLoader fxmlLoader = new FXMLLoader(OfficeFXML.class.getResource("/fxml/optimisation.fxml"));
+                    fxmlLoader.setControllerFactory(param -> param.isInstance(optimisationFXML) ? optimisationFXML : null);
+
+                    Stage stage = new Stage();
+                    stage.setTitle("Optimierungsalgorithmus");
+                    stage.setWidth(950);
+                    stage.setHeight(680);
+                    stage.centerOnScreen();
+                    stage.setScene(new Scene(fxmlLoader.load()));
+                    stage.show();
+
+                } catch (IOException e) {
+                    LOG.error(e.getMessage());
+
+                }
+
+            }
+
+            @Override
+            protected void failed(){
+
+            }
+        }, "optimisation-algorithm").start();
+
 
     }
 }

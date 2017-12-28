@@ -9,10 +9,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.rest.TaskControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TaskServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,14 +50,14 @@ public class TaskManagementTest {
 
         task3.setId(3);
         task3.setOrder_id(2);
-        task3.setDescription("Kantholz");
+        task3.setDescription("Latten");
         task3.setFinishing("Prismiert");
-        task3.setWood_type("Fi/Ta");
+        task3.setWood_type("Ta");
         task3.setQuality("I/III");
         task3.setSize(22);
         task3.setWidth(48);
-        task3.setLength(5000);
-        task3.setQuantity(30);
+        task3.setLength(3000);
+        task3.setQuantity(40);
 
         taskDTO1.setId(4);
         taskDTO1.setOrder_id(3);
@@ -74,7 +71,24 @@ public class TaskManagementTest {
         LOG.debug("task management test setup initiated");
     }
 
-    @Ignore
+    @Before
+    public void initDBConnection() {
+        dbConnection = DBUtil.getConnection();
+        taskDAO = new TaskDAOJDBC(dbConnection);
+
+        taskConverter = new TaskConverter();
+        taskService = new TaskServiceImpl(taskDAO, taskConverter);
+        taskController = new TaskControllerImpl(taskService);
+    }
+
+    @Test (expected = PersistenceLayerException.class)
+    public void deleteTask_throws_Exception_in_persistenceLayer_without_DBConnection() throws PersistenceLayerException {
+        LOG.debug("testing for task deletion in persistence layer without DB connection");
+
+        DBUtil.closeConnection();
+        taskDAO.deleteTask(task1);
+    }
+
     @Test
     public void testDeleteTask_server_persistenceLayer() throws PersistenceLayerException {
         LOG.debug("testing for task deletion in server persistence layer");
@@ -91,7 +105,6 @@ public class TaskManagementTest {
         assertEquals(taskCountBeforeDeletion,taskCountAfterDeletion);
     }
 
-    @Ignore
     @Test
     public void testDeleteTask_reduceReservation_server_persistenceLayer() throws PersistenceLayerException {
         LOG.debug("testing for reducing amount of reservation in server persistence layer");
@@ -105,7 +118,6 @@ public class TaskManagementTest {
         assertEquals(reserverationAmountBeforeDeletion, reserverationAmountAfterDeletion);
     }
 
-    @Ignore
     @Test
     public void testDeleteTask_server_restController() throws EntityNotFoundException {
         LOG.debug("testing for task deletion in server rest controller");

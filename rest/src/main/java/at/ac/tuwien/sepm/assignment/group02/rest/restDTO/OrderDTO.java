@@ -10,7 +10,7 @@ public class OrderDTO {
 
     private int id;
     private int invoiceNumber;
-    private String orderDate;
+    private Date orderDate;
     private Date deliveryDate;
     private Date invoiceDate;
     private String customerName;
@@ -25,15 +25,13 @@ public class OrderDTO {
     private int taxAmount;
 
 
-    private int quantity;
-    private int taskAmount;
 
     public OrderDTO() {
         this.id = -1;
         this.invoiceNumber = this.id;
     }
 
-    public OrderDTO(int id, String orderDate) {
+    public OrderDTO(int id, Date orderDate) {
         this.id = id;
         this.invoiceNumber = this.id;
         this.orderDate = orderDate;
@@ -48,11 +46,11 @@ public class OrderDTO {
         return this.id;
     }
 
-    public String getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(String orderDate) {
+    public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -136,19 +134,7 @@ public class OrderDTO {
         this.taxAmount = taxAmount;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 
-    public int getTaskAmount() {
-        return taskAmount;
-    }
 
-    public void setTaskAmount(int taskAmount) {
-        this.taskAmount = taskAmount;
-    }
 }

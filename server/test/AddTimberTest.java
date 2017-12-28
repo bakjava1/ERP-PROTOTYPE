@@ -28,13 +28,10 @@ public class AddTimberTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static Connection dbConnection;
-    private static Connection fakeDBConnection;
 
     private static TimberDAO timberDAO;
-    private static TimberDAO timberDAOMock;
 
     private static TimberService timberService;
-    private static TimberService timberServiceMock;
 
     private static TimberControllerImpl timberController;
 
@@ -50,13 +47,10 @@ public class AddTimberTest {
     public static void setup() {
         LOG.debug("add timber test setup initiated");
         dbConnection = DBUtil.getConnection();
-        fakeDBConnection = mock(Connection.class);
 
         timberDAO = new TimberDAOJDBC(dbConnection);
-        timberDAOMock = mock(TimberDAOJDBC.class);
 
         timberService = new TimberServiceImpl(timberDAO, new TimberConverter());
-        timberServiceMock = new TimberServiceImpl(timberDAOMock, new TimberConverter());
 
         timberController = new TimberControllerImpl(timberService);
 
@@ -99,7 +93,6 @@ public class AddTimberTest {
     }
 
     //TODO test not working properly: error in db
-    @Ignore
     @Test
     public void testAddTimberController() throws PersistenceLayerException, EntityCreationException {
         int startAmount = getTimberAmount();
@@ -119,7 +112,7 @@ public class AddTimberTest {
     }
     
     //TODO test not working properly: error in db
-    @Ignore
+
     @Test
     public void testAddTimberService() throws PersistenceLayerException, ServiceLayerException {
         int startAmount = getTimberAmount();
@@ -133,6 +126,25 @@ public class AddTimberTest {
         Assert.assertEquals(endAmount,currentAmount);
     }
 
+    @Test(expected = PersistenceLayerException.class)
+    public void testAddTimberPersistenceCloseDBConnection() throws SQLException, PersistenceLayerException {
+        DBUtil.closeConnection();
+        timberDAO.createTimber(timber1);
+    }
+
+    @Before
+    public void before(){
+        dbConnection = DBUtil.getConnection();
+
+        timberDAO = new TimberDAOJDBC(dbConnection);
+
+        TimberConverter timberConverter = new TimberConverter();
+
+        timberService = new TimberServiceImpl(timberDAO, timberConverter);
+
+        timberController = new TimberControllerImpl(timberService);
+    }
+
     @AfterClass
     public static void teardown() {
         LOG.debug("add timber test teardown initiated");
@@ -144,7 +156,6 @@ public class AddTimberTest {
 
     private int getTimberAmount() throws PersistenceLayerException {
         int currentAmount = 0;
-
         String selectSentence = "SELECT AMOUNT FROM TIMBER WHERE ID = 1";
 
         try {

@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundExce
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.AssignmentDAO;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateAssignment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,13 @@ public class AssignmentServiceImpl implements AssignmentService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static AssignmentDAO assignmentManagementDAO;
     private static AssignmentConverter assignmentConverter;
+    private ValidateAssignment validateAssignment;
 
     @Autowired
-    public AssignmentServiceImpl(AssignmentDAO assignmentManagementDAO, AssignmentConverter assignmentConverter) {
+    public AssignmentServiceImpl(AssignmentDAO assignmentManagementDAO, AssignmentConverter assignmentConverter, ValidateAssignment validateAssignment) {
         AssignmentServiceImpl.assignmentManagementDAO = assignmentManagementDAO;
         AssignmentServiceImpl.assignmentConverter = assignmentConverter;
+        this.validateAssignment = validateAssignment;
     }
 
     @Override
@@ -56,9 +59,16 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Override
     public void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException {
         LOG.debug("called setDone");
+
+        // might throw ConversionException
         Assignment toUpdate = assignmentConverter.convertRestDTOToPlainObject(assignmentDTO);
+
+        // might throw InvalidInputException
+        validateAssignment.isValid(toUpdate);
+
         try {
-            assignmentManagementDAO.updateAssignment(toUpdate);
+            // 3.2.2 (rest/AssignmentController) Aufgabe als erledigt markieren.
+            assignmentManagementDAO.setAssignmentDone(toUpdate);
         } catch (EntityNotFoundException e){
             LOG.error("Entity Not Found: " + e.getMessage());
             throw new ServiceLayerException("entity not found");
@@ -66,5 +76,12 @@ public class AssignmentServiceImpl implements AssignmentService {
             LOG.error("Database Problems: " + e.getMessage());
             throw new ServiceLayerException("database problem.");
         }
+
+        // 3.2.3 (rest/TimberController) Rundholz aus dem Lager entfernen.
+        // 3.2.4 (rest/LumberController) Schnittholz ins Lager hinzufügen.
+        // 3.2.5 (rest/LumberController) Hinzugefügtes Schnittholz bei Bedarf reservieren.
+        // 3.2.6 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
+        // 3.2.7 Überprüfen ob Auftrag fertig ist (? => (rest/TaskController) getTaskById)
+
     }
 }

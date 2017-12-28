@@ -15,16 +15,16 @@
    <tabs>
       <Tab text="Bestellungen">
          <content>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="900.0">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="523.0" prefWidth="910.0">
                 <children>
-                    <Button fx:id="deleteOrderButton" layoutX="382.0" layoutY="339.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
-                  <TableView fx:id="table_openOrder" layoutX="7.0" prefHeight="322.0" prefWidth="460.0">
+                    <Button fx:id="deleteOrderButton" layoutX="320.0" layoutY="339.0" mnemonicParsing="false" onAction="#deleteOrder" prefHeight="27.0" prefWidth="118.0" text="Delete Order" />
+                  <TableView fx:id="table_openOrder" layoutX="7.0" prefHeight="322.0" prefWidth="522.0">
                     <columns>
                       <TableColumn fx:id="col_orderID" prefWidth="30.0" text="Nr" />
                       <TableColumn fx:id="col_costumerName" prefWidth="100.0" text="Kundenname" />
-                        <TableColumn fx:id="col_taskAmount" prefWidth="100.0" text="Anzahl Aufträge" />
-                        <TableColumn fx:id="col_amount" prefWidth="130.0" text="Anzahl Stück Gesamt" />
-                        <TableColumn fx:id="col_grossSum" prefWidth="100.0" text="Summe (Brutto)" />
+                        <TableColumn fx:id="col_taskAmount" prefWidth="112.0" text="Anzahl Aufträge" />
+                        <TableColumn fx:id="col_amount" prefWidth="157.0" text="Anzahl Stück Gesamt" />
+                        <TableColumn fx:id="col_grossSum" prefWidth="132.0" text="Summe (Brutto)" />
                     </columns>
                   </TableView>
                   <Label layoutX="573.0" layoutY="-1.0" text="Bestellung erstellen">
@@ -32,7 +32,7 @@
                         <Font name="System Bold" size="21.0" />
                      </font>
                   </Label>
-                  <Label layoutX="515.0" layoutY="35.0" text="Name">
+                  <Label layoutX="550.0" layoutY="35.0" prefHeight="18.0" prefWidth="74.0" text="Name">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -40,30 +40,30 @@
                   <TextField fx:id="tf_order_customername" layoutX="706.0" layoutY="35.0" />
                   <TextField fx:id="tf_order_customeraddress" layoutX="706.0" layoutY="70.0" />
                   <TextField fx:id="tf_order_customerUID" layoutX="706.0" layoutY="105.0" />
-                  <Label layoutX="515.0" layoutY="70.0" text="Adresse">
+                  <Label layoutX="550.0" layoutY="70.0" prefHeight="18.0" prefWidth="65.0" text="Adresse">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label layoutX="515.0" layoutY="105.0" text="Kunden UID">
+                  <Label layoutX="552.0" layoutY="105.0" prefHeight="18.0" prefWidth="102.0" text="Kunden UID">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
                   <Button layoutX="608.0" layoutY="197.0" mnemonicParsing="false" onAction="#addTaskToOrder" text="Aufträge hinzufügen" />
-                  <TableView fx:id="table_addedTask" layoutX="474.0" layoutY="239.0" prefHeight="150.0" prefWidth="425.0">
+                  <TableView fx:id="table_addedTask" layoutX="531.0" layoutY="238.0" prefHeight="150.0" prefWidth="348.0">
                     <columns>
                       <TableColumn fx:id="col_taskNr" prefWidth="35.0" text="Nr" />
-                      <TableColumn fx:id="col_taskDescription" prefWidth="150.0" text="Bezeichnung" />
-                      <TableColumn fx:id="col_taskQuantity" prefWidth="60.0" text="Anzahl" />
-                      <TableColumn fx:id="col_taskSize" prefWidth="60.0" text="Stärke" />
-                      <TableColumn fx:id="col_taskWidth" prefWidth="60.0" text="Breite" />
-                      <TableColumn fx:id="col_taskLength" prefWidth="60.0" text="Länge" />
+                      <TableColumn fx:id="col_taskDescription" prefWidth="88.0" text="Bezeichnung" />
+                      <TableColumn fx:id="col_taskQuantity" prefWidth="54.0" text="Anzahl" />
+                      <TableColumn fx:id="col_taskSize" prefWidth="61.0" text="Stärke" />
+                      <TableColumn fx:id="col_taskWidth" minWidth="0.0" prefWidth="55.0" text="Breite" />
+                      <TableColumn fx:id="col_taskLength" maxWidth="4000.0" minWidth="0.0" prefWidth="52.0" text="Länge" />
                     </columns>
                   </TableView>
                   <Button fx:id="bt_acceptOrder" layoutX="474.0" layoutY="481.0" mnemonicParsing="false" onAction="#createOrder" style="-fx-background-color: #6cff48;" text="Bestellung aufnehmen" />
                   <Button fx:id="btnInvoice" layoutX="23.0" layoutY="339.0" mnemonicParsing="false" onAction="#invoiceBtnClicked" text="Abrechnen" />
-                  <Button layoutX="768.0" layoutY="481.0" mnemonicParsing="false" onAction="#clearCurrentOrder" style="-fx-background-color: #ff5048;" text="Bestellung verwerfen" />
+                  <Button layoutX="676.0" layoutY="481.0" mnemonicParsing="false" onAction="#clearCurrentOrder" prefHeight="27.0" prefWidth="183.0" style="-fx-background-color: #ff5048;" text="Bestellung verwerfen" />
                   <Button fx:id="bt_deleteOrder" layoutX="594.0" layoutY="407.0" mnemonicParsing="false" onAction="#initiateCostValueFunction" text="Kosten/Nutzen Schätzung" />
                   <Label layoutX="508.0" layoutY="446.0" text="Ergebnis Schätzung">
                      <font>

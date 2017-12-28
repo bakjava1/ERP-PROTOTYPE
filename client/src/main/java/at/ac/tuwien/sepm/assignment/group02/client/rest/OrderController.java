@@ -8,39 +8,52 @@ import java.util.List;
 public interface OrderController {
 
     /**
-     * 1.1.2 Bestellung mit allen relevanten Daten + eindeutigem Schlüssel (id) erstellen.
-     * @param orderDTO order to be created
-     * @throws PersistenceLayerException if an error at the server occurs or if the server is unreachable
-     * @Invariant order got validated
+     * create an order with all relevant data
+     * @param orderDTO
+     * @throws PersistenceLayerException
      */
     void createOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 
     /**
-     * 1.2.2 Bestellung löschen.
+     * delete an order
+     * @param orderDTO
+     * @throws PersistenceLayerException
      */
     void deleteOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 
     /**
-     * 1.3.1 Alle offenen Bestellungen anfordern.
-     * @return
+     * retrieve all open orders
+     * @return list of all open Order
+     * @throws PersistenceLayerException if the server is not available
      */
     List<OrderDTO> getAllOpen() throws PersistenceLayerException;
 
     /**
-     * 1.4.2 Abzurechnende Bestellung bearbeiten (Abgerechnet Flag setzten, zusätzliche Werte speichern)
+     * update an order, put flag and save additional values
+     * @param orderDTO
+     * @throws PersistenceLayerException
      */
     void updateOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 
     /**
-     * 1.5.1 Alle geschlossenen Bestellungen == Rechnugen anfordern.
-     * @return
+     * all closed orders equal request of invoice
+     * @return list of all closed Order
+     * @throws PersistenceLayerException if the server is not available
      */
     List<OrderDTO> getAllClosed() throws PersistenceLayerException;
 
     /**
-     * 1.6.2 Rechnungsdetails (Geschlossene Bestellung) anfordern.
+     * get an order by id
+     * @param order_id
+     * @return an id of order
+     * @throws PersistenceLayerException
      */
     OrderDTO getOrderById(int order_id) throws PersistenceLayerException;
 
+    /**
+     * get the invoice of order
+     * @param orderDTO
+     * @throws PersistenceLayerException
+     */
     void invoiceOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 }

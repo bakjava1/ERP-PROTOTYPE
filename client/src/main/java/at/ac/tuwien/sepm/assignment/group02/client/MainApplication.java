@@ -39,16 +39,22 @@ public class MainApplication extends Application {
         ExampleQSE_SpringFXMLLoader fxmlLoader = context.getBean(ExampleQSE_SpringFXMLLoader.class);
 
         if(lead) {
-            primaryStage.setTitle("Lead Worker");
+            primaryStage.setTitle("Vorarbeiter");
+           // primaryStage.setTitle("Lead Worker");
+
             primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/lead.fxml"), 831, 634));
 
         }
         if(office) {
-            primaryStage.setTitle("Office");
+            primaryStage.setTitle("Büroangestellter");
+            //primaryStage.setTitle("office");
+
             primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/office.fxml"), 900, 550));
         }
         if(crane) {
-            primaryStage.setTitle("Crane Operator");
+            primaryStage.setTitle("Kranfahrer");
+            //primaryStage.setTitle("Crame Operator");
+
             primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/crane.fxml"), 610, 625));
         }
 

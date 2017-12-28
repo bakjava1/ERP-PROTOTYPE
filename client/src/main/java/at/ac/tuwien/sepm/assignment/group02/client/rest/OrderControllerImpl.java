@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
+
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.slf4j.Logger;
@@ -79,10 +80,6 @@ public class OrderControllerImpl implements OrderController {
             throw new PersistenceLayerException("Connection Problem with Server");
         }
 
-        for (int i = 0; orderArray!= null && i < orderArray.length; i++) {
-            orderList.add(orderArray[i]);
-        }
-
         return orderList;
 
     }
@@ -105,9 +102,11 @@ public class OrderControllerImpl implements OrderController {
             }
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("Connection Problem with Server");
         } catch(RestClientException e){
             //no response payload, probably server not running
             LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("Connection Problem with Server");
         }
 
 

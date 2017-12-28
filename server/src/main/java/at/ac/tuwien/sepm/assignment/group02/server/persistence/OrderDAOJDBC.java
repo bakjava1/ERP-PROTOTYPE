@@ -28,7 +28,7 @@ public class OrderDAOJDBC implements OrderDAO {
     @Override
     public void createOrder(Order order) throws PersistenceLayerException {
         LOG.debug("Creating new Order");
-        String createSentence = "INSERT INTO ORDERS VALUES(default,?,?,?,now(),false,false)";
+        String createSentence = "INSERT INTO ORDERS(id,customer_name,customer_address,customer_uid,order_date,isPaidFlag,isDoneFlag) VALUES(default,?,?,?,now(),false,false)";
         String insertTaskSentence = "INSERT INTO TASK VALUES(default,?,?,?,?,?,?,?,?,?,?,?,false,false);";
 
         try{
@@ -92,7 +92,7 @@ public class OrderDAOJDBC implements OrderDAO {
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISPAIDFLAG = 0 AND ISDONEFLAG = 0 ORDER BY ORDER_DATE");
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = 0 AND ISPAIDFLAG = 0 ORDER BY ORDER_DATE");
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -101,6 +101,10 @@ public class OrderDAOJDBC implements OrderDAO {
                 Order currentOrder = new Order();
                 currentOrder.setID(rs.getInt("ID"));
                 currentOrder.setCustomerName(rs.getString("customer_name"));
+                currentOrder.setCustomerAddress(rs.getString("customer_address"));
+                currentOrder.setCustomerUID(rs.getString("customer_uid"));
+                currentOrder.setOrderDate(rs.getTimestamp("order_date"));
+                currentOrder.setPaid(rs.getBoolean("isPaidFlag"));
                 //currentOrder.setGrossAmount(rs.getInt("summe"));
 
 
@@ -148,7 +152,7 @@ public class OrderDAOJDBC implements OrderDAO {
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = 1 ORDER BY ORDER_DATE");
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = 0 AND ISPAIDFLAG = 1 ORDER BY ORDER_DATE");
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -181,13 +185,20 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public void invoiceOrder(Order order) throws PersistenceLayerException {
-        String updateSentence = "UPDATE ORDERS SET isPaidFlag=? WHERE ID=?";
+        String updateSentence = "UPDATE ORDERS SET isPaidFlag=?, delivery_date=?, invoice_date=?, gross_amount=?, net_amount=?, tax_amount=? WHERE ID=?";
+
+        //TODO prices get not written because not clear how they are working now
 
         try {
             PreparedStatement stmt = dbConnection.prepareStatement(updateSentence);
-            //set to ispaid to true
+            //set necessary fields in order
             stmt.setInt(1, 1);
-            stmt.setInt(2, order.getID());
+            stmt.setTimestamp(2, new Timestamp(order.getDeliveryDate().getTime()));
+            stmt.setTimestamp(3,  new Timestamp(order.getInvoiceDate().getTime()));
+            stmt.setInt(4, order.getGrossAmount());
+            stmt.setInt(5, order.getNetAmount());
+            stmt.setInt(6, order.getTaxAmount());
+            stmt.setInt(7, order.getID());
             stmt.execute();
 
             stmt.close();

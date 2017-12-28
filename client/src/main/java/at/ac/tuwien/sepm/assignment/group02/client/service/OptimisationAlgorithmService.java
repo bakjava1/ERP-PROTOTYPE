@@ -1,6 +1,11 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
-public interface OptimizingAlgorithmService {
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
+
+import java.util.ArrayList;
+
+public interface OptimisationAlgorithmService {
 
     /**
      * 2.3 Schnittbild Optimierung
@@ -11,4 +16,9 @@ public interface OptimizingAlgorithmService {
      * 2.4.3 Impementieren der Anzeige des Schnittbilds
      * 2.4.4 (rest/AssignmentController) Neue Aufgabe für Kranfahrer erstellen.
      */
+
+    public ArrayList<Task> getSelectedTasksMock();
+
+    public Timber getSelectedTimberMock();
+
 }

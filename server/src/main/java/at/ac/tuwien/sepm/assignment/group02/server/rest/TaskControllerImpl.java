@@ -54,7 +54,7 @@ public class TaskControllerImpl {
         }
     }
 
-    @RequestMapping(value="/deleteTask", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/deleteTask", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "delete task")
     public void deleteTask(TaskDTO task) throws ResourceNotFoundException {
         LOG.debug("Deleting task " + task.getId());
@@ -68,7 +68,7 @@ public class TaskControllerImpl {
 
     @RequestMapping(value="/getAllOpenTasks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all open tasks")
-    public List<TaskDTO> getAllOpenTasks() {
+    public List<TaskDTO> getAllOpenTasks() throws ResourceNotFoundException {
         LOG.debug("called getAllOpenTasks");
         try {
             return taskService.getAllOpenTasks();
@@ -80,7 +80,7 @@ public class TaskControllerImpl {
 
     @RequestMapping(value="/getTaskById/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get Task By Id")
-    public TaskDTO getTaskById(int task_id) {
+    public TaskDTO getTaskById(int task_id) throws ResourceNotFoundException {
         LOG.debug("called getTaskById");
         try {
             return taskService.getTaskById(task_id);

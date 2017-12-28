@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -48,7 +49,7 @@ public class AssignmentControllerImpl implements AssignmentController {
 
         try {
             assignmentArray = restTemplate.getForObject("http://localhost:8080/getAllOpenAssignments", AssignmentDTO[].class);
-        } catch(HttpStatusCodeException e){
+        } catch(HttpClientErrorException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("HttpStatusCodeException");
         } catch(RestClientException e){
@@ -66,7 +67,7 @@ public class AssignmentControllerImpl implements AssignmentController {
     @Override
     public void setDone(@RequestBody AssignmentDTO assignmentDTO) throws PersistenceLayerException {
         try {
-            restTemplate.put("http://localhost:8080/updateAssignment", assignmentDTO, AssignmentDTO.class);
+            restTemplate.put("http://localhost:8080/setAssignmentDone", assignmentDTO, AssignmentDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("HttpStatusCodeException");

@@ -1,14 +1,14 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.converter.OrderConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.converter.TaskConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
-import at.ac.tuwien.sepm.assignment.group02.client.converter.OrderConverter;
-import at.ac.tuwien.sepm.assignment.group02.client.converter.TaskConverter;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.slf4j.Logger;
@@ -82,14 +82,10 @@ public class OrderServiceImpl implements OrderService {
             LOG.warn(e.getMessage());
         }
 
-        List<Order> allOpenConverted = new LinkedList<>();
+        List<Order> convertedOrders = convertTaskLists(allOpen);
+        setNetPrice(convertedOrders);
 
-
-        for (OrderDTO order: allOpen) {
-            allOpenConverted.add(orderConverter.convertRestDTOToPlainObject(order));
-        }
-
-        return allOpenConverted;
+        return convertedOrders;
 
     }
 
@@ -109,14 +105,12 @@ public class OrderServiceImpl implements OrderService {
             LOG.warn(e.getMessage());
         }
 
-        List<Order> allClosedConverted = new LinkedList<>();
 
+        List<Order> convertedOrders = convertTaskLists(allClosed);
 
-        for (OrderDTO bill: allClosed) {
-            allClosedConverted.add(orderConverter.convertRestDTOToPlainObject(bill));
-        }
+        setNetPrice(convertedOrders);
 
-        return allClosedConverted;
+        return convertedOrders;
     }
 
     @Override
@@ -126,37 +120,79 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void invoiceOrder(Order selectedOrder) throws InvalidInputException, ServiceLayerException {
+    public void invoiceOrder(Order selectedOrder) throws ServiceLayerException {
 
-        if(selectedOrder==null){
-            throw new InvalidInputException("Selected Order is null");
-        }
+        validator.inputValidationOrder(selectedOrder);
+
         if(selectedOrder.isPaid()){
             throw new InvalidInputException("Order already invoiced");
         }
 
-        //check if customer information is missing //TODO throws null-pointer exception
-        if(selectedOrder.getCustomerName().isEmpty() || selectedOrder.getCustomerAddress().isEmpty() || selectedOrder.getCustomerUID().isEmpty()){
-            throw new InvalidInputException("Customer information missing for selected order");
-        }
-        if(selectedOrder.getNetAmount()<=0){
-            throw new InvalidInputException("net price for selected order is negative or empty");
+        int netSumTasks = 0;
+        for(Task task : selectedOrder.getTaskList()){
+            validator.inputValidationTaskOnOrder(task);
+            netSumTasks += task.getPrice();
         }
 
 
-        int netAmount = selectedOrder.getNetAmount();
+        selectedOrder.setNetAmount(netSumTasks);
         //TODO get tax rate from properties file
-        int taxAmount = netAmount * (20/100);
-        int grossAmount = netAmount + taxAmount;
+        double taxAmount = (double)netSumTasks * (20.0/100.0);
+        int grossAmount = netSumTasks + (int)taxAmount;
         selectedOrder.setGrossAmount(grossAmount);
-        selectedOrder.setTaxAmount(taxAmount);
+        selectedOrder.setTaxAmount((int)taxAmount);
         selectedOrder.setDeliveryDate(new Date());
+        selectedOrder.setInvoiceDate(new Date());
+
+
+        validator.inputValidationInvoice(selectedOrder);
+
         OrderDTO orderDTO = orderConverter.convertPlainObjectToRestDTO(selectedOrder);
+
 
         try {
             orderController.invoiceOrder(orderDTO);
         } catch (PersistenceLayerException e) {
             throw new ServiceLayerException(e.getMessage());
         }
+    }
+
+
+
+    private List<Order> convertTaskLists(List<OrderDTO> allOrder){
+        List<Order> allConverted = new LinkedList<>();
+
+        for (OrderDTO currentOrder: allOrder) {
+            Order order = orderConverter.convertRestDTOToPlainObject(currentOrder);
+            List<Task> tasksConverted = new LinkedList<>();
+
+            for (TaskDTO task: currentOrder.getTaskList()) {
+                tasksConverted.add(taskConverter.convertRestDTOToPlainObject(task));
+            }
+
+            order.setTaskList(tasksConverted);
+
+            allConverted.add(order);
+        }
+
+        return allConverted;
+    }
+
+
+    private void setNetPrice(List<Order> orders) {
+
+        for (Order order : orders) {
+
+            int sum = 0;
+
+            for (Task task : order.getTaskList()) {
+                sum += task.getPrice();
+
+            }
+
+            order.setNetAmount(sum);
+
+        }
+
     }
 }

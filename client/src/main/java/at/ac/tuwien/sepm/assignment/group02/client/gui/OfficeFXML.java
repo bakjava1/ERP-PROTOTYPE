@@ -29,6 +29,7 @@ import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -145,7 +146,6 @@ public class OfficeFXML {
         this.costBenefitService = costBenefitService;
     }
 
-
     @FXML
     void initialize() {
         table_openOrder.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -154,8 +154,7 @@ public class OfficeFXML {
         col_costumerName.setCellValueFactory(new PropertyValueFactory("customerName"));
         col_taskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
         col_amount.setCellValueFactory(new PropertyValueFactory("quantity"));
-        col_grossSum.setCellValueFactory(new PropertyValueFactory("grossAmount"));
-
+        col_grossSum.setCellValueFactory(new PropertyValueFactory("netAmount"));
 
 
         table_bill.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -164,7 +163,7 @@ public class OfficeFXML {
         col_billCostumerName.setCellValueFactory(new PropertyValueFactory("customerName"));
         col_billTaskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
         col_billAmount.setCellValueFactory(new PropertyValueFactory("quantity"));
-        col_billGrossSum.setCellValueFactory(new PropertyValueFactory("grossAmount"));
+        col_billGrossSum.setCellValueFactory(new PropertyValueFactory("netAmount"));
 
 
 
@@ -203,20 +202,25 @@ public class OfficeFXML {
         Order order = new Order();
 
         if(table_openOrder.getSelectionModel().getSelectedItem() != null) {
-            order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
+            AlertBuilder confirmDeletion = new AlertBuilder();
+            boolean confirmed = confirmDeletion.showConfirmationAlert("Bestellung löschen", null, "Möchten Sie die Bestellung wirklich löschen?");
 
-            Task task = new Task();
-            task.setOrder_id(order.getID());
+            if(confirmed) {
+                order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
 
-            try {
-                orderService.deleteOrder(order);
-                taskService.deleteTask(task);
-            } catch (InvalidInputException e) {
-                //InvalidInputException is never thrown
-                //the only user input is to select an order
-                //LOG.warn(e.getMessage());
-            } catch (ServiceLayerException e) {
-                LOG.warn(e.getMessage());
+                Task task = new Task();
+                task.setOrder_id(order.getID());
+
+                try {
+                    orderService.deleteOrder(order);
+                    taskService.deleteTask(task);
+                } catch (InvalidInputException e) {
+                    //InvalidInputException is never thrown
+                    //the only user input is to select an order
+                    //LOG.warn(e.getMessage());
+                } catch (ServiceLayerException e) {
+                    LOG.warn(e.getMessage());
+                }
             }
         } else {
             Alert noSelection = new Alert(Alert.AlertType.ERROR);
@@ -283,6 +287,7 @@ public class OfficeFXML {
 
             for (Order order: allOpen) {
                 openOrderForTable.add(order);
+
             }
 
             table_openOrder.setItems(openOrderForTable);
@@ -322,25 +327,18 @@ public class OfficeFXML {
     }
 
 
-
-
     @FXML
     public void addTimber(ActionEvent actionEvent){
-        //TODO catch exception (InvalidInputException by Lucia)
+
         if(tf_timber_amount.getText().isEmpty() || cb_timber_box.getSelectionModel().getSelectedIndex()==-1){
             LOG.error("No Input");
-
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Input Error");
-            alert.setHeaderText("No Input");
-            alert.setContentText("Please use only valid input!");
-            alert.showAndWait();
+            alertBuilder.showErrorAlert("Fehler bei Eingabe", "Eigabe unvollständig.", "Bitte nur gültige Eingaben benützen!");
         }
         else{
-            int tes = cb_timber_box.getSelectionModel().getSelectedIndex();
             Timber timber = new Timber(cb_timber_box.getSelectionModel().getSelectedIndex()+1, Integer.parseInt(tf_timber_amount.getText()));
             try {
-                boolean addTimberConfirmation = alertBuilder.showConfirmationAlert("Rundholz hinzufügen", "Wollen Sie " + timber.getAmount() + " Stück Rundholz zu Box " + timber.getBox_id() + " hinzufügen?", "");
+                boolean addTimberConfirmation = alertBuilder.showConfirmationAlert("Rundholz hinzufügen", "Wollen Sie " +
+                        timber.getAmount() + " Stück Rundholz zu Box " + timber.getBox_id() + " hinzufügen?", "");
                 if(addTimberConfirmation){
                     timberService.addTimber(timber);
                     tf_timber_amount.setText("");
@@ -591,23 +589,26 @@ public class OfficeFXML {
         //get the selected order
         Order selectedOrder = table_openOrder.getSelectionModel().getSelectedItem();
 
-        try {
-            orderService.invoiceOrder(selectedOrder);
-        } catch (InvalidInputException e) {
-            //TODO use alertBuilder
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Fehler beim Abrechnen!");
-            alert.setHeaderText(null);
-            alert.setContentText("Bestellung konnte nicht erfolgreich abgerechnet werden. Bitte versuchen Sie es erneut!");
-            alert.showAndWait();
-        } catch (ServiceLayerException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            //TODO alertBuilder
-            alert.setTitle("Fehler beim Abrechnen!");
-            alert.showAndWait();
+        //check if something selected from table
+        if(selectedOrder == null){
+            LOG.warn("no order selected from database");
+            alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Keine Bestellung wurde ausgewählt", "Bitte eine abzurechnende Bestellung aus der Tabelle auswählen!");
+            return;
         }
 
-        updateTable();
+        boolean accept = alertBuilder.showConfirmationAlert("Rechnung abrechnen", "Wollen Sie die Rechnung mit Nummer " + selectedOrder.getID() + " abrechnen?", "");
+        if(accept){
+            try {
+                orderService.invoiceOrder(selectedOrder);
+                updateBillTable();
+                updateTable();
+                alertBuilder.showInformationAlert("Rechnung abgerechnet", "Rechnung mit Nummer " + selectedOrder.getID() + " erfolgreich abgerechnet!","");
+            } catch (InvalidInputException e) {
+                alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Bestellung konnte nicht erfolgreich abgerechnet werden!", e.getMessage());
+            } catch (ServiceLayerException e) {
+                alertBuilder.showErrorAlert("Fehler beim Abrechnen!", "", "");
+            }
+        }
 
     }
 

@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.group02.server.entity;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +13,7 @@ public class Order {
     private String customerName;
     private String customerAddress;
     private String customerUID;
-    private Timestamp orderDate;
+    private Date orderDate;
     private boolean isPaid;
     private List<Task> taskList;
 
@@ -23,8 +22,7 @@ public class Order {
     private int netAmount;
     private int taxAmount;
 
-    private int quantity;
-    private int taskAmount;
+
 
     public Order() {
         this.id = -1;
@@ -33,7 +31,7 @@ public class Order {
         this.taskList = new ArrayList<>();
     }
 
-    public Order(int id, Timestamp orderDate) {
+    public Order(int id, Date orderDate) {
         this.id = id;
         this.orderDate = orderDate;
     }
@@ -48,11 +46,11 @@ public class Order {
         return this.id;
     }
 
-    public Timestamp getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -137,21 +135,6 @@ public class Order {
         this.taxAmount = taxAmount;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public int getTaskAmount() {
-        return taskAmount;
-    }
-
-    public void setTaskAmount(int taskAmount) {
-        this.taskAmount = taskAmount;
-    }
 
     @Override
     public String toString() {

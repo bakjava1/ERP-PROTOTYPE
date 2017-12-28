@@ -26,7 +26,7 @@ public class LumberControllerImpl {
     private static LumberService lumberService;
 
     @Autowired
-    public LumberControllerImpl(LumberService lumberService) throws EntityCreationException{
+    public LumberControllerImpl(LumberService lumberService) throws EntityCreationException {
 
         LumberControllerImpl.lumberService = lumberService;
     }
@@ -81,7 +81,7 @@ public class LumberControllerImpl {
         try {
             return lumberService.getAllLumber(filter);
         } catch (ServiceLayerException e) {
-            throw new ResourceNotFoundException("failed to get all lumbers.");
+            throw new ResourceNotFoundException("failed to get all lumbers."+ e.getMessage());
         }
 
     }

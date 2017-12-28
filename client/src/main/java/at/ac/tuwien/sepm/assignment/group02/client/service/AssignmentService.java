@@ -12,28 +12,23 @@ import java.util.List;
 public interface AssignmentService {
 
     /**
-     * 2.4.4 Neue Aufgabe für Kranfahrer erstellen.
+     * create a new assignment for crane
      * @param assignmentDTO
+     * @throws ServiceLayerException
      */
     void createAssignment(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 
     /**
-     * 3.1 Aufgaben anzeigen
-     * 3.1.2 (rest/AssignmentController) Eine tabellarische Übersicht der nicht erledigten Aufgaben anzeigen.
-     * @return
+     * retrieve all open assignments overviewing not finihsing assignments
+     * @return a list of assignments
+     * @throws ServiceLayerException
      */
     List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 
     /**
-     * 3.2 Aufgaben abschließen
-     * 3.2.2 (rest/AssignmentController) Aufgabe als erledigt markieren.
-     * 3.2.3 (rest/TimberController) Rundholz aus dem Lager entfernen.
-     * 3.2.4 (rest/LumberController) Schnittholz ins Lager hinzufügen.
-     * 3.2.5 (rest/LumberController) Hinzugefügtes Schnittholz bei Bedarf reservieren.
-     * 3.2.6 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
-     * 3.2.7 Überprüfen ob Auftrag fertig ist (? => (rest/TaskController) getTaskById)
+     * method marks an assignment as done
      * @param assignmentDTO an assignment to mark as done
-     * @throws ServiceLayerException if the assignment couldn't be updated
+     * @throws ServiceLayerException if the assignment couldn't be marked as done
      */
     void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 

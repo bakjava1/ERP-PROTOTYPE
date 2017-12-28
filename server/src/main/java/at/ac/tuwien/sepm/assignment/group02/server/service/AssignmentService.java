@@ -12,18 +12,23 @@ import java.util.List;
 public interface AssignmentService {
 
     /**
-     * 2.4.4
      * This method creates a new assignment for the crane operator
+     * @param assignmentDTO
+     * @throws ServiceLayerException
      */
     void addAssignment(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 
     /**
-     * 3.1.2 Alle nicht erledigten Aufgaben anfordern.
+     * retrieve all open assignments
+     * @return a list of all open assignments
+     * @throws ServiceLayerException
      */
     List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 
     /**
-     * 3.2.2 Aufgabe als erledigt markieren.
+     * mark an assignment as done
+     * @param assignmentDTO
+     * @throws ServiceLayerException
      */
     void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 

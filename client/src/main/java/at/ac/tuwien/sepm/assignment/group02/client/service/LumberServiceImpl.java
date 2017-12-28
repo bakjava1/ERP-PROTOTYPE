@@ -1,19 +1,21 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.converter.LumberConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.NoValidIntegerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberController;
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskController;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
-import at.ac.tuwien.sepm.assignment.group02.client.converter.LumberConverter;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedList;
@@ -36,12 +38,7 @@ public class LumberServiceImpl implements LumberService {
         LumberServiceImpl.validator = validator;
     }
 
-    /**
-     * HELLO WORLD example
-     *
-     * @param id
-     * @return
-     */
+
     @Override
     public Lumber getLumber(int id) {
 
@@ -53,14 +50,12 @@ public class LumberServiceImpl implements LumberService {
         } catch (PersistenceLayerException e) {
             e.printStackTrace();
         }
-        Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
 
-        return lumber;
-
+        return lumberConverter.convertRestDTOToPlainObject(lumberDTO);
     }
 
     @Override
-    public void addReservedLumberToTask(String id, String quantity) throws InvalidInputException,ServiceLayerException {
+    public void addReservedLumberToTask(String id, String quantity) throws ServiceLayerException {
         try {
             int[] validated = validator.temporaryAddTaskToLumberValidation(id,quantity);
             TaskDTO toAdd = new TaskDTO();
@@ -77,17 +72,24 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public List<Lumber> getAll(Lumber filter) {
-
+    public List<Lumber> getAll(UnvalidatedLumber filter)throws ServiceLayerException {
         LOG.debug("getAllSchnittholz called");
-
         List<LumberDTO> allLumber = null;
-        LumberDTO filterDTO = lumberConverter.convertPlainObjectToRestDTO(filter);
 
         try {
+
+        Lumber validatedLumber = validator.validateLumber(filter);
+
+        LumberDTO filterDTO = lumberConverter.convertPlainObjectToRestDTO(validatedLumber);
+
+
             allLumber = lumberController.getAllLumber(filterDTO);
+        } catch(InvalidInputException e) {
+            LOG.error("Failed to validate Input: " + e.getMessage());
+            throw new InvalidInputException(e.getMessage());
         } catch (PersistenceLayerException e) {
-            LOG.warn(e.getMessage());
+            LOG.warn("Failed to get all Lumber"+e.getMessage());
+            throw new ServiceLayerException("Server Problems");
         }
 
         List<Lumber> allLumberConverted = new LinkedList<>();
@@ -109,6 +111,14 @@ public class LumberServiceImpl implements LumberService {
     public void deleteLumber(Lumber lumber) throws ServiceLayerException {
 
         LOG.debug("deleteLumber called: {}", lumber);
+
+        try {
+            validateLumber(lumber);
+        } catch (NoValidIntegerException e) {
+            e.printStackTrace();
+        } catch (InvalidInputException e) {
+            e.printStackTrace();
+        }
         LumberDTO lumberToDelete = lumberConverter.convertPlainObjectToRestDTO(lumber);
         try {
             lumberController.removeLumber(lumberToDelete);
@@ -121,6 +131,13 @@ public class LumberServiceImpl implements LumberService {
     public void updateLumber(Lumber lumber) throws ServiceLayerException {
 
         LOG.debug("updateLumber called: {}", lumber);
+        try {
+            validateLumber(lumber);
+        } catch (NoValidIntegerException e) {
+            e.printStackTrace();
+        } catch (InvalidInputException e) {
+            e.printStackTrace();
+        }
         LumberDTO toUpdate = lumberConverter.convertPlainObjectToRestDTO(lumber);
         try {
             lumberController.updateLumber(toUpdate);
@@ -129,6 +146,114 @@ public class LumberServiceImpl implements LumberService {
         }
 
     }
+
+    private void validateLumber(Lumber lumber) throws InvalidInputException {
+        LOG.debug("Validating lumber: {}",lumber);
+
+        if(lumber==null){
+            LOG.debug("Lumber is null.");
+            try {
+                throw new InvalidInputException("Lumber can't be empty.");
+            } catch (InvalidInputException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(lumber.getId()<=0){
+            LOG.warn("ID: {}", lumber.getId());
+            try {
+                throw new NoValidIntegerException("Invalid ID.");
+            } catch (NoValidIntegerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(lumber.getSize()<=0){
+            LOG.warn("SIZE: {}", lumber.getSize());
+            try {
+                throw new NoValidIntegerException("Negative Integer or Null entered");
+            } catch (NoValidIntegerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(lumber.getWidth()<=0){
+            LOG.warn("WIDTH: {}", lumber.getWidth());
+            try {
+                throw new NoValidIntegerException("Negative Integer or Null entered.");
+            } catch (NoValidIntegerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(lumber.getLength()<=0){
+            LOG.warn("LENGTH: {}", lumber.getLength());
+            try {
+                throw new NoValidIntegerException("Negative Integer or Null entered.");
+            } catch (NoValidIntegerException e) {
+                e.printStackTrace();
+            }
+        }
+        if(lumber.getQuantity()<=0){
+            LOG.warn("QUALITY: {}", lumber.getQuantity());
+            try {
+                throw new NoValidIntegerException("Negative Integer or Null entered.");
+            } catch (NoValidIntegerException e) {
+                e.printStackTrace();
+            }
+        }
+        if(lumber.getReserved_quantity()<=0){
+            LOG.warn("RESERVED QUANTITY: {}", lumber.getReserved_quantity());
+            try {
+                throw new NoValidIntegerException("Negative Integer or Null entered.");
+            } catch (NoValidIntegerException e) {
+                e.printStackTrace();
+            }
+        }
+        if(lumber.getDelivered_quantity()<=0){
+            LOG.warn("DELIVERED QUANTITY: {}", lumber.getDelivered_quantity());
+            try {
+                throw new NoValidIntegerException("Negative Integer or Null entered.");
+            } catch (NoValidIntegerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (lumber.isAll_reserved()){
+            LOG.warn("ALL RESERVED: {}", lumber.isAll_reserved());
+
+            try {
+                throw new PersistenceLayerException("All reserved persist.");
+            }catch (PersistenceLayerException e){
+                e.printStackTrace();
+            }
+        }
+
+        if(lumber.getLager()==null || lumber.getLager().isEmpty()){
+            LOG.warn("Lager: '{}'.", lumber.getLager());
+            throw new InvalidInputException("Lager can't be empty.");
+        }
+
+        if(lumber.getDescription()==null || lumber.getDescription().isEmpty()){
+            LOG.warn("Description: '{}'.", lumber.getDescription());
+            throw new InvalidInputException("Description can't be empty.");
+        }
+        if(lumber.getFinishing()==null || lumber.getFinishing().isEmpty()){
+            LOG.warn("Finishing: '{}'.", lumber.getFinishing());
+            throw new InvalidInputException("Finishing can't be empty.");
+        }
+
+        if(lumber.getWood_type()==null || lumber.getWood_type().isEmpty()){
+            LOG.warn("Wood_type: '{}'.", lumber.getWood_type());
+            throw new InvalidInputException("Wood_type can't be empty.");
+        }
+
+        if(lumber.getQuality()==null || lumber.getQuality().isEmpty()){
+            LOG.warn("Quality: '{}'.", lumber.getQuality());
+            throw new InvalidInputException(" Quality can't be empty.");
+        }
+    }
+
 
 
 }
