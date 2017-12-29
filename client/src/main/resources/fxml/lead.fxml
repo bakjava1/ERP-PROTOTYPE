@@ -15,7 +15,7 @@
    <children>
       <TabPane prefHeight="634.0" prefWidth="831.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab text="Schnittholz">
+          <Tab fx:id="tab_lumber" text="Schnittholz">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="593.0">
                      <children>
@@ -61,10 +61,27 @@
                   </AnchorPane>
             </content>
           </Tab>
-            <Tab text="Aufträge">
+            <Tab fx:id="tab_task" text="Aufträge">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="593.0">
                      <children>
+
+                         <TableView fx:id="table_task" layoutX="25.0" layoutY="41.0" prefHeight="437.0" prefWidth="777.0">
+                             <columns>
+                                 <TableColumn fx:id="task_col_order_id" prefWidth="87.0" text="Bestellung" />
+                                 <TableColumn fx:id="task_col_description" prefWidth="105.0" text="Bezeichnung" />
+                                 <TableColumn fx:id="task_col_finishing" prefWidth="92.0" text="Ausführung" />
+                                 <TableColumn fx:id="task_col_wood_type" prefWidth="64.0" text="Holzart" />
+                                 <TableColumn fx:id="task_col_quality" prefWidth="69.0" text="Qualität" />
+                                 <TableColumn fx:id="task_col_size" prefWidth="59.0" text="Stärke" />
+                                 <TableColumn fx:id="task_col_width" prefWidth="61.0" text="Breite" />
+                                 <TableColumn fx:id="task_col_length" prefWidth="58.0" text="Länge" />
+                                 <TableColumn fx:id="task_col_quantity" prefWidth="66.0" text="Anzahl" />
+                                 <TableColumn fx:id="task_col_produced_quantity" prefWidth="122.0" text="Produziert" />
+                             </columns>
+                         </TableView>
+
+
                         <Button fx:id="btn_opt_alg" layoutX="328.0" layoutY="520.0" mnemonicParsing="false" onAction="#optimisationBtnClicked" prefHeight="40.0" prefWidth="176.0" text="Optimierung starten" />
                      </children>
                   </AnchorPane>

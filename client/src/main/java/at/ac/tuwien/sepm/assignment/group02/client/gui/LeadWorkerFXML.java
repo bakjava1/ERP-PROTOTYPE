@@ -87,6 +87,44 @@ public class LeadWorkerFXML {
     @FXML
     TableView<Lumber> table_lumber;
 
+    @FXML
+    private TableColumn task_col_order_id;
+
+    @FXML
+    private TableColumn task_col_produced_quantity;
+
+    @FXML
+    private TableColumn task_col_quantity;
+
+    @FXML
+    private TableColumn task_col_length;
+
+    @FXML
+    private TableColumn task_col_width;
+
+    @FXML
+    private TableColumn task_col_size;
+
+    @FXML
+    private TableColumn task_col_quality;
+
+    @FXML
+    private TableColumn task_col_wood_type;
+
+    @FXML
+    private TableColumn task_col_finishing;
+
+    @FXML
+    private TableColumn task_col_description;
+
+    @FXML
+    TableView<Task> table_task;
+
+    @FXML
+    private Tab tab_task;
+
+    @FXML
+    private Tab tab_lumber;
 
     private LumberService lumberService;
 
@@ -116,8 +154,25 @@ public class LeadWorkerFXML {
         cb_wood_type.getSelectionModel().selectFirst();
         cb_quality.getSelectionModel().selectFirst();
 
+
+        task_col_order_id.setCellValueFactory(new PropertyValueFactory("order_id"));
+        task_col_description.setCellValueFactory(new PropertyValueFactory("description"));
+        task_col_finishing.setCellValueFactory(new PropertyValueFactory("finishing"));
+        task_col_wood_type.setCellValueFactory(new PropertyValueFactory("wood_type"));
+        task_col_quality.setCellValueFactory(new PropertyValueFactory("quality"));
+        task_col_size.setCellValueFactory(new PropertyValueFactory("size"));
+        task_col_width.setCellValueFactory(new PropertyValueFactory("width"));
+        task_col_length.setCellValueFactory(new PropertyValueFactory("length"));
+        task_col_quantity.setCellValueFactory(new PropertyValueFactory("quantity"));
+        task_col_produced_quantity.setCellValueFactory(new PropertyValueFactory("produced_quantity"));
+
+
         //initial lumber overview
         onSearchButtonClicked();
+
+    }
+
+    private void updateTaskTable() {
 
     }
 
