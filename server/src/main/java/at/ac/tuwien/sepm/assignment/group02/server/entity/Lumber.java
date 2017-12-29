@@ -269,4 +269,25 @@ public class Lumber {
     public void setAll_delivered(boolean all_delivered) {
         this.all_delivered = all_delivered;
     }
+
+
+    @Override
+    public String toString() {
+        return "Lumber{" +
+                "id=" + id +
+                ", lager='" + lager + '\'' +
+                ", description='" + description + '\'' +
+                ", finishing='" + finishing + '\'' +
+                ", wood_type='" + wood_type + '\'' +
+                ", quality='" + quality + '\'' +
+                ", size=" + size +
+                ", width=" + width +
+                ", length=" + length +
+                ", quantity=" + quantity +
+                ", reserved_quantity=" + reserved_quantity +
+                ", delivered_quantity=" + delivered_quantity +
+                ", all_reserved=" + all_reserved +
+                ", all_delivered=" + all_delivered +
+                '}';
+    }
 }

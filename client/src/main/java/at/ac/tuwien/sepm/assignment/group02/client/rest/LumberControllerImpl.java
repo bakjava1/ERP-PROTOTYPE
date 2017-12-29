@@ -38,8 +38,19 @@ public class LumberControllerImpl implements LumberController {
     }
 
     @Override
-    public void reserveLumber(LumberDTO lumberDTO) {
+    public void reserveLumber(LumberDTO lumberDTO) throws PersistenceLayerException {
+        LOG.debug("Sending request for lumber reservation to server");
 
+        try {
+            restTemplate.put("http://localhost:8080/reserveLumber", lumberDTO, LumberDTO.class);
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("Ressource nicht gefunden.");
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("Server nicht erreichbar.");
+        }
     }
 
     @Override

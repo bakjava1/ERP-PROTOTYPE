@@ -21,7 +21,7 @@ public interface LumberService {
      * @throws InvalidInputException if the search parameters are not valid
      * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
      */
-    List<Lumber> getAll(UnvalidatedLumber filter) throws InvalidInputException, ServiceLayerException;
+    List<Lumber> getAll(UnvalidatedLumber filter) throws ServiceLayerException;
 
     /**
      * choose a lumber from the list and mark it as reserved
@@ -30,21 +30,21 @@ public interface LumberService {
      * @throws InvalidInputException
      * @throws ServiceLayerException
      */
-    void reserveLumber(Lumber lumber, int quantity) throws InvalidInputException, ServiceLayerException;
+    void reserveLumber(Lumber lumber, int quantity) throws ServiceLayerException;
 
     /**
      * delete a lumber from the store
      * @param lumber
      * @throws ServiceLayerException
      */
-    public void deleteLumber(Lumber lumber) throws ServiceLayerException;
+    void deleteLumber(Lumber lumber) throws ServiceLayerException;
 
     /**
      * update a lumber
      * @param lumber
      * @throws ServiceLayerException
      */
-    public void updateLumber(Lumber lumber) throws  ServiceLayerException;
+    void updateLumber(Lumber lumber) throws  ServiceLayerException;
 
     /**
      * get an id of lumber
@@ -61,5 +61,5 @@ public interface LumberService {
      * @throws InvalidInputException
      * @throws ServiceLayerException
      */
-    void addReservedLumberToTask(String id, String quantity) throws InvalidInputException, ServiceLayerException;
+    void addReservedLumberToTask(String id, String quantity) throws ServiceLayerException;
 }

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.LeadWorkerFXML">
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.LeadWorkerFXML">
    <children>
       <TabPane prefHeight="634.0" prefWidth="831.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -36,10 +36,13 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="353.0" layoutY="526.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="112.0" text="Reservieren">
+                        <Button layoutX="297.0" layoutY="526.0" mnemonicParsing="false" onAction="#onReserveButtonClicked" prefHeight="36.0" prefWidth="233.0" text="Reservieren">
                            <font>
                               <Font size="14.0" />
                            </font>
+                           <graphic>
+                              <TextField fx:id="tf_quantity" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="62.0" promptText="0" />
+                           </graphic>
                         </Button>
                         <TableView fx:id="table_lumber" layoutX="81.0" layoutY="207.0" prefHeight="297.0" prefWidth="655.0">
                           <columns>

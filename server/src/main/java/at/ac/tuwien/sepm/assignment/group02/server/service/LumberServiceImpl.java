@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerEx
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateLumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,13 @@ public class LumberServiceImpl implements LumberService {
 
     private static LumberDAO lumberManagementDAO;
     private static LumberConverter lumberConverter;
+    private ValidateLumber validateLumber;
 
     @Autowired
-    public LumberServiceImpl(LumberDAO lumberManagementDAO, LumberConverter lumberConverter) {
+    public LumberServiceImpl(LumberDAO lumberManagementDAO, LumberConverter lumberConverter, ValidateLumber validateLumber) {
         LumberServiceImpl.lumberManagementDAO = lumberManagementDAO;
         LumberServiceImpl.lumberConverter = lumberConverter;
+        this.validateLumber = validateLumber;
     }
 
 
@@ -71,7 +74,8 @@ public class LumberServiceImpl implements LumberService {
             allLumberConverted = new ArrayList<>();
 
             for (int i = 0; i < allLumber.size(); i++) {
-                allLumberConverted.add(lumberConverter.convertPlainObjectToRestDTO(allLumber.get(i)));
+                LumberDTO lumberDTO = lumberConverter.convertPlainObjectToRestDTO(allLumber.get(i));
+                allLumberConverted.add(lumberDTO);
             }
         }
 
@@ -79,8 +83,34 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public void reserveLumber(LumberDTO lumber) throws ServiceLayerException {
+    public void reserveLumber(LumberDTO lumberDTO) throws ServiceLayerException {
 
+        Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
+        validateLumber.isValid(lumber);
+
+        try {
+            Lumber existing_lumber = lumberManagementDAO.readLumberById(lumber.getId());
+            LOG.debug("lumber reservation - existing lumber: {}", existing_lumber.toString());
+
+            int toReserve = lumber.getQuantity();
+            int existingQuantity = existing_lumber.getQuantity();
+            int existingReservedQuantity = existing_lumber.getReserved_quantity();
+
+            if(lumber.getQuantity() <= existingQuantity) {
+
+                existing_lumber.setReserved_quantity( existingReservedQuantity + toReserve );
+                existing_lumber.setQuantity( existingQuantity - toReserve );
+                LOG.debug("lumber reservation - updated lumber: {}", existing_lumber.toString());
+                lumberManagementDAO.updateLumber(existing_lumber);
+
+            } else {
+                throw new ServiceLayerException("Reservierte Menge an Schnittholz übersteigt vorhandene Menge.");
+            }
+
+        } catch (PersistenceLayerException e) {
+            LOG.warn("Updating Lumber Persistence Exception: {}", e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
     }
 
     @Override

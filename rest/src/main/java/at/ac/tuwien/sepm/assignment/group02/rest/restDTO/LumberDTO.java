@@ -63,7 +63,7 @@ public class LumberDTO {
      * method to retrieve the schnittholz ID
      * @return a value of id to caller
      */
-    public int getID() {
+    public int getId() {
         return id;
     }
 
@@ -71,7 +71,7 @@ public class LumberDTO {
      * method to set the schnittholz ID
      * @param id
      */
-    public void setID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -337,4 +337,24 @@ public class LumberDTO {
         return new SimpleBooleanProperty(all_delivered);
     }
 
+
+    @Override
+    public String toString() {
+        return "LumberDTO{" +
+                "id=" + id +
+                ", lager='" + lager + '\'' +
+                ", description='" + description + '\'' +
+                ", finishing='" + finishing + '\'' +
+                ", wood_type='" + wood_type + '\'' +
+                ", quality='" + quality + '\'' +
+                ", size=" + size +
+                ", width=" + width +
+                ", length=" + length +
+                ", quantity=" + quantity +
+                ", reserved_quantity=" + reserved_quantity +
+                ", delivered_quantity=" + delivered_quantity +
+                ", all_reserved=" + all_reserved +
+                ", all_delivered=" + all_delivered +
+                '}';
+    }
 }

@@ -202,7 +202,7 @@ public class Validator {
 
     }
 
-    private int validateNumber(String toValidate) throws NoValidIntegerException {
+    public int validateNumber(String toValidate) throws NoValidIntegerException {
         int num;
         if(toValidate == null || toValidate.length() == 0) {
             throw new NoValidIntegerException("Empty Field, No Number entered");

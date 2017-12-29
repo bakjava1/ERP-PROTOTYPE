@@ -34,7 +34,7 @@ public class LumberControllerImpl {
     @RequestMapping(value="/updateLumber", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Update Lumber")
     public void updateLumber(@RequestBody LumberDTO lumberDTO) throws ResourceNotFoundException {
-        LOG.debug("Updating the Lumber  with id: " + lumberDTO.getID());
+        LOG.debug("Updating the Lumber  with id: " + lumberDTO.getId());
 
         try {
             lumberService.updateLumber(lumberDTO);
@@ -47,7 +47,7 @@ public class LumberControllerImpl {
     @RequestMapping(value="/deleteLumber", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Remove Lumber")
     public void removeLumber(@RequestBody LumberDTO lumberDTO) throws ResourceNotFoundException {
-        LOG.debug("removing lumber " + lumberDTO.getID());
+        LOG.debug("removing lumber " + lumberDTO.getId());
         try {
             lumberService.removeLumber(lumberDTO);
         } catch (ServiceLayerException e) {
@@ -86,7 +86,7 @@ public class LumberControllerImpl {
 
     }
 
-    /*
+
     @RequestMapping(value="/reserveLumber", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Reserve Lumber")
     public void reserveLumber(@RequestBody LumberDTO lumberDTO) throws ResourceNotFoundException {
@@ -96,7 +96,7 @@ public class LumberControllerImpl {
         } catch (ServiceLayerException e) {
             throw new ResourceNotFoundException();
         }
-    }*/
+    }
 
     @RequestMapping(value="/createLumber", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Create Lumber")
