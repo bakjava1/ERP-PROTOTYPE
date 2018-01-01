@@ -211,6 +211,7 @@ public class LumberDAOJDBC implements LumberDAO {
     @Override
     public void updateLumber(Lumber lumber) throws PersistenceLayerException {
         LOG.debug("Entering update Lumber method with parameter:{}" ,lumber);
+
         checkIfLumberIsNull(lumber);
 
         try {
@@ -251,8 +252,8 @@ public class LumberDAOJDBC implements LumberDAO {
 
             ps = dbConnection.prepareStatement(updateLumber);
             ps.setInt(1, currentQuantity);
-            ps.setInt(2,currentReservedQuantity);
-            ps.setInt(3,lumber.getId());
+            ps.setInt(2, currentReservedQuantity);
+            ps.setInt(3, lumber.getId());
             ps.executeUpdate();
 
             dbConnection.commit();

@@ -29,6 +29,7 @@ public class LumberControllerImpl implements LumberController {
 
     @Autowired
     public LumberControllerImpl(RestTemplate restTemplate){
+
         this.restTemplate = restTemplate;
     }
 

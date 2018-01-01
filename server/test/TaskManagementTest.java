@@ -134,8 +134,6 @@ public class TaskManagementTest {
         assertEquals(taskCountBeforeDeletion,taskCountAfterDeletion);
     }
 
-
-
     @AfterClass
     public static void teardown() {
         LOG.debug("task management test teardown initiated");
@@ -144,8 +142,6 @@ public class TaskManagementTest {
 
         LOG.debug("task management test teardown completed");
     }
-
-
 
     private static void activateTasks() {
         String activateTasks = "UPDATE TASK SET DELETED = 0 WHERE ID = 1 OR ID = 2 OR ID = 3 OR ID = 4 OR ID = 5";

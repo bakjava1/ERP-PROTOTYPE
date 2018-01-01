@@ -2,11 +2,16 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
+import java.util.Collection;
 
 /**
  * Created by raquelsima on 20.12.17.
@@ -34,5 +39,20 @@ public class LumberManagementTest {
     private static Lumber lumber1=new Lumber();
     private static Lumber lumber2=new Lumber();
 
+
+    @Test
+    public void name() throws Exception {
+
+    }
+
+    @Before
+    public void setUp() throws Exception {
+
+    }
+
+    @After
+    public void tearDown() throws Exception {
+
+    }
 
 }

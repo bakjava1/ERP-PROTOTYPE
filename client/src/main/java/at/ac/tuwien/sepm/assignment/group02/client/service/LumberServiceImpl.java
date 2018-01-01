@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.NoValidIntegerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
@@ -75,7 +76,7 @@ public class LumberServiceImpl implements LumberService {
         }
     }
 
-    @Override
+
     public List<Lumber> getAll(Lumber filter) {
 
         LOG.debug("getAllSchnittholz called");
@@ -97,6 +98,11 @@ public class LumberServiceImpl implements LumberService {
         }
 
         return allLumberConverted;
+    }
+
+    @Override
+    public List<Lumber> getAll(UnvalidatedLumber filter) throws InvalidInputException, ServiceLayerException {
+        return null;
     }
 
     @Override
@@ -130,8 +136,8 @@ public class LumberServiceImpl implements LumberService {
             validateLumber(lumber);
         } catch (InvalidInputException e) {
             e.printStackTrace();
-
         }
+
         LumberDTO toUpdate = lumberConverter.convertPlainObjectToRestDTO(lumber);
         try {
             lumberController.updateLumber(toUpdate);

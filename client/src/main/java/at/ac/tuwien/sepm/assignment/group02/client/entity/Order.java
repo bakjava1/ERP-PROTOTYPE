@@ -22,8 +22,6 @@ public class Order {
     private int netAmount;
     private int taxAmount;
 
-
-
     public Order() {
         this.id = -1;
         this.orderDate = null;
