@@ -7,16 +7,20 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerExcept
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,6 +127,9 @@ public class LeadWorkerFXML {
     TableView<TaskDTO> table_task;
 
     @FXML
+    private TabPane tabPane;
+
+    @FXML
     private Tab tab_task;
 
     @FXML
@@ -130,6 +137,8 @@ public class LeadWorkerFXML {
 
     private LumberService lumberService;
     private TaskService taskService;
+
+    private TaskDTO selectedTask;
 
     @Autowired
     public LeadWorkerFXML(LumberService lumberService, TaskService taskService){
@@ -141,6 +150,11 @@ public class LeadWorkerFXML {
 
     @FXML
     void initialize() {
+
+        tabPane = new TabPane();
+        tabPane.getTabs().add(tab_task);
+        tabPane.getTabs().add(tab_lumber);
+
         col_description.setCellValueFactory(new PropertyValueFactory("description"));
         col_finishing.setCellValueFactory(new PropertyValueFactory("finishing"));
         col_wood_type.setCellValueFactory(new PropertyValueFactory("wood_type"));
@@ -175,6 +189,7 @@ public class LeadWorkerFXML {
         //initial lumber overview
         onSearchButtonClicked();
 
+        initializeTaskTable();
         updateTaskTable();
 
     }
@@ -182,6 +197,7 @@ public class LeadWorkerFXML {
     private void updateTaskTable() {
 
         List<TaskDTO> allOpenTasks = null;
+
         try{
             allOpenTasks = taskService.getAllOpenTasks();
         } catch (ServiceLayerException e){
@@ -202,6 +218,42 @@ public class LeadWorkerFXML {
             table_task.refresh();
         }
 
+    }
+
+    @FXML
+    private void initializeTaskTable(){
+
+        // single row can be selected
+        table_task.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        // set row factory in order to create the context menu
+        table_task.setRowFactory(
+                new Callback<TableView<TaskDTO>, TableRow<TaskDTO>>() {
+                    @Override
+                    public TableRow<TaskDTO> call(TableView<TaskDTO> tableView) {
+                        final TableRow<TaskDTO> row = new TableRow<>();
+                        final ContextMenu rowMenu = new ContextMenu();
+
+                        MenuItem reserveLumber = new MenuItem("Schnittholz hinzufügen");
+                        reserveLumber.setOnAction((ActionEvent event) -> {
+                            LOG.debug("selected product: {}",row.getItem().toString());
+                            selectedTask = table_task.getSelectionModel().getSelectedItem();
+
+                            tabPane.getSelectionModel().select(tab_lumber);
+
+                            table_task.getSelectionModel().clearSelection();
+                        });
+
+                        rowMenu.getItems().addAll(reserveLumber);
+
+
+                        // only display context menu for non-null items:
+                        row.contextMenuProperty().bind(Bindings.when(Bindings.isNotNull(row.itemProperty()))
+                                .then(rowMenu)
+                                .otherwise((ContextMenu)null));
+                        return row;
+                    }
+                });
     }
 
     @FXML
@@ -252,6 +304,14 @@ public class LeadWorkerFXML {
     public void onReserveButtonClicked(){
         LOG.info("onReserveButtonClicked clicked");
 
+        if(selectedTask == null){
+            AlertBuilder alertBuilder = new AlertBuilder();
+            alertBuilder.showInformationAlert("Schnittholz-Reservierung",
+                    "Schnittholz-Reservierung", "Bitte wählen Sie einen Auftrag zur Reservierung aus!");
+            tabPane.getSelectionModel().select(tab_task);
+            return;
+        }
+
         // get the selected lumberDTO from the table
         if(table_lumber.getSelectionModel().getSelectedItem() == null) {
             AlertBuilder alertBuilder = new AlertBuilder();
@@ -277,51 +337,73 @@ public class LeadWorkerFXML {
                 AlertBuilder alertBuilder = new AlertBuilder();
                 alertBuilder.showInformationAlert("Schnittholz-Reservierung",
                         "Schnittholz-Reservierung", "Bitte definieren Sie eine positive ganze Zahl als Reservierungsmenge!");
+
                 return;
             }
         }
 
         final int qu = quantity;
 
-        new Thread(new Task<>() {
-            @Override
-            protected Object call() throws Exception {
-                LOG.debug("reserve-lumber thread called");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Schnittholz (Id:"+lumber.getId()+", "+lumber.getDescription()+", Menge: "+qu+") dem Auftrag (Id: "+selectedTask.getId()+", "+selectedTask.getDescription()+") hinzufügen?",
+                ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.showAndWait();
 
-                try {
-                    lumberService.reserveLumber(lumber, qu);
-                } catch (ServiceLayerException e){
-                    LOG.warn(e.getMessage().trim());
-                    throw new ServiceLayerException("Schnittholz-Reservierung ist gescheitert"+ e.getMessage());
+        if (alert.getResult() == ButtonType.YES) {
+
+            new Thread(new Task<>() {
+                @Override
+                protected Object call() throws Exception {
+                    LOG.debug("reserve-lumber thread called");
+
+                    lumberService.reserveLumber(lumber, qu, selectedTask);
+
+                    return 1;
                 }
 
-                return 1;
-            }
+                @Override
+                protected void succeeded() {
+                    super.succeeded();
+                    LOG.debug("reserve-lumber succeeded with value {}", getValue());
+                    table_lumber.getSelectionModel().clearSelection();
+                    tf_quantity.setText("");
 
-            @Override
-            protected void succeeded(){
-                super.succeeded();
-                LOG.debug("reserve-lumber succeeded with value {}", getValue());
-                table_lumber.getSelectionModel().clearSelection();
-                tf_quantity.setText("");
+                    //refresh tables
+                    onSearchButtonClicked();
+                    updateTaskTable();
 
-                //refresh table
-                onSearchButtonClicked();
-            }
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                            "Schnittholz wurde dem Auftrag erfolgreich hinzugefügt.");
+                    alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+                    alert.show();
 
-            @Override
-            protected void failed(){
-                super.failed();
-                LOG.debug("reserve-lumber failed with exception: {}", getException());
-                table_lumber.getSelectionModel().clearSelection();
-                tf_quantity.setText("");
+                    //change tab
+                    tabPane.getSelectionModel().select(tab_task);
+                }
 
-                AlertBuilder alertBuilder = new AlertBuilder();
-                alertBuilder.showErrorAlert("Schnittholz-Reservierung", "Fehlermeldung",
-                        "Schnittholz-Reservierung ist gescheitert.");
+                @Override
+                protected void failed() {
+                    super.failed();
+                    LOG.debug("reserve-lumber failed with exception:", getException().getMessage());
+                    table_lumber.getSelectionModel().clearSelection();
+                    tf_quantity.setText("");
 
-            }
-        }, "reserve-lumber").start();
+                    Alert alert = new Alert(Alert.AlertType.WARNING,
+                            "Schnittholz-Reservierung wurde nicht durchgeführt. "+ getException().getMessage());
+                    alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+                    alert.show();
+
+                    //refresh tables
+                    onSearchButtonClicked();
+                    updateTaskTable();
+                    //change tab
+                    tabPane.getSelectionModel().select(tab_task);
+
+                }
+            }, "reserve-lumber").start();
+
+        }
     }
 
     @FXML

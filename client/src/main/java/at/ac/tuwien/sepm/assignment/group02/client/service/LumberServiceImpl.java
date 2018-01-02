@@ -102,12 +102,19 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public void reserveLumber(Lumber lumber, int quantity) throws ServiceLayerException {
+    public void reserveLumber(Lumber lumber, int quantity, TaskDTO taskDTO) throws ServiceLayerException {
         LOG.debug("reserveLumber called: {}", lumber);
 
         // validate method parameters
         validateLumber(lumber);
         validator.validateNumber(quantity+"");
+        //validateTask(taskDTO); TODO
+
+        // check if reservation quantity is needed for task
+        int openQuantityForTask = taskDTO.getQuantity()-taskDTO.getProduced_quantity();
+        if(quantity>openQuantityForTask){
+            throw new ServiceLayerException("Reservierungsmenge übersteigt für Auftrag benötigte Menge an Schnittholz.");
+        }
 
         if(quantity > (lumber.getQuantity())){
            throw new ServiceLayerException("Reservierungsmenge übersteigt vorhandene Menge an Schnittholz.");
@@ -124,6 +131,19 @@ public class LumberServiceImpl implements LumberService {
             LOG.warn(e.getMessage());
             throw new ServiceLayerException("Schnittholz konnte nicht reserviert werden.");
         }
+
+        int producedQuantity = taskDTO.getProduced_quantity() + quantity;
+        LOG.debug("taskDTO.getProduced_quantity(): {}, quantity: {}",taskDTO.getProduced_quantity(), quantity);
+        taskDTO.setProduced_quantity(producedQuantity);
+
+        try {
+            taskController.updateTask(taskDTO);
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
+            // TODO reset lumber reservation
+            throw new ServiceLayerException("Schnittholz konnte dem Auftrag nicht hinzugefügt werden.");
+        }
+
     }
 
     @Override

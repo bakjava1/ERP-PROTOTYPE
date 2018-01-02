@@ -3,9 +3,11 @@ package at.ac.tuwien.sepm.assignment.group02.server.service;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +23,13 @@ public class TaskServiceImpl implements TaskService {
 
     private static TaskDAO taskManagementDAO;
     private static TaskConverter taskConverter;
+    private ValidateTask validateTask;
 
     @Autowired
-    public TaskServiceImpl(TaskDAO taskManagementDAO, TaskConverter taskConverter) {
+    public TaskServiceImpl(TaskDAO taskManagementDAO, TaskConverter taskConverter, ValidateTask validateTask) {
         TaskServiceImpl.taskManagementDAO = taskManagementDAO;
         TaskServiceImpl.taskConverter = taskConverter;
+        this.validateTask = validateTask;
     }
 
     @Override
@@ -45,13 +49,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void updateTask(TaskDTO task) {
-        LOG.info("Converting TaskDTO to Task");
+    public void updateTask(TaskDTO task) throws ServiceLayerException {
+        LOG.info("called updateTask");
+
         Task toUpdate = taskConverter.convertRestDTOToPlainObject(task);
+
+        validateTask.isValid(toUpdate);
+
         try {
             taskManagementDAO.updateTask(toUpdate);
         } catch(PersistenceLayerException e) {
             LOG.error("Database Problems: " + e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
     }
 

@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public interface LumberService {
      * @throws InvalidInputException
      * @throws ServiceLayerException
      */
-    void reserveLumber(Lumber lumber, int quantity) throws ServiceLayerException;
+    void reserveLumber(Lumber lumber, int quantity, TaskDTO taskDTO) throws ServiceLayerException;
 
     /**
      * delete a lumber from the store

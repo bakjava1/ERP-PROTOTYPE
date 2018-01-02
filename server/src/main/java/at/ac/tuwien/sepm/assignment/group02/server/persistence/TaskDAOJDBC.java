@@ -119,7 +119,7 @@ public class TaskDAOJDBC implements TaskDAO {
 
     @Override
     public void updateTask(Task task) throws PersistenceLayerException {
-        LOG.info("Attempting to Update Task");
+        LOG.info("called updateTask");
         String getStatement = "SELECT PRODUCED_QUANTITY FROM TASK WHERE ID = ?";
         String updateStatement = "UPDATE TASK SET PRODUCED_QUANTITY = ? WHERE ID = ?";
 
@@ -129,17 +129,24 @@ public class TaskDAOJDBC implements TaskDAO {
             ResultSet rs = stmt.executeQuery();
             rs.next();
             int current_amount = rs.getInt(1);
-            current_amount += task.getProduced_quantity();
-            stmt = dbConnection.prepareStatement(updateStatement);
-            stmt.setInt(1,current_amount);
-            stmt.setInt(2,task.getId());
-            stmt.executeUpdate();
+            //current_amount += task.getProduced_quantity();
+            int new_amount = task.getProduced_quantity();
+
+            if(new_amount>=current_amount) {
+                stmt = dbConnection.prepareStatement(updateStatement);
+                stmt.setInt(1, new_amount);
+                stmt.setInt(2, task.getId());
+                stmt.executeUpdate();
+            }
+
+            stmt.close();
+            rs.close();
         } catch(SQLException e) {
             LOG.error("SQL Exception: " + e.getMessage());
             throw new PersistenceLayerException("Database Error");
         }
 
-        }
+    }
 
     @Override
     public List<Task> getAllOpenTasks() throws PersistenceLayerException {

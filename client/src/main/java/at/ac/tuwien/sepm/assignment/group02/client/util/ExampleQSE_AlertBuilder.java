@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.client.util;
 
 import javafx.scene.control.Alert;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
@@ -122,6 +123,7 @@ public class ExampleQSE_AlertBuilder {
         alert.initOwner(this.owner);
         alert.initModality(this.modality);
         alert.initStyle(this.stageStyle);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         return alert;
     }
 
