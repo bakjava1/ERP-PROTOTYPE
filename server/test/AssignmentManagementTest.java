@@ -69,7 +69,7 @@ public class AssignmentManagementTest {
 
         int activeAssignments = getActiveAssignments();
 
-        List<Assignment> assignmentList = assignmentDAO.getAllAssignments();
+        List<Assignment> assignmentList = assignmentDAO.getAllOpenAssignments();
 
         assertEquals(activeAssignments, assignmentList.size());
     }

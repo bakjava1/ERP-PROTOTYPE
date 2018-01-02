@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,32 +145,45 @@ public class LumberDAOJDBC implements LumberDAO {
     }
 
     @Override
-    public void createLumber(Lumber lumber) throws PersistenceLayerException {
-        /*LOG.debug("adding product to database: {}", lumber);
+    public int createLumber(Lumber lumber) throws PersistenceLayerException {
+        LOG.debug("called createLumber: {}", lumber.toString());
 
         String insertSQL =
-                "INSERT INTO LUMBER " +
-                        "(ID, NAME)" +
-                        "VALUES" +
-                        "(default,?)";
-
+                "INSERT INTO LUMBER "+
+                        "(ID, description, finishing, wood_type, quality, "+
+                        "size, width, length, quantity, reserved_quantity) "+
+                        "VALUES " +
+                        "(default,?,?,?,?," +
+                        "?,?,?,?,?) ";
         try {
+
             PreparedStatement ps = dbConnection.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1,lumber.getDescription());
+            ps.setString(2, lumber.getFinishing());
+            ps.setString(3, lumber.getWood_type());
+            ps.setString(4, lumber.getQuality());
+            ps.setInt(5, lumber.getSize());
+            ps.setInt(6, lumber.getWidth());
+            ps.setInt(7, lumber.getLength());
+            ps.setInt(8, lumber.getQuantity());
+            ps.setInt(9, lumber.getReserved_quantity());
             ps.executeUpdate();
 
             ResultSet generatedKey = ps.getGeneratedKeys();
             generatedKey.next();
-            lumber.setId(generatedKey.getInt(1));
+
+            int newID = generatedKey.getInt(1);
+            lumber.setId(newID);
             LOG.debug("product.setId(generatedKey.getInt(1)) {}", lumber.getId());
             generatedKey.close();
             ps.close();
+
+            return newID;
 
         } catch (SQLException e) {
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLayerException(e.getMessage());
         }
-        */
     }
 
     @Override

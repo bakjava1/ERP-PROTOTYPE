@@ -65,6 +65,30 @@ public class AssignmentControllerImpl implements AssignmentController {
     }
 
     @Override
+    public List<AssignmentDTO> getAllAssignments() throws PersistenceLayerException {
+        LOG.debug("get all open assignments called in client assignment controller");
+
+        List<AssignmentDTO> assignmentList = new ArrayList<>();
+        AssignmentDTO[] assignmentArray;
+
+        try {
+            assignmentArray = restTemplate.getForObject("http://localhost:8080/getAllAssignments", AssignmentDTO[].class);
+        } catch(HttpClientErrorException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("HttpStatusCodeException");
+        } catch(RestClientException e){
+            LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("No response from server. Is it running?");
+        }
+
+        if(assignmentArray != null) {
+            assignmentList.addAll(Arrays.asList(assignmentArray));
+        }
+
+        return assignmentList;
+    }
+
+    @Override
     public void setDone(@RequestBody AssignmentDTO assignmentDTO) throws PersistenceLayerException {
         try {
             restTemplate.put("http://localhost:8080/setAssignmentDone", assignmentDTO, AssignmentDTO.class);

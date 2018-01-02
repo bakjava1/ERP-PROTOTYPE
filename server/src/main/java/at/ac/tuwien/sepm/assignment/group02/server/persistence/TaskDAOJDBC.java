@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -256,7 +257,36 @@ public class TaskDAOJDBC implements TaskDAO {
     }
 
     @Override
-    public void getTaskById(int task_id) throws PersistenceLayerException {
+    public Task getTaskById(int task_id) throws PersistenceLayerException {
+
+        try {
+
+            PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM TASK WHERE ID = ? LIMIT 1");
+            ps.setInt(1,task_id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Task currentTask = new Task();
+                currentTask.setId(rs.getInt("id"));
+                currentTask.setOrder_id(rs.getInt("orderid"));
+                currentTask.setDescription(rs.getString("description"));
+                currentTask.setFinishing(rs.getString("finishing"));
+                currentTask.setWood_type(rs.getString("wood_type"));
+                currentTask.setQuality(rs.getString("quality"));
+                currentTask.setSize(rs.getInt("size"));
+                currentTask.setWidth(rs.getInt("width"));
+                currentTask.setLength(rs.getInt("length"));
+                currentTask.setQuantity(rs.getInt("quantity"));
+                currentTask.setProduced_quantity(rs.getInt("produced_quantity"));
+                currentTask.setPrice(rs.getInt("sum"));
+                currentTask.setDone(rs.getBoolean("done"));
+
+                return currentTask;
+            } else throw new EntityNotFoundException("");
+
+        } catch (SQLException e){
+            throw new PersistenceLayerException("Database error:" + e.getMessage());
+        }
 
     }
 

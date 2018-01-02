@@ -3,7 +3,6 @@ package at.ac.tuwien.sepm.assignment.group02.server.validation;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.NoValidIntegerException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -85,32 +84,6 @@ public class ValidateLumber implements ValidateInput<Lumber> {
                 throw new InvalidInputException(e.getMessage());
             }
         }
-        if(lumber.getDelivered_quantity()<0){
-            LOG.warn("DELIVERED QUANTITY: {}", lumber.getDelivered_quantity());
-            try {
-                throw new NoValidIntegerException("Negative Integer or Null entered.");
-            } catch (NoValidIntegerException e) {
-                LOG.warn(e.getMessage());
-                throw new InvalidInputException(e.getMessage());
-            }
-        }
-
-        if (lumber.isAll_reserved()){
-            LOG.warn("ALL RESERVED: {}", lumber.isAll_reserved());
-
-            try {
-                throw new PersistenceLayerException("All reserved persist.");
-            }catch (PersistenceLayerException e){
-                LOG.warn(e.getMessage());
-                throw new InvalidInputException(e.getMessage());
-            }
-        }
-
-        /*
-        if(lumber.getLager()==null || lumber.getLager().isEmpty()){
-            LOG.warn("Lager: '{}'.", lumber.getLager());
-            throw new InvalidInputException("Lager can't be empty.");
-        }*/
 
         if(lumber.getDescription()==null || lumber.getDescription().isEmpty()){
             LOG.warn("Description: '{}'.", lumber.getDescription());

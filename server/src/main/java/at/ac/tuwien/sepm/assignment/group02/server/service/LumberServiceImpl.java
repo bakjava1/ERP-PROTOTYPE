@@ -45,10 +45,10 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public void addLumber(LumberDTO lumberDTO) throws ServiceLayerException {
+    public int addLumber(LumberDTO lumberDTO) throws ServiceLayerException {
 
         try {
-            lumberManagementDAO.createLumber(lumberConverter.convertRestDTOToPlainObject(lumberDTO));
+            return lumberManagementDAO.createLumber(lumberConverter.convertRestDTOToPlainObject(lumberDTO));
         } catch (PersistenceLayerException e) {
             LOG.warn("helloWorldLumber Persistence Exception: {}", e.getMessage());
             throw new ServiceLayerException(e.getMessage());
@@ -58,7 +58,7 @@ public class LumberServiceImpl implements LumberService {
 
     @Override
     public List<LumberDTO> getAllLumber(LumberDTO lumber) throws ServiceLayerException {
-        List<Lumber> allLumber = null;
+        List<Lumber> allLumber;
         List<LumberDTO> allLumberConverted = null;
         Lumber filter = lumberConverter.convertRestDTOToPlainObject(lumber);
 

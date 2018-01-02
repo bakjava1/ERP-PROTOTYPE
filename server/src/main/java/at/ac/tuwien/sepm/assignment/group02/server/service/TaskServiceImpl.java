@@ -90,7 +90,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDTO getTaskById(int task_id) {
-        return null;
+    public TaskDTO getTaskById(int task_id) throws ServiceLayerException {
+        try {
+            return taskConverter.convertPlainObjectToRestDTO(taskManagementDAO.getTaskById(task_id));
+        } catch (PersistenceLayerException e) {
+            LOG.error("Error while trying to get objects from Database: " + e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
     }
 }

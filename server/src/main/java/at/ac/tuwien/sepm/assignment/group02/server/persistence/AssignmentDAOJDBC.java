@@ -34,12 +34,12 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
     }
 
     @Override
-    public List<Assignment> getAllAssignments() throws PersistenceLayerException {
+    public List<Assignment> getAllOpenAssignments() throws PersistenceLayerException {
         LOG.debug("get all assignments called in server persistence layer");
 
         List<Assignment> assignmentList = new LinkedList<>();
         Assignment assignment;
-        String getAllOpenAssignments = "SELECT ID, CREATION_DATE, AMOUNT, BOX_ID FROM ASSIGNMENT WHERE ISDONE = 0";
+        String getAllOpenAssignments = "SELECT ID, CREATION_DATE, AMOUNT, BOX_ID, ISDONE, TASK_ID FROM ASSIGNMENT WHERE ISDONE = 0";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(getAllOpenAssignments);
@@ -53,6 +53,40 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
                 assignment.setCreation_date(rs.getDate("CREATION_DATE").toString());
                 assignment.setAmount(rs.getInt("AMOUNT"));
                 assignment.setBox_id(rs.getInt("BOX_ID"));
+                assignment.setDone(rs.getBoolean("ISDONE"));
+                assignment.setTask_id(rs.getInt("TASK_ID"));
+                assignmentList.add(assignment);
+            }
+        } catch (SQLException e) {
+            LOG.warn("SQLException: {}", e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
+
+        return assignmentList;
+    }
+
+    @Override
+    public List<Assignment> getAllAssignments() throws PersistenceLayerException {
+        LOG.debug("get all assignments called in server persistence layer");
+
+        List<Assignment> assignmentList = new LinkedList<>();
+        Assignment assignment;
+        String getAllAssignments = "SELECT ID, CREATION_DATE, AMOUNT, BOX_ID, ISDONE, TASK_ID FROM ASSIGNMENT";
+
+        try {
+            PreparedStatement ps = dbConnection.prepareStatement(getAllAssignments);
+            ps.execute();
+
+            ResultSet rs = ps.getResultSet();
+
+            while(rs.next()) {
+                assignment = new Assignment();
+                assignment.setId(rs.getInt("ID"));
+                assignment.setCreation_date(rs.getDate("CREATION_DATE").toString());
+                assignment.setAmount(rs.getInt("AMOUNT"));
+                assignment.setBox_id(rs.getInt("BOX_ID"));
+                assignment.setDone(rs.getBoolean("ISDONE"));
+                assignment.setTask_id(rs.getInt("TASK_ID"));
                 assignmentList.add(assignment);
             }
         } catch (SQLException e) {

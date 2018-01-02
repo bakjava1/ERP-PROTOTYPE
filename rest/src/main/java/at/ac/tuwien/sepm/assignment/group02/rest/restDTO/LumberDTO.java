@@ -15,13 +15,16 @@ public class LumberDTO {
      */
     private int id;
     private  String lager;
+
     private  String description;
     private  String finishing;
     private  String wood_type;
     private  String quality;
+
     private int size;
     private int width;
     private int length;
+
     private int quantity;
     private int reserved_quantity;
     private int delivered_quantity;

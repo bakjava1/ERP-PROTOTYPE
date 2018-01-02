@@ -47,7 +47,7 @@ public interface TaskDAO {
      * @param task_id
      * @throws PersistenceLayerException
      */
-    void getTaskById(int task_id) throws PersistenceLayerException;
+    Task getTaskById(int task_id) throws PersistenceLayerException;
 
     /**
      * get task by order_id

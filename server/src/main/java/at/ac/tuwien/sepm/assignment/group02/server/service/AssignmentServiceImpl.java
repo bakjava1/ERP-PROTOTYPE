@@ -1,8 +1,11 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.AssignmentConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Assignment;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
@@ -24,6 +27,14 @@ public class AssignmentServiceImpl implements AssignmentService {
     private static AssignmentConverter assignmentConverter;
     private ValidateAssignment validateAssignment;
 
+
+    @Autowired
+    private TimberService timberService;
+    @Autowired
+    private LumberService lumberService;
+    @Autowired
+    private TaskService taskService;
+
     @Autowired
     public AssignmentServiceImpl(AssignmentDAO assignmentManagementDAO, AssignmentConverter assignmentConverter, ValidateAssignment validateAssignment) {
         AssignmentServiceImpl.assignmentManagementDAO = assignmentManagementDAO;
@@ -44,7 +55,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         List<AssignmentDTO> allOpenAssignmentsConverted = new LinkedList<>();
 
         try {
-            allOpenAssignments = assignmentManagementDAO.getAllAssignments();
+            allOpenAssignments = assignmentManagementDAO.getAllOpenAssignments();
         } catch (PersistenceLayerException e) {
             LOG.warn("error while getting all open assignments in server persistence layer", e.getMessage());
         }
@@ -54,6 +65,26 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
 
         return allOpenAssignmentsConverted;
+    }
+
+    @Override
+    public List<AssignmentDTO> getAllAssignments() throws ServiceLayerException {
+        LOG.debug("get all open assignments called in server service layer");
+
+        List<Assignment> allAssignments = new LinkedList<>();
+        List<AssignmentDTO> allAssignmentsConverted = new LinkedList<>();
+
+        try {
+            allAssignments = assignmentManagementDAO.getAllAssignments();
+        } catch (PersistenceLayerException e) {
+            LOG.warn("error while getting all open assignments in server persistence layer", e.getMessage());
+        }
+
+        for(Assignment assignment : allAssignments) {
+            allAssignmentsConverted.add(assignmentConverter.convertPlainObjectToRestDTO(assignment));
+        }
+
+        return allAssignmentsConverted;
     }
 
     @Override
@@ -78,10 +109,45 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
 
         // 3.2.3 (rest/TimberController) Rundholz aus dem Lager entfernen.
-        // 3.2.4 (rest/LumberController) Schnittholz ins Lager hinzufügen.
-        // 3.2.5 (rest/LumberController) Hinzugefügtes Schnittholz bei Bedarf reservieren.
-        // 3.2.6 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
-        // 3.2.7 Überprüfen ob Auftrag fertig ist (? => (rest/TaskController) getTaskById)
+        timberService.removeTimberFromBox(toUpdate.getBox_id(), toUpdate.getAmount());
 
+        // 3.2.4 (rest/LumberController) Schnittholz ins Lager hinzufügen.
+        TaskDTO taskDTO = taskService.getTaskById(toUpdate.getTask_id());
+        LumberDTO lumberDTO = new LumberDTO();
+
+        lumberDTO.setDescription(taskDTO.getDescription());
+        lumberDTO.setFinishing(taskDTO.getFinishing());
+        lumberDTO.setWood_type(taskDTO.getWood_type());
+        lumberDTO.setQuality(taskDTO.getQuality());
+
+        lumberDTO.setSize(taskDTO.getSize());
+        lumberDTO.setWidth(taskDTO.getWidth());
+        lumberDTO.setLength(taskDTO.getLength());
+
+        //retrieve a list of all lumber that matches the taskDTO
+        List<LumberDTO> matchingLumber = lumberService.getAllLumber(lumberDTO);
+
+        // if there is lumber that matches the task produced, increase its quantity
+        if(matchingLumber.size()>0){
+
+            lumberDTO = matchingLumber.get(0);
+            int existing_quantity = lumberDTO.getQuantity();
+            lumberDTO.setQuantity( existing_quantity + taskDTO.getQuantity() );
+
+            lumberService.updateLumber(lumberDTO);
+
+        } else { // if there is no lumber matching the task, create new lumber
+            lumberDTO.setQuantity(taskDTO.getQuantity());
+            int lumberId = lumberService.addLumber(lumberDTO);
+            lumberDTO.setId(lumberId);
+        }
+
+        // 3.2.5 (rest/LumberController) Hinzugefügtes Schnittholz bei Bedarf(?) reservieren.
+        lumberDTO.setQuantity(taskDTO.getQuantity()); //reset quantity to produced quantity
+        lumberService.reserveLumber(lumberDTO);
+
+        // 3.2.6 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
+        taskDTO.setProduced_quantity(taskDTO.getQuantity());
+        taskService.updateTask(taskDTO);
     }
 }

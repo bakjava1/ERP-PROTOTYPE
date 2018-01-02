@@ -46,8 +46,16 @@ public class TimberServiceImpl implements TimberService{
     }
 
     @Override
-    public void updateTimber(TimberDTO timberDTO) throws ServiceLayerException {
-
+    public void removeTimberFromBox(int box_id, int amount_to_remove) throws ServiceLayerException {
+        Timber timber = new Timber();
+        timber.setBox_id(box_id);
+        timber.setAmount(amount_to_remove);
+        try {
+            timberManagementDAO.removeTimber(timber);
+        } catch (PersistenceLayerException e) {
+            LOG.error("Error while trying to update timber in Database");
+            throw new ServiceLayerException("Fehlermeldung. Rundholz konnte nicht bearbeitet werden.");
+        }
     }
 
     @Override

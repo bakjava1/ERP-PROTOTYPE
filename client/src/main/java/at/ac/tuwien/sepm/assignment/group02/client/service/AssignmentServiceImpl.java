@@ -53,6 +53,21 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
+    public List<AssignmentDTO> getAllAssignments() throws ServiceLayerException {
+        LOG.debug("getAllAssignments called in ");
+        List<AssignmentDTO> allAssignments = null;
+
+        try {
+            allAssignments = assignmentController.getAllAssignments();
+        } catch (PersistenceLayerException e) {
+            LOG.warn("Error while getting all open assignments in client service layer: ", e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
+
+        return allAssignments;
+    }
+
+    @Override
     public void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException {
 
         if(!assignmentDTO.isDone())

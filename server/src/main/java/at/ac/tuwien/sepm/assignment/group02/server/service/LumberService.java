@@ -49,7 +49,7 @@ public interface LumberService {
      * @param lumber
      * @throws ServiceLayerException
      */
-    void addLumber(LumberDTO lumber) throws ServiceLayerException;
+    int addLumber(LumberDTO lumber) throws ServiceLayerException;
 
     /**
      * Hello World!

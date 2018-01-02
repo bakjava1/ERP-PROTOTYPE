@@ -23,6 +23,9 @@ public class AssignmentDTO {
     @ApiModelProperty(readOnly = true, name = "boolean defining is the assignment is done or not")
     private boolean isDone;
 
+    @ApiModelProperty(readOnly = true, name = "int defining the corresponding task id")
+    private int task_id;
+
     public int getId() {
         return id;
     }
@@ -61,5 +64,13 @@ public class AssignmentDTO {
 
     public void setDone(boolean done) {
         isDone = done;
+    }
+
+    public int getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(int task_id) {
+        this.task_id = task_id;
     }
 }
