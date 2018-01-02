@@ -143,7 +143,6 @@ public class LumberServiceImpl implements LumberService {
             // TODO reset lumber reservation
             throw new ServiceLayerException("Schnittholz konnte dem Auftrag nicht hinzugefügt werden.");
         }
-
     }
 
     @Override

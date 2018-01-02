@@ -7,11 +7,9 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerExcept
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -124,6 +122,9 @@ public class LeadWorkerFXML {
     private TableColumn task_col_description;
 
     @FXML
+    private TableColumn task_col_done;
+
+    @FXML
     TableView<TaskDTO> table_task;
 
     @FXML
@@ -184,17 +185,17 @@ public class LeadWorkerFXML {
         task_col_length.setCellValueFactory(new PropertyValueFactory("length"));
         task_col_quantity.setCellValueFactory(new PropertyValueFactory("quantity"));
         task_col_produced_quantity.setCellValueFactory(new PropertyValueFactory("produced_quantity"));
-
+        task_col_done.setCellValueFactory(new PropertyValueFactory("done"));
 
         //initial lumber overview
         onSearchButtonClicked();
 
-        initializeTaskTable();
         updateTaskTable();
 
     }
 
     private void updateTaskTable() {
+        LOG.debug("called updateTaskTable");
 
         List<TaskDTO> allOpenTasks = null;
 
@@ -218,22 +219,34 @@ public class LeadWorkerFXML {
             table_task.refresh();
         }
 
-    }
-
-    @FXML
-    private void initializeTaskTable(){
-
         // single row can be selected
         table_task.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        // set row factory in order to create the context menu
+        // set row factory in order to create the context menu and set row color
         table_task.setRowFactory(
                 new Callback<TableView<TaskDTO>, TableRow<TaskDTO>>() {
                     @Override
                     public TableRow<TaskDTO> call(TableView<TaskDTO> tableView) {
-                        final TableRow<TaskDTO> row = new TableRow<>();
-                        final ContextMenu rowMenu = new ContextMenu();
 
+                        //final ContextMenu rowMenu = new ContextMenu();
+
+                        final TableRow<TaskDTO> row = new TableRow<>() {
+                            @Override
+                            protected void updateItem(TaskDTO taskDTO, boolean empty){
+                                super.updateItem(taskDTO, empty);
+
+                                if (taskDTO == null) {
+                                    setStyle("");
+                                } else if (taskDTO.isDone()) {
+                                    setStyle("-fx-background-color: darkolivegreen;");
+                                } else {
+                                    setStyle("");
+                                }
+
+                            }
+                        };
+
+                        /*
                         MenuItem reserveLumber = new MenuItem("Schnittholz hinzufügen");
                         reserveLumber.setOnAction((ActionEvent event) -> {
                             LOG.debug("selected product: {}",row.getItem().toString());
@@ -246,18 +259,35 @@ public class LeadWorkerFXML {
 
                         rowMenu.getItems().addAll(reserveLumber);
 
-
                         // only display context menu for non-null items:
                         row.contextMenuProperty().bind(Bindings.when(Bindings.isNotNull(row.itemProperty()))
                                 .then(rowMenu)
                                 .otherwise((ContextMenu)null));
+                        */
                         return row;
                     }
                 });
     }
 
     @FXML
+    public void addLumberButtonClicked(){
+
+        selectedTask = table_task.getSelectionModel().getSelectedItem();
+
+        if(selectedTask == null || selectedTask.isDone()) {
+            AlertBuilder alertBuilder = new AlertBuilder();
+            alertBuilder.showInformationAlert("Schnittholz-Reservierung",
+                    "Schnittholz-Reservierung", "Bitte wählen Sie einen nicht abgeschlossenen Auftrag zur Reservierung aus!");
+            tabPane.getSelectionModel().clearAndSelect(0);
+            return;
+        }
+
+        tabPane.getSelectionModel().clearAndSelect(1);
+    }
+
+    @FXML
     public void onSearchButtonClicked() {
+
         UnvalidatedLumber filter = new UnvalidatedLumber();
         List<Lumber> allLumber = null;
 
@@ -304,11 +334,11 @@ public class LeadWorkerFXML {
     public void onReserveButtonClicked(){
         LOG.info("onReserveButtonClicked clicked");
 
-        if(selectedTask == null){
+        if(selectedTask == null || selectedTask.isDone()) {
             AlertBuilder alertBuilder = new AlertBuilder();
             alertBuilder.showInformationAlert("Schnittholz-Reservierung",
-                    "Schnittholz-Reservierung", "Bitte wählen Sie einen Auftrag zur Reservierung aus!");
-            tabPane.getSelectionModel().select(tab_task);
+                    "Schnittholz-Reservierung", "Bitte wählen Sie einen nicht abgeschlossenen Auftrag zur Reservierung aus!");
+            tabPane.getSelectionModel().clearAndSelect(0);
             return;
         }
 
@@ -379,7 +409,7 @@ public class LeadWorkerFXML {
                     alert.show();
 
                     //change tab
-                    tabPane.getSelectionModel().select(tab_task);
+                    tabPane.getSelectionModel().clearAndSelect(0);
                 }
 
                 @Override
@@ -398,11 +428,17 @@ public class LeadWorkerFXML {
                     onSearchButtonClicked();
                     updateTaskTable();
                     //change tab
-                    tabPane.getSelectionModel().select(tab_task);
+                    tabPane.getSelectionModel().clearAndSelect(0);
 
                 }
             }, "reserve-lumber").start();
 
+        } else {
+            //refresh tables
+            onSearchButtonClicked();
+            updateTaskTable();
+            //change tab
+            tabPane.getSelectionModel().clearAndSelect(0);
         }
     }
 

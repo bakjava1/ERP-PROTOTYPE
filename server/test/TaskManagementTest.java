@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.rest.TaskControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TaskServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateTask;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ public class TaskManagementTest {
     private static TaskControllerImpl taskController;
     private static TaskService taskService;
     private static TaskConverter taskConverter;
+    private static ValidateTask validateTask;
 
     @BeforeClass
     public static void setup() {
@@ -64,8 +66,9 @@ public class TaskManagementTest {
         taskDTO2.setId(5);
         taskDTO2.setOrder_id(3);
 
+        validateTask = new ValidateTask();
         taskConverter = new TaskConverter();
-        taskService = new TaskServiceImpl(taskDAO, taskConverter);
+        taskService = new TaskServiceImpl(taskDAO, taskConverter, validateTask);
         taskController = new TaskControllerImpl(taskService);
 
         LOG.debug("task management test setup initiated");
@@ -77,7 +80,7 @@ public class TaskManagementTest {
         taskDAO = new TaskDAOJDBC(dbConnection);
 
         taskConverter = new TaskConverter();
-        taskService = new TaskServiceImpl(taskDAO, taskConverter);
+        taskService = new TaskServiceImpl(taskDAO, taskConverter, validateTask);
         taskController = new TaskControllerImpl(taskService);
     }
 

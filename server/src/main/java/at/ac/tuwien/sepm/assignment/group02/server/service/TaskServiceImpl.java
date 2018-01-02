@@ -1,9 +1,8 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
@@ -56,6 +55,12 @@ public class TaskServiceImpl implements TaskService {
 
         validateTask.isValid(toUpdate);
 
+        //check if task is done
+        if( toUpdate.getProduced_quantity() == toUpdate.getQuantity() ) {
+            LOG.debug("task is done");
+            toUpdate.setDone(true);
+        }
+
         try {
             taskManagementDAO.updateTask(toUpdate);
         } catch(PersistenceLayerException e) {
@@ -66,10 +71,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDTO> getAllOpenTasks() throws ServiceLayerException {
+        LOG.debug("called getAllOpenTasks");
         List<TaskDTO> allOpenConverted = new ArrayList<>();
 
         try{
-            List<Task> allOpen = taskManagementDAO.getAllOpenTasks();
+            List<Task> allOpen = taskManagementDAO.getAllTasks();
 
             for (int i = 0; allOpen!=null && i < allOpen.size(); i++) {
                 allOpenConverted.add(taskConverter.convertPlainObjectToRestDTO(allOpen.get(i)));

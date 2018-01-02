@@ -36,6 +36,13 @@ public interface TaskDAO {
     List<Task> getAllOpenTasks() throws PersistenceLayerException;
 
     /**
+     * retrieve all tasks
+     * @return a list of all tasks
+     * @throws PersistenceLayerException
+     */
+    List<Task> getAllTasks() throws PersistenceLayerException;
+
+    /**
      * get task by id
      * @param task_id
      * @throws PersistenceLayerException

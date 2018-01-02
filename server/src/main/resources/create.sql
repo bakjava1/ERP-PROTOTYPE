@@ -25,8 +25,8 @@ quality varchar(20) NOT NULL,
 size integer NOT NULL CHECK(size>0),
 width integer NOT NULL CHECK(width>0),
 length integer NOT NULL CHECK(length>0),
-quantity integer NOT NULL CHECK(quantity>0),
-reserved_quantity integer NOT NULL,
+quantity integer,
+reserved_quantity integer,
 all_reserved boolean NOT NULL,
 all_delivered boolean NOT NULL
 );
@@ -124,11 +124,11 @@ width,length,quantity,produced_quantity,sum,done,deleted) VALUES
 (3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
 (4,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
 (4,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(6,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(7,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(7,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
+(5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,0,25,0,0),
+(5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,0,25,0,0),
+(6,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,10,25,0,0),
+(7,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,30,25,0,0),
+(7,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,30,25,0,0),
 (8,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0);
 
 INSERT INTO ASSIGNMENT(creation_date, amount,box_ID, isDone) VALUES
