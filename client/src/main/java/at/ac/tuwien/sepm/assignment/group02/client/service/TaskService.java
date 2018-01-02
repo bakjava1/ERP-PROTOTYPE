@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface TaskService {
      * @throws InvalidInputException
      * @throws ServiceLayerException
      */
-    void createTask(Task task) throws InvalidInputException, ServiceLayerException;
+    void createTask(Task task) throws ServiceLayerException;
 
     /**
      * method deletes a given task (identified by its id)
@@ -33,7 +34,7 @@ public interface TaskService {
      * @return a list of all open tasks
      * @throws ServiceLayerException
      */
-    List<Task> getAllOpenTasks() throws ServiceLayerException;
+    List<TaskDTO> getAllOpenTasks() throws ServiceLayerException;
 
     /**
      * validate task input

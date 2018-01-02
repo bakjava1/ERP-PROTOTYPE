@@ -5,6 +5,8 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -118,7 +120,7 @@ public class LeadWorkerFXML {
     private TableColumn task_col_description;
 
     @FXML
-    TableView<Task> table_task;
+    TableView<TaskDTO> table_task;
 
     @FXML
     private Tab tab_task;
@@ -127,11 +129,14 @@ public class LeadWorkerFXML {
     private Tab tab_lumber;
 
     private LumberService lumberService;
+    private TaskService taskService;
 
     @Autowired
-    public LeadWorkerFXML(LumberService lumberService){
+    public LeadWorkerFXML(LumberService lumberService, TaskService taskService){
 
         this.lumberService = lumberService;
+        this.taskService = taskService;
+
     }
 
     @FXML
@@ -170,9 +175,32 @@ public class LeadWorkerFXML {
         //initial lumber overview
         onSearchButtonClicked();
 
+        updateTaskTable();
+
     }
 
     private void updateTaskTable() {
+
+        List<TaskDTO> allOpenTasks = null;
+        try{
+            allOpenTasks = taskService.getAllOpenTasks();
+        } catch (ServiceLayerException e){
+            LOG.warn(e.getMessage());
+            AlertBuilder alertBuilder = new AlertBuilder();
+            alertBuilder.showInformationAlert("Übersicht Aufträge",
+                    "Übersicht Aufträge", "Fehler bei Erstellung der Auftragsübersicht.");
+        }
+
+        if(allOpenTasks != null){
+            ObservableList<TaskDTO> openTasksForTable = FXCollections.observableArrayList();
+            for (TaskDTO task: allOpenTasks) {
+                openTasksForTable.add(task);
+            }
+            table_task.setItems(openTasksForTable);
+            table_task.refresh();
+        } else {
+            table_task.refresh();
+        }
 
     }
 

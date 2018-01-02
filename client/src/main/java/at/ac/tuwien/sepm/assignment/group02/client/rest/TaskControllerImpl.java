@@ -12,6 +12,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -64,7 +65,26 @@ public class TaskControllerImpl implements TaskController {
 
     @Override
     public List<TaskDTO> getAllOpenTasks() throws PersistenceLayerException {
-        return null;
+        LOG.debug("called getAllOpenTasks");
+
+        List<TaskDTO> taskList = new ArrayList<>();
+        TaskDTO[] taskArray;
+        try{
+            taskArray = restTemplate.getForObject("http://localhost:8080/getAllOpenTasks", TaskDTO[].class);
+
+            for (int i = 0; taskArray!= null && i < taskArray.length; i++) {
+                taskList.add(taskArray[i]);
+            }
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("Connection Problem with Server");
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("Connection Problem with Server");
+        }
+
+        return taskList;
     }
 
     @Override

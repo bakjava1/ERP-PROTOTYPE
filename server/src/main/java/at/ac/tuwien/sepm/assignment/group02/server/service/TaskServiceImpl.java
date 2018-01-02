@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,8 +56,22 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDTO> getAllOpenTasks() {
-        return null;
+    public List<TaskDTO> getAllOpenTasks() throws ServiceLayerException {
+        List<TaskDTO> allOpenConverted = new ArrayList<>();
+
+        try{
+            List<Task> allOpen = taskManagementDAO.getAllOpenTasks();
+
+            for (int i = 0; allOpen!=null && i < allOpen.size(); i++) {
+                allOpenConverted.add(taskConverter.convertPlainObjectToRestDTO(allOpen.get(i)));
+            }
+
+        } catch(PersistenceLayerException e) {
+            LOG.error("Error while trying to get objects from Database: " + e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
+
+        return allOpenConverted;
     }
 
     @Override

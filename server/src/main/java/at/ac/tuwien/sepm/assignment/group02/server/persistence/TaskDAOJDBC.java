@@ -143,7 +143,55 @@ public class TaskDAOJDBC implements TaskDAO {
 
     @Override
     public List<Task> getAllOpenTasks() throws PersistenceLayerException {
-        return null;
+        LOG.debug("called getAllOpenTasks");
+
+        List<Task> taskList = new ArrayList<>();
+
+        try {
+
+            PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM TASK WHERE " +
+                    "DONE = 0 AND DELETED = 0 ORDER BY ORDERID");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Task currentTask = new Task();
+                currentTask.setId(rs.getInt("id"));
+                currentTask.setOrder_id(rs.getInt("orderid"));
+
+                currentTask.setDescription(rs.getString("description"));
+                currentTask.setFinishing(rs.getString("finishing"));
+                currentTask.setWood_type(rs.getString("wood_type"));
+                currentTask.setQuality(rs.getString("quality"));
+
+                currentTask.setSize(rs.getInt("size"));
+                currentTask.setWidth(rs.getInt("width"));
+                currentTask.setLength(rs.getInt("length"));
+
+                currentTask.setQuantity(rs.getInt("quantity"));
+                currentTask.setProduced_quantity(rs.getInt("produced_quantity"));
+
+                currentTask.setPrice(rs.getInt("sum"));
+                currentTask.setDone(rs.getBoolean("done"));
+
+                taskList.add(currentTask);
+            }
+
+            rs.close();
+            ps.close();
+
+            if (taskList.size() == 0) {
+                //no open tasks was found
+                LOG.debug("No open task found");
+                //throw new PersistenceLayerException("No open task found");
+            }
+
+        } catch (SQLException e) {
+            LOG.error("SQL Exception: " +  e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
+
+        return taskList;
     }
 
     @Override
