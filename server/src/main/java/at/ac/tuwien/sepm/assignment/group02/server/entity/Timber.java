@@ -3,8 +3,8 @@ package at.ac.tuwien.sepm.assignment.group02.server.entity;
 public class Timber {
 
     private int box_id;
-
     private int amount;
+    private String wood_type;
 
     public Timber() {
 
@@ -29,5 +29,13 @@ public class Timber {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public void setWood_type(String wood_type) {
+        this.wood_type = wood_type;
+    }
+
+    public String getWood_type() {
+        return wood_type;
     }
 }
