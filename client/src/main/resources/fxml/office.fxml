@@ -50,7 +50,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Button layoutX="608.0" layoutY="197.0" mnemonicParsing="false" onAction="#addTaskToOrder" text="Aufträge hinzufügen" />
+                  <Button layoutX="571.0" layoutY="197.0" mnemonicParsing="false" onAction="#addTaskToOrder" text="Aufträge hinzufügen" />
                   <TableView fx:id="table_addedTask" layoutX="531.0" layoutY="238.0" prefHeight="150.0" prefWidth="348.0">
                     <columns>
                       <TableColumn fx:id="col_taskNr" prefWidth="35.0" text="Nr" />
@@ -85,6 +85,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
+                  <Button layoutX="742.0" layoutY="197.0" mnemonicParsing="false" onAction="#deleteSelectedTask" text="Auftrag entfernen" />
                 </children>
             </AnchorPane>
          </content>

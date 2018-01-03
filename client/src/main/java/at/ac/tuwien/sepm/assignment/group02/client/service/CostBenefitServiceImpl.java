@@ -36,12 +36,14 @@ public class CostBenefitServiceImpl implements CostBenefitService {
         for(int i = 0; i < taskList.size();i++) {
             toEvaluate.add(taskConverter.convertPlainObjectToRestDTO(taskList.get(i)));
         }
+        int result = -1;
         try {
-            costBenefitController.costValueFunction(toEvaluate);
+            result = costBenefitController.costValueFunction(toEvaluate);
         } catch(PersistenceLayerException e) {
             LOG.error("Error at Server: " + e.getMessage());
             throw new ServiceLayerException("Error at Server: " + e.getMessage());
         }
+        if(result != -1) { return result; }
         int evalValue = (int) Math.floor(sum * 1.2);
         int randomizedValue = (int) Math.floor(Math.random() * evalValue);
         double posOrNeg = Math.random();

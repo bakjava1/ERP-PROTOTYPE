@@ -100,7 +100,7 @@ width,length,quantity,reserved_quantity,all_reserved,all_delivered) VALUES
 ('Lager2', 'KVH', 'trocken','fi', 'V', 22,48,4000,40,42,1,0),
 ('Lager3', 'Kurzware', 'lutro','Ta', 'O/III', 22,48,3000,40,50,1,0),
 ('Lager3', 'Kantholz', 'frisch','Fi/Ta', 'III/IV', 98,98,3500,50,42,1,0),
-('Lager5', 'hobelware', 'imprägniert','Ta', 'III/V', 22,48,3000,40,50,1,0),
+('Lager3', 'Kantholz', 'frisch','Fi/Ta', 'III/IV', 98,98,3500,50,42,1,0),
 ('Lager5', 'kvh', 'gehobelt','Ta', 'O/III', 98,48,4000,40,60,0,1);
 
 

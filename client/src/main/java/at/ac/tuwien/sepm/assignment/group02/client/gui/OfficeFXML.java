@@ -654,10 +654,18 @@ public class OfficeFXML {
         }
         if(randomized < 0) {
             kn_result.setTextFill(Color.web("#dd0000"));
-            kn_result.setText(randomized+"");
+            kn_result.setText("- " + randomized + " €");
         } else {
             kn_result.setTextFill(Color.web("#00dd00"));
-            kn_result.setText(randomized+"");
+            kn_result.setText("+ " + randomized + " €");
+        }
+    }
+
+    public void deleteSelectedTask(ActionEvent actionEvent) {
+        if(table_addedTask.getSelectionModel().getSelectedIndex() == -1) {
+            alertBuilder.showErrorAlert("Kein Auftrag ausgewählt",null,"Bitte wählen sie einen Auftrag zum löschen aus");
+        } else {
+            table_addedTask.getItems().remove(table_addedTask.getSelectionModel().getSelectedIndex());
         }
     }
 }
