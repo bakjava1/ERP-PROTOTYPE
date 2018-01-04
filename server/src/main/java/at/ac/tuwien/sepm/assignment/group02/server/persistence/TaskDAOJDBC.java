@@ -143,6 +143,7 @@ public class TaskDAOJDBC implements TaskDAO {
 
     @Override
     public List<Task> getAllOpenTasks() throws PersistenceLayerException {
+        //TODO return all open tasks
         return null;
     }
 

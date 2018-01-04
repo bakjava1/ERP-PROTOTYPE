@@ -5,6 +5,12 @@ public class Timber {
     private int box_id;
     private int amount;
     private String wood_type;
+    private String quality;
+    private int diameter;
+    private int length;
+    private double festmeter;
+    private int price;
+    private String lastEdited;
 
     public Timber() {
 
@@ -37,5 +43,53 @@ public class Timber {
 
     public String getWood_type() {
         return wood_type;
+    }
+
+    public String getQuality() {
+        return quality;
+    }
+
+    public void setQuality(String quality) {
+        this.quality = quality;
+    }
+
+    public int getDiameter() {
+        return diameter;
+    }
+
+    public void setDiameter(int diameter) {
+        this.diameter = diameter;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public double getFestmeter() {
+        return festmeter;
+    }
+
+    public void setFestmeter(double festmeter) {
+        this.festmeter = festmeter;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public String getLastEdited() {
+        return lastEdited;
+    }
+
+    public void setLastEdited(String lastEdited) {
+        this.lastEdited = lastEdited;
     }
 }

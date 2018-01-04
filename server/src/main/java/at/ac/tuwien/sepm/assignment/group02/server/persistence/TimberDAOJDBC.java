@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Component
 public class TimberDAOJDBC implements TimberDAO{
@@ -82,6 +83,12 @@ public class TimberDAOJDBC implements TimberDAO{
             closeStatement();
         }
         return numberOfBoxes;
+    }
+
+    @Override
+    public List<Timber> getAllBoxes() throws PersistenceLayerException {
+        //TODO return a list of all boxes
+        return null;
     }
 
     private void closeStatement() throws PersistenceLayerException {
