@@ -1,15 +1,40 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.converter.OptAlgorithmConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.converter.TaskConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.OptAlgorithmResult;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.rest.OptAlgorithmController;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Date;
 
 @Service
 public class OptimisationAlgorithmServiceImpl implements OptimisationAlgorithmService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static OptAlgorithmController optAlgorithmController;
+    private static OptAlgorithmConverter optAlgorithmConverter;
+    private static TaskConverter taskConverter;
+
+    @Autowired
+    public OptimisationAlgorithmServiceImpl (OptAlgorithmController optAlgorithmController, TaskConverter taskConverter, OptAlgorithmConverter optAlgorithmConverter){
+        OptimisationAlgorithmServiceImpl.optAlgorithmController = optAlgorithmController;
+        OptimisationAlgorithmServiceImpl.taskConverter = taskConverter;
+        OptimisationAlgorithmServiceImpl.optAlgorithmConverter = optAlgorithmConverter;
+    }
+
+    //TODO delete this constructor and use autowired constructor
+    public OptimisationAlgorithmServiceImpl(){}
 
     @Override
     public ArrayList<Task> getSelectedTasksMock() {
@@ -67,5 +92,13 @@ public class OptimisationAlgorithmServiceImpl implements OptimisationAlgorithmSe
         timberMock.setPrice(50);
         timberMock.setQuality("CX");
         return timberMock;
+    }
+
+    @Override
+    public OptAlgorithmResult getOptAlgorithmResult(Task task) throws PersistenceLayerException {
+        TaskDTO taskDTO = taskConverter.convertPlainObjectToRestDTO(task);
+        OptAlgorithmResultDTO optAlgorithmResultDTO = optAlgorithmController.getOptAlgorithmResult(taskDTO);
+        return optAlgorithmConverter.convertRestDTOToPlainObject(optAlgorithmResultDTO);
+        //TODO check if optAlgorithmResult is empty and throw new exception to show user that no optimisation can be found
     }
 }
