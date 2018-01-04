@@ -15,7 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -33,9 +32,6 @@ import java.util.concurrent.TimeUnit;
 public class LeadWorkerFXML {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    @FXML
-    private AnchorPane ap;
 
     @FXML
     private TextField tf_description;
@@ -177,6 +173,15 @@ public class LeadWorkerFXML {
         cb_wood_type.getSelectionModel().selectFirst();
         cb_quality.getSelectionModel().selectFirst();
 
+        //initial lumber overview
+        onSearchButtonClicked();
+
+        initializeTaskTable();
+        updateTaskTable();
+
+    }
+
+    private void initializeTaskTable(){
 
         task_col_order_id.setCellValueFactory(new PropertyValueFactory("order_id"));
         task_col_description.setCellValueFactory(new PropertyValueFactory("description"));
@@ -190,11 +195,18 @@ public class LeadWorkerFXML {
         task_col_produced_quantity.setCellValueFactory(new PropertyValueFactory("produced_quantity"));
         task_col_done.setCellValueFactory(new PropertyValueFactory("done"));
 
-        //initial lumber overview
-        onSearchButtonClicked();
-
-        updateTaskTable();
-
+        Thread t = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(15000); // sleep 15 sec
+                } catch (InterruptedException e) {
+                    LOG.warn("auto refresh thread interrupt: ",e.getMessage());
+                }
+                updateTaskTable();
+            }
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
     private void updateTaskTable() {
@@ -213,9 +225,7 @@ public class LeadWorkerFXML {
 
         if(allOpenTasks != null){
             ObservableList<TaskDTO> openTasksForTable = FXCollections.observableArrayList();
-            for (TaskDTO task: allOpenTasks) {
-                openTasksForTable.add(task);
-            }
+            openTasksForTable.addAll(allOpenTasks);
             table_task.setItems(openTasksForTable);
             table_task.refresh();
         } else {
@@ -270,6 +280,8 @@ public class LeadWorkerFXML {
                         return row;
                     }
                 });
+
+        table_task.refresh();
     }
 
     @FXML
@@ -318,14 +330,10 @@ public class LeadWorkerFXML {
 
         if (allLumber != null) {
             ObservableList<Lumber> lumberForTable = FXCollections.observableArrayList();
-
-            for (Lumber lumber: allLumber) {
-                lumberForTable.add(lumber);
-            }
-
+            lumberForTable.addAll(allLumber);
             table_lumber.setItems(lumberForTable);
-
             table_lumber.refresh();
+
         } else {
             table_lumber.refresh();
         }
@@ -356,8 +364,11 @@ public class LeadWorkerFXML {
         Lumber lumber = table_lumber.getSelectionModel().getSelectedItem();
         LOG.debug("selected lumber: {}", lumber.toString());
 
-        // get the quantity of lumber to reserve from the textfield
+        // set the textfield quantity of lumber to reserve to the needed amount of lumber
         int quantity;
+        tf_quantity.setText(""+(selectedTask.getQuantity()-selectedTask.getProduced_quantity()));
+
+        // get the entered quantity from the text field
         if( tf_quantity.getText().isEmpty() || tf_quantity.getText().length() < 1 ) {
             AlertBuilder alertBuilder = new AlertBuilder();
             alertBuilder.showInformationAlert("Schnittholz-Reservierung",

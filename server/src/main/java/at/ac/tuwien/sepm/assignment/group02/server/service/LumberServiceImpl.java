@@ -65,7 +65,6 @@ public class LumberServiceImpl implements LumberService {
         List<Lumber> allLumber;
         List<LumberDTO> allLumberConverted = null;
         Lumber filter = lumberConverter.convertRestDTOToPlainObject(lumber);
-        validateLumber.isValid(filter);
 
         try {
             allLumber = lumberManagementDAO.getAllLumber(filter);

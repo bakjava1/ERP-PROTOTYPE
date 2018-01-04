@@ -133,19 +133,19 @@ INSERT INTO ORDERS(customer_name, customer_address,customer_uid, order_date, isP
 
 INSERT INTO task(orderid,description,finishing,wood_type,quality,size,
 width,length,quantity,produced_quantity,sum,done,deleted) VALUES
-(1,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(1,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,50,50,25,1,0),
-(3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(4,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(4,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(6,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(7,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(7,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-(8,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0);
+(1,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,30,25,0,0),
+(1,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,20,25,0,0),
+(2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,50,30,25,0,0),
+(3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,30,25,0,0),
+(3,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,20,25,0,0),
+(4,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,40,25,1,0),
+(4,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,40,25,1,0),
+(5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,40,25,1,0),
+(5,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,40,25,1,0),
+(6,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,5,25,0,0),
+(7,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,0,25,0,0),
+(7,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,0,25,0,0),
+(8,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,40,25,1,0);
 
 INSERT INTO ASSIGNMENT(creation_date, amount,box_ID, isDone, task_id) VALUES
 (now(),2,3,0,1),

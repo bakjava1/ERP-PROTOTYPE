@@ -54,6 +54,12 @@ public class CraneOperatorFXML {
 
     @FXML
     public void initialize() {
+
+        initializeAssignmentTable();
+        updateAssignmentTable();
+    }
+
+    private void initializeAssignmentTable() {
         table_assignment.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         col_assignmentNr.setCellValueFactory(new PropertyValueFactory("id"));
@@ -64,10 +70,22 @@ public class CraneOperatorFXML {
 
         ObservableList<AssignmentDTO> assignments = FXCollections.observableArrayList();
         table_assignment.setItems(assignments);
-        updateTable();
+
+        Thread t = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(15000); // sleep 15 sec
+                } catch (InterruptedException e) {
+                    LOG.warn("auto refresh thread interrupt: ",e.getMessage());
+                }
+                updateAssignmentTable();
+            }
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
-    private void updateTable() {
+    private void updateAssignmentTable() {
         List<AssignmentDTO> allOpenAssignments = new LinkedList<>();
         try {
             allOpenAssignments = assignmentService.getAllAssignments();
@@ -85,7 +103,6 @@ public class CraneOperatorFXML {
         }
 
         table_assignment.setItems(assignmentObservableList);
-        table_assignment.refresh();
 
         // set row factory in order to create the context menu and set row color
         table_assignment.setRowFactory(
@@ -111,6 +128,8 @@ public class CraneOperatorFXML {
                         return row;
                     }
                 });
+
+        table_assignment.refresh();
     }
 
     public void setDone() {
@@ -160,7 +179,7 @@ public class CraneOperatorFXML {
                     AlertBuilder alertBuilder = new AlertBuilder();
                     alertBuilder.showInformationAlert("Information", "Aufgabe abgeschlossen", "Aufgabe " + assignmentDTO.getId() + " wurde als erledigt markiert.");
 
-                    updateTable();
+                    updateAssignmentTable();
                 }
 
                 @Override

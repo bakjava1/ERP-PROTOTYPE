@@ -117,7 +117,6 @@ public class LumberServerServiceImplTest {
 
         List<LumberDTO> allLumberConverted = lumberService.getAllLumber(any(LumberDTO.class));
 
-        verify(validateLumber,times(1)).isValid(any(Lumber.class));
         verify(lumberManagementDAO, times(1)).getAllLumber(any(Lumber.class));
         verify(lumberConverter, times(2)).convertPlainObjectToRestDTO(any(Lumber.class));
 
@@ -134,21 +133,10 @@ public class LumberServerServiceImplTest {
 
         List<LumberDTO> allLumberConverted = lumberService.getAllLumber(any(LumberDTO.class));
 
-        verify(validateLumber,times(1)).isValid(any(Lumber.class));
         verify(lumberManagementDAO, times(1)).getAllLumber(any(Lumber.class));
         verify(lumberConverter, times(0)).convertPlainObjectToRestDTO(any(Lumber.class));
 
         Assert.assertEquals(allLumberConverted.size(),0);
-    }
-
-    @Test(expected = InvalidInputException.class)
-    public void testGetAllLumber_InvalidInputException() throws Exception {
-        LumberService lumberService
-                = new LumberServiceImpl(lumberManagementDAO,lumberConverter,validateLumber);
-
-        doThrow(InvalidInputException.class).when(validateLumber).isValid(any(Lumber.class));
-
-        lumberService.getAllLumber(any(LumberDTO.class));
     }
 
     @Test(expected = ServiceLayerException.class)
