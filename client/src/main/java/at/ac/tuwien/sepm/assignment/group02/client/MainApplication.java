@@ -18,7 +18,6 @@ import java.lang.invoke.MethodHandles;
 public class MainApplication extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     private static boolean crane = false;
     private static boolean lead = false;
     private static boolean office = false;

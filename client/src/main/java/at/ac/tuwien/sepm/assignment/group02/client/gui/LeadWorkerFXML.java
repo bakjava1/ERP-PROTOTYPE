@@ -144,6 +144,8 @@ public class LeadWorkerFXML {
 
     private TaskDTO selectedTask;
 
+    private boolean running = true;
+
     @Autowired
     public LeadWorkerFXML(LumberService lumberService, TaskService taskService, AssignmentService assignmentService){
 
@@ -201,11 +203,11 @@ public class LeadWorkerFXML {
         task_col_done.setCellValueFactory(new PropertyValueFactory("done"));
 
         Thread t = new Thread(() -> {
-            while (true) {
+            while (running) {
                 try {
-                    Thread.sleep(15000); // sleep 15 sec
+                    Thread.sleep(5000); // sleep 5 sec
                 } catch (InterruptedException e) {
-                    LOG.warn("auto refresh thread interrupt: ",e.getMessage());
+                    LOG.debug("auto refresh thread interrupt: ",e.getMessage());
                 }
                 updateTaskTable();
             }
@@ -358,6 +360,9 @@ public class LeadWorkerFXML {
             return;
         }
 
+        // set the textfield quantity of lumber to reserve to the needed amount of lumber
+        tf_quantity.setText(""+(selectedTask.getQuantity()-selectedTask.getProduced_quantity()));
+
         tabPane.getSelectionModel().clearAndSelect(1);
     }
 
@@ -425,9 +430,7 @@ public class LeadWorkerFXML {
         Lumber lumber = table_lumber.getSelectionModel().getSelectedItem();
         LOG.debug("selected lumber: {}", lumber.toString());
 
-        // set the textfield quantity of lumber to reserve to the needed amount of lumber
         int quantity;
-        tf_quantity.setText(""+(selectedTask.getQuantity()-selectedTask.getProduced_quantity()));
 
         // get the entered quantity from the text field
         if( tf_quantity.getText().isEmpty() || tf_quantity.getText().length() < 1 ) {
@@ -452,6 +455,8 @@ public class LeadWorkerFXML {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "Schnittholz (Id:"+lumber.getId()+", "+lumber.getDescription()+", Menge: "+qu+") dem Auftrag (Id: "+selectedTask.getId()+", "+selectedTask.getDescription()+") hinzufügen?",
                 ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.showAndWait();
 
         if (alert.getResult() == ButtonType.YES) {
 
@@ -483,6 +488,8 @@ public class LeadWorkerFXML {
 
                     //change tab
                     tabPane.getSelectionModel().clearAndSelect(0);
+
+                    selectedTask = null;
                 }
 
                 @Override
@@ -507,11 +514,19 @@ public class LeadWorkerFXML {
             }, "reserve-lumber").start();
 
         } else {
+
+            AlertBuilder alertBuilder = new AlertBuilder();
+            alertBuilder.showInformationAlert("Schnittholz-Reservierung",
+                    "Schnittholz-Reservierung", "Reservierungsvorgang wurde abgebrochen.");
+
+
             //refresh tables
             onSearchButtonClicked();
             updateTaskTable();
             //change tab
             tabPane.getSelectionModel().clearAndSelect(0);
+
+            selectedTask = null;
         }
     }
 

@@ -28,6 +28,7 @@ public class CraneOperatorFXML {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private AssignmentService assignmentService;
+    private boolean running = true;
 
     @Autowired
     public CraneOperatorFXML(AssignmentService assignmentService) {
@@ -73,9 +74,9 @@ public class CraneOperatorFXML {
         table_assignment.setItems(assignments);
 
         Thread t = new Thread(() -> {
-            while (true) {
+            while (running) {
                 try {
-                    Thread.sleep(15000); // sleep 15 sec
+                    Thread.sleep(5000); // sleep 5 sec
                 } catch (InterruptedException e) {
                     LOG.warn("auto refresh thread interrupt: ",e.getMessage());
                 }
