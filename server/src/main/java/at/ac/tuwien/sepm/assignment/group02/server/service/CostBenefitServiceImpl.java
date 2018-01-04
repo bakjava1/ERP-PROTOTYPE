@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +43,22 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                 int aviable = lumberDAO.getLumberCountForTask(toEvaluate.get(i));
                 LOG.info("Aviable for Task " + i + ": " + aviable);
                 if(toEvaluate.get(i).getQuantity() <= aviable) {
+                    LOG.info("Complete needed Task Quantity is aviable in storage -> + " + toEvaluate.get(i).getPrice());
                     summe += toEvaluate.get(i).getPrice();
                 } else {
+                    LOG.info("Not complete Quantity is aviable in storage");
+                    int toBeProduced = toEvaluate.get(i).getQuantity() - aviable;
+                    LOG.info(toBeProduced + " are left to produce");
+                    double d = Math.floor( (double) toEvaluate.get(i).getWidth() / (double) 10);
+                    double l = (double) toEvaluate.get(i).getLength() / (double) 1000;
+                    LOG.info("D = " + d + " L = " + l);
+                    double bankmeter = (Math.PI / 4) * Math.pow(d,2) * l * Math.pow(10,-4);
+                    BigDecimal bd = new BigDecimal(bankmeter);
+                    bd = bd.setScale(4, RoundingMode.HALF_UP);
+                    bankmeter = bd.doubleValue();
+                    LOG.info("Bankmeters for one Product are: " + bankmeter);
+                    double sum_bankmeter = bankmeter * toBeProduced;
+                    LOG.info("Complete Bankmeter Count to be produced: " + sum_bankmeter);
                     //TODO Produktionskostenrechnung
                 }
             } catch(PersistenceLayerException e) {
