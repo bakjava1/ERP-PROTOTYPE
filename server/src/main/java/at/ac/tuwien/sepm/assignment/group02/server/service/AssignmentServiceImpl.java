@@ -51,7 +51,15 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public void addAssignment(AssignmentDTO assignmentDTO) throws ServiceLayerException {
+        Assignment assignment = assignmentConverter.convertRestDTOToPlainObject(assignmentDTO);
+        validateAssignment.isValid(assignment);
 
+        try {
+            assignmentManagementDAO.createAssignment(assignment);
+        } catch (PersistenceLayerException e) {
+            LOG.warn("Database Error", e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
     }
 
     @Override

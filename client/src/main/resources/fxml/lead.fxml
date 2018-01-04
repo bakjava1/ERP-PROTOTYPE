@@ -38,7 +38,8 @@
 
 
                         <Button fx:id="btn_opt_alg" layoutX="415.0" layoutY="520.0" mnemonicParsing="false" onAction="#optimisationBtnClicked" prefHeight="40.0" prefWidth="176.0" text="Optimierung starten" />
-                        <Button fx:id="btn_addLumber" layoutX="240.0" layoutY="520.0" mnemonicParsing="false" onAction="#addLumberButtonClicked" prefHeight="40.0" prefWidth="176.0" text="Schnittholz hinzufügen" />
+                        <Button fx:id="btn_addLumber" layoutX="240.0" layoutY="520.0" mnemonicParsing="false" onAction="#addLumberButtonClicked" prefHeight="40.0" prefWidth="176.0" text="Schnittholz reservieren" />
+                        <Button fx:id="btn_createAssignment" layoutX="25.0" layoutY="520.0" mnemonicParsing="false" onAction="#createAssignmentButtonClicked" prefHeight="40.0" prefWidth="203.0" text="Produktion in Auftrag geben" />
                      </children>
                   </AnchorPane>
                </content>

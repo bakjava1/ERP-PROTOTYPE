@@ -1,4 +1,4 @@
-package servicelayer;
+package serviceLayer;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
@@ -43,6 +43,43 @@ public class AssignmentServerServiceImplTest {
     private LumberService lumberService;
     @Mock
     private TaskService taskService;
+
+    @Test
+    public void testCreateTask_works() throws Exception {
+        AssignmentService assignmentService
+                = new AssignmentServiceImpl(assignmentManagementDAO, assignmentConverter, validateAssignment,
+                timberService, lumberService, taskService);
+
+        assignmentService.addAssignment(any(AssignmentDTO.class));
+
+        verify(assignmentConverter,times(1)).convertRestDTOToPlainObject(any(AssignmentDTO.class));
+        verify(validateAssignment,times(1)).isValid(any(Assignment.class));
+        verify(assignmentManagementDAO,times(1)).createAssignment(any(Assignment.class));
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testCreateTask_ValidationException() throws Exception {
+        AssignmentService assignmentService
+                = new AssignmentServiceImpl(assignmentManagementDAO, assignmentConverter, validateAssignment,
+                timberService, lumberService, taskService);
+
+        doThrow(InvalidInputException.class).when(validateAssignment).isValid(any(Assignment.class));
+
+        assignmentService.addAssignment(any(AssignmentDTO.class));
+        verify(assignmentConverter,times(1)).convertRestDTOToPlainObject(any(AssignmentDTO.class));
+
+    }
+
+    @Test(expected = ServiceLayerException.class)
+    public void testCreateTask_PersistenceLayerException() throws Exception {
+        AssignmentService assignmentService
+                = new AssignmentServiceImpl(assignmentManagementDAO, assignmentConverter, validateAssignment,
+                timberService, lumberService, taskService);
+
+        doThrow(PersistenceLayerException.class).when(assignmentManagementDAO).createAssignment(any(Assignment.class));
+
+        assignmentService.addAssignment(any(AssignmentDTO.class));
+    }
 
     @Test
     public void testGetAllOpenAssignments_returns2OpenAssignments() throws Exception {

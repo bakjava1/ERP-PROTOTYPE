@@ -86,7 +86,6 @@ public class AssignmentControllerImpl {
     @ApiOperation(value = "create assignment")
     public void createAssignment(@RequestBody AssignmentDTO assignmentDTO) throws ResourceNotFoundException {
         LOG.debug("called createAssignment" + assignmentDTO.toString());
-
         try {
             assignmentService.addAssignment(assignmentDTO);
         } catch(ServiceLayerException e) {

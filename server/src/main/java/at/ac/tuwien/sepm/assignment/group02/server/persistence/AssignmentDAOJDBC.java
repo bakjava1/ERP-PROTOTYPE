@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,7 +27,33 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
 
     @Override
     public void createAssignment(Assignment assignment) throws PersistenceLayerException {
+        LOG.debug("called createAssignment");
 
+        String insert =
+                "INSERT INTO ASSIGNMENT(ID, creation_date, amount, box_ID, isDone, task_id) VALUES"+
+                "(default, now(), ?, ?, false, ?)";
+
+        try {
+
+            PreparedStatement ps = dbConnection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1,assignment.getAmount());
+            ps.setInt(2,assignment.getBox_id());
+            ps.setInt(3,assignment.getTask_id());
+            ps.executeUpdate();
+
+            ResultSet generatedKey = ps.getGeneratedKeys();
+            generatedKey.next();
+
+            int newID = generatedKey.getInt(1);
+            assignment.setId(newID);
+
+            generatedKey.close();
+            ps.close();
+
+        } catch (SQLException e) {
+            LOG.warn("SQLException: {}", e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
     }
 
     @Override

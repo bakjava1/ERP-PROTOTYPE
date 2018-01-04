@@ -1,4 +1,4 @@
-package servicelayer;
+package serviceLayer;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.LumberConverter;

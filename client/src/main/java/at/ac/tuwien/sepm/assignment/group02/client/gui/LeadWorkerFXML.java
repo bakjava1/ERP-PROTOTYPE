@@ -4,8 +4,11 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
+import at.ac.tuwien.sepm.assignment.group02.client.util.AlertBuilder;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -137,14 +140,16 @@ public class LeadWorkerFXML {
 
     private LumberService lumberService;
     private TaskService taskService;
+    private AssignmentService assignmentService;
 
     private TaskDTO selectedTask;
 
     @Autowired
-    public LeadWorkerFXML(LumberService lumberService, TaskService taskService){
+    public LeadWorkerFXML(LumberService lumberService, TaskService taskService, AssignmentService assignmentService){
 
         this.lumberService = lumberService;
         this.taskService = taskService;
+        this.assignmentService = assignmentService;
 
     }
 
@@ -285,6 +290,62 @@ public class LeadWorkerFXML {
     }
 
     @FXML
+    public void createAssignmentButtonClicked(){
+
+        TaskDTO taskDTO = table_task.getSelectionModel().getSelectedItem();
+
+        if(taskDTO == null || taskDTO.isDone()) {
+            AlertBuilder alertBuilder = new AlertBuilder();
+            alertBuilder.showInformationAlert("Schnittholz-Produktion",
+                    "Schnittholz-Produktion", "Bitte wählen Sie einen nicht abgeschlossenen Auftrag zur Produktion aus!");
+            return;
+        }
+
+        AssignmentDTO assignmentDTO = new AssignmentDTO();
+        assignmentDTO.setTask_id(taskDTO.getId());
+        assignmentDTO.setDone(false);
+
+        //TODO opt_alg
+        int box_id=2;
+        int amount=taskDTO.getQuantity()-taskDTO.getProduced_quantity()/5;
+        assignmentDTO.setBox_id(box_id);
+        assignmentDTO.setAmount(amount);
+
+        new Thread(new Task<>() {
+            @Override
+            protected Object call() throws Exception {
+                LOG.debug("create-assignment thread called");
+
+                assignmentService.createAssignment(assignmentDTO);
+
+                return 1;
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                LOG.debug("create-assignment succeeded with value: ", getValue());
+                AlertBuilder alertBuilder = new AlertBuilder();
+                alertBuilder.showInformationAlert("Schnittholz-Produktion",
+                        "Schnittholz-Produktion", "Schnittholz Produktion wurde erfolgreich in Auftrag gegeben.");
+                table_task.getSelectionModel().clearSelection();
+            }
+
+            @Override
+            protected void failed() {
+                super.failed();
+                LOG.debug("create-assignment failed with exception:", getException().getMessage());
+
+                AlertBuilder alertBuilder = new AlertBuilder();
+                alertBuilder.showErrorAlert("Schnittholz-Produktion",
+                        "Schnittholz-Produktion","Schnittholz Produktion wurde nicht in Auftrag gegeben. "+ getException().getMessage());
+
+                table_task.getSelectionModel().clearSelection();
+            }
+        }, "create-assignment").start();
+    }
+
+    @FXML
     public void addLumberButtonClicked(){
 
         selectedTask = table_task.getSelectionModel().getSelectedItem();
@@ -391,8 +452,6 @@ public class LeadWorkerFXML {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "Schnittholz (Id:"+lumber.getId()+", "+lumber.getDescription()+", Menge: "+qu+") dem Auftrag (Id: "+selectedTask.getId()+", "+selectedTask.getDescription()+") hinzufügen?",
                 ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        alert.showAndWait();
 
         if (alert.getResult() == ButtonType.YES) {
 

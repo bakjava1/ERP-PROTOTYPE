@@ -1,4 +1,4 @@
-package servicelayer;
+package serviceLayer;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;

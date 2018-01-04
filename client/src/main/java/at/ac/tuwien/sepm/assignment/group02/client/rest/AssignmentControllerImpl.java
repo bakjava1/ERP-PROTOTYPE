@@ -35,8 +35,8 @@ public class AssignmentControllerImpl implements AssignmentController {
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("HttpStatusCodeException");
         } catch(RestClientException e){
-            LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("No response from server. Is it running?");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 
@@ -54,7 +54,7 @@ public class AssignmentControllerImpl implements AssignmentController {
             throw new PersistenceLayerException("HttpStatusCodeException");
         } catch(RestClientException e){
             LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("No response from server. Is it running?");
+            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
         }
 
         if(assignmentArray != null) {
@@ -78,7 +78,7 @@ public class AssignmentControllerImpl implements AssignmentController {
             throw new PersistenceLayerException("HttpStatusCodeException");
         } catch(RestClientException e){
             LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("No response from server. Is it running?");
+            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
         }
 
         if(assignmentArray != null) {
@@ -97,7 +97,7 @@ public class AssignmentControllerImpl implements AssignmentController {
             throw new PersistenceLayerException("HttpStatusCodeException");
         } catch(RestClientException e){
             LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("No response from server. Is it running?");
+            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 }

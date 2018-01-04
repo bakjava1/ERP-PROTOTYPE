@@ -1,4 +1,4 @@
-package servicelayer;
+package serviceLayer;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
@@ -11,7 +11,6 @@ import at.ac.tuwien.sepm.assignment.group02.server.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TaskServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateTask;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -19,7 +18,6 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
