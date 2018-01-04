@@ -4,7 +4,6 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateLumber;
@@ -39,7 +38,7 @@ public class LumberServiceImpl implements LumberService {
         try {
             return lumberConverter.convertPlainObjectToRestDTO(lumberManagementDAO.readLumberById(id));
         } catch (PersistenceLayerException e) {
-            LOG.warn("helloWorldLumber Persistence Exception: {}", e.getMessage());
+            LOG.error("Database Problem", e.getMessage());
             throw new ServiceLayerException(e.getMessage());
         }
     }
@@ -47,8 +46,13 @@ public class LumberServiceImpl implements LumberService {
     @Override
     public int addLumber(LumberDTO lumberDTO) throws ServiceLayerException {
 
+        int lumber_id;
+        Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
+        validateLumber.isValid(lumber);
+
         try {
-            return lumberManagementDAO.createLumber(lumberConverter.convertRestDTOToPlainObject(lumberDTO));
+            lumber_id = lumberManagementDAO.createLumber(lumber);
+            return lumber_id;
         } catch (PersistenceLayerException e) {
             LOG.warn("helloWorldLumber Persistence Exception: {}", e.getMessage());
             throw new ServiceLayerException(e.getMessage());
@@ -61,6 +65,7 @@ public class LumberServiceImpl implements LumberService {
         List<Lumber> allLumber;
         List<LumberDTO> allLumberConverted = null;
         Lumber filter = lumberConverter.convertRestDTOToPlainObject(lumber);
+        validateLumber.isValid(filter);
 
         try {
             allLumber = lumberManagementDAO.getAllLumber(filter);
@@ -86,10 +91,11 @@ public class LumberServiceImpl implements LumberService {
     public void reserveLumber(LumberDTO lumberDTO) throws ServiceLayerException {
 
         Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
+        Lumber existing_lumber;
         validateLumber.isValid(lumber);
 
         try {
-            Lumber existing_lumber = lumberManagementDAO.readLumberById(lumber.getId());
+            existing_lumber = lumberManagementDAO.readLumberById(lumber.getId());
             LOG.debug("lumber reservation - existing lumber: {}", existing_lumber.toString());
 
             int toReserve = lumber.getQuantity();
@@ -115,8 +121,12 @@ public class LumberServiceImpl implements LumberService {
 
     @Override
     public void updateLumber(LumberDTO lumberDTO) throws ServiceLayerException {
+
+        Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
+        validateLumber.isValid(lumber);
+
         try {
-            lumberManagementDAO.updateLumber(lumberConverter.convertRestDTOToPlainObject(lumberDTO));
+            lumberManagementDAO.updateLumber(lumber);
         } catch (PersistenceLayerException e) {
             LOG.warn("Updating Lumber Persistence Exception: {}", e.getMessage());
             throw new ServiceLayerException(e.getMessage());
@@ -127,10 +137,11 @@ public class LumberServiceImpl implements LumberService {
     @Override
     public void removeLumber(LumberDTO lumberDTO) throws ServiceLayerException {
 
-        Lumber lumberToDelete = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
+        Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
+        validateLumber.isValid(lumber);
 
         try {
-            lumberManagementDAO.deleteLumber(lumberToDelete);
+            lumberManagementDAO.deleteLumber(lumber);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while deleting an order");
             throw new ServiceLayerException(e.getMessage());

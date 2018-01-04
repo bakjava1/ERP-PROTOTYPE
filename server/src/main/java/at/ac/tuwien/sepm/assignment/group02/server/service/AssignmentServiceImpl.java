@@ -5,7 +5,6 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.AssignmentConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Assignment;
-import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
@@ -28,18 +27,26 @@ public class AssignmentServiceImpl implements AssignmentService {
     private ValidateAssignment validateAssignment;
 
 
-    @Autowired
+
     private TimberService timberService;
-    @Autowired
+
     private LumberService lumberService;
-    @Autowired
+
     private TaskService taskService;
 
     @Autowired
-    public AssignmentServiceImpl(AssignmentDAO assignmentManagementDAO, AssignmentConverter assignmentConverter, ValidateAssignment validateAssignment) {
+    public AssignmentServiceImpl(AssignmentDAO assignmentManagementDAO,
+                                 AssignmentConverter assignmentConverter,
+                                 ValidateAssignment validateAssignment,
+                                 TimberService timberService,
+                                 LumberService lumberService,
+                                 TaskService taskService) {
         AssignmentServiceImpl.assignmentManagementDAO = assignmentManagementDAO;
         AssignmentServiceImpl.assignmentConverter = assignmentConverter;
         this.validateAssignment = validateAssignment;
+        this.timberService = timberService;
+        this.lumberService = lumberService;
+        this.taskService = taskService;
     }
 
     @Override
@@ -92,14 +99,14 @@ public class AssignmentServiceImpl implements AssignmentService {
         LOG.debug("called setDone");
 
         // might throw ConversionException
-        Assignment toUpdate = assignmentConverter.convertRestDTOToPlainObject(assignmentDTO);
+        Assignment assignment = assignmentConverter.convertRestDTOToPlainObject(assignmentDTO);
 
         // might throw InvalidInputException
-        validateAssignment.isValid(toUpdate);
+        validateAssignment.isValid(assignment);
 
         try {
             // 3.2.2 (rest/AssignmentController) Aufgabe als erledigt markieren.
-            assignmentManagementDAO.setAssignmentDone(toUpdate);
+            assignmentManagementDAO.setAssignmentDone(assignment);
         } catch (EntityNotFoundException e){
             LOG.error("Entity Not Found: " + e.getMessage());
             throw new ServiceLayerException("entity not found");
@@ -109,10 +116,12 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
 
         // 3.2.3 (rest/TimberController) Rundholz aus dem Lager entfernen.
-        timberService.removeTimberFromBox(toUpdate.getBox_id(), toUpdate.getAmount());
+        timberService.removeTimberFromBox(assignment.getBox_id(), assignment.getAmount());
 
         // 3.2.4 (rest/LumberController) Schnittholz ins Lager hinzufügen.
-        TaskDTO taskDTO = taskService.getTaskById(toUpdate.getTask_id());
+        // problem: no direct link between lumber and task
+        // create lumber by copying task description
+        TaskDTO taskDTO = taskService.getTaskById(assignment.getTask_id());
         LumberDTO lumberDTO = new LumberDTO();
 
         lumberDTO.setDescription(taskDTO.getDescription());
@@ -129,6 +138,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
         // if there is lumber that matches the task produced, increase its quantity
         if(matchingLumber.size()>0){
+            LOG.debug("there is > 0 lumber that matches the task - the first one in the list will be updated");
 
             lumberDTO = matchingLumber.get(0);
             int existing_quantity = lumberDTO.getQuantity();
@@ -137,6 +147,8 @@ public class AssignmentServiceImpl implements AssignmentService {
             lumberService.updateLumber(lumberDTO);
 
         } else { // if there is no lumber matching the task, create new lumber
+            LOG.debug("there is <= 0 lumber that matches the task - new lumber will be created");
+
             lumberDTO.setQuantity(taskDTO.getQuantity());
             int lumberId = lumberService.addLumber(lumberDTO);
             lumberDTO.setId(lumberId);

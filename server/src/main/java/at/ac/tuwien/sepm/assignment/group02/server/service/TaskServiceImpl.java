@@ -32,18 +32,29 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void createTask(TaskDTO task) {
+    public int createTask(TaskDTO taskDTO) throws ServiceLayerException {
+        int task_id;
+        Task task = taskConverter.convertRestDTOToPlainObject(taskDTO);
+        validateTask.isValid(task);
 
+        try {
+            task_id = taskManagementDAO.createTask(task);
+            return task_id;
+        } catch (PersistenceLayerException e) {
+            LOG.warn("Database Error", e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
     }
 
     @Override
-    public void deleteTask(TaskDTO task) {
+    public void deleteTask(TaskDTO task) throws ServiceLayerException {
         Task taskToDelete = taskConverter.convertRestDTOToPlainObject(task);
-
+        validateTask.isValid(taskToDelete);
         try {
             taskManagementDAO.deleteTask(taskToDelete);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while deleting an task");
+            throw new ServiceLayerException(e.getMessage());
         }
     }
 
@@ -52,7 +63,6 @@ public class TaskServiceImpl implements TaskService {
         LOG.info("called updateTask");
 
         Task toUpdate = taskConverter.convertRestDTOToPlainObject(task);
-
         validateTask.isValid(toUpdate);
 
         //check if task is done

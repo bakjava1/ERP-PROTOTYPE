@@ -63,8 +63,25 @@ public class TaskManagementTest {
 
         taskDTO1.setId(4);
         taskDTO1.setOrder_id(3);
+        taskDTO1.setDescription("Latten");
+        taskDTO1.setFinishing("Prismiert");
+        taskDTO1.setWood_type("Ta");
+        taskDTO1.setQuality("I/III");
+        taskDTO1.setSize(22);
+        taskDTO1.setWidth(48);
+        taskDTO1.setLength(3000);
+        taskDTO1.setQuantity(40);
+
         taskDTO2.setId(5);
         taskDTO2.setOrder_id(3);
+        taskDTO2.setDescription("Latten");
+        taskDTO2.setFinishing("Prismiert");
+        taskDTO2.setWood_type("Ta");
+        taskDTO2.setQuality("I/III");
+        taskDTO2.setSize(22);
+        taskDTO2.setWidth(48);
+        taskDTO2.setLength(3000);
+        taskDTO2.setQuantity(40);
 
         validateTask = new ValidateTask();
         taskConverter = new TaskConverter();

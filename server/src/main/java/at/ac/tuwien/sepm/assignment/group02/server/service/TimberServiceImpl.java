@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TimberDAO;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateTimber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,13 @@ public class TimberServiceImpl implements TimberService{
 
     private static TimberDAO timberManagementDAO;
     private static TimberConverter timberConverter;
+    private static ValidateTimber validateTimber;
 
     @Autowired
-    public TimberServiceImpl(TimberDAO timberManagementDAO, TimberConverter timberConverter) {
+    public TimberServiceImpl(TimberDAO timberManagementDAO, TimberConverter timberConverter, ValidateTimber validateTimber) {
         TimberServiceImpl.timberManagementDAO = timberManagementDAO;
         TimberServiceImpl.timberConverter = timberConverter;
+        TimberServiceImpl.validateTimber = validateTimber;
     }
 
 
@@ -32,10 +35,9 @@ public class TimberServiceImpl implements TimberService{
     public void addTimber(TimberDTO timberDTO) throws ServiceLayerException {
 
         Timber timber = timberConverter.convertRestDTOToPlainObject(timberDTO);
+        validateTimber.isValid(timber);
 
-        if(timber.getAmount()<0){
-            throw new ServiceLayerException("Error: added amount is negative");
-        }
+        //TODO verify if amount is equal or less to box volume
 
         try {
             timberManagementDAO.createTimber(timber);
@@ -50,6 +52,11 @@ public class TimberServiceImpl implements TimberService{
         Timber timber = new Timber();
         timber.setBox_id(box_id);
         timber.setAmount(amount_to_remove);
+
+        validateTimber.isValid(timber);
+
+        //TODO verify if amount is equal or less to total amount in the box
+
         try {
             timberManagementDAO.removeTimber(timber);
         } catch (PersistenceLayerException e) {

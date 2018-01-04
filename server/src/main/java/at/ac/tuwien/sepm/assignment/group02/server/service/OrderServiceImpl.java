@@ -36,12 +36,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void deleteOrder(OrderDTO orderDTO) {
+    public void deleteOrder(OrderDTO orderDTO) throws ServiceLayerException {
         Order orderToDelete = orderConverter.convertRestDTOToPlainObject(orderDTO);
         try {
             orderManagementDAO.deleteOrder(orderToDelete);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while deleting an order");
+            throw new ServiceLayerException("Failed Persistenz");
         }
     }
 
@@ -64,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> getAllOpen() {
+    public List<OrderDTO> getAllOpen() throws ServiceLayerException {
 
         List<OrderDTO> allOpenConverted = new ArrayList<>();
 
@@ -79,6 +80,7 @@ public class OrderServiceImpl implements OrderService {
 
         } catch(PersistenceLayerException e) {
             LOG.error("Error while trying to get objects from Database: " + e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
 
 
@@ -87,11 +89,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateOrder(OrderDTO orderDTO) {
+        LOG.info("called updateOrder");
 
     }
 
     @Override
-    public List<OrderDTO> getAllClosed() {
+    public List<OrderDTO> getAllClosed() throws ServiceLayerException {
         List<OrderDTO> allClosedConverted =  new ArrayList<>();
 
         try{
@@ -109,6 +112,7 @@ public class OrderServiceImpl implements OrderService {
 
         } catch(PersistenceLayerException e) {
             LOG.error(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
 
 
@@ -116,8 +120,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO getOrderById(int order_id) {
-        return null;
+    public OrderDTO getOrderById(int order_id) throws ServiceLayerException {
+
+        try {
+            return orderConverter.convertPlainObjectToRestDTO(orderManagementDAO.getOrderById(order_id));
+        } catch (PersistenceLayerException e) {
+            LOG.error("Error while trying to get objects from Database: " + e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
     }
 
     @Override
@@ -133,9 +143,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    private void setTaskInfo(List<OrderDTO> order) throws PersistenceLayerException {
-
-        for (OrderDTO current : order) {
+    private void setTaskInfo(List<OrderDTO> orderDTOList) throws PersistenceLayerException {
+        LOG.debug("called setTaskInfo");
+        for (OrderDTO current : orderDTOList) {
 
             List<Task> tasks = null;
             try {

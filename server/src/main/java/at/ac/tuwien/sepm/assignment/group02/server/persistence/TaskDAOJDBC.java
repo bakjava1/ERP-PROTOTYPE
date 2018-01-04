@@ -25,8 +25,8 @@ public class TaskDAOJDBC implements TaskDAO {
     }
 
     @Override
-    public void createTask(Task task) throws PersistenceLayerException {
-
+    public int createTask(Task task) throws PersistenceLayerException {
+        return 1;
     }
 
     @Override

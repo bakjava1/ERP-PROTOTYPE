@@ -12,7 +12,7 @@ public interface TaskDAO {
      * @param task
      * @throws PersistenceLayerException
      */
-    void createTask(Task task) throws PersistenceLayerException;
+    int createTask(Task task) throws PersistenceLayerException;
 
     /**
      * delete an existing task from the data base
