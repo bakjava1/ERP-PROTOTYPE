@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
-import at.ac.tuwien.sepm.assignment.group02.client.entity.OptAlgorithmResult;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +26,12 @@ public class OptAlgorithmControllerImpl implements OptAlgorithmController {
     }
 
     @Override
-    public OptAlgorithmResult getOptAlgorithmResult(@RequestBody TaskDTO task) throws PersistenceLayerException {
+    public OptAlgorithmResultDTO getOptAlgorithmResult(@RequestBody TaskDTO taskDTO) throws PersistenceLayerException {
         LOG.debug("sending selected task to the server to execute the optimisation algorithm");
 
         try {
-            return restTemplate.getForObject("http://localhost:8080/getOptAlgorithmResult", OptAlgorithmResult.class);
+            //return restTemplate.getForObject("http://localhost:8080/getOptAlgorithmResult", OptAlgorithmResultDTO.class);
+            return restTemplate.postForObject("http://localhost:8080/getOptAlgorithmResult", taskDTO, OptAlgorithmResultDTO.class);
         } catch(HttpStatusCodeException e) {
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");

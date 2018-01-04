@@ -58,7 +58,7 @@ public class OptimisationFXML {
     private LumberService lumberService;
     private TimberService timberService;
     private TaskService taskService;
-    private OptimisationAlgorithmService optimisationAlgorithmService;
+    private static OptimisationAlgorithmService optimisationAlgorithmService;
 
     @FXML
     void initialize() {
@@ -95,6 +95,12 @@ public class OptimisationFXML {
         //image set in fxml file
     }
 
+    @Autowired
+    public OptimisationFXML(OptimisationAlgorithmService optimisationAlgorithmService){;
+        OptimisationFXML.optimisationAlgorithmService = optimisationAlgorithmService;
+    }
+
+    //TODO delete this constructor and use autowired contructor
     public OptimisationFXML(){
         this.optimisationAlgorithmService = new OptimisationAlgorithmServiceImpl();
     }

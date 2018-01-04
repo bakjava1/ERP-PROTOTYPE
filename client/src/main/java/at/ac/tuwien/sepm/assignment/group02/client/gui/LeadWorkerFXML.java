@@ -85,6 +85,9 @@ public class LeadWorkerFXML {
     @FXML
     TableView<Lumber> table_lumber;
 
+    @FXML
+    private Button btn_opt_alg;
+
 
     private LumberService lumberService;
 
@@ -175,6 +178,8 @@ public class LeadWorkerFXML {
     public void optimisationBtnClicked(ActionEvent actionEvent) {
         LOG.info("optimisationBtn clicked");
 
+        btn_opt_alg.setDisable(true);
+
         new Thread(new Task<Object>() {
             @Override
             protected Object call() throws Exception {
@@ -223,10 +228,12 @@ public class LeadWorkerFXML {
                     stage.setScene(new Scene(fxmlLoader.load()));
                     stage.show();
 
+                    btn_opt_alg.setDisable(false);
                 } catch (IOException e) {
                     LOG.error(e.getMessage());
 
                 }
+
 
             }
 
@@ -235,7 +242,6 @@ public class LeadWorkerFXML {
 
             }
         }, "optimisation-algorithm").start();
-
 
     }
 }
