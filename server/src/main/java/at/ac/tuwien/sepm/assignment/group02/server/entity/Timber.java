@@ -3,7 +3,7 @@ package at.ac.tuwien.sepm.assignment.group02.server.entity;
 public class Timber {
 
     private int box_id;
-
+    private int diameter;
     private int amount;
 
     public Timber() {
@@ -29,5 +29,13 @@ public class Timber {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public int getDiameter(){
+        return this.diameter;
+    }
+
+    public void setDiameter(int d){
+        this.diameter = d;
     }
 }
