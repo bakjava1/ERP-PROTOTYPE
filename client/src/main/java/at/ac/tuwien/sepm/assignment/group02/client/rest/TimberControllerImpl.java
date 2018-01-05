@@ -23,7 +23,6 @@ public class TimberControllerImpl implements TimberController {
 
     @Autowired
     public TimberControllerImpl(RestTemplate restTemplate){
-
         this.restTemplate = restTemplate;
     }
 
