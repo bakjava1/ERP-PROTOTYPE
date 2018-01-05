@@ -1,16 +1,19 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
+import at.ac.tuwien.sepm.assignment.group02.client.MainApplication;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_SpringFXMLLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -19,6 +22,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -90,11 +94,13 @@ public class LeadWorkerFXML {
 
 
     private LumberService lumberService;
+    private OptimisationFXML optimisationFXML;
 
     @Autowired
-    public LeadWorkerFXML(LumberService lumberService){
+    public LeadWorkerFXML(LumberService lumberService, OptimisationFXML optimisationFXML){
 
         this.lumberService = lumberService;
+        this.optimisationFXML = optimisationFXML;
     }
 
     @FXML
@@ -185,12 +191,11 @@ public class LeadWorkerFXML {
             protected Object call() throws Exception {
 
                 //TODO not able to debug autowiring not working
-                /*TimeUnit.SECONDS.sleep(6);
-                try {
-                    Stage stage = new Stage();
+                /*try {
+                   Stage stage = new Stage();
                     stage.setTitle("Optimierungsalgorithmus");
 
-                    context = new AnnotationConfigApplicationContext();
+                    AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
                     context.getBeanFactory().registerSingleton("stage", (Stage) ap.getScene().getWindow());
                     context.scan("at.ac.tuwien.sepm.assignment.group02.client");
                     context.refresh();
@@ -201,12 +206,11 @@ public class LeadWorkerFXML {
                     stage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/optimisation.fxml"), 950, 680));
                     stage.centerOnScreen();
                     stage.show();
-
                 } catch (IOException e) {
                     LOG.error(e.getMessage());
 
-                }*/
-
+                }
+*/
                 TimeUnit.SECONDS.sleep(6);
 
                 return null;
@@ -215,17 +219,14 @@ public class LeadWorkerFXML {
             @Override
             protected void succeeded(){
                 try {
-
-                    OptimisationFXML optimisationFXML    = new OptimisationFXML();
-                    FXMLLoader fxmlLoader = new FXMLLoader(OfficeFXML.class.getResource("/fxml/optimisation.fxml"));
-                    fxmlLoader.setControllerFactory(param -> param.isInstance(optimisationFXML) ? optimisationFXML : null);
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/fxml/optimisation.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load(),950, 680);
 
                     Stage stage = new Stage();
                     stage.setTitle("Optimierungsalgorithmus");
-                    stage.setWidth(950);
-                    stage.setHeight(680);
+                    stage.setScene(scene);
                     stage.centerOnScreen();
-                    stage.setScene(new Scene(fxmlLoader.load()));
                     stage.show();
 
                     btn_opt_alg.setDisable(false);

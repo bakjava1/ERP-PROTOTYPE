@@ -96,7 +96,7 @@ public class OptimisationFXML {
     }
 
     @Autowired
-    public OptimisationFXML(OptimisationAlgorithmService optimisationAlgorithmService){;
+    public OptimisationFXML(OptimisationAlgorithmService optimisationAlgorithmService){
         OptimisationFXML.optimisationAlgorithmService = optimisationAlgorithmService;
     }
 
