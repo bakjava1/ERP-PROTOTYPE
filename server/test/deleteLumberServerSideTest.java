@@ -60,14 +60,14 @@ public class deleteLumberServerSideTest {
         lumber3.setId(3);
 
         lumberDTO1=new LumberDTO();
-        lumberDTO1.setID(4);
+       // lumberDTO1.setID(4);
         lumberDTO2=new LumberDTO();
-        lumberDTO2.setID(5);
+        //lumberDTO2.setID(5);
         lumberDTO3=new LumberDTO();
-        lumberDTO3.setID(6);
+        //lumberDTO3.setID(6);
 
         lumberController= new LumberControllerImpl(lumberService);
-        lumberService=new LumberServiceImpl(lumberDAO,lumberConverter);
+       // lumberService=new LumberServiceImpl(lumberDAO,lumberConverter);
         lumberConverter=new LumberConverter();
 
         LOG.debug("lumber management test setup completed");
@@ -80,7 +80,7 @@ public class deleteLumberServerSideTest {
         dbConnection = DBUtil.getConnection();
         lumberDAO=new LumberDAOJDBC(dbConnection);
         lumberConverter=new LumberConverter();
-        lumberService=new LumberServiceImpl(lumberDAO,lumberConverter);
+        //lumberService=new LumberServiceImpl(lumberDAO,lumberConverter);
     }
 
     @Test(expected = PersistenceLayerException.class)

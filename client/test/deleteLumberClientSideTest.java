@@ -57,7 +57,7 @@ public class deleteLumberClientSideTest {
         lumber=new Lumber();
         lumber.setId(1);
         lumberDTO=new LumberDTO();
-        lumberDTO.setID(1);
+        //lumberDTO.setID(1);
         LOG.debug("delete lumber test setup completed");
     }
 
@@ -88,7 +88,7 @@ public class deleteLumberClientSideTest {
     }
 
     @AfterClass
-    public void tearDown() {
+    public static void tearDown() {
 
         LOG.debug("Delete lumber test shutdown");
 
