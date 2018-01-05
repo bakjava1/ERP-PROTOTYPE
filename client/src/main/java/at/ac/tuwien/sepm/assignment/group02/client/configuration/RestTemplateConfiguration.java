@@ -11,6 +11,9 @@ import java.util.List;
 @Configuration
 public class RestTemplateConfiguration {
 
+    public final static String host = "localhost";
+    public final static String port = "8080";
+
     @Bean
     public RestTemplate getRestTemplate() {
         final MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();

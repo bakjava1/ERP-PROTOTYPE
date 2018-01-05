@@ -270,6 +270,7 @@ public class Lumber {
         this.all_delivered = all_delivered;
     }
 
+
     @Override
     public String toString() {
         return "Lumber{" +
@@ -284,8 +285,9 @@ public class Lumber {
                 ", length=" + length +
                 ", quantity=" + quantity +
                 ", reserved_quantity=" + reserved_quantity +
+                ", delivered_quantity=" + delivered_quantity +
                 ", all_reserved=" + all_reserved +
+                ", all_delivered=" + all_delivered +
                 '}';
     }
 }
-

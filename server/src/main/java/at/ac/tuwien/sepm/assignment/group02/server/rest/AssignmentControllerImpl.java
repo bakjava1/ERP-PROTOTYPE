@@ -64,11 +64,28 @@ public class AssignmentControllerImpl {
         }
     }
 
+    /**
+     * rest interface for getting all open assignments
+     * @return list of all open assignments for the assignment overview for crane
+     * @throws ResourceNotFoundException if the database is not available for the persistence layer
+     */
+    @RequestMapping(value="/getAllAssignments",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "get all assignments")
+    public List<AssignmentDTO> getAllAssignments() throws ResourceNotFoundException {
+        LOG.debug("called getAllAssignments");
+
+        try {
+            return assignmentService.getAllAssignments();
+        } catch (ServiceLayerException e) {
+            LOG.warn("error while getting all assignments in server service layer", e.getMessage());
+            throw new ResourceNotFoundException(e.getMessage());
+        }
+    }
+
     @RequestMapping(value="/createAssignment", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "create assignment")
     public void createAssignment(@RequestBody AssignmentDTO assignmentDTO) throws ResourceNotFoundException {
         LOG.debug("called createAssignment" + assignmentDTO.toString());
-
         try {
             assignmentService.addAssignment(assignmentDTO);
         } catch(ServiceLayerException e) {

@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
+import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import org.slf4j.Logger;
@@ -22,7 +23,6 @@ public class TimberControllerImpl implements TimberController {
 
     @Autowired
     public TimberControllerImpl(RestTemplate restTemplate){
-
         this.restTemplate = restTemplate;
     }
 
@@ -31,7 +31,7 @@ public class TimberControllerImpl implements TimberController {
         LOG.debug("creating new Timber on Server");
 
         try{
-            restTemplate.postForObject("http://localhost:8080/createTimber", timberDTO, TimberDTO.class);
+            restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/createTimber", timberDTO, TimberDTO.class);
 
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
@@ -57,7 +57,7 @@ public class TimberControllerImpl implements TimberController {
 
         try{
             timberDTO = restTemplate.getForObject(
-                    "http://localhost:8080/getTimberbyId/{id}",
+                    "http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/getTimberbyId/{id}",
                     TimberDTO.class, id);
 
         } catch(HttpStatusCodeException e){
@@ -78,7 +78,7 @@ public class TimberControllerImpl implements TimberController {
         int timber_int;
 
         try {
-            timber_int = restTemplate.getForObject("http://localhost:8080/getNumberOfBoxes", Integer.class);
+            timber_int = restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getNumberOfBoxes", Integer.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");

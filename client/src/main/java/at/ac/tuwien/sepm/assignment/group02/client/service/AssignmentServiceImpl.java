@@ -28,6 +28,15 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public void createAssignment(AssignmentDTO assignmentDTO) throws ServiceLayerException {
+        LOG.debug("createAssignment called");
+        validateAssignmentDTO.isValid(assignmentDTO);
+        try {
+            assignmentController.createAssignment(assignmentDTO);
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
+
     }
 
     @Override
@@ -53,11 +62,26 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
+    public List<AssignmentDTO> getAllAssignments() throws ServiceLayerException {
+        LOG.debug("getAllAssignments called");
+        List<AssignmentDTO> allAssignments;
+
+        try {
+            allAssignments = assignmentController.getAllAssignments();
+        } catch (PersistenceLayerException e) {
+            LOG.warn("Error while getting all open assignments in client service layer: ", e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
+
+        return allAssignments;
+    }
+
+    @Override
     public void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException {
 
         if(!assignmentDTO.isDone())
             assignmentDTO.setDone(true);
-        else throw new ServiceLayerException("the assignment is already marked as done.");
+        else throw new ServiceLayerException("Diese Aufgabe ist bereits abgeschlossen.");
 
         // throws InvalidInputException
         validateAssignmentDTO.isValid(assignmentDTO);

@@ -54,8 +54,8 @@ public class ValidateAssignmentDTO implements ValidateInput<AssignmentDTO> {
     private void isNumber(String string) throws NoValidIntegerException {
         try {
             int num = Integer.parseInt(string);
-            if (num <= 0) {
-                throw new NoValidIntegerException("Negative Integer or Null entered");
+            if (num < 0) {
+                throw new NoValidIntegerException("Negative Integer entered");
             }
         } catch (NumberFormatException e) {
             LOG.error("No valid Integer entered");

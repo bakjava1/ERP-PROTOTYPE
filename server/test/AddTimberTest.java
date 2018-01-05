@@ -10,7 +10,9 @@ import at.ac.tuwien.sepm.assignment.group02.server.rest.TimberControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TimberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateTimber;
 import org.junit.*;
+import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +35,8 @@ public class AddTimberTest {
 
     private static TimberService timberService;
 
+    private static ValidateTimber validateTimber = new ValidateTimber();
+
     private static TimberControllerImpl timberController;
 
     private static TimberDTO timberDTONegativeAmount = new TimberDTO();
@@ -50,7 +54,7 @@ public class AddTimberTest {
 
         timberDAO = new TimberDAOJDBC(dbConnection);
 
-        timberService = new TimberServiceImpl(timberDAO, new TimberConverter());
+        timberService = new TimberServiceImpl(timberDAO, new TimberConverter(), validateTimber);
 
         timberController = new TimberControllerImpl(timberService);
 
@@ -140,7 +144,7 @@ public class AddTimberTest {
 
         TimberConverter timberConverter = new TimberConverter();
 
-        timberService = new TimberServiceImpl(timberDAO, timberConverter);
+        timberService = new TimberServiceImpl(timberDAO, timberConverter, validateTimber);
 
         timberController = new TimberControllerImpl(timberService);
     }

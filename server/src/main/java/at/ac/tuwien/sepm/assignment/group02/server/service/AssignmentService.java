@@ -26,6 +26,14 @@ public interface AssignmentService {
     List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 
     /**
+     * retrieve all open and closed assignments
+     * @return a list of all assignments
+     * @throws ServiceLayerException
+     */
+    List<AssignmentDTO> getAllAssignments() throws ServiceLayerException;
+
+
+    /**
      * mark an assignment as done
      * @param assignmentDTO
      * @throws ServiceLayerException

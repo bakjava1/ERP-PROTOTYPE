@@ -18,7 +18,7 @@ public interface LumberDAO {
      * @param lumber
      * @throws PersistenceLayerException
      */
-    void createLumber(Lumber lumber) throws PersistenceLayerException;
+    int createLumber(Lumber lumber) throws PersistenceLayerException;
 
     /**
      * update an existing lumber
