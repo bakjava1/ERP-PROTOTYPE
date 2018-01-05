@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
+import ch.qos.logback.core.db.dialect.DBUtil;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
+import java.sql.Connection;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -39,6 +41,8 @@ public class deleteLumberClientSideTest {
 
     private static Lumber lumber;
     private static LumberDTO lumberDTO;
+
+    private static Connection dbConnection;
 
 
     @BeforeClass
@@ -62,7 +66,7 @@ public class deleteLumberClientSideTest {
 
         LOG.debug("test delete lumber in client service layer");
 
-        // lumberService.deleteLumber(lumber);
+        // lumberService.deleteLumber(lumber); // anschauen noch ein Mal
         verify(restTemplate, times(1)).put(any(), any(OrderDTO.class), any(OrderDTO.class));
 
     }
@@ -85,6 +89,8 @@ public class deleteLumberClientSideTest {
 
     @AfterClass
     public void tearDown() {
+
+        LOG.debug("Delete lumber test shutdown");
 
     }
 }

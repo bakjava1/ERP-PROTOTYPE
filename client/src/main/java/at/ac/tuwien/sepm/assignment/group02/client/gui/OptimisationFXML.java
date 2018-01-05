@@ -102,6 +102,7 @@ public class OptimisationFXML {
 
     //TODO delete this constructor and use autowired contructor
     public OptimisationFXML(){
+
         this.optimisationAlgorithmService = new OptimisationAlgorithmServiceImpl();
     }
 

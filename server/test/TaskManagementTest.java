@@ -40,7 +40,7 @@ public class TaskManagementTest {
 
     @BeforeClass
     public static void setup() {
-        LOG.debug("task management test setup initiated");
+
         dbConnection = DBUtil.getConnection();
         taskDAO = new TaskDAOJDBC(dbConnection);
 
@@ -103,6 +103,7 @@ public class TaskManagementTest {
 
     @Test (expected = PersistenceLayerException.class)
     public void deleteTask_throws_Exception_in_persistenceLayer_without_DBConnection() throws PersistenceLayerException {
+
         LOG.debug("testing for task deletion in persistence layer without DB connection");
 
         DBUtil.closeConnection();

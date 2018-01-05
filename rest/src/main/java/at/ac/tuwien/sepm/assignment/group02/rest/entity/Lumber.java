@@ -68,6 +68,14 @@ public class Lumber {
         this.all_delivered=all_delivered;
     }
 
+    public Lumber(String description, String wood_type, int quantity, int reserved_quantity) {
+
+        this.description=description;
+        this.wood_type=wood_type;
+        this.quantity=quantity;
+        this.reserved_quantity=reserved_quantity;
+    }
+
     //Create Setters and Getters
 
     /**

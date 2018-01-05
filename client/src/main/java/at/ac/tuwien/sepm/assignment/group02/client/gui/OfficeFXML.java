@@ -10,7 +10,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.CostBenefitService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
-import at.ac.tuwien.sepm.assignment.group02.client.util.AlertBuilder;
+import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_SpringFXMLLoader;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,20 +18,28 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class OfficeFXML {
@@ -46,12 +54,36 @@ public class OfficeFXML {
 
     @FXML
     private Button bt_acceptOrder;
-
+    @FXML
+    private Button bt_rechnungAnzeigen;
     @FXML
     private Label l_sumorders;
 
     @FXML
     private Label kn_result;
+
+    @FXML
+    private Label dateLabel;
+    @FXML
+    private Label billCostumerNameLabel;
+    @FXML
+    private Label billTaskAmountLabel;
+    @FXML
+    private Label billAmountLabel;
+    @FXML
+    private Label billGrossSum;
+
+    @FXML
+    private TextField txt_billCostumerName;
+
+    @FXML
+    private TextField txt_billTaskAmount;
+
+    @FXML
+    private TextField txt_billAmount;
+
+    @FXML
+    private TextField txt_billGrossSum;
 
     @FXML
     private TableColumn col_taskLength;
@@ -137,6 +169,7 @@ public class OfficeFXML {
     private TaskService taskService;
     private CostBenefitService costBenefitService;
     private AlertBuilder alertBuilder = new AlertBuilder();
+    private Order order;
 
     @Autowired
     public OfficeFXML(OrderService orderService, TimberService timberService, TaskService taskService, CostBenefitService costBenefitService){
@@ -150,23 +183,20 @@ public class OfficeFXML {
     void initialize() {
         table_openOrder.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        col_orderID.setCellValueFactory(new PropertyValueFactory("ID"));
-        col_costumerName.setCellValueFactory(new PropertyValueFactory("customerName"));
-        col_taskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
-        col_amount.setCellValueFactory(new PropertyValueFactory("quantity"));
-        col_grossSum.setCellValueFactory(new PropertyValueFactory("netAmount"));
+        col_orderID.setCellValueFactory(new PropertyValueFactory<Order, Integer>("ID"));
+        col_costumerName.setCellValueFactory(new PropertyValueFactory<Order, String>("customerName"));
+        col_taskAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("taskAmount"));
+        col_amount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
+        col_grossSum.setCellValueFactory(new PropertyValueFactory<Order, Integer>("netAmount"));
 
 
         table_bill.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        col_billID.setCellValueFactory(new PropertyValueFactory("ID"));
-        col_billCostumerName.setCellValueFactory(new PropertyValueFactory("customerName"));
-        col_billTaskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
-        col_billAmount.setCellValueFactory(new PropertyValueFactory("quantity"));
-        col_billGrossSum.setCellValueFactory(new PropertyValueFactory("netAmount"));
-
-
-
+        col_billID.setCellValueFactory(new PropertyValueFactory<Order, Integer>("ID"));
+        col_billCostumerName.setCellValueFactory(new PropertyValueFactory<Order, String>("customerName"));
+        col_billTaskAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("taskAmount"));
+        col_billAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
+        col_billGrossSum.setCellValueFactory(new PropertyValueFactory<Order, Integer>("netAmount"));
 
         col_taskNr.setCellValueFactory(
                 new PropertyValueFactory<Task, Integer>("id")
@@ -189,10 +219,23 @@ public class OfficeFXML {
 
         ObservableList<Task> orderTasks = FXCollections.observableArrayList();
         table_addedTask.setItems(orderTasks);
+        ObservableList<Order> orders=FXCollections.observableArrayList();
+        table_bill.setItems(orders);
         l_sumorders.setText(currentOrderSum + " €");
         initTimberTab();
         updateTable();
         updateBillTable();
+
+
+        // Auto resize columns
+        table_bill.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // clear rechnung
+        showRechnungDetails(null);
+
+        // Listen for selection changes
+        table_bill.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showRechnungDetails(newValue));
+
     }
 
     @FXML
@@ -603,7 +646,7 @@ public class OfficeFXML {
             return;
         }
 
-        boolean accept = alertBuilder.showConfirmationAlert("Rechnung abrechnen", "Wollen Sie die Rechnung mit Nummer " + selectedOrder.getID() + " abrechnen?", "");
+        boolean accept = alertBuilder.showConfirmationAlert("Rechnung abrechnen", "Wollen Sie die Rechnung mit Nummer " + selectedOrder.getID() + " löschen?", "");
         if(accept){
             try {
                 orderService.invoiceOrder(selectedOrder);
@@ -661,4 +704,63 @@ public class OfficeFXML {
             kn_result.setText(randomized+"");
         }
     }
+
+
+    @FXML
+    public void rechnungAnzeigenBtnClicked(ActionEvent actionEvent){
+        LOG.info("RechnungAnzeigenBtn clicked");
+
+        new Thread(new javafx.concurrent.Task<Object>() {
+            @Override
+            protected Object call() throws Exception {
+
+                try {
+
+                    FXMLLoader fxmlLoader = new FXMLLoader(OfficeFXML.class.getResource("fxml/login.fxml"));
+
+                    Stage stage = (Stage) bt_rechnungAnzeigen.getScene().getWindow();
+                    stage.setTitle("Detail Ansicht Rechnung");
+                    stage.setWidth(950);
+                    stage.setHeight(680);
+                    stage.centerOnScreen();
+                    stage.setScene(new Scene(fxmlLoader.load()));
+
+                    stage.show();
+
+                } catch (IOException e) {
+                    LOG.error(e.getMessage());
+
+                }
+
+                return null;
+            }
+        });
+    }
+
+    /**
+     * show details about the bill
+     * @param order
+     */
+
+    private void showRechnungDetails(Order order){
+
+/*        dateLabel.setText(String.valueOf(order.getOrderDate()));
+        billCostumerNameLabel.setText(order.getCustomerName());
+        billTaskAmountLabel.setText(String.valueOf(order.getQuantity()));
+        billAmountLabel.setText(Integer.toString(order.getQuantity()));
+        billGrossSum.setText(String.valueOf(order.getGrossAmount()));*/
+
+       /* txt_billCostumerName.setText(String.valueOf(order.getOrderDate()));
+        billCostumerNameLabel.setText(order.getCustomerName());
+        txt_billTaskAmount.setText(String.valueOf(order.getQuantity()));
+        txt_billAmount.setText(Integer.toString(order.getQuantity()));
+        txt_billGrossSum.setText(String.valueOf(order.getGrossAmount()));*/
+
+    }
+
+
+
+
 }
+
+
