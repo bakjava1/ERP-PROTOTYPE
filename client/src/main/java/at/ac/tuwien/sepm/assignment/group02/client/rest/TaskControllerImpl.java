@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
+import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class TaskControllerImpl implements TaskController {
         LOG.debug("sending task to be deleted to server");
 
         try {
-            restTemplate.put("http://localhost:8080/deleteTask", task, TaskDTO.class);
+            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteTask", task, TaskDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");
@@ -52,7 +53,7 @@ public class TaskControllerImpl implements TaskController {
     public void updateTask(@RequestBody TaskDTO task) throws PersistenceLayerException {
         LOG.info("Attempting to update Task");
         try {
-            restTemplate.put("http://localhost:8080/updateTask", task, TaskDTO.class);
+            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/updateTask", task, TaskDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");
@@ -70,7 +71,7 @@ public class TaskControllerImpl implements TaskController {
         List<TaskDTO> taskList = new ArrayList<>();
         TaskDTO[] taskArray;
         try{
-            taskArray = restTemplate.getForObject("http://localhost:8080/getAllOpenTasks", TaskDTO[].class);
+            taskArray = restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllOpenTasks", TaskDTO[].class);
 
             for (int i = 0; taskArray!= null && i < taskArray.length; i++) {
                 taskList.add(taskArray[i]);

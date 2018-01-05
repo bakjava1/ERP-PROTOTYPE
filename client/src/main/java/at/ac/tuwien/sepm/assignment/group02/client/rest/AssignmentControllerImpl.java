@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
+import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
 import org.slf4j.Logger;
@@ -22,6 +23,9 @@ public class AssignmentControllerImpl implements AssignmentController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private RestTemplate restTemplate;
 
+
+
+
     @Autowired
     public AssignmentControllerImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -30,7 +34,7 @@ public class AssignmentControllerImpl implements AssignmentController {
     @Override
     public void createAssignment(AssignmentDTO assignmentDTO) throws PersistenceLayerException {
         try {
-            restTemplate.postForObject("http://localhost:8080/createAssignment", assignmentDTO, AssignmentDTO.class);
+            restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/createAssignment", assignmentDTO, AssignmentDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("HttpStatusCodeException");
@@ -48,7 +52,7 @@ public class AssignmentControllerImpl implements AssignmentController {
         AssignmentDTO[] assignmentArray;
 
         try {
-            assignmentArray = restTemplate.getForObject("http://localhost:8080/getAllOpenAssignments", AssignmentDTO[].class);
+            assignmentArray = restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllOpenAssignments", AssignmentDTO[].class);
         } catch(HttpClientErrorException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("HttpStatusCodeException");
@@ -72,7 +76,7 @@ public class AssignmentControllerImpl implements AssignmentController {
         AssignmentDTO[] assignmentArray;
 
         try {
-            assignmentArray = restTemplate.getForObject("http://localhost:8080/getAllAssignments", AssignmentDTO[].class);
+            assignmentArray = restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllAssignments", AssignmentDTO[].class);
         } catch(HttpClientErrorException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("HttpStatusCodeException");
@@ -91,7 +95,7 @@ public class AssignmentControllerImpl implements AssignmentController {
     @Override
     public void setDone(@RequestBody AssignmentDTO assignmentDTO) throws PersistenceLayerException {
         try {
-            restTemplate.put("http://localhost:8080/setAssignmentDone", assignmentDTO, AssignmentDTO.class);
+            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/setAssignmentDone", assignmentDTO, AssignmentDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("HttpStatusCodeException");

@@ -145,7 +145,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         List<LumberDTO> matchingLumber = lumberService.getAllLumber(lumberDTO);
 
         // if there is lumber that matches the task produced, increase its quantity
-        if(matchingLumber.size()>0){
+        if(matchingLumber!=null && matchingLumber.size()>0){
             LOG.debug("there is > 0 lumber that matches the task - the first one in the list will be updated");
 
             lumberDTO = matchingLumber.get(0);

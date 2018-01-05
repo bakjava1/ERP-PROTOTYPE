@@ -454,7 +454,7 @@ public class LeadWorkerFXML {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "Schnittholz (Id:"+lumber.getId()+", "+lumber.getDescription()+", Menge: "+qu+") dem Auftrag (Id: "+selectedTask.getId()+", "+selectedTask.getDescription()+") hinzufügen?",
-                ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+                ButtonType.YES, ButtonType.NO);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.showAndWait();
 
