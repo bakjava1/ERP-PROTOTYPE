@@ -55,41 +55,9 @@ public class updateLumberServerSideTest {
     private static Lumber lumber;
     private static LumberDTO lumberDTO;
 
-    private MockMvc mockMvc;
 
 
-    @Mock
-    private static LumberService lumberService;
-    @InjectMocks
-    private static LumberController lumberController;
-
-    @Before
-    public void init(){
-
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders
-                .standaloneSetup(lumberController)
-                .build();
-    }
 
 
-    @Test
-    public void test_update_lumber_success() throws Exception {
-        Lumber lumber = new Lumber("blbla","ta",34,50);
-        //when(lumberDAO.updateLumber());
-       // verify(lumberController, times(1)).updateLumber();
-        verifyNoMoreInteractions(lumberService);
-    }
-
-
-    //This piece of code is used to write an object into JSON representation.
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 }

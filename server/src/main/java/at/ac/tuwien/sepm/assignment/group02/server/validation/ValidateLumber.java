@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 
 @Component
-public class ValidateLumber implements ValidateInput<Lumber> {
+public class    ValidateLumber implements ValidateInput<Lumber> {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Override
