@@ -160,10 +160,23 @@ public class LeadWorkerFXML {
         }
 
     }
+    @FXML
+    public void createAssignmentButtonClicked(ActionEvent actionEvent){
 
 
+    }
+    @FXML
+    public void addLumberButtonClicked(ActionEvent actionEvent){
+
+
+    }
     @FXML
     public void onUpdateButtonClicked(ActionEvent actionEvent){
+
+
+    }
+    @FXML
+    public void onReserveButtonClicked(ActionEvent actionEvent){
 
 
     }

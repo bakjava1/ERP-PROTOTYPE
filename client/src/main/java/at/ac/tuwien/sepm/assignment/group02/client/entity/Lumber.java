@@ -290,29 +290,8 @@ public class Lumber {
                 ", length=" + length +
                 ", quantity=" + quantity +
                 ", reserved_quantity=" + reserved_quantity +
-                ", all_reserved=" + all_reserved +
                 '}';
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Lumber lumber = (Lumber) o;
-
-        if (id != lumber.id) return false;
-        if (wood_type != null ? !wood_type.equals(lumber.wood_type) : lumber.wood_type != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (wood_type != null ? wood_type.hashCode() : 0);
-        return result;
-    }
 
 }

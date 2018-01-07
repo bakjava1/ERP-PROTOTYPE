@@ -87,7 +87,7 @@ public class deleteLumberServerSideTest {
     public void deleteLumber_throws_PersistenceLayerExeption_without_DBConnection() throws PersistenceLayerException {
         LOG.debug("testing for lumber deletion in persistence layer without DB connection");
 
-        DBUtil.closeConnection();
+       // DBUtil.closeConnection();
         lumberDAO.deleteLumber(lumber1);
     }
 

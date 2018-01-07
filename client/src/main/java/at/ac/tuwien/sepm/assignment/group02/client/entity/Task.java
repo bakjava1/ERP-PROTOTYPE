@@ -40,6 +40,11 @@ public class Task {
         this.price = price;
     }
 
+    public String getItemName() {
+        return description + " " + finishing +" " + wood_type + " " + quality + " " + size + " " + width + " " + length;
+    }
+
+
     public int getId() {
         return id;
     }

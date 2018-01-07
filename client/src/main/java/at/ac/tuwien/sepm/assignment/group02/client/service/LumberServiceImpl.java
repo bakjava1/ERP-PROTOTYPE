@@ -29,7 +29,7 @@ public class LumberServiceImpl implements LumberService {
     private static LumberController lumberController;
     private static LumberConverter lumberConverter;
     private static TaskController taskController;
-    private static Validator validator;
+    private static Validator validator = new Validator();
 
     @Autowired
     public LumberServiceImpl (LumberController lumberController, LumberConverter lumberConverter,TaskController taskController,Validator validator){
@@ -126,18 +126,15 @@ public class LumberServiceImpl implements LumberService {
 
         LOG.debug("deleteLumber called: {}", lumber);
 
-        try {
-            validateLumber(lumber);
-        } catch (InvalidInputException e) {
-            e.printStackTrace();
-        }
         LumberDTO lumberToDelete = lumberConverter.convertPlainObjectToRestDTO(lumber);
         try {
+
             lumberController.removeLumber(lumberToDelete);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
         }
     }
+
 
     @Override
     public void updateLumber(Lumber lumber) throws ServiceLayerException {
@@ -145,6 +142,7 @@ public class LumberServiceImpl implements LumberService {
         LOG.debug("updateLumber called: {}", lumber);
         try {
             validateLumber(lumber);
+
         } catch (InvalidInputException e) {
             e.printStackTrace();
         }
@@ -166,7 +164,7 @@ public class LumberServiceImpl implements LumberService {
     }
 
 
-    public void validateLumber(Lumber lumber) throws InvalidInputException,NoValidIntegerException{
+    public void validateLumber(Lumber lumber) throws InvalidInputException{
         LOG.debug("Validating lumber: {}",lumber);
 
         if(lumber==null){
