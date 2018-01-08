@@ -9,7 +9,6 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.util.AlertBuilder;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -320,7 +319,8 @@ public class LeadWorkerFXML {
 
         //TODO opt_alg
         int box_id=2;
-        int amount=taskDTO.getQuantity()-taskDTO.getProduced_quantity()/5;
+        int amount=(taskDTO.getQuantity()-taskDTO.getProduced_quantity())/5;
+
         assignmentDTO.setBox_id(box_id);
         assignmentDTO.setAmount(amount);
 
@@ -560,7 +560,7 @@ public class LeadWorkerFXML {
 
         btn_opt_alg.setDisable(true);
 
-        new Thread(new Task<Object>() {
+        new Thread(new Task<>() {
             @Override
             protected Object call() throws Exception {
 
