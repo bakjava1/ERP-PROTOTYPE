@@ -144,8 +144,6 @@ public class LeadWorkerFXML {
 
     private TaskDTO selectedTask;
 
-    private boolean running = true;
-
     @Autowired
     public LeadWorkerFXML(LumberService lumberService, TaskService taskService, AssignmentService assignmentService){
 
@@ -202,18 +200,24 @@ public class LeadWorkerFXML {
         task_col_produced_quantity.setCellValueFactory(new PropertyValueFactory("produced_quantity"));
         task_col_done.setCellValueFactory(new PropertyValueFactory("done"));
 
-        Thread t = new Thread(() -> {
-            while (running) {
-                try {
-                    Thread.sleep(5000); // sleep 5 sec
-                } catch (InterruptedException e) {
-                    LOG.debug("auto refresh thread interrupt: ",e.getMessage());
+        Task<Integer> task = new Task<>() {
+            @Override
+            protected Integer call() throws Exception {
+                while(true){
+                    if(isCancelled()) break;
+                    Thread.sleep(5000);
+                    int selected_index = table_task.getSelectionModel().getSelectedIndex();
+                    updateTaskTable();
+                    table_task.getSelectionModel().select(selected_index);
                 }
-                updateTaskTable();
+                return 1;
             }
-        });
-        t.setDaemon(true);
-        t.start();
+        };
+
+        //start the auto-refresh task
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
     }
 
     private void updateTaskTable() {
