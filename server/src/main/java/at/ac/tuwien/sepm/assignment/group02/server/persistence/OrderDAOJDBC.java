@@ -29,7 +29,9 @@ public class OrderDAOJDBC implements OrderDAO {
     public void createOrder(Order order) throws PersistenceLayerException {
         LOG.debug("Creating new Order");
         String createSentence = "INSERT INTO ORDERS(id,customer_name,customer_address,customer_uid,order_date,isPaidFlag,isDoneFlag) VALUES(default,?,?,?,now(),false,false)";
-        String insertTaskSentence = "INSERT INTO TASK VALUES(default,?,?,?,?,?,?,?,?,?,?,?,false,false);";
+        String insertTaskSentence = "INSERT INTO TASK (ID, ORDERID, DESCRIPTION, FINISHING, WOOD_TYPE, QUALITY, " +
+                "SIZE, WIDTH, LENGTH, QUANTITY, PRODUCED_QUANTITY, PRICE, DONE, IN_PROGRESS, DELETED)" +
+                "VALUES(default,?,?,?,?,?,?,?,?,?,?,?,false,false,false);";
 
         try{
             PreparedStatement stmt = dbConnection.prepareStatement(createSentence, Statement.RETURN_GENERATED_KEYS);

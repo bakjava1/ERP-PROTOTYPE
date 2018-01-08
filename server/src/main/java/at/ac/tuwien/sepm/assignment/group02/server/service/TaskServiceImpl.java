@@ -69,6 +69,7 @@ public class TaskServiceImpl implements TaskService {
         if( toUpdate.getProduced_quantity() == toUpdate.getQuantity() ) {
             LOG.debug("task is done");
             toUpdate.setDone(true);
+            toUpdate.setIn_progress(false);
         }
 
         try {

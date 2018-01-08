@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.util.AlertBuilder;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -127,6 +128,9 @@ public class LeadWorkerFXML {
     private TableColumn task_col_done;
 
     @FXML
+    private TableColumn task_col_in_progress;
+
+    @FXML
     TableView<TaskDTO> table_task;
 
     @FXML
@@ -199,6 +203,7 @@ public class LeadWorkerFXML {
         task_col_quantity.setCellValueFactory(new PropertyValueFactory("quantity"));
         task_col_produced_quantity.setCellValueFactory(new PropertyValueFactory("produced_quantity"));
         task_col_done.setCellValueFactory(new PropertyValueFactory("done"));
+        task_col_in_progress.setCellValueFactory(new PropertyValueFactory("in_progress"));
 
         Task<Integer> task = new Task<>() {
             @Override
@@ -262,7 +267,9 @@ public class LeadWorkerFXML {
                                 if (taskDTO == null) {
                                     setStyle("");
                                 } else if (taskDTO.isDone()) {
-                                    setStyle("-fx-background-color: darkolivegreen;");
+                                    setStyle("-fx-background-color: lightgreen;");
+                                } else if (taskDTO.isIn_progress()) {
+                                    setStyle("-fx-background-color: lightgoldenrodyellow;");
                                 } else {
                                     setStyle("");
                                 }
@@ -334,6 +341,7 @@ public class LeadWorkerFXML {
                 AlertBuilder alertBuilder = new AlertBuilder();
                 alertBuilder.showInformationAlert("Schnittholz-Produktion",
                         "Schnittholz-Produktion", "Schnittholz Produktion wurde erfolgreich in Auftrag gegeben.");
+                updateTaskTable();
                 table_task.getSelectionModel().clearSelection();
             }
 
@@ -366,6 +374,18 @@ public class LeadWorkerFXML {
 
         // set the textfield quantity of lumber to reserve to the needed amount of lumber
         tf_quantity.setText(""+(selectedTask.getQuantity()-selectedTask.getProduced_quantity()));
+
+        // set the search properties to the task properties
+
+        tf_description.setText(selectedTask.getDescription());
+        cb_finishing.getSelectionModel().select(selectedTask.getFinishing());
+        cb_wood_type.getSelectionModel().select(selectedTask.getWood_type());
+        cb_quality.getSelectionModel().select(selectedTask.getQuality());
+        tf_strength.setText(selectedTask.getSize()+"");
+        tf_width.setText(selectedTask.getWidth()+"");
+        tf_length.setText(selectedTask.getLength()+"");
+
+        onSearchButtonClicked();
 
         tabPane.getSelectionModel().clearAndSelect(1);
     }
