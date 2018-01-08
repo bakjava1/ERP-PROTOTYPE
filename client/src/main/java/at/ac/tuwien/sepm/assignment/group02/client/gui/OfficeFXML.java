@@ -732,8 +732,6 @@ public class OfficeFXML {
         }
         Order order = table_bill.getSelectionModel().getSelectedItem();
 
-
-
                 try {
 
                     FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/rechnungOverview.fxml"));
@@ -751,11 +749,12 @@ public class OfficeFXML {
                     nameL.setText(order.getCustomerName());
                     address.setText(order.getCustomerAddress());
                     uid.setText(order.getCustomerUID());
-                    date.setText("Rechnungsdatum "+order.getInvoiceDate());
+                    date.setText(""+order.getInvoiceDate());
                     sumNet.setText("€ " +order.getNetAmount());
                     sumTax.setText("€ "+order.getTaxAmount());
                     sumGross.setText("€ "+order.getGrossAmount());
                     invoiceNumber.setText("Rechnung #"+order.getID());
+
 
 
                     PrinterJob printerJob = PrinterJob.createPrinterJob();

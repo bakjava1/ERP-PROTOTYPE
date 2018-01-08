@@ -15,6 +15,7 @@ public class InvoicePrinter implements Printable {
     private int heightAfterItems = 0;
 
     public void setOrder(Order order) {
+
         this.order = order;
     }
 

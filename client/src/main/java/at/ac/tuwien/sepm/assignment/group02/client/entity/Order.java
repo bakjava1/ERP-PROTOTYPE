@@ -19,6 +19,8 @@ public class Order {
 
     //prices in cent
     private int grossAmount;
+
+
     private int netAmount;
     private int taxAmount;
 
@@ -125,9 +127,11 @@ public class Order {
         return netAmount;
     }
 
-    public void setNetAmount(int netAmount) {
-        this.netAmount = netAmount;
+
+    public void setNetAmount(int netAmount){
+        this.netAmount=netAmount;
     }
+
 
     public int getTaxAmount() {
         return taxAmount;
