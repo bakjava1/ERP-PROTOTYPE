@@ -577,6 +577,12 @@ public class LeadWorkerFXML {
 
                 }*/
 
+
+
+
+
+
+
                 TimeUnit.SECONDS.sleep(6);
 
                 return null;
@@ -584,6 +590,7 @@ public class LeadWorkerFXML {
 
             @Override
             protected void succeeded(){
+
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader();
                     fxmlLoader.setLocation(getClass().getResource("/fxml/optimisation.fxml"));
@@ -593,7 +600,6 @@ public class LeadWorkerFXML {
                     stage.setTitle("Optimierungsalgorithmus");
                     stage.setScene(scene);
                     stage.centerOnScreen();
-                    stage.setScene(new Scene(fxmlLoader.load()));
                     stage.show();
 
                     btn_opt_alg.setDisable(false);
