@@ -232,11 +232,11 @@ public class Validator {
     public Lumber validateLumber(UnvalidatedLumber filter) throws InvalidInputException{
 
         String description = filter.getDescription().trim();
-        String finishing = filter.getFinishing().trim().equals("keine Angabe")? "" :
+        String finishing = filter.getFinishing().trim().equals("alle Veredelungen")? "" :
                 filter.getFinishing().trim();
-        String wood_type = filter.getWood_type().trim().equals("keine Angabe")? "" :
+        String wood_type = filter.getWood_type().trim().equals("alle Holzarten")? "" :
                 filter.getWood_type().trim();
-        String quality = filter.getQuality().trim().equals("keine Angabe")? "" :
+        String quality = filter.getQuality().trim().equals("alle Qualitäten")? "" :
                 filter.getQuality().trim();
         String strength = filter.getSize().trim();
         String width = filter.getWidth().trim();
