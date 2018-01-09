@@ -37,6 +37,8 @@ public class Timber {
         this.amount = amount;
     }
 
+
+
     public void setWood_type(String wood_type) {
         this.wood_type = wood_type;
     }

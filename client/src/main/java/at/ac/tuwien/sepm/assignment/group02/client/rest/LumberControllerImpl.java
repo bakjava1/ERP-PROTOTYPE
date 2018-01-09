@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
+import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
@@ -38,8 +39,19 @@ public class LumberControllerImpl implements LumberController {
     }
 
     @Override
-    public void reserveLumber(LumberDTO lumberDTO) {
+    public void reserveLumber(LumberDTO lumberDTO) throws PersistenceLayerException {
+        LOG.debug("Sending request for lumber reservation to server");
 
+        try {
+            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/reserveLumber", lumberDTO, LumberDTO.class);
+        } catch(HttpStatusCodeException e){
+            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
+            throw new PersistenceLayerException("Ressource nicht gefunden.");
+        } catch(RestClientException e){
+            //no response payload, probably server not running
+            LOG.warn("server is down? - {}", e.getMessage());
+            throw new PersistenceLayerException("Server nicht erreichbar.");
+        }
     }
 
     @Override
@@ -48,11 +60,11 @@ public class LumberControllerImpl implements LumberController {
 
         List<LumberDTO> lumberList = new ArrayList<>();
 
-//        LumberDTO[] lumberArray = restTemplate.postForObject("http://localhost:8080/getAllLumber", filter, LumberDTO[].class);
+//        LumberDTO[] lumberArray = restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllLumber", filter, LumberDTO[].class);
         LumberDTO[] lumberArray;
 
         try {
-            lumberArray = restTemplate.postForObject("http://localhost:8080/getAllLumber", filter, LumberDTO[].class);
+            lumberArray = restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllLumber", filter, LumberDTO[].class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");
@@ -75,8 +87,8 @@ public class LumberControllerImpl implements LumberController {
         LOG.debug("Sending request for lumber updating to server");
 
         try {
-            //restTemplate.postForObject("http://localhost:8080/updateLumber", lumberDTO, OrderDTO.class);
-            restTemplate.put("http://localhost:8080/updateLumber", lumberDTO, OrderDTO.class);
+            //restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, OrderDTO.class);
+            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, OrderDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");
@@ -93,9 +105,9 @@ public class LumberControllerImpl implements LumberController {
             LOG.debug("sending lumber to be deleted to server");
 
             try{
-                //restTemplate.postForObject("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
-                //restTemplate.delete("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
-                restTemplate.put("http://localhost:8080/deleteLumber", lumberDTO, LumberDTO.class);
+                //restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteLumber", lumberDTO, LumberDTO.class);
+                //restTemplate.delete("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteLumber", lumberDTO, LumberDTO.class);
+                restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteLumber", lumberDTO, LumberDTO.class);
 
             } catch(HttpStatusCodeException e){
                 LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
@@ -122,7 +134,7 @@ public class LumberControllerImpl implements LumberController {
 
         try {
             lumberDTO = restTemplate.getForObject(
-                    "http://localhost:8080/getLumberById/{id}",
+                    "http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/getLumberById/{id}",
                     LumberDTO.class, id);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());

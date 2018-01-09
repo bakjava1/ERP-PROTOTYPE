@@ -94,7 +94,6 @@ public class LumberServiceImpl implements LumberService {
 
         List<Lumber> allLumberConverted = new LinkedList<>();
 
-
         for (LumberDTO lumber: allLumber) {
             allLumberConverted.add(lumberConverter.convertRestDTOToPlainObject(lumber));
         }
@@ -103,8 +102,47 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public void reserveLumber(Lumber lumber, int quantity) {
+    public void reserveLumber(Lumber lumber, int quantity, TaskDTO taskDTO) throws ServiceLayerException {
+        LOG.debug("reserveLumber called: {}", lumber);
 
+        // validate method parameters
+        validateLumber(lumber);
+        validator.validateNumber(quantity+"");
+        //validateTask(taskDTO); TODO
+
+        // check if reservation quantity is needed for task
+        int openQuantityForTask = taskDTO.getQuantity()-taskDTO.getProduced_quantity();
+        if(quantity>openQuantityForTask){
+            throw new ServiceLayerException("Reservierungsmenge übersteigt für Auftrag benötigte Menge an Schnittholz.");
+        }
+
+        if(quantity > (lumber.getQuantity())){
+           throw new ServiceLayerException("Reservierungsmenge übersteigt vorhandene Menge an Schnittholz.");
+        }
+
+        // convert lumber to lumberDTO
+        LumberDTO lumberDTO = lumberConverter.convertPlainObjectToRestDTO(lumber);
+        // update lumberDTO to define the quantity to be reserved
+        lumberDTO.setQuantity(quantity);
+
+        try {
+            lumberController.reserveLumber(lumberDTO);
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
+            throw new ServiceLayerException("Schnittholz konnte nicht reserviert werden.");
+        }
+
+        int producedQuantity = taskDTO.getProduced_quantity() + quantity;
+        LOG.debug("taskDTO.getProduced_quantity(): {}, quantity: {}",taskDTO.getProduced_quantity(), quantity);
+        taskDTO.setProduced_quantity(producedQuantity);
+
+        try {
+            taskController.updateTask(taskDTO);
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
+            // TODO reset lumber reservation
+            throw new ServiceLayerException("Schnittholz konnte dem Auftrag nicht hinzugefügt werden.");
+        }
     }
 
     @Override
@@ -159,7 +197,7 @@ public class LumberServiceImpl implements LumberService {
             }
         }
 
-        if(lumber.getId()<=0){
+        if(lumber.getId()<0){
             LOG.warn("ID: {}", lumber.getId());
             try {
                 throw new NoValidIntegerException("Invalid ID.");
@@ -194,7 +232,7 @@ public class LumberServiceImpl implements LumberService {
                 e.printStackTrace();
             }
         }
-        if(lumber.getQuantity()<=0){
+        if(lumber.getQuantity()<0){
             LOG.warn("QUALITY: {}", lumber.getQuantity());
             try {
                 throw new NoValidIntegerException("Negative Integer or Null entered.");
@@ -202,7 +240,7 @@ public class LumberServiceImpl implements LumberService {
                 e.printStackTrace();
             }
         }
-        if(lumber.getReserved_quantity()<=0){
+        if(lumber.getReserved_quantity()<0){
             LOG.warn("RESERVED QUANTITY: {}", lumber.getReserved_quantity());
             try {
                 throw new NoValidIntegerException("Negative Integer or Null entered.");
@@ -210,7 +248,7 @@ public class LumberServiceImpl implements LumberService {
                 e.printStackTrace();
             }
         }
-        if(lumber.getDelivered_quantity()<=0){
+        if(lumber.getDelivered_quantity()<0){
             LOG.warn("DELIVERED QUANTITY: {}", lumber.getDelivered_quantity());
             try {
                 throw new NoValidIntegerException("Negative Integer or Null entered.");
@@ -229,10 +267,11 @@ public class LumberServiceImpl implements LumberService {
             }
         }
 
+        /*
         if(lumber.getLager()==null || lumber.getLager().isEmpty()){
             LOG.warn("Lager: '{}'.", lumber.getLager());
             throw new InvalidInputException("Lager can't be empty.");
-        }
+        }*/
 
         if(lumber.getDescription()==null || lumber.getDescription().isEmpty()){
             LOG.warn("Description: '{}'.", lumber.getDescription());

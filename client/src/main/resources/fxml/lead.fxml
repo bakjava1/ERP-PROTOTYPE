@@ -11,11 +11,40 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.LeadWorkerFXML">
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.LeadWorkerFXML">
    <children>
-      <TabPane prefHeight="634.0" prefWidth="831.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" prefHeight="634.0" prefWidth="831.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab text="Schnittholz">
+            <Tab fx:id="tab_task" text="Aufträge">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="593.0">
+                     <children>
+
+                         <TableView fx:id="table_task" layoutX="25.0" layoutY="41.0" prefHeight="437.0" prefWidth="779.0">
+                             <columns>
+                                 <TableColumn fx:id="task_col_order_id" prefWidth="87.0" text="Bestellung" />
+                                 <TableColumn fx:id="task_col_description" prefWidth="105.0" text="Bezeichnung" />
+                                 <TableColumn fx:id="task_col_finishing" prefWidth="92.0" text="Ausführung" />
+                                 <TableColumn fx:id="task_col_wood_type" prefWidth="64.0" text="Holzart" />
+                                 <TableColumn fx:id="task_col_quality" prefWidth="69.0" text="Qualität" />
+                                 <TableColumn fx:id="task_col_size" prefWidth="59.0" text="Stärke" />
+                                 <TableColumn fx:id="task_col_width" prefWidth="61.0" text="Breite" />
+                                 <TableColumn fx:id="task_col_length" prefWidth="58.0" text="Länge" />
+                                 <TableColumn fx:id="task_col_quantity" prefWidth="92.0" text="Anzahl" />
+                                 <TableColumn fx:id="task_col_produced_quantity" prefWidth="90.0" text="Produziert" />
+                                 <TableColumn fx:id="task_col_done" prefWidth="72.0" text="Done" visible="false" />
+                             </columns>
+                         </TableView>
+
+
+                        <Button fx:id="btn_opt_alg" layoutX="415.0" layoutY="520.0" mnemonicParsing="false" onAction="#optimisationBtnClicked" prefHeight="40.0" prefWidth="176.0" text="Optimierung starten" />
+                        <Button fx:id="btn_addLumber" layoutX="240.0" layoutY="520.0" mnemonicParsing="false" onAction="#addLumberButtonClicked" prefHeight="40.0" prefWidth="176.0" text="Schnittholz reservieren" />
+                        <Button fx:id="btn_createAssignment" layoutX="25.0" layoutY="520.0" mnemonicParsing="false" onAction="#createAssignmentButtonClicked" prefHeight="40.0" prefWidth="203.0" text="Produktion in Auftrag geben" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+          <Tab fx:id="tab_lumber" text="Schnittholz">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="593.0">
                      <children>
@@ -36,10 +65,13 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="353.0" layoutY="526.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="112.0" text="Reservieren">
+                        <Button layoutX="297.0" layoutY="526.0" mnemonicParsing="false" onAction="#onReserveButtonClicked" prefHeight="36.0" prefWidth="233.0" text="Reservieren">
                            <font>
                               <Font size="14.0" />
                            </font>
+                           <graphic>
+                              <TextField fx:id="tf_quantity" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="62.0" promptText="0" />
+                           </graphic>
                         </Button>
                         <TableView fx:id="table_lumber" layoutX="81.0" layoutY="207.0" prefHeight="297.0" prefWidth="655.0">
                           <columns>
@@ -58,15 +90,6 @@
                   </AnchorPane>
             </content>
           </Tab>
-            <Tab text="Aufträge">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="593.0">
-                     <children>
-                        <Button fx:id="btn_opt_alg" layoutX="328.0" layoutY="520.0" mnemonicParsing="false" onAction="#optimisationBtnClicked" prefHeight="40.0" prefWidth="176.0" text="Optimierung starten" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
         </tabs>
       </TabPane>
    </children>

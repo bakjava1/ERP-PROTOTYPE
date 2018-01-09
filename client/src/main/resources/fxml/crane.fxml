@@ -28,6 +28,7 @@
           <TableColumn fx:id="col_assignmentCreated" prefWidth="268.0" text="Eingang" />
             <TableColumn fx:id="col_assignmentAmount" prefWidth="138.0" text="RH Anzahl" />
             <TableColumn fx:id="col_assignmentBoxID" prefWidth="100.0" text="BoxNr" />
+              <TableColumn fx:id="col_assignmentDone" prefWidth="100.0" text="Erledigt" visible="false" />
         </columns>
       </TableView>
    </children>

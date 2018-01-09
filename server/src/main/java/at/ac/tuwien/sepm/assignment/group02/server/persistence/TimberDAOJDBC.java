@@ -61,8 +61,39 @@ public class TimberDAOJDBC implements TimberDAO{
     }
 
     @Override
-    public void updateTimber(Timber timber) throws PersistenceLayerException {
+    public void removeTimber(Timber timber) throws PersistenceLayerException {
+        LOG.debug("called updateTimber");
 
+        String selectSentence = "SELECT AMOUNT FROM TIMBER WHERE ID = ?";
+        String updateSentence = "UPDATE TIMBER SET AMOUNT=? WHERE ID = ?";
+
+        try{
+            stmt = dbConnection.prepareStatement(selectSentence);
+            stmt.setInt(1, timber.getBox_id());
+            rs = stmt.executeQuery();
+
+            rs.next();
+            int currentAmount = rs.getInt(1);
+
+            int newAmount = currentAmount - timber.getAmount();
+
+            if(newAmount<0){
+                LOG.warn("not enough timber to remove the requested amount");
+                throw new PersistenceLayerException("Nicht ausreichend Rundholz im Lager.");
+            }
+
+            stmt = dbConnection.prepareStatement(updateSentence);
+            stmt.setInt(1, newAmount);
+            stmt.setInt(2, timber.getBox_id());
+            stmt.execute();
+
+        } catch(SQLException e) {
+            LOG.error("SQL Exception: " + e.getMessage());
+            throw new PersistenceLayerException("Database Error");
+        }
+        finally {
+            closeStatement();
+        }
     }
 
     @Override

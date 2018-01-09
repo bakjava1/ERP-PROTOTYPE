@@ -18,14 +18,14 @@ public interface LumberController {
 
     /**
      * remove lumber from the stock
-     * @param lumberDTO
+     * @param lumberDTO lumber to remove
      * @throws PersistenceLayerException
      */
     void removeLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
 
     /**
-     * marking a select lumber als reserved.
-     * @param lumberDTO
+     * marking a select lumber as reserved.
+     * @param lumberDTO lumber to reserve
      * @throws PersistenceLayerException
      */
     void reserveLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
@@ -35,7 +35,7 @@ public interface LumberController {
      * @param lumberDTO
      * @throws PersistenceLayerException
      */
-    public void updateLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
+    void updateLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
 
     /**
      * create a new lumber.

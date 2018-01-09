@@ -12,7 +12,7 @@ public interface TaskService {
      * @param task the TaskDTO to be created
      * @throws ServiceLayerException in case the TaskDTO can't be created
      */
-    void createTask(TaskDTO task) throws ServiceLayerException;
+    int createTask(TaskDTO task) throws ServiceLayerException;
 
     /**
      * method deletes a given task (identified by its id)

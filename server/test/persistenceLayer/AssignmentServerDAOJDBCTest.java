@@ -1,3 +1,5 @@
+package persistenceLayer;
+
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Assignment;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
@@ -17,25 +19,25 @@ import static org.mockito.Mockito.*;
 
 // @RunWith attach a runner to initialize the test data
 @RunWith(MockitoJUnitRunner.class)
-public class AssignmentServerDAOJDBCTest_setDone {
+public class AssignmentServerDAOJDBCTest {
 
     @Mock
     private Connection dbConnection;
 
     @Test
+    public void testCreateAssignment_works() throws Exception {
+
+    }
+
+    @Test
     public void testSetAssignmentDone_works() throws Exception {
         AssignmentDAO assignmentDAO
                 = new AssignmentDAOJDBC(dbConnection);
-
         PreparedStatement mockPreparedStatement = Mockito.mock(PreparedStatement.class);
-
         Assignment assignment = new Assignment();
-
         doReturn(mockPreparedStatement).when(dbConnection).prepareStatement(any(String.class));
         doReturn(1).when(mockPreparedStatement).executeUpdate();
-
         assignmentDAO.setAssignmentDone(assignment);
-
         verify(dbConnection, times(1)).prepareStatement(any(String.class));
         verify(mockPreparedStatement).executeUpdate();
     }
@@ -44,14 +46,10 @@ public class AssignmentServerDAOJDBCTest_setDone {
     public void testSetDone_SQLException() throws Exception {
         AssignmentDAO assignmentDAO
                 = new AssignmentDAOJDBC(dbConnection);
-
         PreparedStatement mockPreparedStatement = Mockito.mock(PreparedStatement.class);
-
         Assignment assignment = new Assignment();
-
         doReturn(mockPreparedStatement).when(dbConnection).prepareStatement(any(String.class));
         doThrow(SQLException.class).when(mockPreparedStatement).executeUpdate();
-
         assignmentDAO.setAssignmentDone(assignment);
     }
 
@@ -59,14 +57,10 @@ public class AssignmentServerDAOJDBCTest_setDone {
     public void testSetDone_EntityNotFound() throws Exception {
         AssignmentDAO assignmentDAO
                 = new AssignmentDAOJDBC(dbConnection);
-
         PreparedStatement mockPreparedStatement = Mockito.mock(PreparedStatement.class);
-
         Assignment assignment = new Assignment();
-
         doReturn(mockPreparedStatement).when(dbConnection).prepareStatement(any(String.class));
         doReturn(0).when(mockPreparedStatement).executeUpdate();
-
         assignmentDAO.setAssignmentDone(assignment);
     }
 

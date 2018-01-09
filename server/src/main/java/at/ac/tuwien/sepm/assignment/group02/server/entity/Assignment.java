@@ -6,6 +6,7 @@ public class Assignment {
     private int amount;
     private int box_id;
     private boolean isDone;
+    private int task_id;
 
     public int getId() {
         return id;
@@ -56,5 +57,13 @@ public class Assignment {
                 ", box_id=" + box_id +
                 ", isDone=" + isDone +
                 '}';
+    }
+
+    public int getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(int task_id) {
+        this.task_id = task_id;
     }
 }

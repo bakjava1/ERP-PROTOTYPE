@@ -12,7 +12,7 @@ public interface TaskDAO {
      * @param task
      * @throws PersistenceLayerException
      */
-    void createTask(Task task) throws PersistenceLayerException;
+    int createTask(Task task) throws PersistenceLayerException;
 
     /**
      * delete an existing task from the data base
@@ -36,11 +36,18 @@ public interface TaskDAO {
     List<Task> getAllOpenTasks() throws PersistenceLayerException;
 
     /**
+     * retrieve all tasks
+     * @return a list of all tasks
+     * @throws PersistenceLayerException
+     */
+    List<Task> getAllTasks() throws PersistenceLayerException;
+
+    /**
      * get task by id
      * @param task_id
      * @throws PersistenceLayerException
      */
-    void getTaskById(int task_id) throws PersistenceLayerException;
+    Task getTaskById(int task_id) throws PersistenceLayerException;
 
     /**
      * get task by order_id
