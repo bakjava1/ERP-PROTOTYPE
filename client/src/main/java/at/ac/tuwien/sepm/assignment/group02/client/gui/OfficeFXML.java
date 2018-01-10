@@ -68,7 +68,7 @@ public class OfficeFXML {
 
 
     @FXML
-    private AnchorPane printPage;
+   private AnchorPane printPage;
 
     @FXML
     private Label sumNet;
@@ -181,6 +181,8 @@ public class OfficeFXML {
     @FXML
     TableView<Order> table_bill;
 
+
+
     private OrderService orderService;
     private TimberService timberService;
     private TaskService taskService;
@@ -215,29 +217,19 @@ public class OfficeFXML {
         col_billAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
         col_billGrossSum.setCellValueFactory(new PropertyValueFactory<Order, Integer>("grossAmount"));
 
-        col_taskNr.setCellValueFactory(
-                new PropertyValueFactory<Task, Integer>("id")
-        );
-        col_taskDescription.setCellValueFactory(
-                new PropertyValueFactory<Task, String>("description")
-        );
-        col_taskQuantity.setCellValueFactory(
-                new PropertyValueFactory<Task, Integer>("quantity")
-        );
-        col_taskSize.setCellValueFactory(
-                new PropertyValueFactory<Task, Integer>("size")
-        );
-        col_taskWidth.setCellValueFactory(
-                new PropertyValueFactory<Task, Integer>("width")
-        );
-        col_taskLength.setCellValueFactory(
-                new PropertyValueFactory<Task, Integer>("length")
-        );
+
+        col_taskNr.setCellValueFactory(new PropertyValueFactory<Task, Integer>("id"));
+        col_taskQuantity.setCellValueFactory(new PropertyValueFactory<Task, Integer>("quantity"));
+        col_taskDescription.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
+        col_taskSize.setCellValueFactory(new PropertyValueFactory<Task, Integer>("size"));
+        col_taskWidth.setCellValueFactory(new PropertyValueFactory<Task, Integer>("width"));
+        col_taskLength.setCellValueFactory(new PropertyValueFactory<Task, Integer>("length"));
 
         ObservableList<Task> orderTasks = FXCollections.observableArrayList();
         table_addedTask.setItems(orderTasks);
         ObservableList<Order> orders=FXCollections.observableArrayList();
         table_bill.setItems(orders);
+
         l_sumorders.setText(currentOrderSum + " €");
         initTimberTab();
         updateTable();
@@ -246,9 +238,6 @@ public class OfficeFXML {
 
         // Auto resize columns
         table_bill.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        // clear rechnung
-//        showRechnungDetails(null);
 
         // Listen for selection changes
         table_bill.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showRechnungDetails(newValue));
@@ -724,13 +713,14 @@ public class OfficeFXML {
 
 
     @FXML
-    public void rechnungAnzeigenBtnClicked(ActionEvent actionEvent){
+   public void rechnungAnzeigenBtnClicked(ActionEvent actionEvent){
         LOG.info("RechnungAnzeigenBtn clicked");
 
         if (table_bill.getSelectionModel().getSelectedItem() == null) {
             return;
         }
         Order order = table_bill.getSelectionModel().getSelectedItem();
+
 
                 try {
 
@@ -755,7 +745,7 @@ public class OfficeFXML {
                     sumGross.setText("€ "+order.getGrossAmount());
                     invoiceNumber.setText("Rechnung #"+order.getID());
 
-
+                   // nocht task holen
 
                     PrinterJob printerJob = PrinterJob.createPrinterJob();
                     if (printerJob.showPrintDialog(stage)) {
@@ -791,11 +781,7 @@ public class OfficeFXML {
         billAmountLabel.setText(Integer.toString(order.getQuantity()));
         billGrossSum.setText("€ " + String.valueOf(order.getGrossAmount()));
 
-
     }
-
-
-
 
 
 }

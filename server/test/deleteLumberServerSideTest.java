@@ -67,7 +67,6 @@ public class deleteLumberServerSideTest {
         //lumberDTO3.setID(6);
 
         lumberController= new LumberControllerImpl(lumberService);
-       // lumberService=new LumberServiceImpl(lumberDAO,lumberConverter);
         lumberConverter=new LumberConverter();
 
         LOG.debug("lumber management test setup completed");

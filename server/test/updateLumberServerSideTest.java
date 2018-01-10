@@ -55,9 +55,4 @@ public class updateLumberServerSideTest {
     private static Lumber lumber;
     private static LumberDTO lumberDTO;
 
-
-
-
-
-
 }

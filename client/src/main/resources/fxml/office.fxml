@@ -106,7 +106,7 @@
                         <TableColumn fx:id="col_billGrossSum" prefWidth="99.0" text="Summe (Brutto)" />
                      </columns>
                   </TableView>
-                  <Button layoutX="612.0" layoutY="408.0" mnemonicParsing="false" onAction="#rechnungAnzeigenBtnClicked" prefWidth="156.0" text="Rechnung drucken" />
+                  <Button fx:id="bt_rechnungAnzeigen" layoutX="612.0" layoutY="408.0" mnemonicParsing="false" onAction="#rechnungAnzeigenBtnClicked" prefWidth="156.0" text="Rechnung drucken" />
                   <Label layoutX="664.0" layoutY="21.0" text="Rechnung anzeigen">
                      <font>
                         <Font size="18.0" />

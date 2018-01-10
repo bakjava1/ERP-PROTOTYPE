@@ -37,7 +37,7 @@ public interface LumberService {
      * @param lumber
      * @throws ServiceLayerException
      */
-    public void deleteLumber(Lumber lumber) throws ServiceLayerException;
+    public boolean deleteLumber(Lumber lumber) throws ServiceLayerException;
 
     /**
      * update a lumber
@@ -73,7 +73,7 @@ public interface LumberService {
     /**
      *
      * @param lumber
-     * @return
+     * @return false or true
      */
     public boolean lumberExists(Lumber lumber);
 

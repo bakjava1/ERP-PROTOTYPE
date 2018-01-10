@@ -79,6 +79,7 @@ public class LumberServiceImpl implements LumberService {
 
     @Override
     public boolean lumberExists(Lumber lumber) {
+
         return getLumber(lumber.getId()) != null;
     }
 
@@ -107,7 +108,6 @@ public class LumberServiceImpl implements LumberService {
         for (LumberDTO lumber: allLumber) {
             allLumberConverted.add(lumberConverter.convertRestDTOToPlainObject(lumber));
         }
-
         return allLumberConverted;
     }
 
@@ -121,25 +121,39 @@ public class LumberServiceImpl implements LumberService {
 
     }
 
+    /**
+     * delete an existing  lumber
+     * @param lumber
+     * @return a boolean value
+     * @throws ServiceLayerException
+     */
     @Override
-    public void deleteLumber(Lumber lumber) throws ServiceLayerException {
-
+    public boolean deleteLumber(Lumber lumber) throws ServiceLayerException {
         LOG.debug("deleteLumber called: {}", lumber);
 
-        LumberDTO lumberToDelete = lumberConverter.convertPlainObjectToRestDTO(lumber);
+        if (lumberExists(lumber)){
+            return true;
+
+        }
+            LumberDTO lumberToDelete = lumberConverter.convertPlainObjectToRestDTO(lumber);
         try {
 
             lumberController.removeLumber(lumberToDelete);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
         }
+        return true;
     }
 
-
+    /**
+     * update an existing lumber
+     * @param lumber
+     * @throws ServiceLayerException
+     */
     @Override
     public void updateLumber(Lumber lumber) throws ServiceLayerException {
-
         LOG.debug("updateLumber called: {}", lumber);
+
         try {
             validateLumber(lumber);
 
@@ -162,7 +176,6 @@ public class LumberServiceImpl implements LumberService {
 
         return lumbers;
     }
-
 
     public void validateLumber(Lumber lumber) throws InvalidInputException{
         LOG.debug("Validating lumber: {}",lumber);
@@ -270,7 +283,5 @@ public class LumberServiceImpl implements LumberService {
             throw new InvalidInputException(" Quality can't be empty.");
         }
     }
-
-
 
 }
