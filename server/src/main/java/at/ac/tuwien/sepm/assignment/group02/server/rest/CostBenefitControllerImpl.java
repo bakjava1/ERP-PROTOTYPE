@@ -33,7 +33,7 @@ public class CostBenefitControllerImpl {
         try {
             return costBenefitService.costValueFunction(taskList);
         } catch (ServiceLayerException e) {
-            throw new ResourceNotFoundException("failed to get lumber.");
+            throw new ResourceNotFoundException("Failed to execute Cost Benefit Service.");
         }
     }
 }

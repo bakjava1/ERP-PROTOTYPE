@@ -423,7 +423,7 @@ public class OfficeFXML {
         gridPane.add(finishing,2,1);
 
         ComboBox<String> wood_type =  new ComboBox<>();
-        wood_type.setItems(FXCollections.observableArrayList(  "Fi", "Ta", "Lä", "Ki", "Zi"));
+        wood_type.setItems(FXCollections.observableArrayList(  "Fi", "Ta", "Lä"));
         wood_type.setMaxWidth(200);
         wood_type.getSelectionModel().selectFirst();
         wood_type.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
