@@ -199,30 +199,66 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
     }
 
-    private void calculateSideTasks(int horizontalIndex, int verticalIndex) {
+    //horizontal = top and bottom; vertical = left and right
+    private void calculateSideTasks(int verticalIndex, int horizontalIndex) {
         Task sideTaskHorizontal = possibleSideTasks.get(horizontalIndex);
         Task sideTaskVertical = possibleSideTasks.get(verticalIndex);
 
         //r = Radius, xM = yM = radius bzw Kreismittelpunkt
         //r*r = (x - xM) * (x - xM) + (y - yM) * (y - yM)
         //y = sqrt(-(x-xM)^2+r^2)+yM
-        double xCoordinateSideTaskHorizontal = ((currentRadius - widthMainTask)/2) - sideTaskHorizontal.getSize();
-        double yCoordinateSideTaskHorizontal = sqrt(-pow((xCoordinateSideTaskHorizontal - currentRadius), 2) + pow(currentRadius, 2)) + currentRadius;
-        double maxHeightSideTaskHorizontal = currentDiameter - ((currentDiameter - yCoordinateSideTaskHorizontal) * 2);
-
-        //Anzahl der moeglichen Schnitthoelzer * Dicke * 2 (weil links und rechts)
-        double horizontalCount = floor(maxHeightSideTaskHorizontal / sideTaskHorizontal.getWidth());
-        double currentSideTaskVerticalArea = horizontalCount * sideTaskHorizontal.getSize() * 2;
-
-        //TODO Schnittfuge auch bei side tasks vorhanden??
+        double xCoordinateSideTaskVertical = ((currentRadius - widthMainTask)/2) - sideTaskVertical.getSize();
+        double yCoordinateSideTaskVertical = sqrt(-pow((xCoordinateSideTaskVertical - currentRadius), 2) + pow(currentRadius, 2)) + currentRadius;
+        double maxHeightSideTaskVertical = currentDiameter - ((currentDiameter - yCoordinateSideTaskVertical) * 2);
+        //TODO schnittfuge korrektur (einmal zu oft) wahrscheinlich auch bei der anzahl notwendig
+        int verticalCount = (int) floor(maxHeightSideTaskVertical / (sideTaskVertical.getWidth() + SCHNITTFUGE));
 
 
 
-        double currentSideTaskHorizontalArea = 0.0;
-        double currentWaste = currentCircleArea - (mainTaskArea + currentSideTaskVerticalArea + currentSideTaskHorizontalArea);
+        double xCoordinateSideTaskHorizontal = (currentRadius - widthMainTask)/2;
+        //TODO
+        //Punkt links oben von Hauptauftrag + Dicke von Nebenauftrag sideTaskHorizontal (horizontal = oben/unten)
+        //double yCoordinateSideTaskHorizontal = 0.0;
+
+        int horizontalCount = 0;
+        if(sideTaskHorizontal.getWidth() <= mainTask.getWidth()) {
+            horizontalCount = vorschnittAnzahl;
+        }
 
 
-        //TODO notwendig? wir wollen nur waste bzw verschleiß minimieren
+        if(verticalCount > 0) {
+            double widthSideTaskVertical = verticalCount * (sideTaskVertical.getWidth() + SCHNITTFUGE) - SCHNITTFUGE;
+            double heightSideTaskVertical = sideTaskVertical.getSize();
+            double currentSideTaskVerticalArea = widthSideTaskVertical * heightSideTaskVertical * 2;
+
+            if(horizontalCount > 0) {
+                double widthSideTaskHorizontal = horizontalCount * (sideTaskHorizontal.getWidth() + SCHNITTFUGE) - SCHNITTFUGE;
+                double heightSideTaskHorizontal = sideTaskHorizontal.getSize();
+                double currentSideTaskHorizontalArea = widthSideTaskHorizontal * heightSideTaskHorizontal * 2;
+
+
+                double currentWaste = currentCircleArea - (mainTaskArea + currentSideTaskVerticalArea + currentSideTaskHorizontalArea);
+
+                if (minWaste <= currentWaste) {
+                    minWaste = currentWaste;
+
+                    optAlgorithmResult.setTimberResult(currentTimber);
+
+                    optBuffer.setNewValues(currentRadius, nachschnittAnzahl, vorschnittAnzahl, widthMainTask, heightMainTask, biggerSize, smallerSize, horizontalCount, widthSideTaskHorizontal, heightSideTaskHorizontal, verticalCount, widthSideTaskVertical, heightSideTaskVertical);
+                } else if (verticalIndex < possibleSideTasks.size()) {
+                    calculateSideTasks(horizontalIndex, verticalIndex + 1);
+                } else if (horizontalIndex < possibleSideTasks.size()){
+                    calculateSideTasks(horizontalIndex + 1, 0);
+                }
+            } else {
+                //oben und unten passt der aktuelle auftrag nicht hinein
+                calculateSideTasks(verticalIndex, horizontalIndex + 1);
+            }
+        } else {
+            //links und rechts passt der aktuelle auftrag nicht hinein
+            calculateSideTasks(verticalIndex + 1, horizontalIndex);
+        }
+        //TODO notwendig? wir wollen nur den wert von waste bzw verschleiß minimieren
         /*double currentMainTaskProportion = mainTaskArea/currentCircleArea;
         double currentWasteProportion = currentWaste/currentCircleArea;
 
@@ -236,16 +272,6 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
             optBuffer.setNewValues(currentTimber.getDiameter()/2, nachschnittAnzahl, vorschnittAnzahl, widthMainTask, heightMainTask, biggerSize, smallerSize);
         }*/
-        if (minWaste <= currentWaste) {
-            minWaste = currentWaste;
 
-            optAlgorithmResult.setTimberResult(currentTimber);
-
-
-        } else if (verticalIndex < possibleSideTasks.size()) {
-            calculateSideTasks(horizontalIndex, verticalIndex + 1);
-        } else if (horizontalIndex < possibleSideTasks.size()){
-            calculateSideTasks(horizontalIndex + 1, 0);
-        }
     }
 }

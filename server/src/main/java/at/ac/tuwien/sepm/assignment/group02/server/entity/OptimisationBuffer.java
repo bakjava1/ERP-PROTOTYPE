@@ -12,12 +12,12 @@ public class OptimisationBuffer {
     private double biggerSize;
     private double smallerSize;
 
-    //side task horizontal (left and right)
+    //side task horizontal (top and bottom)
     private int horizontalCount;
     private double widthSideTaskHorizontal;
     private double heightSideTaskHorizontal;
 
-    //side task vertical (top and bottom)
+    //side task vertical (left and right)
     private int verticalCount;
     private double widthSideTaskVertical;
     private double heightSideTaskVertical;
@@ -74,5 +74,17 @@ public class OptimisationBuffer {
         return smallerSize;
     }
 
+    public int getHorizontalCount() {
+        return horizontalCount;
+    }
 
+    public double getWidthSideTaskHorizontal() { return widthSideTaskHorizontal; }
+
+    public double getHeightSideTaskHorizontal() { return heightSideTaskHorizontal; }
+
+    public int getVerticalCount() { return verticalCount; }
+
+    public double getWidthSideTaskVertical() { return widthSideTaskVertical; }
+
+    public double getHeightSideTaskVertical() { return heightSideTaskVertical; }
 }
