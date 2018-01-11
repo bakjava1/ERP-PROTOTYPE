@@ -57,6 +57,12 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                     LOG.info("Not complete Quantity is aviable in storage");
                     int toBeProduced = toEvaluate.get(i).getQuantity() - aviable;
                     LOG.info(toBeProduced + " are left to produce");
+                    double height = (double) toEvaluate.get(i).getSize() / (double) 1000;
+                    double width = (double) toEvaluate.get(i).getWidth() / (double) 1000;
+                    double length = (double) toEvaluate.get(i).getLength() / (double) 1000;
+                    LOG.info("h: " + height + " w: " + width + " l: " + length);
+                    double volumeLumber = height * width * length;
+                    LOG.info("Volume of one Lumber: " + volumeLumber);
                     Properties properties = new Properties();
                     InputStream input = null;
                     int cost1 = -1;
@@ -92,6 +98,16 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                         bd = bd.setScale(4, RoundingMode.HALF_UP);
                         bankmeter = bd.doubleValue();
                         LOG.info("Bankmeters for Box " + temp.getBox_id() + " is " + bankmeter);
+                        bankmeter *= 0.6;
+                        LOG.info("Aviable Bankmeter Count (60%): " + bankmeter);
+                        double countOneLumber = bankmeter / volumeLumber;
+                        countOneLumber = Math.floor(countOneLumber);
+                        LOG.info("In one Timber " + countOneLumber + " Lumber could be produced");
+                        double lumberCount = (double) toBeProduced / (double) countOneLumber;
+                        lumberCount = Math.ceil(lumberCount);
+                        LOG.info(lumberCount + " Timber would be needed to produce needed Quantity of Lumber");
+                        double produceCost = lumberCount * price + (bankmeter * lumberCount) * cost2 ;
+                        LOG.info("The Cost for Production would be: " + produceCost);
                     }
                     if (input != null) {
                         try {
