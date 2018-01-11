@@ -156,6 +156,10 @@ public class CraneOperatorFXML {
                                     setStyle("-fx-background-color: lightgray;");
                                 }
 
+                                if(isSelected()){
+                                    setStyle("-fx-background-color: blue;");
+                                }
+
                             }
                         };
                         return row;
@@ -175,8 +179,10 @@ public class CraneOperatorFXML {
 
                                 if (assignmentDTO == null) {
                                     setStyle("");
-                                } else {
+                                } else if (assignmentDTO.isDone()) {
                                     setStyle("-fx-background-color: lightgreen;");
+                                } else {
+                                    setStyle("-fx-background-color: lightgray;");
                                 }
 
                             }

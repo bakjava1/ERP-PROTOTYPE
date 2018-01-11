@@ -22,7 +22,7 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <TableView fx:id="table_open_assignment" layoutX="50.0" layoutY="50.0" prefHeight="450" prefWidth="550" style="-fx-font-size: 175%; -fx-border-width: 0px;">
+      <TableView fx:id="table_open_assignment" layoutX="50.0" layoutY="50.0" prefHeight="450" prefWidth="552" style="-fx-font-size: 175%; -fx-border-width: 0px;">
           <columns>
           <TableColumn fx:id="col_open_assignmentNr" prefWidth="50.0" text="Nr" />
           <TableColumn fx:id="col_open_assignmentCreated" prefWidth="150.0" text="Eingang" />
@@ -32,7 +32,7 @@
         </columns>
       </TableView>
 
-       <TableView fx:id="table_done_assignment" layoutX="600.0" layoutY="50.0" prefHeight="450" prefWidth="350" style="-fx-font-size: 125%; -fx-border-width: 0px;">
+       <TableView fx:id="table_done_assignment" layoutX="600.0" layoutY="50.0" prefHeight="450" prefWidth="352" style="-fx-font-size: 125%; -fx-border-width: 0px;">
            <columns>
                <TableColumn fx:id="col_done_assignmentNr" prefWidth="35.0" text="Nr" />
                <TableColumn fx:id="col_done_assignmentCreated" prefWidth="125.0" text="Eingang" />

@@ -266,9 +266,11 @@ public class LeadWorkerFXML {
                                 if (taskDTO == null) {
                                     setStyle("");
                                 } else if (taskDTO.isDone()) {
-                                    setStyle("-fx-background-color: lightgreen;");
+                                    setStyle("-fx-background-color:#b0eeb0;");
+                                    if(isSelected()) setStyle("-fx-background-color: lightslategray;");
                                 } else if (taskDTO.isIn_progress()) {
-                                    setStyle("-fx-background-color: lightgoldenrodyellow;");
+                                    setStyle("-fx-background-color:#ffff80;");
+                                    if(isSelected()) setStyle("-fx-background-color: lightslategray;");
                                 } else {
                                     setStyle("");
                                 }
@@ -443,6 +445,14 @@ public class LeadWorkerFXML {
             return;
         }
 
+        if(selectedTask.isIn_progress()) {
+            AlertBuilder alertBuilder = new AlertBuilder();
+            alertBuilder.showInformationAlert("Schnittholz-Reservierung",
+                    "Schnittholz-Reservierung", "Der ausgewählte Auftrag ist bereits in Produktion!");
+            tabPane.getSelectionModel().clearAndSelect(0);
+            return;
+        }
+
         // get the selected lumberDTO from the table
         if(table_lumber.getSelectionModel().getSelectedItem() == null) {
             AlertBuilder alertBuilder = new AlertBuilder();
@@ -477,8 +487,10 @@ public class LeadWorkerFXML {
         final int qu = quantity;
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                "Schnittholz (Id:"+lumber.getId()+", "+lumber.getDescription()+", Menge: "+qu+") dem Auftrag (Id: "+selectedTask.getId()+", "+selectedTask.getDescription()+") hinzufügen?",
+                "Möchten Sie Schnittholz (Id:"+lumber.getId()+", "+lumber.getDescription()+", Menge: "+qu+") dem Auftrag (Id: "+selectedTask.getId()+", "+selectedTask.getDescription()+") hinzufügen?",
                 ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Schnittholz-Reservierung");
+        alert.setHeaderText("Schnittholz-Reservierung");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.showAndWait();
 
@@ -507,6 +519,8 @@ public class LeadWorkerFXML {
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION,
                             "Schnittholz wurde dem Auftrag erfolgreich hinzugefügt.");
+                    alert.setTitle("Schnittholz-Reservierung");
+                    alert.setHeaderText("Schnittholz-Reservierung");
                     alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     alert.show();
 
@@ -525,6 +539,8 @@ public class LeadWorkerFXML {
 
                     Alert alert = new Alert(Alert.AlertType.WARNING,
                             "Schnittholz-Reservierung wurde nicht durchgeführt. "+ getException().getMessage());
+                    alert.setTitle("Schnittholz-Reservierung");
+                    alert.setHeaderText("Schnittholz-Reservierung");
                     alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     alert.show();
 

@@ -103,7 +103,7 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
 
         List<Assignment> assignmentList = new LinkedList<>();
         Assignment assignment;
-        String getAllAssignments = "SELECT ID, CREATION_DATE, AMOUNT, BOX_ID, ISDONE, TASK_ID FROM ASSIGNMENT";
+        String getAllAssignments = "SELECT ID, CREATION_DATE, AMOUNT, BOX_ID, ISDONE, TASK_ID FROM ASSIGNMENT WHERE ISDONE = 1";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(getAllAssignments);
