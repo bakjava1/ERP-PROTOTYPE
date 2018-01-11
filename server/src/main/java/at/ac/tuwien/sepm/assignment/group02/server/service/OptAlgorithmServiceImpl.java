@@ -109,6 +109,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         return possibleTimbers;
     }
 
+    //TODO zwei Methoden und zwei Listen; jeweils eine für vertikal=links/rechts und horizontal=oben/unten
     @Override
     public List<Task> getPossibleTasks(Task mainTask) throws PersistenceLayerException {
         List<Task> possibleTasks = new ArrayList<>();
@@ -207,18 +208,23 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         //r = Radius, xM = yM = radius bzw Kreismittelpunkt
         //r*r = (x - xM) * (x - xM) + (y - yM) * (y - yM)
         //y = sqrt(-(x-xM)^2+r^2)+yM
-        double xCoordinateSideTaskVertical = ((currentRadius - widthMainTask)/2) - sideTaskVertical.getSize();
+        double xCoordinateSideTaskVertical = (currentRadius - (widthMainTask/2)) - sideTaskVertical.getSize() - SCHNITTFUGE;
+        //r*r = (xCoordinate - radius)^2 + (y - radius)^2
+        //r*r - (xCoordinate - radius)^2 = (y - radius)^2
+        //
+        //y^2 - 2*y*radius + (radius^2 - (r*r - (xCoordinate - radius)^2)) = 0
         double yCoordinateSideTaskVertical = sqrt(-pow((xCoordinateSideTaskVertical - currentRadius), 2) + pow(currentRadius, 2)) + currentRadius;
+        //x1 - x2
         double maxHeightSideTaskVertical = currentDiameter - ((currentDiameter - yCoordinateSideTaskVertical) * 2);
         //TODO schnittfuge korrektur (einmal zu oft) wahrscheinlich auch bei der anzahl notwendig
         int verticalCount = (int) floor(maxHeightSideTaskVertical / (sideTaskVertical.getWidth() + SCHNITTFUGE));
 
 
 
-        double xCoordinateSideTaskHorizontal = (currentRadius - widthMainTask)/2;
-        //TODO
-        //Punkt links oben von Hauptauftrag + Dicke von Nebenauftrag sideTaskHorizontal (horizontal = oben/unten)
-        //double yCoordinateSideTaskHorizontal = 0.0;
+        double xCoordinateSideTaskHorizontal = currentRadius - widthMainTask/2;
+        double yCoordinateSideTaskHorizontal = currentRadius + heightMainTask/2 + SCHNITTFUGE + sideTaskHorizontal.getSize();
+
+
 
         int horizontalCount = 0;
         if(sideTaskHorizontal.getWidth() <= mainTask.getWidth()) {
@@ -227,8 +233,8 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
 
         if(verticalCount > 0) {
-            double widthSideTaskVertical = verticalCount * (sideTaskVertical.getWidth() + SCHNITTFUGE) - SCHNITTFUGE;
-            double heightSideTaskVertical = sideTaskVertical.getSize();
+            double heightSideTaskVertical = verticalCount * (sideTaskVertical.getWidth() + SCHNITTFUGE) - SCHNITTFUGE;
+            double widthSideTaskVertical = sideTaskVertical.getSize();
             double currentSideTaskVerticalArea = widthSideTaskVertical * heightSideTaskVertical * 2;
 
             if(horizontalCount > 0) {
@@ -239,7 +245,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
                 double currentWaste = currentCircleArea - (mainTaskArea + currentSideTaskVerticalArea + currentSideTaskHorizontalArea);
 
-                if (minWaste <= currentWaste) {
+                if (currentWaste <= minWaste) {
                     minWaste = currentWaste;
 
                     optAlgorithmResult.setTimberResult(currentTimber);
