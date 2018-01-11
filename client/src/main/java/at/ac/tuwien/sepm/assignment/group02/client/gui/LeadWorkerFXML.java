@@ -321,7 +321,7 @@ public class LeadWorkerFXML {
 
         //TODO opt_alg
         int box_id=2;
-        int amount=(taskDTO.getQuantity()-taskDTO.getProduced_quantity())/5;
+        int amount=(taskDTO.getQuantity()-taskDTO.getProduced_quantity());
 
         assignmentDTO.setBox_id(box_id);
         assignmentDTO.setAmount(amount);
@@ -378,16 +378,17 @@ public class LeadWorkerFXML {
         tf_quantity.setText(""+(selectedTask.getQuantity()-selectedTask.getProduced_quantity()));
 
         // set the search properties to the task properties
+        UnvalidatedLumber filter = new UnvalidatedLumber();
 
-        tf_description.setText(selectedTask.getDescription());
-        cb_finishing.getSelectionModel().select(selectedTask.getFinishing());
-        cb_wood_type.getSelectionModel().select(selectedTask.getWood_type());
-        cb_quality.getSelectionModel().select(selectedTask.getQuality());
-        tf_strength.setText(selectedTask.getSize()+"");
-        tf_width.setText(selectedTask.getWidth()+"");
-        tf_length.setText(selectedTask.getLength()+"");
+        filter.setDescription(selectedTask.getDescription());
+        filter.setFinishing(selectedTask.getFinishing());
+        filter.setWood_type(selectedTask.getWood_type());
+        filter.setQuality(selectedTask.getQuality());
+        filter.setSize(selectedTask.getSize()+"");
+        filter.setWidth(selectedTask.getWidth()+"");
+        filter.setLength(selectedTask.getLength()+"");
 
-        onSearchButtonClicked();
+        executeSearch(filter);
 
         tabPane.getSelectionModel().clearAndSelect(1);
     }
@@ -396,7 +397,6 @@ public class LeadWorkerFXML {
     public void onSearchButtonClicked() {
 
         UnvalidatedLumber filter = new UnvalidatedLumber();
-        List<Lumber> allLumber = null;
 
         filter.setDescription(tf_description.getText().trim());
         filter.setFinishing(cb_finishing.getSelectionModel().getSelectedItem().toString().trim());
@@ -406,7 +406,12 @@ public class LeadWorkerFXML {
         filter.setWidth(tf_width.getText().trim());
         filter.setLength(tf_length.getText().trim());
 
+        executeSearch(filter);
 
+    }
+
+    private void executeSearch(UnvalidatedLumber filter){
+        List<Lumber> allLumber = null;
         try {
             allLumber = lumberService.getAll(filter);
         } catch (InvalidInputException e) {
@@ -429,7 +434,6 @@ public class LeadWorkerFXML {
         } else {
             table_lumber.refresh();
         }
-
     }
 
 
