@@ -670,7 +670,7 @@ public class OfficeFXML {
             @Override public void run() {
                 if(evaluation < 0) {
                     kn_result.setTextFill(Color.web("#dd0000"));
-                    kn_result.setText("- " + evaluation + " €");
+                    kn_result.setText("  " + evaluation + " €");
                 } else {
                     kn_result.setTextFill(Color.web("#00dd00"));
                     kn_result.setText("+ " + evaluation + " €");
