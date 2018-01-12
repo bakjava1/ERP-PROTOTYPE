@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CostBenefitService {
 
-    int costValueFunction(List<TaskDTO> taskList) throws ServiceLayerException;
+    double costValueFunction(List<TaskDTO> taskList) throws ServiceLayerException;
 
 }

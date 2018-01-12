@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CostBenefitController {
 
-    int costValueFunction(List<TaskDTO> taskList) throws PersistenceLayerException;
+    double costValueFunction(List<TaskDTO> taskList) throws PersistenceLayerException;
 
 }

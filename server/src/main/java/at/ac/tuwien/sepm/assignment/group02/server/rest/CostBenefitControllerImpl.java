@@ -27,7 +27,7 @@ public class CostBenefitControllerImpl {
 
     @RequestMapping(value="/costBenefit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "costBenefitEvaluation")
-    public int costBenefit(@RequestBody List<TaskDTO> taskList) throws ResourceNotFoundException {
+    public double costBenefit(@RequestBody List<TaskDTO> taskList) throws ResourceNotFoundException {
         LOG.debug("called costBenefit");
 
         try {

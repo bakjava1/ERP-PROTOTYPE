@@ -40,12 +40,12 @@ public class CostBenefitServiceImpl implements CostBenefitService {
     }
 
     @Override
-    public int costValueFunction(List<TaskDTO> taskList) throws ServiceLayerException {
+    public double costValueFunction(List<TaskDTO> taskList) throws ServiceLayerException {
         List<Task> toEvaluate = new ArrayList<>();
         for(int i = 0; i < taskList.size();i++) {
             toEvaluate.add(taskConverter.convertRestDTOToPlainObject(taskList.get(i)));
         }
-        int summe = 0;
+        double summe = 0.0;
         for(int i  = 0; i < toEvaluate.size();i++) {
             try {
                 int aviable = lumberDAO.getLumberCountForTask(toEvaluate.get(i));
@@ -78,7 +78,8 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                     }
                     LOG.info("cost riftsaw = " + cost1 + " cost bandsaw = " + cost2);
                     //TODO Produktionskostenrechnung
-                    List<Timber> possibleBoxes = timberDAO.getBoxesForTask(null);
+                    double optimalProduceCost = -1.0;
+                    List<Timber> possibleBoxes = timberDAO.getBoxesForTask(toEvaluate.get(i));
                     for(int j = 0; j < possibleBoxes.size();j++) {
                         Timber temp = possibleBoxes.get(j);
                         String searchSentence = "";
@@ -103,11 +104,18 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                         double countOneLumber = bankmeter / volumeLumber;
                         countOneLumber = Math.floor(countOneLumber);
                         LOG.info("In one Timber " + countOneLumber + " Lumber could be produced");
-                        double lumberCount = (double) toBeProduced / (double) countOneLumber;
-                        lumberCount = Math.ceil(lumberCount);
-                        LOG.info(lumberCount + " Timber would be needed to produce needed Quantity of Lumber");
-                        double produceCost = lumberCount * price + (bankmeter * lumberCount) * cost2 ;
-                        LOG.info("The Cost for Production would be: " + produceCost);
+                        if(countOneLumber > 0) {
+                            double lumberCount = (double) toBeProduced / (double) countOneLumber;
+                            lumberCount = Math.ceil(lumberCount);
+                            LOG.info(lumberCount + " Timber would be needed to produce needed Quantity of Lumber");
+                            double produceCost = lumberCount * price + (bankmeter * lumberCount) * cost2;
+                            LOG.info("The Cost for Production would be: " + produceCost);
+                            if(optimalProduceCost == -1.0) {
+                                optimalProduceCost = produceCost;
+                            } else if(optimalProduceCost > produceCost) {
+                                optimalProduceCost = produceCost;
+                            }
+                        }
                     }
                     if (input != null) {
                         try {
@@ -116,6 +124,7 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                             LOG.error("Could not close InputStream\nReason: " + e.getMessage());
                         }
                     }
+                    summe += (double) toEvaluate.get(i).getPrice() - optimalProduceCost;
                 }
             } catch(PersistenceLayerException e) {
                 LOG.error("Database Problems, Reason: " + e.getMessage());

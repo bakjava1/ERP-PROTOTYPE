@@ -27,8 +27,8 @@ public class CostBenefitControllerImpl implements CostBenefitController {
     }
 
     @Override
-    public int costValueFunction(@RequestBody List<TaskDTO> taskList) throws PersistenceLayerException {
-        int estimate;
+    public double costValueFunction(@RequestBody List<TaskDTO> taskList) throws PersistenceLayerException {
+        double estimate;
 
         try {
             estimate = restTemplate.postForObject("http://localhost:8080/costBenefit", taskList, Integer.class);

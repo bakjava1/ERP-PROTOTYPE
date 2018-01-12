@@ -10,5 +10,5 @@ public interface CostBenefitService {
      * estimate costs/use for orders
      * estimate the planned algorithm tho the costs and use
      */
-    int costValueFunction(int sum, List<Task> taskList) throws ServiceLayerException;
+    double costValueFunction(List<Task> taskList) throws ServiceLayerException;
 }
