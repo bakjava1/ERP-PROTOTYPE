@@ -566,14 +566,28 @@ public class OfficeFXML {
         gridPane.add(l_width,0,5,2,1);
         gridPane.add(width,2,5);
 
-        TextField length = new TextField("");
-        length.textProperty().addListener(new ChangeListener<String>() {
+        ComboBox<String> length =  new ComboBox<>();
+        length.setItems(FXCollections.observableArrayList(  "3500","4000","4500","5000"));
+        length.setMaxWidth(200);
+        length.getSelectionModel().selectFirst();
+        length.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    length.setText(newValue.replaceAll("[^\\d]", ""));
-                }
+            public ListCell<String> call(ListView<String> param) {
+                ListCell cell = new ListCell<String>() {
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        getListView().setMaxWidth(200);
+                        if (!empty) {
+                            setText(item);
+                        } else {
+                            setText(null);
+                        }
+                    }
+                };
+                return cell;
             }
         });
         Label l_length =  new Label("Länge:");
@@ -613,7 +627,7 @@ public class OfficeFXML {
         Platform.runLater(description::requestFocus);
         dialog.setResultConverter((ButtonType button) -> {
             if (button == ButtonType.OK) {
-                return new UnvalidatedTask(description.getText(),finishing.getSelectionModel().getSelectedItem(),wood_type.getSelectionModel().getSelectedItem(),quality.getSelectionModel().getSelectedItem(),size.getText(),width.getText(),length.getText(),quantity.getText(),cost.getText());
+                return new UnvalidatedTask(description.getText(),finishing.getSelectionModel().getSelectedItem(),wood_type.getSelectionModel().getSelectedItem(),quality.getSelectionModel().getSelectedItem(),size.getText(),width.getText(),length.getSelectionModel().getSelectedItem(),quantity.getText(),cost.getText());
             }
             return null;
         });
