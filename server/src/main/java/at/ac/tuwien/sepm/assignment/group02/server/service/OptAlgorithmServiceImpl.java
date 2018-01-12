@@ -290,18 +290,28 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                     optAlgorithmResult.setTimberResult(currentTimber);
 
                     //optBuffer.setNewValues(currentRadius, nachschnittAnzahl, vorschnittAnzahl, widthMainTask, heightMainTask, biggerSize, smallerSize, horizontalCount, widthSideTaskHorizontal, heightSideTaskHorizontal, verticalCount, widthSideTaskVertical, heightSideTaskVertical);
-                } else if (verticalIndex < possibleSideTasks.size()) {
-                    calculateSideTasks(horizontalIndex, verticalIndex + 1);
-                } else if (horizontalIndex < possibleSideTasks.size()){
-                    calculateSideTasks(horizontalIndex + 1, 0);
+
+
+                }
+
+                if (horizontalIndex < possibleSideTasks.size() - 1) {
+                    calculateSideTasks(verticalIndex, horizontalIndex + 1);
+                } else if (verticalIndex < possibleSideTasks.size() - 1){
+                    calculateSideTasks(verticalIndex + 1, 0);
                 }
             } else {
                 //oben und unten passt der aktuelle auftrag nicht hinein
-                calculateSideTasks(verticalIndex, horizontalIndex + 1);
+                if (horizontalIndex < possibleSideTasks.size() - 1) {
+                    calculateSideTasks(verticalIndex, horizontalIndex + 1);
+                } else if (verticalIndex < possibleSideTasks.size() - 1){
+                    calculateSideTasks(verticalIndex + 1, 0);
+                }
             }
         } else {
             //links und rechts passt der aktuelle auftrag nicht hinein
-            calculateSideTasks(verticalIndex + 1, horizontalIndex);
+            if(verticalIndex < possibleSideTasks.size() - 1) {
+                calculateSideTasks(verticalIndex + 1, horizontalIndex);
+            }
         }
         //TODO notwendig? wir wollen nur den wert von waste bzw verschleiß minimieren
         /*double currentMainTaskProportion = mainTaskArea/currentCircleArea;
