@@ -149,10 +149,11 @@ public class TaskDAOJDBC implements TaskDAO {
             throw new PersistenceLayerException("Database Error");
         }
 
-    }
+        }
 
     @Override
     public List<Task> getAllOpenTasks() throws PersistenceLayerException {
+
         LOG.debug("called getAllOpenTasks");
 
         List<Task> taskList = new ArrayList<>();

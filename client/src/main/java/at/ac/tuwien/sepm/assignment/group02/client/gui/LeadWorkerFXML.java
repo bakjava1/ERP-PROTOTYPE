@@ -1,14 +1,17 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.client.service.OptimisationAlgorithmService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.util.AlertBuilder;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,15 +24,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 
 @Controller
 public class LeadWorkerFXML {
@@ -142,17 +145,23 @@ public class LeadWorkerFXML {
     private Tab tab_lumber;
 
     private LumberService lumberService;
+    private OptimisationFXML optimisationFXML;
     private TaskService taskService;
     private AssignmentService assignmentService;
+    private OptimisationAlgorithmService optimisationAlgorithmService;
 
     private TaskDTO selectedTask;
 
+    private boolean running = true;
+
     @Autowired
-    public LeadWorkerFXML(LumberService lumberService, TaskService taskService, AssignmentService assignmentService){
+    public LeadWorkerFXML(LumberService lumberService, OptimisationFXML optimisationFXML, TaskService taskService, AssignmentService assignmentService, OptimisationAlgorithmService optimisationAlgorithmService){
 
         this.lumberService = lumberService;
+        this.optimisationFXML = optimisationFXML;
         this.taskService = taskService;
         this.assignmentService = assignmentService;
+        this.optimisationAlgorithmService = optimisationAlgorithmService;
 
     }
 
@@ -581,9 +590,13 @@ public class LeadWorkerFXML {
 
         btn_opt_alg.setDisable(true);
 
+        final OptAlgorithmResultDTO[] bestResult = {null};
+
+
         new Thread(new Task<Object>() {
             @Override
             protected Object call() throws Exception {
+
 
                 //TODO not able to debug autowiring not working
                 /*TimeUnit.SECONDS.sleep(6);
@@ -608,30 +621,44 @@ public class LeadWorkerFXML {
 
                 }*/
 
-                TimeUnit.SECONDS.sleep(6);
+
+                bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(table_task.getSelectionModel().getSelectedItem());
+
 
                 return null;
             }
 
             @Override
             protected void succeeded(){
-                try {
 
-                    OptimisationFXML optimisationFXML    = new OptimisationFXML();
-                    FXMLLoader fxmlLoader = new FXMLLoader(OfficeFXML.class.getResource("/fxml/optimisation.fxml"));
-                    fxmlLoader.setControllerFactory(param -> param.isInstance(optimisationFXML) ? optimisationFXML : null);
 
-                    Stage stage = new Stage();
-                    stage.setTitle("Optimierungsalgorithmus");
-                    stage.setWidth(950);
-                    stage.setHeight(680);
-                    stage.centerOnScreen();
-                    stage.setScene(new Scene(fxmlLoader.load()));
-                    stage.show();
 
-                    btn_opt_alg.setDisable(false);
+                if (bestResult[0] != null) {
+
+                    optimisationFXML.setData(bestResult[0]);
+
+                    try {
+                        btn_opt_alg.setDisable(false);
+
+
+                        FXMLLoader fxmlLoader = new FXMLLoader(OfficeFXML.class.getResource("/fxml/optimisation.fxml"));
+                        fxmlLoader.setControllerFactory(param -> param.isInstance(optimisationFXML) ? optimisationFXML : null);
+                        Scene scene = new Scene(fxmlLoader.load(), 950, 680);
+
+                        Stage stage = new Stage();
+                        stage.setTitle("Optimierungsalgorithmus");
+                        stage.setScene(scene);
+                        stage.centerOnScreen();
+                        stage.show();
+
+
                 } catch (IOException e) {
                     LOG.error(e.getMessage());
+
+
+                    }
+
+
 
                 }
 

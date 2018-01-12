@@ -119,6 +119,63 @@ public class TimberDAOJDBC implements TimberDAO{
     }
 
     @Override
+    public List<Timber> getAllBoxes() throws PersistenceLayerException {
+
+
+        List<Timber> timberList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+
+            //connect to db
+            ps = dbConnection.prepareStatement("SELECT * FROM Timber");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Timber currentTimber = new Timber();
+
+                currentTimber.setBox_id(rs.getInt("ID"));
+                currentTimber.setWood_type(rs.getString("wood_type"));
+                currentTimber.setFestmeter(rs.getDouble("festmeter"));
+                currentTimber.setAmount(rs.getInt("amount"));
+                currentTimber.setLength(rs.getInt("length"));
+                currentTimber.setQuality(rs.getString("quality"));
+                currentTimber.setDiameter(rs.getInt("diameter"));
+                currentTimber.setPrice(rs.getInt("price"));
+                currentTimber.setLast_edited(rs.getString("last_edited"));
+
+
+                timberList.add(currentTimber);
+            }
+
+            if (timberList.size() == 0) {
+                //no open order was found
+                throw new PersistenceLayerException("No open orders found");
+            }
+
+        } catch (SQLException e) {
+            LOG.error("SQL Exception: " +  e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        } finally {
+            //close connections
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+
+        }
+        return timberList;
+    }
+
+    @Override
     public List<Timber> getBoxesForTask(Task toCheck) throws PersistenceLayerException {
 
         List<String> qualities = convertLumberQualityToTimberQuality(toCheck.getQuality());

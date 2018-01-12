@@ -36,11 +36,13 @@ public interface TimberDAO {
     int getNumberOfBoxes() throws PersistenceLayerException;
 
     /**
-     * for cost benefit
-     * @author Markus Fugger
-     * @param toCheck
-     * @return
-     * @throws PersistenceLayerException
+     * This method returns all boxes currently saved.
+     * @return list of all boxes
+     * @throws PersistenceLayerException if could not return a list of all boxes
      */
+    List<Timber> getAllBoxes() throws PersistenceLayerException;
+
+
     List<Timber> getBoxesForTask(Task toCheck) throws PersistenceLayerException;
+
 }
