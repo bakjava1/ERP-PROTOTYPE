@@ -8,10 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import org.slf4j.Logger;
@@ -28,6 +25,8 @@ public class CraneOperatorFXML {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private AssignmentService assignmentService;
+
+    private AssignmentDTO currentAssignment;
 
     @Autowired
     public CraneOperatorFXML(AssignmentService assignmentService) {
@@ -51,9 +50,6 @@ public class CraneOperatorFXML {
     private TableColumn col_open_assignmentBoxID;
 
     @FXML
-    private TableColumn col_open_assignmentDone;
-
-    @FXML
     private TableView<AssignmentDTO> table_done_assignment;
 
     @FXML
@@ -69,12 +65,23 @@ public class CraneOperatorFXML {
     private TableColumn col_done_assignmentBoxID;
 
     @FXML
-    private TableColumn col_done_assignmentDone;
+    private Label currentAssignment_amount;
+    @FXML
+    private Label currentAssignment_box;
+
+    @FXML
+    private Button btn_done;
+    @FXML
+    private Button btn_inProgress;
+    @FXML
+    private Button btn_inProgressAbort;
 
     @FXML
     public void initialize() {
         initializeAssignmentTable();
         updateAssignmentTable();
+        btn_done.setVisible(false);
+        btn_inProgressAbort.setVisible(false);
     }
 
     private void initializeAssignmentTable() {
@@ -84,7 +91,6 @@ public class CraneOperatorFXML {
         col_open_assignmentCreated.setCellValueFactory(new PropertyValueFactory("creation_date"));
         col_open_assignmentAmount.setCellValueFactory(new PropertyValueFactory("amount"));
         col_open_assignmentBoxID.setCellValueFactory(new PropertyValueFactory("box_id"));
-        //col_open_assignmentDone.setCellValueFactory(new PropertyValueFactory("isDone"));
 
         ObservableList<AssignmentDTO> assignments = FXCollections.observableArrayList();
         table_open_assignment.setItems(assignments);
@@ -93,7 +99,6 @@ public class CraneOperatorFXML {
         col_done_assignmentCreated.setCellValueFactory(new PropertyValueFactory("creation_date"));
         col_done_assignmentAmount.setCellValueFactory(new PropertyValueFactory("amount"));
         col_done_assignmentBoxID.setCellValueFactory(new PropertyValueFactory("box_id"));
-        //col_done_assignmentDone.setCellValueFactory(new PropertyValueFactory("isDone"));
 
         ObservableList<AssignmentDTO> assignments_done = FXCollections.observableArrayList();
         table_done_assignment.setItems(assignments_done);
@@ -150,8 +155,6 @@ public class CraneOperatorFXML {
 
                                 if (assignmentDTO == null) {
                                     setStyle("");
-                                } else if (assignmentDTO.isDone()) {
-                                    setStyle("-fx-background-color: lightgreen;");
                                 } else {
                                     setStyle("-fx-background-color: lightgray;");
                                 }
@@ -166,7 +169,7 @@ public class CraneOperatorFXML {
                     }
                 });
 
-        // set row factory in order to create the context menu and set row color
+        // set row factory in order to create context menu and set row color
         table_done_assignment.setRowFactory(
                 new Callback<TableView<AssignmentDTO>, TableRow<AssignmentDTO>>() {
                     @Override
@@ -196,18 +199,56 @@ public class CraneOperatorFXML {
     }
 
     @FXML
-    public void setDoneButtonPressed() {
-        LOG.info("setDone button pressed");
+    public void setInProgressButtonPressed() {
+        LOG.info("setInProgressButtonPressed button pressed");
+        AssignmentDTO assignmentDTO = this.currentAssignment;
 
-        // get the selected assignmentDTO from the table
-        if (table_open_assignment.getSelectionModel().getSelectedItem() == null) {
-            AlertBuilder alertBuilder = new AlertBuilder();
-            alertBuilder.showInformationAlert("Information", "Aufgabe ", "Bitte wählen Sie eine Aufgabe aus!");
+        if (assignmentDTO == null){
+            if (table_open_assignment.getSelectionModel().getSelectedItem() == null) {
+                AlertBuilder alertBuilder = new AlertBuilder();
+                alertBuilder.showInformationAlert("Information", "Aufgabe ", "Bitte wählen Sie eine Aufgabe aus!");
+                return;
+            } else {
+                assignmentDTO = table_open_assignment.getSelectionModel().getSelectedItem();
+            }
+        } else {
             return;
         }
 
-        AssignmentDTO assignmentDTO = table_open_assignment.getSelectionModel().getSelectedItem();
+        this.currentAssignment = assignmentDTO;
+
+        currentAssignment_amount.setText("Anzahl: "+this.currentAssignment.getAmount()+"");
+        currentAssignment_box.setText("Box Nr: "+this.currentAssignment.getBox_id());
+        table_open_assignment.getSelectionModel().clearSelection();
+        btn_done.setVisible(true);
+        btn_inProgress.setVisible(false);
+        btn_inProgressAbort.setVisible(true);
+    }
+
+    @FXML
+    public void abortInProgressButtonPressed(){
+        this.currentAssignment = null;
+        btn_done.setVisible(false);
+        btn_inProgress.setVisible(true);
+        btn_inProgressAbort.setVisible(false);
+        currentAssignment_amount.setText("");
+        currentAssignment_box.setText("");
+    }
+
+    @FXML
+    public void setDoneButtonPressed() {
+        LOG.info("setDone button pressed");
+        AssignmentDTO assignmentDTO = this.currentAssignment;
+
+        // get the selected assignmentDTO from the table
+        if (assignmentDTO == null) {
+            AlertBuilder alertBuilder = new AlertBuilder();
+            alertBuilder.showInformationAlert("Information", "Aufgabe abschließen", "Keine Aufgabe in Arbeit!");
+            return;
+        }
+
         setDone(assignmentDTO);
+        this.currentAssignment = null;
     }
 
     private void setDone(AssignmentDTO assignmentDTO){
@@ -245,7 +286,11 @@ public class CraneOperatorFXML {
                     AlertBuilder alertBuilder = new AlertBuilder();
                     alertBuilder.showInformationAlert("Information", "Aufgabe abgeschlossen", "Aufgabe " + assignmentDTO.getId() + " wurde als erledigt markiert.");
                     updateAssignmentTable();
-                    table_open_assignment.getSelectionModel().clearSelection();
+                    btn_done.setVisible(false);
+                    btn_inProgress.setVisible(true);
+                    btn_inProgressAbort.setVisible(false);
+                    currentAssignment_amount.setText("");
+                    currentAssignment_box.setText("");
                 }
 
                 @Override
