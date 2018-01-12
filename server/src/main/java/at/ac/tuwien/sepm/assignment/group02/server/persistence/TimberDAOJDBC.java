@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -118,8 +119,59 @@ public class TimberDAOJDBC implements TimberDAO{
 
     @Override
     public List<Timber> getAllBoxes() throws PersistenceLayerException {
-        //TODO return a list of all boxes
-        return null;
+
+
+        List<Timber> timberList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+
+            //connect to db
+            ps = dbConnection.prepareStatement("SELECT * FROM Timber");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Timber currentTimber = new Timber();
+
+                currentTimber.setBox_id(rs.getInt("ID"));
+                currentTimber.setWood_type(rs.getString("wood_type"));
+                currentTimber.setFestmeter(rs.getDouble("festmeter"));
+                currentTimber.setAmount(rs.getInt("amount"));
+                currentTimber.setLength(rs.getInt("length"));
+                currentTimber.setQuality(rs.getString("quality"));
+                currentTimber.setDiameter(rs.getInt("diameter"));
+                currentTimber.setPrice(rs.getInt("price"));
+                currentTimber.setLastEdited(rs.getString("last_edited"));
+
+
+                timberList.add(currentTimber);
+            }
+
+            if (timberList.size() == 0) {
+                //no open order was found
+                throw new PersistenceLayerException("No open orders found");
+            }
+
+        } catch (SQLException e) {
+            LOG.error("SQL Exception: " +  e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        } finally {
+            //close connections
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) { /* ignored */}
+            }
+
+        }
+        return timberList;
     }
 
     private void closeStatement() throws PersistenceLayerException {

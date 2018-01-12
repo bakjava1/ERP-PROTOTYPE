@@ -1,22 +1,34 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.RectangleDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.OptAlgorithmConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
+import at.ac.tuwien.sepm.assignment.group02.server.converter.TimberConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.*;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TimberDAO;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.TimberDAOJDBC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.floor;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
+
+
+@Service
 
 public class OptAlgorithmServiceImpl implements OptAlgorithmService{
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -25,17 +37,19 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
     private static TimberDAO timberDAO;
     private static OptAlgorithmConverter optAlgorithmConverter;
     private static TaskConverter taskConverter;
+    private static TimberConverter timberConverter;
 
-    private OptAlgorithmResult optAlgorithmResult= new OptAlgorithmResult();
+    private OptAlgorithmResultDTO optAlgorithmResult= new OptAlgorithmResultDTO();
     private OptimisationBuffer optBuffer = new OptimisationBuffer();
 
     private static final double SCHNITTFUGE = 4.2; //in mm TODO: in properties file or input?
-    private static final int MAX_STIELE_VORSCHNITT = 2; //in mm TODO: in properties file or input?
+    private static final int MAX_STIELE_VORSCHNITT = 10; //in mm TODO: in properties file or input?
 
+    public OptAlgorithmServiceImpl(){}
 
-    private Timber currentTimber;
-    private Task mainTask;
-    private List<Task> possibleSideTasks;
+    private TimberDTO currentTimber;
+    private TaskDTO mainTask;
+    private List<TaskDTO> possibleSideTasks;
 
     private int upperBound, lowerBound;
     private int vorschnittAnzahl, nachschnittAnzahl;
@@ -45,19 +59,23 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
     private double minMainTaskWasteRelation, minWaste;
 
 
+
     @Autowired
-    public OptAlgorithmServiceImpl(TimberDAO timberDAO, TaskDAO taskDAO, OptAlgorithmConverter optAlgorithmConverter, TaskConverter taskConverter) {
+    public OptAlgorithmServiceImpl(TimberDAO timberDAO, TaskDAO taskDAO, OptAlgorithmConverter optAlgorithmConverter, TimberConverter timberConverter, TaskConverter taskConverter) {
         OptAlgorithmServiceImpl.timberDAO = timberDAO;
         OptAlgorithmServiceImpl.taskDAO = taskDAO;
         OptAlgorithmServiceImpl.taskConverter = taskConverter;
+        OptAlgorithmServiceImpl.timberConverter = timberConverter;
         OptAlgorithmServiceImpl.optAlgorithmConverter = optAlgorithmConverter;
     }
 
     @Override
-    public OptAlgorithmResult getOptAlgorithmResult(Task task) throws PersistenceLayerException {
+
+    public OptAlgorithmResultDTO getOptAlgorithmResult(TaskDTO task) throws PersistenceLayerException {
         mainTask = task;
 
-        List<Timber> possibleTimbers = getPossibleTimbers(mainTask);
+
+        List<TimberDTO> possibleTimbers = getPossibleTimbers(mainTask);
         if(possibleTimbers.isEmpty()){
             //throw exception or set boolean
             return null;
@@ -71,7 +89,8 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         }
 
 
-        for(Timber timber : possibleTimbers) {
+        for(TimberDTO timber : possibleTimbers) {
+
             try {
                 calculateCut(timber);
             } catch (Exception e) {
@@ -88,55 +107,71 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
     }
 
     @Override
-    public List<Timber> getPossibleTimbers(Task mainTask) throws PersistenceLayerException {
-        List<Timber> possibleTimbers = new ArrayList<>();
-            List<Timber> timbers = timberDAO.getAllBoxes();
-            for(Timber timber : timbers){
-                //compare wood type
-                if (timber.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
-                    //area of main task is smaller than area of timber
-                    if((mainTask.getSize()*mainTask.getWidth())< pow(timber.getDiameter()/2,2)*Math.PI){
-                        //length of main task = length of timber
-                        if(mainTask.getLength()==timber.getLength()){
-                            //TODO quality
-                            //quality of main task is not better than best possible quality from timber
+    public List<TimberDTO> getPossibleTimbers(TaskDTO mainTask) throws PersistenceLayerException {
+        List<TimberDTO> possibleTimbers = new ArrayList<>();
+        List<TimberDTO> timbers =  new ArrayList<>();
 
-                            possibleTimbers.add(timber);
-                        }
+        List<Timber> timbersToConvert = timberDAO.getAllBoxes();
+
+        for (Timber timber: timbersToConvert) {
+            timbers.add(timberConverter.convertPlainObjectToRestDTO(timber));
+        }
+
+
+        for(TimberDTO timber : timbers){
+
+            //compare wood type
+
+            if (timber.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
+                //area of main task is smaller than area of timber
+                if((mainTask.getSize()*mainTask.getWidth())< pow(timber.getDiameter()/2,2)*Math.PI){
+                    //length of main task = length of timber
+                    if(mainTask.getLength()==timber.getLength()){
+                        //TODO quality
+                        //quality of main task is not better than best possible quality from timber
+
                     }
                 }
             }
+
+        }
         return possibleTimbers;
     }
 
     //TODO zwei Methoden und zwei Listen; jeweils eine für vertikal=links/rechts und horizontal=oben/unten
     @Override
-    public List<Task> getPossibleTasks(Task mainTask) throws PersistenceLayerException {
-        List<Task> possibleTasks = new ArrayList<>();
-            List<Task> tasks = taskDAO.getAllOpenTasks();
-            for(Task task : tasks){
-                //main task is not allowed as side task
-                if (task.getId() != mainTask.getId()) {
-                    //compare wood type
-                    if (task.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
-                        //length of side task is not bigger than length of main task
-                        if (task.getLength() == mainTask.getLength()) {
-                            //quality of side task is not better than quality of main task
-                            //TODO quality review
-                            if (task.getQuality().toLowerCase().equals(mainTask.getQuality().toLowerCase())) {
-                                possibleTasks.add(task);
-                            }
+    public List<TaskDTO> getPossibleTasks(TaskDTO mainTask) throws PersistenceLayerException {
+        List<TaskDTO> possibleTasks = new ArrayList<>();
+
+
+        List<Task> tasks = taskDAO.getAllOpenTasks();
+        for (Task task : tasks) {
+            //main task is not allowed as side task
+            if (task.getId() != mainTask.getId()) {
+                //compare wood type
+                if (task.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
+                    //length of side task is not bigger than length of main task
+                    if (task.getLength() == mainTask.getLength()) {
+                        //quality of side task is not better than quality of main task
+                        //TODO quality review
+                        if (task.getQuality().toLowerCase().equals(mainTask.getQuality().toLowerCase())) {
+                            possibleTasks.add(taskConverter.convertPlainObjectToRestDTO(task));
+
                         }
 
                     }
                 }
             }
+        }
+
+
         return possibleTasks;
     }
 
-    private void calculateCut(Timber timber) {
-        currentTimber = timber;
 
+    public void calculateCut(TimberDTO timber){
+
+        currentTimber = timber;
         currentDiameter = currentTimber.getDiameter();
         currentRadius = currentDiameter / 2;
 
@@ -150,6 +185,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
         nachschnittAnzahl = (int) Math.floor((a+SCHNITTFUGE)/(smallerSize+SCHNITTFUGE)); //abrunden
         vorschnittAnzahl = (int) Math.floor((a+SCHNITTFUGE)/(biggerSize+SCHNITTFUGE));
+
 
         //check if there is enough space for the main order
         if (nachschnittAnzahl == 0 || vorschnittAnzahl == 0) {
@@ -168,6 +204,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         currentCircleArea = (pow(currentRadius,2)*Math.PI);
 
 
+
         //starting optimisation for current main task (checking every side tasks)
         calculateSideTasks(0,0);
     }
@@ -178,14 +215,14 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         double x = (optBuffer.getRadius() - (optBuffer.getWidthHauptware() / 2));
         double yCoordinate = optBuffer.getRadius() - (optBuffer.getHeightHauptware() / 2);
 
-        List<Rectangle> rectangles = new ArrayList<>();
+        List<RectangleDTO> rectangles = new ArrayList<>();
 
         for (int k = 0; k < optBuffer.getNachschnittAnzahl(); k++){
             double xCoordinate = x;
 
             for (int j = 0;j < optBuffer.getVorschnittAnzahl();j++){
 
-                rectangles.add(new Rectangle(xCoordinate, yCoordinate, "green", optBuffer.getSmallerSize(), optBuffer.getBiggerSize()));
+                rectangles.add(new RectangleDTO(xCoordinate, yCoordinate, "green", optBuffer.getSmallerSize(), optBuffer.getBiggerSize()));
                 xCoordinate += optBuffer.getBiggerSize() + SCHNITTFUGE;
 
 
@@ -195,15 +232,17 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
         }
 
+        System.out.println(rectangles.get(0).getxCoordinate() +" -- rectangle found");
+
         //TODO set image or rectangles
-        //optAlgorithmResult.setRectangles(rectangles);
+        optAlgorithmResult.setCutViewInRectangle(rectangles);
 
     }
 
     //horizontal = top and bottom; vertical = left and right
     private void calculateSideTasks(int verticalIndex, int horizontalIndex) {
-        Task sideTaskHorizontal = possibleSideTasks.get(horizontalIndex);
-        Task sideTaskVertical = possibleSideTasks.get(verticalIndex);
+        TaskDTO sideTaskHorizontal = possibleSideTasks.get(horizontalIndex);
+        TaskDTO sideTaskVertical = possibleSideTasks.get(verticalIndex);
 
         //r = Radius, xM = yM = radius bzw Kreismittelpunkt
         //r*r = (x - xM) * (x - xM) + (y - yM) * (y - yM)
@@ -250,7 +289,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
                     optAlgorithmResult.setTimberResult(currentTimber);
 
-                    optBuffer.setNewValues(currentRadius, nachschnittAnzahl, vorschnittAnzahl, widthMainTask, heightMainTask, biggerSize, smallerSize, horizontalCount, widthSideTaskHorizontal, heightSideTaskHorizontal, verticalCount, widthSideTaskVertical, heightSideTaskVertical);
+                    //optBuffer.setNewValues(currentRadius, nachschnittAnzahl, vorschnittAnzahl, widthMainTask, heightMainTask, biggerSize, smallerSize, horizontalCount, widthSideTaskHorizontal, heightSideTaskHorizontal, verticalCount, widthSideTaskVertical, heightSideTaskVertical);
                 } else if (verticalIndex < possibleSideTasks.size()) {
                     calculateSideTasks(horizontalIndex, verticalIndex + 1);
                 } else if (horizontalIndex < possibleSideTasks.size()){
@@ -280,4 +319,5 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         }*/
 
     }
+
 }
