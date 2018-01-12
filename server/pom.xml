@@ -114,6 +114,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- java faker to create test database -->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>0.12</version>
+        </dependency>
+
         <!-- test dependencies -->
         <dependency>
             <groupId>junit</groupId>

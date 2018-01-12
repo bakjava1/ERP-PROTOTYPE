@@ -48,6 +48,14 @@ public class DBUtil {
         return connection;
     }
 
+    public void createTestData(){
+
+    }
+
+    public void createFinalDB(){
+
+    }
+
     public static void closeConnection(){
         LOG.debug("called closeConnection");
         try{
