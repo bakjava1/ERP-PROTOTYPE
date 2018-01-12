@@ -663,7 +663,11 @@ public class OfficeFXML {
         try {
             evaluation = costBenefitService.costValueFunction(currentOrderTaskList);
         } catch(ServiceLayerException e) {
-            alertBuilder.showErrorAlert("Fehler bei Kosten/Nutzen Schätzung", null, "Ein Fehler trat bei der Kosten/Nutzen Schätzung auf\n Reason: " + e.getMessage());
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    alertBuilder.showErrorAlert("Fehler bei Kosten/Nutzen Schätzung", null, "Ein Fehler trat bei der Kosten/Nutzen Schätzung auf\n Reason: " + e.getMessage());
+                }
+            });
             return;
         }
         Platform.runLater(new Runnable() {
