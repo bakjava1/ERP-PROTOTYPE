@@ -50,8 +50,9 @@ public class LumberServiceImpl implements LumberService {
         } catch (PersistenceLayerException e) {
             e.printStackTrace();
         }
+        Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
 
-        return lumberConverter.convertRestDTOToPlainObject(lumberDTO);
+        return lumber;
     }
 
     @Override
@@ -78,9 +79,9 @@ public class LumberServiceImpl implements LumberService {
 
         try {
 
-        Lumber validatedLumber = validator.validateLumber(filter);
+            Lumber validatedLumber = validator.validateLumber(filter);
 
-        LumberDTO filterDTO = lumberConverter.convertPlainObjectToRestDTO(validatedLumber);
+            LumberDTO filterDTO = lumberConverter.convertPlainObjectToRestDTO(validatedLumber);
 
 
             allLumber = lumberController.getAllLumber(filterDTO);
