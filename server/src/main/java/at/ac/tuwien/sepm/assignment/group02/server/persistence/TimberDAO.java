@@ -1,7 +1,10 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
+
+import java.util.List;
 
 /**
  * Persistence layer for timber management, connects to server on server
@@ -32,4 +35,12 @@ public interface TimberDAO {
      */
     int getNumberOfBoxes() throws PersistenceLayerException;
 
+    /**
+     * for cost benefit
+     * @author Markus Fugger
+     * @param toCheck
+     * @return
+     * @throws PersistenceLayerException
+     */
+    List<Timber> getBoxesForTask(Task toCheck) throws PersistenceLayerException;
 }

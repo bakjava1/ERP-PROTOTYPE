@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class TimberDAOJDBC implements TimberDAO{
@@ -115,6 +118,42 @@ public class TimberDAOJDBC implements TimberDAO{
         return numberOfBoxes;
     }
 
+    @Override
+    public List<Timber> getBoxesForTask(Task toCheck) throws PersistenceLayerException {
+
+        List<String> qualities = convertLumberQualityToTimberQuality(toCheck.getQuality());
+        List<Timber> boxList  = new ArrayList<>();
+        String selectSentence = "SELECT * FROM TIMBER WHERE LENGTH = ? AND QUALITY = ? AND WOOD_TYPE LIKE ?";
+
+        try{
+            stmt = dbConnection.prepareStatement(selectSentence);
+            stmt.setInt(1,toCheck.getLength());
+            stmt.setString(3,toCheck.getWood_type() + "%");
+            for(int i = 0; i < qualities.size();i++) {
+                stmt.setString(2,qualities.get(i));
+                rs = stmt.executeQuery();
+                while (rs.next()) {
+                    Timber toAdd = new Timber();
+                    toAdd.setBox_id(rs.getInt(1));
+                    toAdd.setWood_type(rs.getString(2));
+                    toAdd.setFestmeter(rs.getDouble(3));
+                    toAdd.setAmount(rs.getInt(4));
+                    toAdd.setMAX_AMOUNT(rs.getInt(5));
+                    toAdd.setLength(rs.getInt(6));
+                    toAdd.setQuality(rs.getString(7));
+                    toAdd.setDiameter(rs.getInt(8));
+                    toAdd.setPrice(rs.getInt(9));
+                    toAdd.setLast_edited(rs.getString(10));
+                    boxList.add(toAdd);
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error("SQL Exception: " + e.getMessage());
+            throw new PersistenceLayerException("Database Error");
+        }
+        return boxList;
+    }
+
     private void closeStatement() throws PersistenceLayerException {
         try {
             if(stmt != null)
@@ -125,5 +164,45 @@ public class TimberDAOJDBC implements TimberDAO{
             LOG.error("SQL Exception: " + e.getMessage());
             throw new PersistenceLayerException("Database Error");
         }
+    }
+
+    private List<String> convertLumberQualityToTimberQuality(String quality) {
+        List<String> temp = new ArrayList<>();
+        if(quality.equals("O")) {
+            temp.add("A");
+        }
+        if(quality.equals("I")) {
+            temp.add("A");
+            temp.add("B");
+        }
+        if(quality.equals("II")) {
+            temp.add("A");
+            temp.add("B");
+            temp.add("C");
+        }
+        if(quality.equals("III")) {
+            temp.add("B");
+            temp.add("C");
+            temp.add("CX");
+        }
+        if(quality.equals("IV")) {
+            temp.add("C");
+            temp.add("CX");
+        }
+        if(quality.equals("V")) {
+            temp.add("CX");
+        }
+        if(quality.equals("O/III")) {
+            temp.add("A");
+            temp.add("B");
+            temp.add("C");
+            temp.add("CX");
+        }
+        if(quality.equals("III/IV") || quality.equals("III/V")) {
+            temp.add("B");
+            temp.add("C");
+            temp.add("CX");
+        }
+        return temp;
     }
 }

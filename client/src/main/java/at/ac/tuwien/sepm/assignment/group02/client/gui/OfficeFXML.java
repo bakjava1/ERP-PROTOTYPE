@@ -325,13 +325,6 @@ public class OfficeFXML {
             success.setHeaderText(null);
             success.setContentText("Order created successfully!");
             success.showAndWait();
-        } catch (InvalidInputException e) {
-            LOG.warn(e.getMessage());
-            Alert error = new Alert(Alert.AlertType.ERROR);
-            error.setTitle("Creation failed");
-            error.setHeaderText(null);
-            error.setContentText("Order Creation failed!");
-            error.showAndWait();
         } catch (ServiceLayerException e) {
             LOG.warn(e.getMessage());
         }
@@ -490,7 +483,7 @@ public class OfficeFXML {
         gridPane.add(finishing,2,1);
 
         ComboBox<String> wood_type =  new ComboBox<>();
-        wood_type.setItems(FXCollections.observableArrayList(  "Fi", "Ta", "Lä", "Ki", "Zi"));
+        wood_type.setItems(FXCollections.observableArrayList(  "Fi", "Ta", "Lae"));
         wood_type.setMaxWidth(200);
         wood_type.getSelectionModel().selectFirst();
         wood_type.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
@@ -639,6 +632,7 @@ public class OfficeFXML {
                 alert.setHeaderText(null);
                 alert.setContentText("Task successfully created and added to your Order");
                 alert.showAndWait();
+                initiateCostValueFunction(null);
             } catch(InvalidInputException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error creating Task");
@@ -712,13 +706,53 @@ public class OfficeFXML {
             error.showAndWait();
             return;
         }
-        int randomized = costBenefitService.costValueFunctionStub(currentOrderSum);
-        if(randomized < 0) {
-            kn_result.setTextFill(Color.web("#dd0000"));
-            kn_result.setText(randomized+"");
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                costValueThread();
+            }
+
+        });
+        thread.start();
+    }
+
+
+    private void costValueThread() {
+        double evaluation;
+        try {
+            evaluation = costBenefitService.costValueFunction(currentOrderTaskList);
+        } catch(ServiceLayerException e) {
+            alertBuilder.showErrorAlert("Fehler bei Kosten/Nutzen Schätzung", null, "Ein Fehler trat bei der Kosten/Nutzen Schätzung auf\n Reason: " + e.getMessage());
+            return;
+        }
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                if(evaluation < 0) {
+                    kn_result.setTextFill(Color.web("#dd0000"));
+                    kn_result.setText("  " + evaluation + " €");
+                } else {
+                    kn_result.setTextFill(Color.web("#00dd00"));
+                    kn_result.setText("+ " + evaluation + " €");
+                }
+            }
+        });
+
+    }
+
+    public void deleteSelectedTask(ActionEvent actionEvent) {
+        if(table_addedTask.getSelectionModel().getSelectedIndex() == -1) {
+            alertBuilder.showErrorAlert("Kein Auftrag ausgewählt",null,"Bitte wählen sie einen Auftrag zum löschen aus");
         } else {
-            kn_result.setTextFill(Color.web("#00dd00"));
-            kn_result.setText(randomized+"");
+            int index = table_addedTask.getSelectionModel().getSelectedIndex();
+            int deletePrice = currentOrderTaskList.get(index).getPrice();
+            LOG.info("tablesize: " + table_addedTask.getItems().size() + " tasklistsize: " + currentOrderTaskList.size());
+            LOG.info("index: " + index);
+            table_addedTask.getItems().remove(index);
+            currentOrderTaskList.remove(index);
+            currentOrderSum -= deletePrice;
+            LOG.info("tablesize: " + table_addedTask.getItems().size() + " tasklistsize: " + currentOrderTaskList.size());
+            initiateCostValueFunction(null);
         }
     }
 
