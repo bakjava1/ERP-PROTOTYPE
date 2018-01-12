@@ -1,9 +1,11 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface LumberController {
@@ -43,6 +45,11 @@ public interface LumberController {
      * @throws PersistenceLayerException
      */
     void createLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
+
+
+    public  List<LumberDTO> createDTOs();
+
+
 
     /**
      * get lumber specified by id

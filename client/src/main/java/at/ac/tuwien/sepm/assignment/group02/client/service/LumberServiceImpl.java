@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerEx
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberController;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskController;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.client.converter.LumberConverter;
@@ -30,6 +31,7 @@ public class LumberServiceImpl implements LumberService {
     private static LumberConverter lumberConverter;
     private static TaskController taskController;
     private static Validator validator = new Validator();
+   // private static LumberService lumberService;
 
     @Autowired
     public LumberServiceImpl (LumberController lumberController, LumberConverter lumberConverter,TaskController taskController,Validator validator){
@@ -37,7 +39,9 @@ public class LumberServiceImpl implements LumberService {
         LumberServiceImpl.lumberConverter = lumberConverter;
         LumberServiceImpl.taskController = taskController;
         LumberServiceImpl.validator = validator;
+        //LumberServiceImpl.lumberService=lumberService;
     }
+
 
     /**
      * HELLO WORLD example

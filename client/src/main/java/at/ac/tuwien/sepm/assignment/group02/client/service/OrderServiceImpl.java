@@ -105,7 +105,6 @@ public class OrderServiceImpl implements OrderService {
             LOG.warn(e.getMessage());
         }
 
-
         List<Order> convertedOrders = convertTaskLists(allClosed);
 
         setPrices(convertedOrders);
@@ -187,14 +186,11 @@ public class OrderServiceImpl implements OrderService {
 
             for (Task task : order.getTaskList()) {
                 sum += task.getPrice();
-
-
             }
 
             order.setNetAmount(sum);
             order.setTaxAmount((int) (sum * 0.2));
             order.setGrossAmount(order.getNetAmount() + order.getTaxAmount());
-
         }
 
     }

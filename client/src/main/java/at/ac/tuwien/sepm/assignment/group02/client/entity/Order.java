@@ -68,6 +68,7 @@ public class Order {
 
 
     public List<Task> getTaskList() {
+
         return taskList;
     }
 
@@ -134,6 +135,7 @@ public class Order {
 
 
     public int getTaxAmount() {
+
         return taxAmount;
     }
 

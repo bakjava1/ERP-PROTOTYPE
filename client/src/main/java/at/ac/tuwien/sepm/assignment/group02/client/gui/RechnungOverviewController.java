@@ -1,11 +1,11 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
-import at.ac.tuwien.sepm.assignment.group02.client.MainApplication;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
+import at.ac.tuwien.sepm.assignment.group02.client.util.InvoicePrinter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by raquelsima on 10.01.18.
@@ -33,8 +32,9 @@ import java.util.concurrent.TimeUnit;
 public class RechnungOverviewController {
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Order currentOrder = new Order();
+    private static Task currentTaskt=new Task();
     private static List<Task> currentOrderTaskList = new ArrayList<>();
-    private static int currentOrderIndex = 1;
+    //private static int currentOrderIndex = 1;
     private static int currentOrderSum = 0;
 
 
@@ -50,6 +50,9 @@ public class RechnungOverviewController {
     private TableColumn col_taskDescription;
 
     @FXML
+    private TableColumn col_taxAmount;
+
+    @FXML
     private TableColumn col_taskNr;
     @FXML
     private AnchorPane printPage;
@@ -62,6 +65,9 @@ public class RechnungOverviewController {
     private TableView<Order> bill_table;
 
     @FXML
+    private TableView<Task> invoiceItemsTable;
+
+    @FXML
     private TableColumn col_taskLength;
 
     @FXML
@@ -69,22 +75,10 @@ public class RechnungOverviewController {
 
     @FXML
     private TableColumn col_taskSize;
-    @FXML
-    private TableColumn col_billID;
 
-    @FXML
-    private TableColumn col_billCostumerName;
-
-    @FXML
-    private TableColumn col_billTaskAmount;
-
-    @FXML
-    private TableColumn col_billAmount;
     @FXML
     private TableColumn col_billPrice;
 
-    @FXML
-    private TableColumn col_billGrossSum;
     @FXML
     private Label sumNet;
     @FXML
@@ -104,6 +98,8 @@ public class RechnungOverviewController {
 
     private TaskService taskService;
     private OrderService orderService;
+    ObservableList<Task> orderTasks = FXCollections.observableArrayList();
+    ObservableList<Order> orders=FXCollections.observableArrayList();
 
 
     @Autowired
@@ -114,16 +110,17 @@ public class RechnungOverviewController {
 
 @FXML
     public void initialize(){
-    bill_table.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+    //bill_table.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-    col_billID.setCellValueFactory(new PropertyValueFactory<Order, Integer>("ID"));
+    /*col_billID.setCellValueFactory(new PropertyValueFactory<Order, Integer>("ID"));
     col_billCostumerName.setCellValueFactory(new PropertyValueFactory<Order, String>("customerName"));
     col_billTaskAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("taskAmount"));
     col_billAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
     col_billGrossSum.setCellValueFactory(new PropertyValueFactory<Order, Integer>("grossAmount"));
+    col_taxAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("taxAmount"));*/
 
 
-    task_table.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+    invoiceItemsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
     col_taskNr.setCellValueFactory(new PropertyValueFactory<Task, Integer>("id"));
     col_taskQuantity.setCellValueFactory(new PropertyValueFactory<Task, Integer>("quantity"));
@@ -131,23 +128,24 @@ public class RechnungOverviewController {
     col_taskSize.setCellValueFactory(new PropertyValueFactory<Task, Integer>("size"));
     col_taskWidth.setCellValueFactory(new PropertyValueFactory<Task, Integer>("width"));
     col_taskLength.setCellValueFactory(new PropertyValueFactory<Task, Integer>("length"));
+    col_billPrice.setCellValueFactory(new PropertyValueFactory<Task, Integer>("price"));
 
 
 
-    ObservableList<Task> orderTasks = FXCollections.observableArrayList();
-    task_table.setItems(orderTasks);
-    ObservableList<Order> orders=FXCollections.observableArrayList();
+   // ObservableList<Task> orderTasks = FXCollections.observableArrayList();
+    invoiceItemsTable.setItems(orderTasks);
+
+    //ObservableList<Order> orders=FXCollections.observableArrayList();
     bill_table.setItems(orders);
 
     l_sumorders.setText(currentOrderSum + " €");
     updateBillTable();
-
+    rechnungAnzeigen();
 
 }
 
     @FXML
-    public void rechnungAnzeigen(ActionEvent actionEvent){
-
+    public void rechnungAnzeigen(){
         LOG.info("RechnungAnzeigenBtn clicked");
 
         if (bill_table.getSelectionModel().getSelectedItem() == null) {
@@ -158,11 +156,9 @@ public class RechnungOverviewController {
 
         try {
 
-           //  order=new Order();
+            InvoicePrinter invoicePrinter=new InvoicePrinter();
             FXMLLoader fxmlLoader = new FXMLLoader(OfficeFXML.class.getResource("/fxml/rechnungOverview.fxml"));
-
-
-
+            fxmlLoader.setControllerFactory(param -> param.isInstance(invoicePrinter) ? invoicePrinter : null);
 
             Stage stage = new Stage();
             stage.setTitle("Detail Ansicht Rechnung");
@@ -183,22 +179,18 @@ public class RechnungOverviewController {
             sumGross.setText("€ "+order.getGrossAmount());
             invoiceNumber.setText("Rechnung #"+order.getID());
 
-            // falta la tablatask
+            //alle Felder von Task holen
+
 
             PrinterJob printerJob = PrinterJob.createPrinterJob();
             if (printerJob.showPrintDialog(stage)) {
                 printerJob.printPage(printPage);
             }
 
-
         } catch (IOException e) {
             LOG.error(e.getMessage());
 
-        }
-
-    }
-
-
+        }}
 
     private void updateBillTable() {
 
@@ -225,6 +217,6 @@ public class RechnungOverviewController {
             bill_table.refresh();
         }
 
-    }
+    }}
 
-}
+

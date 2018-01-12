@@ -63,6 +63,7 @@ public class InvoicePrinter implements Printable {
 
         // tell the caller that this page is part
         // of the printed document
+
         return PAGE_EXISTS;
     }
 }

@@ -86,6 +86,11 @@ public class OfficeFXML {
     private Label invoiceNumber;
     @FXML
     private Label date;
+    @FXML
+    private TableColumn col_taxAmount;
+    @FXML
+    private TableColumn col_billPrice;
+
 
 
     @FXML
@@ -181,6 +186,8 @@ public class OfficeFXML {
     @FXML
     TableView<Order> table_bill;
 
+    @FXML
+    TableView<Task> task_table;
 
 
     private OrderService orderService;
@@ -234,7 +241,6 @@ public class OfficeFXML {
         initTimberTab();
         updateTable();
         updateBillTable();
-
 
         // Auto resize columns
         table_bill.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -723,7 +729,7 @@ public class OfficeFXML {
 
 
                 try {
-
+                   Task task=new Task();
                     FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/rechnungOverview.fxml"));
 
                     Stage stage = new Stage();
@@ -745,7 +751,7 @@ public class OfficeFXML {
                     sumGross.setText("€ "+order.getGrossAmount());
                     invoiceNumber.setText("Rechnung #"+order.getID());
 
-                   // nocht task holen
+
 
                     PrinterJob printerJob = PrinterJob.createPrinterJob();
                     if (printerJob.showPrintDialog(stage)) {

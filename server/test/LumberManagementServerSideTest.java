@@ -94,7 +94,7 @@ public class LumberManagementServerSideTest {
         lumberService = new LumberServiceImpl(lumberDAO, lumberConverter, validateLumber);
         lumberController = new LumberControllerImpl(lumberService);
 
-        LOG.debug("task management test setup initiated");
+        LOG.debug("lumber management test setup initiated");
     }
 
     @Before
@@ -150,14 +150,12 @@ public class LumberManagementServerSideTest {
 
     @AfterClass
     public static void teardown() {
-        LOG.debug("task management test teardown initiated");
+        LOG.debug("lumber management test teardown initiated");
 
         DBUtil.closeConnection();
 
-        LOG.debug("task management test teardown completed");
+        LOG.debug("lumber management test teardown completed");
     }
-
-
 
     private static void activateLumbers() {
         String activateTasks = "UPDATE LUMBER SET QUANTITY = 0 WHERE ID = 1 OR ID = 2 OR ID = 3 OR ID = 4 OR ID = 5";

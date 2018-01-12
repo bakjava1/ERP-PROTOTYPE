@@ -252,7 +252,6 @@ public class LeadWorkerFXML {
                     LOG.error(e.getMessage());
 
                 }
-
             }
 
             @Override

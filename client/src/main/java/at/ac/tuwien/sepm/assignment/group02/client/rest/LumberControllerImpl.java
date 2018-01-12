@@ -39,6 +39,12 @@ public class LumberControllerImpl implements LumberController {
     @Override
     public void createLumber(LumberDTO lumberDTO) {
 
+
+    }
+
+    @Override
+    public List<LumberDTO> createDTOs() {
+        return null;
     }
 
     @Override
@@ -85,6 +91,11 @@ public class LumberControllerImpl implements LumberController {
 
     }
 
+    /**
+     * update an existing lumber
+     * @param lumberDTO lumber to update
+     * @throws PersistenceLayerException
+     */
     @Override
     public void updateLumber(@RequestBody LumberDTO lumberDTO)  throws PersistenceLayerException {
         LOG.debug("Sending request for lumber updating to server");
@@ -102,9 +113,13 @@ public class LumberControllerImpl implements LumberController {
         }
     }
 
+    /**
+     * delete an existing lumber
+     * @param lumberDTO lumber to remove
+     * @throws PersistenceLayerException
+     */
     @Override
     public void removeLumber(@RequestBody LumberDTO lumberDTO) throws PersistenceLayerException {
-
             LOG.debug("sending lumber to be deleted to server");
 
             try{

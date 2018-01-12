@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 

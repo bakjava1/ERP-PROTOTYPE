@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.client.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class Lumber {
 
 

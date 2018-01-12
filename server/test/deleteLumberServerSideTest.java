@@ -48,7 +48,7 @@ public class deleteLumberServerSideTest {
     @BeforeClass
     public static void setUp() throws EntityCreationException {
 
-        LOG.debug("lumber management test setup initiated");
+        LOG.debug(" delete lumber management test setup initiated");
         dbConnection = DBUtil.getConnection();
         lumberDAO=new LumberDAOJDBC(dbConnection);
 
@@ -69,7 +69,7 @@ public class deleteLumberServerSideTest {
         lumberController= new LumberControllerImpl(lumberService);
         lumberConverter=new LumberConverter();
 
-        LOG.debug("lumber management test setup completed");
+        LOG.debug("delete lumber management test setup completed");
 
     }
 
