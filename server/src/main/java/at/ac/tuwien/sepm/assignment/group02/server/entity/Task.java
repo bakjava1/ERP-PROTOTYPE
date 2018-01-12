@@ -18,7 +18,11 @@ public class Task {
     private int quantity;
     private int produced_quantity; // (= reserved lumber)
     private int price;
+
     private boolean done; // (true if produced_quantity == quantity)
+    private boolean in_progress; // (true if crane operator assignment was created)
+
+    private boolean deleted;
 
     public Task() {
 
@@ -142,5 +146,21 @@ public class Task {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public boolean isIn_progress() {
+        return in_progress;
+    }
+
+    public void setIn_progress(boolean in_progress) {
+        this.in_progress = in_progress;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

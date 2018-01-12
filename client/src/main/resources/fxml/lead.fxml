@@ -32,7 +32,8 @@
                                  <TableColumn fx:id="task_col_length" prefWidth="58.0" text="Länge" />
                                  <TableColumn fx:id="task_col_quantity" prefWidth="92.0" text="Anzahl" />
                                  <TableColumn fx:id="task_col_produced_quantity" prefWidth="90.0" text="Produziert" />
-                                 <TableColumn fx:id="task_col_done" prefWidth="72.0" text="Done" visible="false" />
+                                 <TableColumn fx:id="task_col_done" prefWidth="0.0" text="Fertig" visible="false" />
+                                 <TableColumn fx:id="task_col_in_progress" prefWidth="0.0" text="In_Arbeit" visible="false" />
                              </columns>
                          </TableView>
 

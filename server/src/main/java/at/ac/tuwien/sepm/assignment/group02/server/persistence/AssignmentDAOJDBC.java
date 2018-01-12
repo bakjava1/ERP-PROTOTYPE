@@ -33,12 +33,16 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
                 "INSERT INTO ASSIGNMENT(ID, creation_date, amount, box_ID, isDone, task_id) VALUES"+
                 "(default, now(), ?, ?, false, ?)";
 
+        String update = "UPDATE TASK SET IN_PROGRESS=true WHERE ID=?";
+
         try {
 
             PreparedStatement ps = dbConnection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
+
             ps.setInt(1,assignment.getAmount());
             ps.setInt(2,assignment.getBox_id());
             ps.setInt(3,assignment.getTask_id());
+
             ps.executeUpdate();
 
             ResultSet generatedKey = ps.getGeneratedKeys();
@@ -49,6 +53,11 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
 
             generatedKey.close();
             ps.close();
+
+            PreparedStatement ps2 = dbConnection.prepareStatement(update);
+            ps2.setInt(1,assignment.getTask_id());
+            ps2.executeUpdate();
+            ps2.close();
 
         } catch (SQLException e) {
             LOG.warn("SQLException: {}", e.getMessage());
@@ -94,7 +103,7 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
 
         List<Assignment> assignmentList = new LinkedList<>();
         Assignment assignment;
-        String getAllAssignments = "SELECT ID, CREATION_DATE, AMOUNT, BOX_ID, ISDONE, TASK_ID FROM ASSIGNMENT";
+        String getAllAssignments = "SELECT ID, CREATION_DATE, AMOUNT, BOX_ID, ISDONE, TASK_ID FROM ASSIGNMENT WHERE ISDONE = 1";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(getAllAssignments);
