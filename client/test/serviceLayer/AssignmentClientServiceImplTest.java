@@ -1,3 +1,5 @@
+package serviceLayer;
+
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
@@ -12,13 +14,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
 
 // @RunWith attach a runner to initialize the test data
 @RunWith(MockitoJUnitRunner.class)
-public class AssignmentClientServiceImplTest_setDone {
+public class AssignmentClientServiceImplTest {
 
     @Mock
     private AssignmentController assignmentController;
@@ -26,29 +29,76 @@ public class AssignmentClientServiceImplTest_setDone {
     @Mock
     private ValidateAssignmentDTO validateAssignmentDTO;
 
+    @Test
+    public void CreateAssignments_works() throws Exception {
+        AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
+        assignmentService.createAssignment(any(AssignmentDTO.class));
+        verify(validateAssignmentDTO, times(1)).isValid(any(AssignmentDTO.class));
+        verify(assignmentController, times(1)).createAssignment(any(AssignmentDTO.class));
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void CreateAssignments_ValidationException() throws Exception {
+        AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
+        doThrow(InvalidInputException.class).when(validateAssignmentDTO).isValid(any(AssignmentDTO.class)); // throws InvalidInputException
+        assignmentService.createAssignment(any(AssignmentDTO.class));
+    }
+
+    @Test(expected = ServiceLayerException.class)
+    public void CreateAssignments_RestException() throws Exception {
+        AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
+        doThrow(PersistenceLayerException.class).when(assignmentController).createAssignment(any(AssignmentDTO.class));
+        assignmentService.createAssignment(any(AssignmentDTO.class));
+        verify(validateAssignmentDTO, times(1)).isValid(any(AssignmentDTO.class));
+    }
 
     @Test
     public void getAllOpenAssignments_works() throws Exception {
-
         AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
 
-        List<AssignmentDTO> assignmentDTOList;
-        assignmentDTOList = assignmentService.getAllOpenAssignments();
+        List<AssignmentDTO> assignmentDTOList1 = new ArrayList<>();
+        List<AssignmentDTO> assignmentDTOList2;
 
-        doReturn(assignmentDTOList).when(assignmentController).getAllOpenAssignments();
-        verify(assignmentController, times(1)).getAllOpenAssignments();
+        AssignmentDTO a1 = new AssignmentDTO();
+        AssignmentDTO a2 = new AssignmentDTO();
+        assignmentDTOList1.add(a1);
+        assignmentDTOList1.add(a2);
 
-        Assert.assertSame(assignmentDTOList, assignmentService.getAllOpenAssignments());
+        when(assignmentController.getAllOpenAssignments()).thenReturn(assignmentDTOList1);
+        assignmentDTOList2 = assignmentService.getAllOpenAssignments();
+        Assert.assertSame(assignmentDTOList1, assignmentDTOList2);
     }
 
     @Test(expected = ServiceLayerException.class)
     public void getAllOpenAssignments_restLayerException() throws Exception {
+        AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
+        doThrow(PersistenceLayerException.class).when(assignmentController).getAllOpenAssignments();
+        assignmentService.getAllOpenAssignments();
+    }
 
+    @Test
+    public void getAllAssignments_works() throws Exception {
         AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
 
-        doThrow(PersistenceLayerException.class).when(assignmentController).getAllOpenAssignments();
+        List<AssignmentDTO> assignmentDTOList1 = new ArrayList<>();
+        List<AssignmentDTO> assignmentDTOList2;
 
-        assignmentService.getAllOpenAssignments();
+        AssignmentDTO a1 = new AssignmentDTO();
+        AssignmentDTO a2 = new AssignmentDTO();
+        assignmentDTOList1.add(a1);
+        assignmentDTOList1.add(a2);
+
+        when(assignmentController.getAllAssignments()).thenReturn(assignmentDTOList1);
+        assignmentDTOList2 = assignmentService.getAllAssignments();
+        Assert.assertSame(assignmentDTOList1, assignmentDTOList2);
+
+    }
+
+    @Test(expected = ServiceLayerException.class)
+    public void getAllAssignments_restLayerException() throws Exception {
+        AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
+        doThrow(PersistenceLayerException.class).when(assignmentController).getAllAssignments();
+        assignmentService.getAllAssignments();
     }
 
     @Test
@@ -83,7 +133,7 @@ public class AssignmentClientServiceImplTest_setDone {
 
         AssignmentDTO assignmentDTO = new AssignmentDTO();
         assignmentDTO.setDone(false);
-        doThrow(new PersistenceLayerException("server error")).when(assignmentController).setDone(assignmentDTO);
+        doThrow(PersistenceLayerException.class).when(assignmentController).setDone(assignmentDTO);
 
         assignmentService.setDone(assignmentDTO);
     }

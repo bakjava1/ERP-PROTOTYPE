@@ -140,11 +140,18 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
+                ", invoiceNumber=" + invoiceNumber +
+                ", invoiceDate=" + invoiceDate +
+                ", deliveryDate=" + deliveryDate +
                 ", customerName='" + customerName + '\'' +
                 ", customerAddress='" + customerAddress + '\'' +
                 ", customerUID='" + customerUID + '\'' +
                 ", orderDate=" + orderDate +
                 ", isPaid=" + isPaid +
+                ", taskList=" + taskList +
+                ", grossAmount=" + grossAmount +
+                ", netAmount=" + netAmount +
+                ", taxAmount=" + taxAmount +
                 '}';
     }
 }

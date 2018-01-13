@@ -1,13 +1,13 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.converter.TaskConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskController;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
-import at.ac.tuwien.sepm.assignment.group02.client.converter.TaskConverter;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +38,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getAllOpenTasks() {
-        return null;
+    public List<TaskDTO> getAllOpenTasks() throws ServiceLayerException {
+        LOG.debug("getAllOpenTasks called");
+        List<TaskDTO> allOpen;
+
+        try {
+            allOpen = taskController.getAllOpenTasks();
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
+
+        return allOpen;
     }
 
     @Override

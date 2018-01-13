@@ -11,6 +11,7 @@ public class AddTimberValidatorTest {
 
     @BeforeClass
     public static void setup(){
+
         timberValidator = new ValidateTimber();
     }
 

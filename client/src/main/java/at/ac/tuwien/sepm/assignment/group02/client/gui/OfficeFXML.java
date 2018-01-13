@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
+import at.ac.tuwien.sepm.assignment.group02.client.MainApplication;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
@@ -10,6 +11,9 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.CostBenefitService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
+import at.ac.tuwien.sepm.assignment.group02.client.util.AlertBuilder;
+import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_SpringFXMLLoader;
+import at.ac.tuwien.sepm.assignment.group02.client.util.InvoicePrinter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,21 +21,33 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 
+
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class OfficeFXML {
@@ -43,15 +59,48 @@ public class OfficeFXML {
 
     @FXML
     private Button bt_deleteOrder;
-
     @FXML
     private Button bt_acceptOrder;
-
+    @FXML
+    private Button bt_rechnungAnzeigen;
     @FXML
     private Label l_sumorders;
 
+
+    @FXML
+    private AnchorPane printPage;
+
+    @FXML
+    private Label sumNet;
+    @FXML
+    private Label sumGross;
+    @FXML
+    private Label sumTax;
+    @FXML
+    private Label address;
+    @FXML
+    private Label nameL;
+    @FXML
+    private Label uid;
+    @FXML
+    private Label invoiceNumber;
+    @FXML
+    private Label date;
+
+
     @FXML
     private Label kn_result;
+
+    @FXML
+    private Label dateLabel;
+    @FXML
+    private Label billCostumerNameLabel;
+    @FXML
+    private Label billTaskAmountLabel;
+    @FXML
+    private Label billAmountLabel;
+    @FXML
+    private Label billGrossSum;
 
     @FXML
     private TableColumn col_taskLength;
@@ -83,6 +132,7 @@ public class OfficeFXML {
     @FXML
     private TextField tf_order_customername;
 
+
     @FXML
     private Tab tab_timber;
 
@@ -110,7 +160,6 @@ public class OfficeFXML {
     @FXML
     private TableColumn col_grossSum;
 
-
     @FXML
     private TableColumn col_billID;
 
@@ -137,6 +186,7 @@ public class OfficeFXML {
     private TaskService taskService;
     private CostBenefitService costBenefitService;
     private AlertBuilder alertBuilder = new AlertBuilder();
+    private Order order;
 
     @Autowired
     public OfficeFXML(OrderService orderService, TimberService timberService, TaskService taskService, CostBenefitService costBenefitService){
@@ -150,23 +200,20 @@ public class OfficeFXML {
     void initialize() {
         table_openOrder.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        col_orderID.setCellValueFactory(new PropertyValueFactory("ID"));
-        col_costumerName.setCellValueFactory(new PropertyValueFactory("customerName"));
-        col_taskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
-        col_amount.setCellValueFactory(new PropertyValueFactory("quantity"));
-        col_grossSum.setCellValueFactory(new PropertyValueFactory("netAmount"));
+        col_orderID.setCellValueFactory(new PropertyValueFactory<Order, Integer>("ID"));
+        col_costumerName.setCellValueFactory(new PropertyValueFactory<Order, String>("customerName"));
+        col_taskAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("taskAmount"));
+        col_amount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
+        col_grossSum.setCellValueFactory(new PropertyValueFactory<Order, Integer>("grossAmount"));
 
 
         table_bill.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        col_billID.setCellValueFactory(new PropertyValueFactory("ID"));
-        col_billCostumerName.setCellValueFactory(new PropertyValueFactory("customerName"));
-        col_billTaskAmount.setCellValueFactory(new PropertyValueFactory("taskAmount"));
-        col_billAmount.setCellValueFactory(new PropertyValueFactory("quantity"));
-        col_billGrossSum.setCellValueFactory(new PropertyValueFactory("netAmount"));
-
-
-
+        col_billID.setCellValueFactory(new PropertyValueFactory<Order, Integer>("ID"));
+        col_billCostumerName.setCellValueFactory(new PropertyValueFactory<Order, String>("customerName"));
+        col_billTaskAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("taskAmount"));
+        col_billAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
+        col_billGrossSum.setCellValueFactory(new PropertyValueFactory<Order, Integer>("grossAmount"));
 
         col_taskNr.setCellValueFactory(
                 new PropertyValueFactory<Task, Integer>("id")
@@ -189,10 +236,23 @@ public class OfficeFXML {
 
         ObservableList<Task> orderTasks = FXCollections.observableArrayList();
         table_addedTask.setItems(orderTasks);
+        ObservableList<Order> orders=FXCollections.observableArrayList();
+        table_bill.setItems(orders);
         l_sumorders.setText(currentOrderSum + " €");
         initTimberTab();
         updateTable();
         updateBillTable();
+
+
+        // Auto resize columns
+        table_bill.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // clear rechnung
+//        showRechnungDetails(null);
+
+        // Listen for selection changes
+        table_bill.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showRechnungDetails(newValue));
+
     }
 
     @FXML
@@ -506,14 +566,28 @@ public class OfficeFXML {
         gridPane.add(l_width,0,5,2,1);
         gridPane.add(width,2,5);
 
-        TextField length = new TextField("");
-        length.textProperty().addListener(new ChangeListener<String>() {
+        ComboBox<String> length =  new ComboBox<>();
+        length.setItems(FXCollections.observableArrayList(  "3500","4000","4500","5000"));
+        length.setMaxWidth(200);
+        length.getSelectionModel().selectFirst();
+        length.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    length.setText(newValue.replaceAll("[^\\d]", ""));
-                }
+            public ListCell<String> call(ListView<String> param) {
+                ListCell cell = new ListCell<String>() {
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        getListView().setMaxWidth(200);
+                        if (!empty) {
+                            setText(item);
+                        } else {
+                            setText(null);
+                        }
+                    }
+                };
+                return cell;
             }
         });
         Label l_length =  new Label("Länge:");
@@ -553,7 +627,7 @@ public class OfficeFXML {
         Platform.runLater(description::requestFocus);
         dialog.setResultConverter((ButtonType button) -> {
             if (button == ButtonType.OK) {
-                return new UnvalidatedTask(description.getText(),finishing.getSelectionModel().getSelectedItem(),wood_type.getSelectionModel().getSelectedItem(),quality.getSelectionModel().getSelectedItem(),size.getText(),width.getText(),length.getText(),quantity.getText(),cost.getText());
+                return new UnvalidatedTask(description.getText(),finishing.getSelectionModel().getSelectedItem(),wood_type.getSelectionModel().getSelectedItem(),quality.getSelectionModel().getSelectedItem(),size.getText(),width.getText(),length.getSelectionModel().getSelectedItem(),quantity.getText(),cost.getText());
             }
             return null;
         });
@@ -597,7 +671,7 @@ public class OfficeFXML {
             return;
         }
 
-        boolean accept = alertBuilder.showConfirmationAlert("Rechnung abrechnen", "Wollen Sie die Rechnung mit Nummer " + selectedOrder.getID() + " abrechnen?", "");
+        boolean accept = alertBuilder.showConfirmationAlert("Rechnung abrechnen", "Wollen Sie die Bestellung mit Nummer " + selectedOrder.getID() + " abrechnen?", "");
         if(accept){
             try {
                 orderService.invoiceOrder(selectedOrder);
@@ -699,4 +773,83 @@ public class OfficeFXML {
             initiateCostValueFunction(null);
         }
     }
+
+
+    @FXML
+    public void rechnungAnzeigenBtnClicked(ActionEvent actionEvent){
+        LOG.info("RechnungAnzeigenBtn clicked");
+
+        if (table_bill.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        Order order = table_bill.getSelectionModel().getSelectedItem();
+
+                try {
+
+                    FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/rechnungOverview.fxml"));
+
+                    Stage stage = new Stage();
+                    stage.setTitle("Detail Ansicht Rechnung");
+                    stage.setWidth(680);
+                    stage.setHeight(900);
+                    stage.centerOnScreen();
+                    fxmlLoader.setController(this);
+
+                    stage.setScene(new Scene(fxmlLoader.load()));
+
+                    stage.show();
+                    nameL.setText(order.getCustomerName());
+                    address.setText(order.getCustomerAddress());
+                    uid.setText(order.getCustomerUID());
+                    date.setText(""+order.getInvoiceDate());
+                    sumNet.setText("€ " +order.getNetAmount());
+                    sumTax.setText("€ "+order.getTaxAmount());
+                    sumGross.setText("€ "+order.getGrossAmount());
+                    invoiceNumber.setText("Rechnung #"+order.getID());
+
+
+
+                    PrinterJob printerJob = PrinterJob.createPrinterJob();
+                    if (printerJob.showPrintDialog(stage)) {
+                        printerJob.printPage(printPage);
+                    }
+
+
+                } catch (IOException e) {
+                    LOG.error(e.getMessage());
+
+                }
+    }
+
+    /**
+     * show details about the bill
+     * @param order
+     */
+
+    private void showRechnungDetails(Order order) {
+
+        if (order == null) {
+            dateLabel.setText("");
+            billCostumerNameLabel.setText("");
+            billTaskAmountLabel.setText("");
+            billAmountLabel.setText("");
+            billGrossSum.setText("");
+            return;
+        }
+
+        dateLabel.setText(String.valueOf(order.getInvoiceDate()));
+        billCostumerNameLabel.setText(order.getCustomerName());
+        billTaskAmountLabel.setText(String.valueOf(order.getTaskAmount()));
+        billAmountLabel.setText(Integer.toString(order.getQuantity()));
+        billGrossSum.setText("€ " + String.valueOf(order.getGrossAmount()));
+
+
+    }
+
+
+
+
+
 }
+
+

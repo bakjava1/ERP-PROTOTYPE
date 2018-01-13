@@ -1,9 +1,10 @@
-package at.ac.tuwien.sepm.assignment.group02.client.gui;
+package at.ac.tuwien.sepm.assignment.group02.client.util;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.Region;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import java.util.Optional;
 public class AlertBuilder {
     public void showInformationAlert(String title, String header, String content){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
@@ -19,6 +21,7 @@ public class AlertBuilder {
 
     public void showErrorAlert(String title, String header, String content){
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
@@ -27,6 +30,7 @@ public class AlertBuilder {
 
     public boolean showConfirmationAlert(String title, String header, String content){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
@@ -41,6 +45,7 @@ public class AlertBuilder {
 
     public String showCustomConfirmationAlert(String title, String header, String content, String[] buttonText){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);

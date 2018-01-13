@@ -83,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         List<Order> convertedOrders = convertTaskLists(allOpen);
-        setNetPrice(convertedOrders);
+        setPrices(convertedOrders);
 
         return convertedOrders;
 
@@ -108,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
 
         List<Order> convertedOrders = convertTaskLists(allClosed);
 
-        setNetPrice(convertedOrders);
+        setPrices(convertedOrders);
 
         return convertedOrders;
     }
@@ -179,7 +179,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    private void setNetPrice(List<Order> orders) {
+    private void setPrices(List<Order> orders) {
 
         for (Order order : orders) {
 
@@ -188,9 +188,12 @@ public class OrderServiceImpl implements OrderService {
             for (Task task : order.getTaskList()) {
                 sum += task.getPrice();
 
+
             }
 
             order.setNetAmount(sum);
+            order.setTaxAmount((int) (sum * 0.2));
+            order.setGrossAmount(order.getNetAmount() + order.getTaxAmount());
 
         }
 

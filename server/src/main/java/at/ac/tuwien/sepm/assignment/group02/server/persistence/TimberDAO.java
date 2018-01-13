@@ -22,11 +22,11 @@ public interface TimberDAO {
     void createTimber(Timber timber) throws PersistenceLayerException;
 
     /**
-     * This method updates a round timber record.
+     * This method removes timber from the round timber store.
      * @param timber the updated round timber entity
      * @throws PersistenceLayerException
      */
-    void updateTimber(Timber timber) throws PersistenceLayerException;
+    void removeTimber(Timber timber) throws PersistenceLayerException;
 
     /**
      * This method returns the number of boxes currently existing in the database.
@@ -36,11 +36,13 @@ public interface TimberDAO {
     int getNumberOfBoxes() throws PersistenceLayerException;
 
     /**
-     * for cost benefit
-     * @author Markus Fugger
-     * @param toCheck
-     * @return
-     * @throws PersistenceLayerException
+     * This method returns all boxes currently saved.
+     * @return list of all boxes
+     * @throws PersistenceLayerException if could not return a list of all boxes
      */
+    List<Timber> getAllBoxes() throws PersistenceLayerException;
+
+
     List<Timber> getBoxesForTask(Task toCheck) throws PersistenceLayerException;
+
 }

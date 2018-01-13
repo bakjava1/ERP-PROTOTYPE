@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +25,8 @@ public class TaskDAOJDBC implements TaskDAO {
     }
 
     @Override
-    public void createTask(Task task) throws PersistenceLayerException {
-
+    public int createTask(Task task) throws PersistenceLayerException {
+        return 1;
     }
 
     @Override
@@ -119,9 +120,9 @@ public class TaskDAOJDBC implements TaskDAO {
 
     @Override
     public void updateTask(Task task) throws PersistenceLayerException {
-        LOG.info("Attempting to Update Task");
+        LOG.info("called updateTask");
         String getStatement = "SELECT PRODUCED_QUANTITY FROM TASK WHERE ID = ?";
-        String updateStatement = "UPDATE TASK SET PRODUCED_QUANTITY = ? WHERE ID = ?";
+        String updateStatement = "UPDATE TASK SET PRODUCED_QUANTITY = ?, DONE=?, IN_PROGRESS=? WHERE ID = ?";
 
         try {
             PreparedStatement stmt = dbConnection.prepareStatement(getStatement);
@@ -129,11 +130,20 @@ public class TaskDAOJDBC implements TaskDAO {
             ResultSet rs = stmt.executeQuery();
             rs.next();
             int current_amount = rs.getInt(1);
-            current_amount += task.getProduced_quantity();
-            stmt = dbConnection.prepareStatement(updateStatement);
-            stmt.setInt(1,current_amount);
-            stmt.setInt(2,task.getId());
-            stmt.executeUpdate();
+            //current_amount += task.getProduced_quantity();
+            int new_amount = task.getProduced_quantity();
+
+            if(new_amount>=current_amount) {
+                stmt = dbConnection.prepareStatement(updateStatement);
+                stmt.setInt(1, new_amount);
+                stmt.setBoolean(2, task.isDone());
+                stmt.setBoolean(3, task.isIn_progress());
+                stmt.setInt(4, task.getId());
+                stmt.executeUpdate();
+            }
+
+            stmt.close();
+            rs.close();
         } catch(SQLException e) {
             LOG.error("SQL Exception: " + e.getMessage());
             throw new PersistenceLayerException("Database Error");
@@ -143,11 +153,144 @@ public class TaskDAOJDBC implements TaskDAO {
 
     @Override
     public List<Task> getAllOpenTasks() throws PersistenceLayerException {
-        return null;
+
+        LOG.debug("called getAllOpenTasks");
+
+        List<Task> taskList = new ArrayList<>();
+
+        try {
+
+            PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM TASK WHERE " +
+                    "DONE = 0 AND DELETED = 0 ORDER BY ORDERID");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Task currentTask = new Task();
+                currentTask.setId(rs.getInt("id"));
+                currentTask.setOrder_id(rs.getInt("orderid"));
+
+                currentTask.setDescription(rs.getString("description"));
+                currentTask.setFinishing(rs.getString("finishing"));
+                currentTask.setWood_type(rs.getString("wood_type"));
+                currentTask.setQuality(rs.getString("quality"));
+
+                currentTask.setSize(rs.getInt("size"));
+                currentTask.setWidth(rs.getInt("width"));
+                currentTask.setLength(rs.getInt("length"));
+
+                currentTask.setQuantity(rs.getInt("quantity"));
+                currentTask.setProduced_quantity(rs.getInt("produced_quantity"));
+
+                currentTask.setPrice(rs.getInt("price"));
+                currentTask.setDone(rs.getBoolean("done"));
+                currentTask.setIn_progress(rs.getBoolean("in_progress"));
+                taskList.add(currentTask);
+            }
+
+            rs.close();
+            ps.close();
+
+            if (taskList.size() == 0) {
+                //no open tasks was found
+                LOG.debug("No open task found");
+                //throw new PersistenceLayerException("No open task found");
+            }
+
+        } catch (SQLException e) {
+            LOG.error("SQL Exception: " +  e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
+
+        return taskList;
     }
 
     @Override
-    public void getTaskById(int task_id) throws PersistenceLayerException {
+    public List<Task> getAllTasks() throws PersistenceLayerException {
+        LOG.debug("called getAllTasks");
+
+        List<Task> taskList = new ArrayList<>();
+
+        try {
+
+            PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM TASK WHERE " +
+                    "DELETED = 0 ORDER BY ORDERID");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Task currentTask = new Task();
+                currentTask.setId(rs.getInt("id"));
+                currentTask.setOrder_id(rs.getInt("orderid"));
+
+                currentTask.setDescription(rs.getString("description"));
+                currentTask.setFinishing(rs.getString("finishing"));
+                currentTask.setWood_type(rs.getString("wood_type"));
+                currentTask.setQuality(rs.getString("quality"));
+
+                currentTask.setSize(rs.getInt("size"));
+                currentTask.setWidth(rs.getInt("width"));
+                currentTask.setLength(rs.getInt("length"));
+
+                currentTask.setQuantity(rs.getInt("quantity"));
+                currentTask.setProduced_quantity(rs.getInt("produced_quantity"));
+
+                currentTask.setPrice(rs.getInt("price"));
+                currentTask.setDone(rs.getBoolean("done"));
+                currentTask.setIn_progress(rs.getBoolean("in_progress"));
+
+                taskList.add(currentTask);
+            }
+
+            rs.close();
+            ps.close();
+
+            if (taskList.size() == 0) {
+                //no open tasks was found
+                LOG.debug("No open task found");
+                //throw new PersistenceLayerException("No open task found");
+            }
+
+        } catch (SQLException e) {
+            LOG.error("SQL Exception: " +  e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
+
+        return taskList;
+    }
+
+    @Override
+    public Task getTaskById(int task_id) throws PersistenceLayerException {
+
+        try {
+
+            PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM TASK WHERE ID = ? LIMIT 1");
+            ps.setInt(1,task_id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Task currentTask = new Task();
+                currentTask.setId(rs.getInt("id"));
+                currentTask.setOrder_id(rs.getInt("orderid"));
+                currentTask.setDescription(rs.getString("description"));
+                currentTask.setFinishing(rs.getString("finishing"));
+                currentTask.setWood_type(rs.getString("wood_type"));
+                currentTask.setQuality(rs.getString("quality"));
+                currentTask.setSize(rs.getInt("size"));
+                currentTask.setWidth(rs.getInt("width"));
+                currentTask.setLength(rs.getInt("length"));
+                currentTask.setQuantity(rs.getInt("quantity"));
+                currentTask.setProduced_quantity(rs.getInt("produced_quantity"));
+                currentTask.setPrice(rs.getInt("price"));
+                currentTask.setDone(rs.getBoolean("done"));
+                currentTask.setIn_progress(rs.getBoolean("in_progress"));
+
+                return currentTask;
+            } else throw new EntityNotFoundException("");
+
+        } catch (SQLException e){
+            throw new PersistenceLayerException("Database error:" + e.getMessage());
+        }
 
     }
 
@@ -172,7 +315,7 @@ public class TaskDAOJDBC implements TaskDAO {
 
                 Task currentTask = new Task();
                 currentTask.setQuantity(rs.getInt("quantity"));
-                currentTask.setPrice(rs.getInt("sum"));
+                currentTask.setPrice(rs.getInt("price"));
                 currentTask.setOrder_id(rs.getInt("orderid"));
                 currentTask.setDescription(rs.getString("description"));
                 currentTask.setFinishing(rs.getString("finishing"));
@@ -183,6 +326,7 @@ public class TaskDAOJDBC implements TaskDAO {
                 currentTask.setLength(rs.getInt("length"));
                 currentTask.setProduced_quantity(rs.getInt("produced_quantity"));
                 currentTask.setDone(rs.getBoolean("done"));
+                currentTask.setIn_progress(rs.getBoolean("in_progress"));
                 currentTask.setId(rs.getInt("id"));
 
                 taskList.add(currentTask);

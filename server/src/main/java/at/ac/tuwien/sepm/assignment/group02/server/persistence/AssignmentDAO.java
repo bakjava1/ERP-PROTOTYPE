@@ -15,7 +15,14 @@ public interface AssignmentDAO {
     void createAssignment(Assignment assignment) throws PersistenceLayerException;
 
     /**
-     * retrieve all not done assignments
+     * retrieve all assignments that are not done
+     * @return a list of all open assignments
+     * @throws PersistenceLayerException
+     */
+    List<Assignment> getAllOpenAssignments() throws PersistenceLayerException;
+
+    /**
+     * retrieve all assignments
      * @return a list of all assignments
      * @throws PersistenceLayerException
      */

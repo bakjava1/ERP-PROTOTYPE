@@ -44,6 +44,14 @@ public class Lumber {
         this.all_delivered=all_delivered;
     }
 
+    public Lumber(String description,String wood_type,int quantity, int reserved_quantity){
+
+        this.description=description;
+        this.wood_type=wood_type;
+        this.quantity=quantity;
+        this.reserved_quantity=reserved_quantity;
+    }
+
     /**
      * method to retrieve the schnittholz ID
      * @return a value of schnittID to caller
@@ -282,9 +290,8 @@ public class Lumber {
                 ", length=" + length +
                 ", quantity=" + quantity +
                 ", reserved_quantity=" + reserved_quantity +
-                ", delivered_quantity=" + delivered_quantity +
-                ", all_reserved=" + all_reserved +
-                ", all_delivered=" + all_delivered +
                 '}';
     }
+
+
 }

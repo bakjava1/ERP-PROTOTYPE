@@ -18,7 +18,6 @@ import java.lang.invoke.MethodHandles;
 public class MainApplication extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     private static boolean crane = false;
     private static boolean lead = false;
     private static boolean office = false;
@@ -55,7 +54,7 @@ public class MainApplication extends Application {
             primaryStage.setTitle("Kranfahrer");
             //primaryStage.setTitle("Crame Operator");
 
-            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/crane.fxml"), 610, 625));
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/crane.fxml"), 1000, 600));
         }
 
         primaryStage.centerOnScreen();

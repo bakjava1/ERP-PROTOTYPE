@@ -1,7 +1,10 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.OptAlgorithmResult;
+
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 
 import java.util.ArrayList;
 
@@ -17,8 +20,13 @@ public interface OptimisationAlgorithmService {
      * 2.4.4 (rest/AssignmentController) Neue Aufgabe für Kranfahrer erstellen.
      */
 
-    public ArrayList<Task> getSelectedTasksMock();
 
-    public Timber getSelectedTimberMock();
+    /**
+     * starts the optimisation algorithm and returns the optimal result
+     * for the selected task by the user
+     * @param task task selected by user
+     * @return optimal result including: 3 tasks, 1 timber and the cut view
+     */
+    OptAlgorithmResultDTO getOptAlgorithmResult(TaskDTO task) throws PersistenceLayerException;
 
 }

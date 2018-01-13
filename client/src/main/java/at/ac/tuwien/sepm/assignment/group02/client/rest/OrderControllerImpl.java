@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
 
+import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class OrderControllerImpl implements OrderController {
     public void createOrder(@RequestBody OrderDTO orderDTO) throws PersistenceLayerException {
         LOG.debug("Sending request for Order Creation to Server");
         try {
-            restTemplate.postForObject("http://localhost:8080/createOrder", orderDTO, OrderDTO.class);
+            restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/createOrder", orderDTO, OrderDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");
@@ -48,7 +49,7 @@ public class OrderControllerImpl implements OrderController {
         LOG.debug("sending order to be deleted to server");
 
         try{
-            restTemplate.put("http://localhost:8080/deleteOrder", orderDTO, OrderDTO.class);
+            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteOrder", orderDTO, OrderDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");
@@ -64,9 +65,9 @@ public class OrderControllerImpl implements OrderController {
         LOG.debug("get all open order");
 
         List<OrderDTO> orderList = new ArrayList<>();
-        OrderDTO[] orderArray; // = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
+        OrderDTO[] orderArray; // = restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllOpen", OrderDTO[].class);
         try{
-            orderArray = restTemplate.getForObject("http://localhost:8080/getAllOpen", OrderDTO[].class);
+            orderArray = restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllOpen", OrderDTO[].class);
 
             for (int i = 0; orderArray!= null && i < orderArray.length; i++) {
                 orderList.add(orderArray[i]);
@@ -95,7 +96,7 @@ public class OrderControllerImpl implements OrderController {
         List<OrderDTO> billList = new ArrayList<>();
 
         try {
-            OrderDTO[] billArray = restTemplate.getForObject("http://localhost:8080/getAllClosedOrders", OrderDTO[].class);
+            OrderDTO[] billArray = restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllClosedOrders", OrderDTO[].class);
 
             for (int i = 0; billArray!= null && i < billArray.length; i++) {
                 billList.add(billArray[i]);
@@ -123,7 +124,7 @@ public class OrderControllerImpl implements OrderController {
         LOG.debug("sending order that will be invoiced on server");
 
         try{
-            restTemplate.put("http://localhost:8080/invoiceOrder", orderDTO, OrderDTO.class);
+            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/invoiceOrder", orderDTO, OrderDTO.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");

@@ -121,6 +121,11 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>at.ac.tuwien.sepm.assignment.group02</groupId>
+            <artifactId>smartholz-client</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
 

@@ -1,71 +1,114 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
+import at.ac.tuwien.sepm.assignment.group02.client.converter.OptAlgorithmConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.converter.TaskConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.OptAlgorithmResult;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Rectangle;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.rest.OptAlgorithmController;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.RectangleDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
+import java.lang.invoke.MethodHandles;
+
 
 @Service
 public class OptimisationAlgorithmServiceImpl implements OptimisationAlgorithmService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static OptAlgorithmController optAlgorithmController;
+    private static OptAlgorithmConverter optAlgorithmConverter;
+    private static TaskConverter taskConverter;
 
-    @Override
-    public ArrayList<Task> getSelectedTasksMock() {
-        //orderid,description,finishing,wood_type,quality,size,width,length,quantity,produced_quantity,sum,done,deleted
-        //2,'Latten','Prismiert','Ta', 'I/III', 22,48,3000,40,50,25,1,0),
-        Task taskMock1 = new Task();
-        taskMock1.setDescription("Latten");
-        taskMock1.setFinishing("Prismiert");
-        taskMock1.setWood_type("Ta");
-        taskMock1.setSize(22);
-        taskMock1.setWidth(48);
-        taskMock1.setLength(3000);
-        taskMock1.setQuantity(40);
-        taskMock1.setQuality("I/III");
-
-        Task taskMock2 = new Task();
-        taskMock2.setDescription("Latten");
-        taskMock2.setFinishing("Prismiert");
-        taskMock2.setWood_type("Ta");
-        taskMock2.setSize(22);
-        taskMock2.setWidth(48);
-        taskMock2.setLength(3000);
-        taskMock2.setQuantity(40);
-        taskMock2.setQuality("I/III");
-
-        Task taskMock3 = new Task();
-        taskMock3.setDescription("Latten");
-        taskMock3.setFinishing("Prismiert");
-        taskMock3.setWood_type("Ta");
-        taskMock3.setSize(22);
-        taskMock3.setWidth(48);
-        taskMock3.setLength(3000);
-        taskMock3.setQuantity(40);
-        taskMock3.setQuality("I/III");
-
-        ArrayList<Task> selectedTasks = new ArrayList<>();
-        selectedTasks.add(taskMock1);
-        selectedTasks.add(taskMock2);
-        selectedTasks.add(taskMock3);
-        return selectedTasks;
+    @Autowired
+    public OptimisationAlgorithmServiceImpl (OptAlgorithmController optAlgorithmController, TaskConverter taskConverter, OptAlgorithmConverter optAlgorithmConverter){
+        OptimisationAlgorithmServiceImpl.optAlgorithmController = optAlgorithmController;
+        OptimisationAlgorithmServiceImpl.taskConverter = taskConverter;
+        OptimisationAlgorithmServiceImpl.optAlgorithmConverter = optAlgorithmConverter;
     }
 
+    //TODO delete this constructor and use autowired constructor
+    public OptimisationAlgorithmServiceImpl(){}
+
     @Override
-    public Timber getSelectedTimberMock() {
-        //festmeter,amount,length, quality,diameter,price,last_edited
-        //( 21.28,7,3500, 'CX', 220,50,now()),
-        Timber timberMock = new Timber();
-        timberMock.setBox_id(1);
-        timberMock.setAmount(12);
-        timberMock.setTaken_amount(3);
-        timberMock.setLength(3500);
-        timberMock.setDiameter(220);
-        timberMock.setFestmeter(21.28);
-        timberMock.setLast_edited(new Date());
-        timberMock.setPrice(50);
-        timberMock.setQuality("CX");
-        return timberMock;
+    public OptAlgorithmResultDTO getOptAlgorithmResult(TaskDTO task) throws PersistenceLayerException {
+
+
+        OptAlgorithmResultDTO optAlgorithmResultDTO = optAlgorithmController.getOptAlgorithmResult(task);
+
+        //OptAlgorithmResult optAlgorithmResult = optAlgorithmConverter.convertRestDTOToPlainObject(optAlgorithmResultDTO);
+
+        renderImage(optAlgorithmResultDTO);
+
+
+        return optAlgorithmResultDTO;
+        //TODO check if optAlgorithmResult is empty and throw new exception to show user that no optimisation can be found
+    }
+
+    private void renderImage(OptAlgorithmResultDTO optAlgorithmResult){
+        double diameter = optAlgorithmResult.getTimberResult().getDiameter();
+
+        BufferedImage bimage = new BufferedImage((int)diameter,(int) diameter,
+                BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2 = bimage.createGraphics();
+
+
+        Color border = new Color(50, 50, 50);
+        g2.setColor(border);
+
+        Shape circle = new Ellipse2D.Double(0, 0, diameter, diameter);
+        g2.draw(circle);
+
+
+
+        for (RectangleDTO rectangle : optAlgorithmResult.getCutViewInRectangle()) {
+
+
+            Shape rect = new java.awt.Rectangle((int)rectangle.getxCoordinate(), (int)rectangle.getyCoordinate(), (int)rectangle.getWidth(), (int)rectangle.getHeight());
+
+            switch (rectangle.getColor()){
+                case"green" :
+                    g2.setColor(new Color(45, 138, 65));
+                    g2.fill(rect);
+                    g2.setColor(border);
+                    g2.draw(rect);
+                    break;
+                case"red" :
+                    g2.setColor(new Color(222, 113, 103));
+                    g2.fill(rect);
+                    g2.setColor(border);
+                    g2.draw(rect);
+                    break;
+                case"blue" :
+                    g2.setColor(new Color(40, 145, 217));
+                    g2.fill(rect);
+                    g2.setColor(border);
+                    g2.draw(rect);
+                    break;
+                default:
+                    break;
+
+            }
+
+
+
+        }
+        g2.dispose();
+
+
+
+        optAlgorithmResult.setRenderedImage(bimage);
+
+
+
     }
 }

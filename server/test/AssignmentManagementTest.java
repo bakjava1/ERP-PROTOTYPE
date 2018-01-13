@@ -5,13 +5,13 @@ import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerEx
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.AssignmentDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.AssignmentDAOJDBC;
-import at.ac.tuwien.sepm.assignment.group02.server.service.AssignmentService;
-import at.ac.tuwien.sepm.assignment.group02.server.service.AssignmentServiceImpl;
+import at.ac.tuwien.sepm.assignment.group02.server.service.*;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateAssignment;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,15 +33,19 @@ public class AssignmentManagementTest {
     private static AssignmentService assignmentService;
     private static AssignmentConverter assignmentConverter;
     private static ValidateAssignment validateAssignment;
+    private static TimberService timberService;
+    private static LumberService lumberService;
+    private static TaskService taskService;
 
     @BeforeClass
     public static void setup() {
         LOG.debug("assignment management test setup initiated");
         dbConnection = DBUtil.getConnection();
         assignmentDAO = new AssignmentDAOJDBC(dbConnection);
-
         assignmentConverter = new AssignmentConverter();
-        assignmentService = new AssignmentServiceImpl(assignmentDAO, assignmentConverter, validateAssignment);
+
+        assignmentService = new AssignmentServiceImpl(assignmentDAO, assignmentConverter, validateAssignment,
+                timberService, lumberService, taskService);
 
         LOG.debug("assignment management test setup completed");
     }
@@ -52,7 +56,8 @@ public class AssignmentManagementTest {
         assignmentDAO = new AssignmentDAOJDBC(dbConnection);
 
         assignmentConverter = new AssignmentConverter();
-        assignmentService = new AssignmentServiceImpl(assignmentDAO, assignmentConverter, validateAssignment);
+        assignmentService = new AssignmentServiceImpl(assignmentDAO, assignmentConverter, validateAssignment,
+                timberService, lumberService, taskService);
     }
 
     @Test (expected = PersistenceLayerException.class)
@@ -69,7 +74,7 @@ public class AssignmentManagementTest {
 
         int activeAssignments = getActiveAssignments();
 
-        List<Assignment> assignmentList = assignmentDAO.getAllAssignments();
+        List<Assignment> assignmentList = assignmentDAO.getAllOpenAssignments();
 
         assertEquals(activeAssignments, assignmentList.size());
     }

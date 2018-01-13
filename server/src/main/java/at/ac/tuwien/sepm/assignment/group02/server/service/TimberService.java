@@ -23,10 +23,11 @@ public interface TimberService {
 
     /**
      * This method removes round timber from the round timber store.
-     * @param timberDTO timberDTO to be updated/removed
-     * @throws ServiceLayerException if timberDTO couldn't be updated/removed
+     * @param box_id int defining the timber to be updated
+     * @param amount_to_remove int number of round timber to remove
+     * @throws ServiceLayerException if timber couldn't be updated/removed
      */
-    void updateTimber(TimberDTO timberDTO) throws ServiceLayerException;
+    void removeTimberFromBox(int box_id, int amount_to_remove) throws ServiceLayerException;
 
     /**
      * This method returns the number of boxes currently existing.
