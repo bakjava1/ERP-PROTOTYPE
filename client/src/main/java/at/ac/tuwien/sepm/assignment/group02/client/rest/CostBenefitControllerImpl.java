@@ -31,7 +31,7 @@ public class CostBenefitControllerImpl implements CostBenefitController {
         double estimate;
 
         try {
-            estimate = restTemplate.postForObject("http://localhost:8080/costBenefit", taskList, Integer.class);
+            estimate = restTemplate.postForObject("http://localhost:8080/costBenefit", taskList, Double.class);
         } catch(HttpStatusCodeException e){
             LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
             throw new PersistenceLayerException("Connection Problem with Server");
