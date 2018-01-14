@@ -134,7 +134,4 @@ public class OrderDTO {
         this.taxAmount = taxAmount;
     }
 
-
-
-
 }

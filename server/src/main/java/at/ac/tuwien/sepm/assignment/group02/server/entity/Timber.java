@@ -2,15 +2,16 @@ package at.ac.tuwien.sepm.assignment.group02.server.entity;
 
 public class Timber {
 
+    private int MAX_AMOUNT;
     private int box_id;
+    private int diameter;
     private int amount;
     private String wood_type;
     private String quality;
-    private int diameter;
     private int length;
     private double festmeter;
     private int price;
-    private String lastEdited;
+    private String last_edited;
 
     public Timber() {
 
@@ -37,14 +38,36 @@ public class Timber {
         this.amount = amount;
     }
 
-
+    public String getWood_type() {
+        return wood_type;
+    }
 
     public void setWood_type(String wood_type) {
         this.wood_type = wood_type;
     }
 
-    public String getWood_type() {
-        return wood_type;
+    public double getFestmeter() {
+        return festmeter;
+    }
+
+    public void setFestmeter(double festmeter) {
+        this.festmeter = festmeter;
+    }
+
+    public int getMAX_AMOUNT() {
+        return MAX_AMOUNT;
+    }
+
+    public void setMAX_AMOUNT(int MAX_AMOUNT) {
+        this.MAX_AMOUNT = MAX_AMOUNT;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
     }
 
     public String getQuality() {
@@ -63,22 +86,6 @@ public class Timber {
         this.diameter = diameter;
     }
 
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public double getFestmeter() {
-        return festmeter;
-    }
-
-    public void setFestmeter(double festmeter) {
-        this.festmeter = festmeter;
-    }
-
     public int getPrice() {
         return price;
     }
@@ -87,11 +94,11 @@ public class Timber {
         this.price = price;
     }
 
-    public String getLastEdited() {
-        return lastEdited;
+    public String getLast_edited() {
+        return last_edited;
     }
 
-    public void setLastEdited(String lastEdited) {
-        this.lastEdited = lastEdited;
+    public void setLast_edited(String last_edited) {
+        this.last_edited = last_edited;
     }
 }

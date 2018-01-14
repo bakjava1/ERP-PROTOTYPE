@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 
@@ -40,5 +41,8 @@ public interface TimberDAO {
      * @throws PersistenceLayerException if could not return a list of all boxes
      */
     List<Timber> getAllBoxes() throws PersistenceLayerException;
+
+
+    List<Timber> getBoxesForTask(Task toCheck) throws PersistenceLayerException;
 
 }

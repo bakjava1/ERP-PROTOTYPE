@@ -72,15 +72,25 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
+    public boolean lumberExists(Lumber lumber) {
+        return false;
+    }
+
+    @Override
+    public void createLumber(Lumber lumber) {
+
+    }
+
+    @Override
     public List<Lumber> getAll(UnvalidatedLumber filter)throws ServiceLayerException {
         LOG.debug("getAllSchnittholz called");
         List<LumberDTO> allLumber = null;
 
         try {
 
-        Lumber validatedLumber = validator.validateLumber(filter);
+            Lumber validatedLumber = validator.validateLumber(filter);
 
-        LumberDTO filterDTO = lumberConverter.convertPlainObjectToRestDTO(validatedLumber);
+            LumberDTO filterDTO = lumberConverter.convertPlainObjectToRestDTO(validatedLumber);
 
 
             allLumber = lumberController.getAllLumber(filterDTO);

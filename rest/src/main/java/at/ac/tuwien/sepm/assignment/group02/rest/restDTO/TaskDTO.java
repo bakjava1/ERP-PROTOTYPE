@@ -21,7 +21,11 @@ public class TaskDTO {
     private int quantity;
     private int produced_quantity; // (= reserved lumber)
     private int price;
+
     private boolean done; // (true if produced_quantity == quantity)
+    private boolean in_progress; // (true if crane operator assignment was created)
+
+    private boolean deleted;
 
     public TaskDTO() {
 
@@ -145,5 +149,41 @@ public class TaskDTO {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public boolean isIn_progress() {
+        return in_progress;
+    }
+
+    public void setIn_progress(boolean in_progress) {
+        this.in_progress = in_progress;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    @Override
+    public String toString() {
+        return "TaskDTO{" +
+                "id=" + id +
+                ", order_id=" + order_id +
+                ", description='" + description + '\'' +
+                ", finishing='" + finishing + '\'' +
+                ", wood_type='" + wood_type + '\'' +
+                ", quality='" + quality + '\'' +
+                ", size=" + size +
+                ", width=" + width +
+                ", length=" + length +
+                ", quantity=" + quantity +
+                ", produced_quantity=" + produced_quantity +
+                ", price=" + price +
+                ", done=" + done +
+                ", in_progress=" + in_progress +
+                '}';
     }
 }

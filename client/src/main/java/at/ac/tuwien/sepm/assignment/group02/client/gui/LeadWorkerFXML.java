@@ -1,16 +1,13 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
-import at.ac.tuwien.sepm.assignment.group02.client.MainApplication;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.OptAlgorithmResult;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentService;
+import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OptimisationAlgorithmService;
-import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_SpringFXMLLoader;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.util.AlertBuilder;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
@@ -19,35 +16,28 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
-
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 
 @Controller
 public class LeadWorkerFXML {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    @FXML
-    private AnchorPane ap;
 
     @FXML
     private TextField tf_description;
@@ -140,6 +130,9 @@ public class LeadWorkerFXML {
     private TableColumn task_col_done;
 
     @FXML
+    private TableColumn task_col_in_progress;
+
+    @FXML
     TableView<TaskDTO> table_task;
 
     @FXML
@@ -193,8 +186,6 @@ public class LeadWorkerFXML {
         cb_wood_type.setItems(FXCollections.observableArrayList("keine Angabe", "Fi", "Ta", "Lä", "Ki", "Zi"));
         cb_quality.setItems(FXCollections.observableArrayList("keine Angabe", "O","I","II","III","IV","V", "O/III", "III/IV", "III/V"));
 
-
-
         cb_finishing.getSelectionModel().selectFirst();
         cb_wood_type.getSelectionModel().selectFirst();
         cb_quality.getSelectionModel().selectFirst();
@@ -220,19 +211,26 @@ public class LeadWorkerFXML {
         task_col_quantity.setCellValueFactory(new PropertyValueFactory("quantity"));
         task_col_produced_quantity.setCellValueFactory(new PropertyValueFactory("produced_quantity"));
         task_col_done.setCellValueFactory(new PropertyValueFactory("done"));
+        task_col_in_progress.setCellValueFactory(new PropertyValueFactory("in_progress"));
 
-        Thread t = new Thread(() -> {
-            while (running) {
-                try {
-                    Thread.sleep(5000); // sleep 5 sec
-                } catch (InterruptedException e) {
-                    LOG.debug("auto refresh thread interrupt: ",e.getMessage());
+        Task<Integer> task = new Task<>() {
+            @Override
+            protected Integer call() throws Exception {
+                while(true){
+                    if(isCancelled()) break;
+                    Thread.sleep(5000);
+                    int selected_index = table_task.getSelectionModel().getSelectedIndex();
+                    updateTaskTable();
+                    table_task.getSelectionModel().select(selected_index);
                 }
-                updateTaskTable();
+                return 1;
             }
-        });
-        t.setDaemon(true);
-        t.start();
+        };
+
+        //start the auto-refresh task
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
     }
 
     private void updateTaskTable() {
@@ -277,7 +275,11 @@ public class LeadWorkerFXML {
                                 if (taskDTO == null) {
                                     setStyle("");
                                 } else if (taskDTO.isDone()) {
-                                    setStyle("-fx-background-color: darkolivegreen;");
+                                    setStyle("-fx-background-color:#b0eeb0;");
+                                    if(isSelected()) setStyle("-fx-background-color: lightslategray;");
+                                } else if (taskDTO.isIn_progress()) {
+                                    setStyle("-fx-background-color:#ffff80;");
+                                    if(isSelected()) setStyle("-fx-background-color: lightslategray;");
                                 } else {
                                     setStyle("");
                                 }
@@ -328,7 +330,8 @@ public class LeadWorkerFXML {
 
         //TODO opt_alg
         int box_id=2;
-        int amount=taskDTO.getQuantity()-taskDTO.getProduced_quantity()/5;
+        int amount=(taskDTO.getQuantity()-taskDTO.getProduced_quantity());
+
         assignmentDTO.setBox_id(box_id);
         assignmentDTO.setAmount(amount);
 
@@ -349,6 +352,7 @@ public class LeadWorkerFXML {
                 AlertBuilder alertBuilder = new AlertBuilder();
                 alertBuilder.showInformationAlert("Schnittholz-Produktion",
                         "Schnittholz-Produktion", "Schnittholz Produktion wurde erfolgreich in Auftrag gegeben.");
+                updateTaskTable();
                 table_task.getSelectionModel().clearSelection();
             }
 
@@ -382,6 +386,19 @@ public class LeadWorkerFXML {
         // set the textfield quantity of lumber to reserve to the needed amount of lumber
         tf_quantity.setText(""+(selectedTask.getQuantity()-selectedTask.getProduced_quantity()));
 
+        // set the search properties to the task properties
+        UnvalidatedLumber filter = new UnvalidatedLumber();
+
+        filter.setDescription(selectedTask.getDescription());
+        filter.setFinishing(selectedTask.getFinishing());
+        filter.setWood_type(selectedTask.getWood_type());
+        filter.setQuality(selectedTask.getQuality());
+        filter.setSize(selectedTask.getSize()+"");
+        filter.setWidth(selectedTask.getWidth()+"");
+        filter.setLength(selectedTask.getLength()+"");
+
+        executeSearch(filter);
+
         tabPane.getSelectionModel().clearAndSelect(1);
     }
 
@@ -389,7 +406,6 @@ public class LeadWorkerFXML {
     public void onSearchButtonClicked() {
 
         UnvalidatedLumber filter = new UnvalidatedLumber();
-        List<Lumber> allLumber = null;
 
         filter.setDescription(tf_description.getText().trim());
         filter.setFinishing(cb_finishing.getSelectionModel().getSelectedItem().toString().trim());
@@ -399,7 +415,12 @@ public class LeadWorkerFXML {
         filter.setWidth(tf_width.getText().trim());
         filter.setLength(tf_length.getText().trim());
 
+        executeSearch(filter);
 
+    }
+
+    private void executeSearch(UnvalidatedLumber filter){
+        List<Lumber> allLumber = null;
         try {
             allLumber = lumberService.getAll(filter);
         } catch (InvalidInputException e) {
@@ -438,6 +459,14 @@ public class LeadWorkerFXML {
             return;
         }
 
+        if(selectedTask.isIn_progress()) {
+            AlertBuilder alertBuilder = new AlertBuilder();
+            alertBuilder.showInformationAlert("Schnittholz-Reservierung",
+                    "Schnittholz-Reservierung", "Der ausgewählte Auftrag ist bereits in Produktion!");
+            tabPane.getSelectionModel().clearAndSelect(0);
+            return;
+        }
+
         // get the selected lumberDTO from the table
         if(table_lumber.getSelectionModel().getSelectedItem() == null) {
             AlertBuilder alertBuilder = new AlertBuilder();
@@ -472,8 +501,10 @@ public class LeadWorkerFXML {
         final int qu = quantity;
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                "Schnittholz (Id:"+lumber.getId()+", "+lumber.getDescription()+", Menge: "+qu+") dem Auftrag (Id: "+selectedTask.getId()+", "+selectedTask.getDescription()+") hinzufügen?",
+                "Möchten Sie Schnittholz (Id:"+lumber.getId()+", "+lumber.getDescription()+", Menge: "+qu+") dem Auftrag (Id: "+selectedTask.getId()+", "+selectedTask.getDescription()+") hinzufügen?",
                 ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Schnittholz-Reservierung");
+        alert.setHeaderText("Schnittholz-Reservierung");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.showAndWait();
 
@@ -502,6 +533,8 @@ public class LeadWorkerFXML {
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION,
                             "Schnittholz wurde dem Auftrag erfolgreich hinzugefügt.");
+                    alert.setTitle("Schnittholz-Reservierung");
+                    alert.setHeaderText("Schnittholz-Reservierung");
                     alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     alert.show();
 
@@ -520,6 +553,8 @@ public class LeadWorkerFXML {
 
                     Alert alert = new Alert(Alert.AlertType.WARNING,
                             "Schnittholz-Reservierung wurde nicht durchgeführt. "+ getException().getMessage());
+                    alert.setTitle("Schnittholz-Reservierung");
+                    alert.setHeaderText("Schnittholz-Reservierung");
                     alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     alert.show();
 
@@ -550,7 +585,7 @@ public class LeadWorkerFXML {
     }
 
     @FXML
-    public void optimisationBtnClicked(ActionEvent actionEvent) {
+    public void optimisationBtnClicked() {
         LOG.info("optimisationBtn clicked");
 
         btn_opt_alg.setDisable(true);
@@ -617,8 +652,8 @@ public class LeadWorkerFXML {
                         stage.show();
 
 
-                    } catch (IOException e) {
-                        LOG.error(e.getMessage());
+                } catch (IOException e) {
+                    LOG.error(e.getMessage());
 
 
                     }
@@ -627,7 +662,6 @@ public class LeadWorkerFXML {
 
                 }
 
-
             }
 
             @Override
@@ -635,7 +669,6 @@ public class LeadWorkerFXML {
 
             }
         }, "optimisation-algorithm").start();
-
 
     }
 }

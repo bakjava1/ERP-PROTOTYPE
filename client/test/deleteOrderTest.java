@@ -42,7 +42,7 @@ public class deleteOrderTest {
         orderController = new OrderControllerImpl(restTemplate);
         orderConverter = new OrderConverter();
         taskConverter = new TaskConverter();
-        orderService = new OrderServiceImpl(orderController, orderConverter, taskConverter);
+        orderService = new OrderServiceImpl(orderController,orderConverter, taskConverter);
 
         order = new Order();
         order.setID(1);

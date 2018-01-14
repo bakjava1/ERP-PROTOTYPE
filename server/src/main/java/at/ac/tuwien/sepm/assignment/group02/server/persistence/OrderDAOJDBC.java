@@ -29,7 +29,9 @@ public class OrderDAOJDBC implements OrderDAO {
     public void createOrder(Order order) throws PersistenceLayerException {
         LOG.debug("Creating new Order");
         String createSentence = "INSERT INTO ORDERS(id,customer_name,customer_address,customer_uid,order_date,isPaidFlag,isDoneFlag) VALUES(default,?,?,?,now(),false,false)";
-        String insertTaskSentence = "INSERT INTO TASK VALUES(default,?,?,?,?,?,?,?,?,?,?,?,false,false);";
+        String insertTaskSentence = "INSERT INTO TASK (ID, ORDERID, DESCRIPTION, FINISHING, WOOD_TYPE, QUALITY, " +
+                "SIZE, WIDTH, LENGTH, QUANTITY, PRODUCED_QUANTITY, PRICE, DONE, IN_PROGRESS, DELETED)" +
+                "VALUES(default,?,?,?,?,?,?,?,?,?,?,?,false,false,false);";
 
         try{
             PreparedStatement stmt = dbConnection.prepareStatement(createSentence, Statement.RETURN_GENERATED_KEYS);
@@ -161,6 +163,7 @@ public class OrderDAOJDBC implements OrderDAO {
                 Order currentBill = new Order();
                 currentBill.setID(rs.getInt("ID"));
                 currentBill.setCustomerName(rs.getString("customer_name"));
+                currentBill.setInvoiceDate(rs.getTimestamp("order_date"));
                 //currentBill.setGrossAmount(rs.getInt("summe"));
 
 
@@ -169,7 +172,7 @@ public class OrderDAOJDBC implements OrderDAO {
 
             if (billList.size() == 0) {
                 //no closed order was found
-                throw new PersistenceLayerException("No open orders found");
+                throw new PersistenceLayerException("No closed orders found");
             }
 
         } catch (SQLException e) {
@@ -188,7 +191,7 @@ public class OrderDAOJDBC implements OrderDAO {
         String updateSentence = "UPDATE ORDERS SET isPaidFlag=?, delivery_date=?, invoice_date=?, gross_amount=?, net_amount=?, tax_amount=? WHERE ID=?";
 
         //TODO prices get not written because not clear how they are working now
-
+        System.err.println(order.toString());
         try {
             PreparedStatement stmt = dbConnection.prepareStatement(updateSentence);
             //set necessary fields in order

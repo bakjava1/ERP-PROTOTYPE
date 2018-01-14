@@ -1,3 +1,4 @@
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.MainApplication;
 import at.ac.tuwien.sepm.assignment.group02.server.rest.AssignmentControllerImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -31,7 +33,7 @@ public class AssignmentServerRestTest {
                 .andExpect(status().is4xxClientError());
     }
 
-    /*
+/*
     @Test
     public void setAssignmentDone_works() throws Exception {
         AssignmentDTO assignmentDTO = new AssignmentDTO();

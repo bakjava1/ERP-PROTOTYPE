@@ -96,6 +96,7 @@ public class AddTimberTest {
 
     @AfterClass
     public static void teardown(){
+
         LOG.debug("add timber test shutdown");
     }
 }
