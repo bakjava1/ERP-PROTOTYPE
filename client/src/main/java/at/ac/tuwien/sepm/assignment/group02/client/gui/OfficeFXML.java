@@ -14,7 +14,13 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.client.util.AlertBuilder;
 import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_SpringFXMLLoader;
 import at.ac.tuwien.sepm.assignment.group02.client.util.InvoicePrinter;
+import com.lowagie.text.Font;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import io.swagger.models.properties.ObjectProperty;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,6 +33,10 @@ import javafx.print.PrinterJob;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -39,15 +49,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
+import com.lowagie.text.*;
 
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+
 
 @Controller
 public class OfficeFXML {
@@ -68,7 +87,7 @@ public class OfficeFXML {
 
 
     @FXML
-   private AnchorPane printPage;
+    private AnchorPane printPage;
 
     @FXML
     private Label sumNet;
@@ -241,6 +260,7 @@ public class OfficeFXML {
         initTimberTab();
         updateTable();
         updateBillTable();
+        rechnungAnzeigenBtnClicked();
 
         // Auto resize columns
         table_bill.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -717,52 +737,137 @@ public class OfficeFXML {
         }
     }
 
+//    public void rechnungAnzeigenBtnClicked(){
+//        LOG.info("RechnungAnzeigenBtn clicked");
+//
+//        if (table_bill.getSelectionModel().getSelectedItem() == null) {
+//            return;
+//        }
+//        Order order = table_bill.getSelectionModel().getSelectedItem();
+//
+//
+//        try {
+//            // Task task=new Task();
+//            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/rechnungOverview.fxml"));
+//
+//            Stage stage = new Stage();
+//            stage.setTitle("Detail Ansicht Rechnung");
+//            stage.setWidth(680);
+//            stage.setHeight(900);
+//            stage.centerOnScreen();
+//            fxmlLoader.setController(this);
+//
+//            stage.setScene(new Scene(fxmlLoader.load()));
+//
+//            stage.show();
+//            nameL.setText(order.getCustomerName());
+//            address.setText(order.getCustomerAddress());
+//            uid.setText(order.getCustomerUID());
+//            date.setText(""+order.getInvoiceDate());
+//            sumNet.setText("€ " +order.getNetAmount());
+//            sumTax.setText("€ "+order.getTaxAmount());
+//            sumGross.setText("€ "+order.getGrossAmount());
+//            invoiceNumber.setText("Rechnung #"+order.getID());
+//
+//            // List<Task> tasks = new ArrayList<Task>();
+//
+//
+//
+//            PrinterJob printerJob = PrinterJob.createPrinterJob();
+//            if (printerJob.showPrintDialog(stage)) {
+//                printerJob.printPage(printPage);
+//            }
+//
+//
+//        } catch (IOException e) {
+//            LOG.error(e.getMessage());
+//
+//        }
+//    }
 
-    @FXML
-   public void rechnungAnzeigenBtnClicked(ActionEvent actionEvent){
+
+    public void rechnungAnzeigenBtnClicked(){
         LOG.info("RechnungAnzeigenBtn clicked");
 
         if (table_bill.getSelectionModel().getSelectedItem() == null) {
             return;
         }
         Order order = table_bill.getSelectionModel().getSelectedItem();
+        Font titleFont = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        try {
 
+            String file = "Invoice.pdf";
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(file));
+            document.open();
 
-                try {
-                   Task task=new Task();
-                    FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/rechnungOverview.fxml"));
+            document.addTitle("Rechnung");
+            document.addAuthor("SmartHolz");
 
-                    Stage stage = new Stage();
-                    stage.setTitle("Detail Ansicht Rechnung");
-                    stage.setWidth(680);
-                    stage.setHeight(900);
-                    stage.centerOnScreen();
-                    fxmlLoader.setController(this);
-
-                    stage.setScene(new Scene(fxmlLoader.load()));
-
-                    stage.show();
-                    nameL.setText(order.getCustomerName());
-                    address.setText(order.getCustomerAddress());
-                    uid.setText(order.getCustomerUID());
-                    date.setText(""+order.getInvoiceDate());
-                    sumNet.setText("€ " +order.getNetAmount());
-                    sumTax.setText("€ "+order.getTaxAmount());
-                    sumGross.setText("€ "+order.getGrossAmount());
-                    invoiceNumber.setText("Rechnung #"+order.getID());
+            Paragraph header = new Paragraph();
+            header.setSpacingBefore(10);
+            header.setSpacingAfter(20);
 
 
 
-                    PrinterJob printerJob = PrinterJob.createPrinterJob();
-                    if (printerJob.showPrintDialog(stage)) {
-                        printerJob.printPage(printPage);
-                    }
+            File fi = new File("logo.jpg");
+            byte[] fileContent = Files.readAllBytes(fi.toPath());
+            //BufferedImage img = ImageIO.read(new File("logo.jpg"));;
+            Jpeg logo = new Jpeg(fileContent);
+            header.add(logo);
+
+            Paragraph addressDetails = new Paragraph();
+            addressDetails.add(new Paragraph("Name"));
+            addressDetails.add(new Paragraph("Adresse"));
+            addressDetails.add(new Paragraph("UID"));
+
+            document.add(header);
+            document.add(addressDetails);
+
+            PdfPTable table = new PdfPTable(3);
+
+            // t.setBorderColor(BaseColor.GRAY);
+            // t.setPadding(4);
+            // t.setSpacing(4);
+            // t.setBorderWidth(1);
+
+            PdfPCell c1 = new PdfPCell(new Phrase("Table Header 1"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+            c1 = new PdfPCell(new Phrase("Table Header 2"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+            c1 = new PdfPCell(new Phrase("Table Header 3"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+            table.setHeaderRows(1);
+
+            table.addCell("1.0");
+            table.addCell("1.1");
+            table.addCell("1.2");
+            table.addCell("2.1");
+            table.addCell("2.2");
+            table.addCell("2.3");
+
+            document.add(table);
 
 
-                } catch (IOException e) {
-                    LOG.error(e.getMessage());
 
-                }
+            document.close();
+            File file2 = new File(file);
+            Desktop.getDesktop().open(file2);
+
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

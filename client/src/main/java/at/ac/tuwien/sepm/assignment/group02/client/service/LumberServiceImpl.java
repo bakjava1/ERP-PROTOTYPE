@@ -31,7 +31,7 @@ public class LumberServiceImpl implements LumberService {
     private static LumberConverter lumberConverter;
     private static TaskController taskController;
     private static Validator validator = new Validator();
-   // private static LumberService lumberService;
+    //private static LumberService lumberService;
 
     @Autowired
     public LumberServiceImpl (LumberController lumberController, LumberConverter lumberConverter,TaskController taskController,Validator validator){
@@ -39,7 +39,7 @@ public class LumberServiceImpl implements LumberService {
         LumberServiceImpl.lumberConverter = lumberConverter;
         LumberServiceImpl.taskController = taskController;
         LumberServiceImpl.validator = validator;
-        //LumberServiceImpl.lumberService=lumberService;
+       // LumberServiceImpl.lumberService=lumberService;
     }
 
 

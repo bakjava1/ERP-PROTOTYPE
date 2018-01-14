@@ -100,13 +100,25 @@ public class RechnungOverviewController {
     private OrderService orderService;
     ObservableList<Task> orderTasks = FXCollections.observableArrayList();
     ObservableList<Order> orders=FXCollections.observableArrayList();
-
+//reference to the officeFXML
+private OfficeFXML officeFXML;
 
     @Autowired
     public RechnungOverviewController(TaskService taskService, OrderService orderService){
         this.taskService=taskService;
         this.orderService=orderService;
     }
+
+  public void  setOfficeFXML(OfficeFXML officeFXML){
+        this.officeFXML=officeFXML;
+        //add obervable list to the table
+      //task_table.getItems(officeFXML.rechnungAnzeigenBtnClicked());
+
+
+
+
+ }
+
 
 @FXML
     public void initialize(){
@@ -132,15 +144,15 @@ public class RechnungOverviewController {
 
 
 
-   // ObservableList<Task> orderTasks = FXCollections.observableArrayList();
-    invoiceItemsTable.setItems(orderTasks);
 
-    //ObservableList<Order> orders=FXCollections.observableArrayList();
+    invoiceItemsTable.setItems(orderTasks);
     bill_table.setItems(orders);
 
     l_sumorders.setText(currentOrderSum + " €");
     updateBillTable();
     rechnungAnzeigen();
+
+
 
 }
 

@@ -1,16 +1,18 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -29,6 +31,7 @@ public class LumberControllerImpl implements LumberController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private RestTemplate restTemplate;
+    private LumberService lumberService;
 
     @Autowired
     public LumberControllerImpl(RestTemplate restTemplate){
@@ -43,9 +46,10 @@ public class LumberControllerImpl implements LumberController {
     }
 
     @Override
-    public List<LumberDTO> createDTOs() {
+    public List<LumberDTO> updateLumber() {
         return null;
     }
+
 
     @Override
     public void reserveLumber(LumberDTO lumberDTO) throws PersistenceLayerException {
@@ -96,9 +100,12 @@ public class LumberControllerImpl implements LumberController {
      * @param lumberDTO lumber to update
      * @throws PersistenceLayerException
      */
+    @RequestMapping(value = "/lumber/{id}",  method = RequestMethod.PUT,consumes = "application/json", produces = "application/json")
+    @ResponseBody
     @Override
-    public void updateLumber(@RequestBody LumberDTO lumberDTO)  throws PersistenceLayerException {
+    public void updateLumber(@PathVariable LumberDTO lumberDTO) throws PersistenceLayerException {
         LOG.debug("Sending request for lumber updating to server");
+           // lumberService.updateLumber(lumber);
 
         try {
             //restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, OrderDTO.class);
@@ -118,9 +125,11 @@ public class LumberControllerImpl implements LumberController {
      * @param lumberDTO lumber to remove
      * @throws PersistenceLayerException
      */
+    @RequestMapping(value = "/lumber/{id}", method = RequestMethod.DELETE)
     @Override
     public void removeLumber(@RequestBody LumberDTO lumberDTO) throws PersistenceLayerException {
             LOG.debug("sending lumber to be deleted to server");
+
 
             try{
                 //restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteLumber", lumberDTO, LumberDTO.class);

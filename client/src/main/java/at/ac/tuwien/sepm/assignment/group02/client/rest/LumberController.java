@@ -47,7 +47,7 @@ public interface LumberController {
     void createLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
 
 
-    public  List<LumberDTO> createDTOs();
+    public  List<LumberDTO> updateLumber();
 
 
 
