@@ -13,7 +13,6 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.client.util.AlertBuilder;
 import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_SpringFXMLLoader;
-import at.ac.tuwien.sepm.assignment.group02.client.util.InvoicePrinter;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -86,29 +85,6 @@ public class OfficeFXML {
     private Label l_sumorders;
 
 
-    @FXML
-    private AnchorPane printPage;
-
-    @FXML
-    private Label sumNet;
-    @FXML
-    private Label sumGross;
-    @FXML
-    private Label sumTax;
-    @FXML
-    private Label address;
-    @FXML
-    private Label nameL;
-    @FXML
-    private Label uid;
-    @FXML
-    private Label invoiceNumber;
-    @FXML
-    private Label date;
-    @FXML
-    private TableColumn col_taxAmount;
-    @FXML
-    private TableColumn col_billPrice;
 
 
 
@@ -789,54 +765,6 @@ public class OfficeFXML {
         }
     }
 
-//    public void rechnungAnzeigenBtnClicked(){
-//        LOG.info("RechnungAnzeigenBtn clicked");
-//
-//        if (table_bill.getSelectionModel().getSelectedItem() == null) {
-//            return;
-//        }
-//        Order order = table_bill.getSelectionModel().getSelectedItem();
-//
-//
-//        try {
-//            // Task task=new Task();
-//            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/rechnungOverview.fxml"));
-//
-//            Stage stage = new Stage();
-//            stage.setTitle("Detail Ansicht Rechnung");
-//            stage.setWidth(680);
-//            stage.setHeight(900);
-//            stage.centerOnScreen();
-//            fxmlLoader.setController(this);
-//
-//            stage.setScene(new Scene(fxmlLoader.load()));
-//
-//            stage.show();
-//            nameL.setText(order.getCustomerName());
-//            address.setText(order.getCustomerAddress());
-//            uid.setText(order.getCustomerUID());
-//            date.setText(""+order.getInvoiceDate());
-//            sumNet.setText("€ " +order.getNetAmount());
-//            sumTax.setText("€ "+order.getTaxAmount());
-//            sumGross.setText("€ "+order.getGrossAmount());
-//            invoiceNumber.setText("Rechnung #"+order.getID());
-//
-//            // List<Task> tasks = new ArrayList<Task>();
-//
-//
-//
-//            PrinterJob printerJob = PrinterJob.createPrinterJob();
-//            if (printerJob.showPrintDialog(stage)) {
-//                printerJob.printPage(printPage);
-//            }
-//
-//
-//        } catch (IOException e) {
-//            LOG.error(e.getMessage());
-//
-//        }
-//    }
-
 
     public void rechnungAnzeigenBtnClicked(){
         LOG.info("RechnungAnzeigenBtn clicked");
@@ -851,65 +779,103 @@ public class OfficeFXML {
             String file = "Invoice.pdf";
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(file));
+
+
+            HeaderFooter header = new HeaderFooter(new Phrase("SmartHolz <Anschrift> <UID>"), false); //TODO: insert actual values
+            HeaderFooter footer = new HeaderFooter(new Phrase("Seite "), new Phrase("."));
+            document.setHeader(header);
+            document.setFooter(footer);
             document.open();
 
             document.addTitle("Rechnung");
             document.addAuthor("SmartHolz");
 
-            Paragraph header = new Paragraph();
-            header.setSpacingBefore(10);
-            header.setSpacingAfter(20);
+//            header.add(new Paragraph("Unsere UID: "));
+//            header.add(new Paragraph("Unsere Anschrift: "));
 
 
 
-            File fi = new File("logo.jpg");
+            File fi = new File(this.getClass().getClassLoader().getResource("logo.jpg").getFile());
             byte[] fileContent = Files.readAllBytes(fi.toPath());
             //BufferedImage img = ImageIO.read(new File("logo.jpg"));;
             Jpeg logo = new Jpeg(fileContent);
-            header.add(logo);
+            logo.setAlignment(Element.ALIGN_RIGHT);
 
             Paragraph addressDetails = new Paragraph();
-            addressDetails.add(new Paragraph("Name"));
-            addressDetails.add(new Paragraph("Adresse"));
-            addressDetails.add(new Paragraph("UID"));
+            addressDetails.add(new Paragraph(order.getCustomerName()));
+            addressDetails.add(new Paragraph(order.getCustomerAddress()));
+            addressDetails.add(new Paragraph(order.getCustomerUID()));
+            addressDetails.setSpacingAfter(10);
 
-            document.add(header);
+            Paragraph invoiceDetails = new Paragraph();
+            invoiceDetails.add(new Paragraph("Rechnung " + order.getID() + " - " + order.getInvoiceDate()));
+            invoiceDetails.setSpacingAfter(20);
+            document.add(logo);
             document.add(addressDetails);
+            document.add(invoiceDetails);
 
-            PdfPTable table = new PdfPTable(3);
+            PdfPTable table = new PdfPTable(4);
 
-            // t.setBorderColor(BaseColor.GRAY);
-            // t.setPadding(4);
-            // t.setSpacing(4);
-            // t.setBorderWidth(1);
-
-            PdfPCell c1 = new PdfPCell(new Phrase("Table Header 1"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-            c1 = new PdfPCell(new Phrase("Table Header 2"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-            c1 = new PdfPCell(new Phrase("Table Header 3"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
+            PdfPCell c0 = new PdfPCell(new Phrase("Menge"));
+            c0.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c0);
+            table.setWidthPercentage(100);
+            table.setWidths(new int[] {10,65,15,10});
+            c0 = new PdfPCell(new Phrase("Bezeichnung"));
+            c0.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c0);
+            c0 = new PdfPCell(new Phrase("Einzelpreis"));
+            c0.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c0);
+            c0 = new PdfPCell(new Phrase("Steuer"));
+            c0.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c0);
             table.setHeaderRows(1);
+            for (Task t: order.getTaskList()) {
+                PdfPCell c1 = new PdfPCell(new Phrase(""+ t.getQuantity()));
+                c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(c1);
+                table.addCell(t.getDescription());
+                PdfPCell c3 = new PdfPCell(new Phrase("€ "+t.getPrice()));
+                c3.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(c3);
+                PdfPCell c4 = new PdfPCell(new Phrase("20 %"));
+                c4.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(c4);
+            }
+            PdfPCell empty = new PdfPCell(new Phrase(""));
+            empty.setColspan(4);
+            table.addCell(empty);
 
-            table.addCell("1.0");
-            table.addCell("1.1");
-            table.addCell("1.2");
-            table.addCell("2.1");
-            table.addCell("2.2");
-            table.addCell("2.3");
 
+            PdfPCell e1 = new PdfPCell(new Phrase("Summe Netto"));
+            e1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            e1.setColspan(3);
+            table.addCell(e1);
+            PdfPCell e2 = new PdfPCell(new Phrase("€ " + order.getNetAmount()));
+            e2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            table.addCell(e2);
+            e1 = new PdfPCell(new Phrase("Steuer"));
+            e1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            e1.setColspan(3);
+            table.addCell(e1);
+            e2 = new PdfPCell(new Phrase("€ " + order.getTaxAmount()));
+            e2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            table.addCell(e2);
+            e1 = new PdfPCell(new Phrase("Summe Brutto"));
+            e1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            e1.setColspan(3);
+            table.addCell(e1);
+            e2 = new PdfPCell(new Phrase("€ "+order.getGrossAmount()));
+            e2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            table.addCell(e2);
             document.add(table);
+            table.setSpacingAfter(20);
 
-
-
+            document.add(new Paragraph("Lieferdatum entspricht Rechnungsdatum"));
             document.close();
-            File file2 = new File(file);
-            Desktop.getDesktop().open(file2);
+            File invoice = new File(file);
+            Desktop.getDesktop().open(invoice);
 
 
         } catch (DocumentException e) {
