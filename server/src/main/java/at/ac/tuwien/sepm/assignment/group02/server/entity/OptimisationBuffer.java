@@ -16,18 +16,26 @@ public class OptimisationBuffer {
     private int horizontalCount;
     private double widthSideTaskHorizontal;
     private double heightSideTaskHorizontal;
+    private double xHorizontal;
+    private double yHorizontal;
+    private double smallerSizeHorizontal;
+    private double biggerSizeVertical;
 
     //side task vertical (left and right)
     private int verticalCount;
     private double widthSideTaskVertical;
     private double heightSideTaskVertical;
+    private double xVertical;
+    private double yVertical;
+    private double smallerSizeVertical;
+    private double biggerSizeHorizontal;
 
     public OptimisationBuffer(){}
 
     public void setNewValues(double radius, int nachschnittAnzahl, int vorschnittAnzahl, double widthHauptware,
                              double heightHauptware, double biggerSize, double smallerSize,
-                             int horizontalCount, double widthSideTaskHorizontal, double heightSideTaskHorizontal,
-                             int verticalCount, double widthSideTaskVertical, double heightSideTaskVertical) {
+                             int horizontalCount, double widthSideTaskHorizontal, double heightSideTaskHorizontal, double xHorizontal, double yHorizontal, double smallerSizeHorizontal, double biggerSizeHorizontal,
+                             int verticalCount, double widthSideTaskVertical, double heightSideTaskVertical, double xVertical, double yVertical, double smallerSizeVertical, double biggerSizeVertical) {
         this.radius = radius;
         this.nachschnittAnzahl = nachschnittAnzahl;
         this.vorschnittAnzahl = vorschnittAnzahl;
@@ -39,10 +47,30 @@ public class OptimisationBuffer {
         this.horizontalCount = horizontalCount;
         this.widthSideTaskHorizontal = widthSideTaskHorizontal;
         this.heightSideTaskHorizontal = heightSideTaskHorizontal;
+        this.xHorizontal = xHorizontal;
+        this.yHorizontal = yHorizontal;
+        this.smallerSizeHorizontal = smallerSizeHorizontal;
+        this.biggerSizeHorizontal = biggerSizeHorizontal;
 
         this.verticalCount = verticalCount;
         this.widthSideTaskVertical = widthSideTaskVertical;
         this.heightSideTaskVertical = heightSideTaskVertical;
+        this.xVertical = xVertical;
+        this.yVertical = yVertical;
+        this.smallerSizeVertical = smallerSizeVertical;
+        this.biggerSizeVertical = biggerSizeVertical;
+    }
+
+    //TODO delete; for testing purpose only
+    public void setNewValues(double radius, int nachschnittAnzahl, int vorschnittAnzahl, double widthHauptware,
+                             double heightHauptware, double biggerSize, double smallerSize) {
+        this.radius = radius;
+        this.nachschnittAnzahl = nachschnittAnzahl;
+        this.vorschnittAnzahl = vorschnittAnzahl;
+        this.widthHauptware = widthHauptware;
+        this.heightHauptware = heightHauptware;
+        this.biggerSize = biggerSize;
+        this.smallerSize = smallerSize;
     }
 
 
@@ -87,4 +115,22 @@ public class OptimisationBuffer {
     public double getWidthSideTaskVertical() { return widthSideTaskVertical; }
 
     public double getHeightSideTaskVertical() { return heightSideTaskVertical; }
+
+    public double getxHorizontal() {
+        return xHorizontal;
+    }
+
+    public double getyHorizontal() { return yHorizontal; }
+
+    public double getxVertical() { return xVertical; }
+
+    public double getyVertical() { return yVertical; }
+
+    public double getSmallerSizeHorizontal() { return smallerSizeHorizontal; }
+
+    public double getSmallerSizeVertical() { return smallerSizeVertical; }
+
+    public double getBiggerSizeVertical() { return biggerSizeVertical; }
+
+    public double getBiggerSizeHorizontal() { return biggerSizeHorizontal; }
 }
