@@ -122,7 +122,7 @@ public class TaskDAOJDBC implements TaskDAO {
     public void updateTask(Task task) throws PersistenceLayerException {
         LOG.info("called updateTask");
         String getStatement = "SELECT PRODUCED_QUANTITY FROM TASK WHERE ID = ?";
-        String updateStatement = "UPDATE TASK SET PRODUCED_QUANTITY = ?, DONE=? WHERE ID = ?";
+        String updateStatement = "UPDATE TASK SET PRODUCED_QUANTITY = ?, DONE=?, IN_PROGRESS=? WHERE ID = ?";
 
         try {
             PreparedStatement stmt = dbConnection.prepareStatement(getStatement);
@@ -137,7 +137,8 @@ public class TaskDAOJDBC implements TaskDAO {
                 stmt = dbConnection.prepareStatement(updateStatement);
                 stmt.setInt(1, new_amount);
                 stmt.setBoolean(2, task.isDone());
-                stmt.setInt(3, task.getId());
+                stmt.setBoolean(3, task.isIn_progress());
+                stmt.setInt(4, task.getId());
                 stmt.executeUpdate();
             }
 
@@ -148,10 +149,11 @@ public class TaskDAOJDBC implements TaskDAO {
             throw new PersistenceLayerException("Database Error");
         }
 
-    }
+        }
 
     @Override
     public List<Task> getAllOpenTasks() throws PersistenceLayerException {
+
         LOG.debug("called getAllOpenTasks");
 
         List<Task> taskList = new ArrayList<>();
@@ -180,9 +182,9 @@ public class TaskDAOJDBC implements TaskDAO {
                 currentTask.setQuantity(rs.getInt("quantity"));
                 currentTask.setProduced_quantity(rs.getInt("produced_quantity"));
 
-                currentTask.setPrice(rs.getInt("sum"));
+                currentTask.setPrice(rs.getInt("price"));
                 currentTask.setDone(rs.getBoolean("done"));
-
+                currentTask.setIn_progress(rs.getBoolean("in_progress"));
                 taskList.add(currentTask);
             }
 
@@ -233,8 +235,9 @@ public class TaskDAOJDBC implements TaskDAO {
                 currentTask.setQuantity(rs.getInt("quantity"));
                 currentTask.setProduced_quantity(rs.getInt("produced_quantity"));
 
-                currentTask.setPrice(rs.getInt("sum"));
+                currentTask.setPrice(rs.getInt("price"));
                 currentTask.setDone(rs.getBoolean("done"));
+                currentTask.setIn_progress(rs.getBoolean("in_progress"));
 
                 taskList.add(currentTask);
             }
@@ -278,8 +281,9 @@ public class TaskDAOJDBC implements TaskDAO {
                 currentTask.setLength(rs.getInt("length"));
                 currentTask.setQuantity(rs.getInt("quantity"));
                 currentTask.setProduced_quantity(rs.getInt("produced_quantity"));
-                currentTask.setPrice(rs.getInt("sum"));
+                currentTask.setPrice(rs.getInt("price"));
                 currentTask.setDone(rs.getBoolean("done"));
+                currentTask.setIn_progress(rs.getBoolean("in_progress"));
 
                 return currentTask;
             } else throw new EntityNotFoundException("");
@@ -311,7 +315,7 @@ public class TaskDAOJDBC implements TaskDAO {
 
                 Task currentTask = new Task();
                 currentTask.setQuantity(rs.getInt("quantity"));
-                currentTask.setPrice(rs.getInt("sum"));
+                currentTask.setPrice(rs.getInt("price"));
                 currentTask.setOrder_id(rs.getInt("orderid"));
                 currentTask.setDescription(rs.getString("description"));
                 currentTask.setFinishing(rs.getString("finishing"));
@@ -322,6 +326,7 @@ public class TaskDAOJDBC implements TaskDAO {
                 currentTask.setLength(rs.getInt("length"));
                 currentTask.setProduced_quantity(rs.getInt("produced_quantity"));
                 currentTask.setDone(rs.getBoolean("done"));
+                currentTask.setIn_progress(rs.getBoolean("in_progress"));
                 currentTask.setId(rs.getInt("id"));
 
                 taskList.add(currentTask);

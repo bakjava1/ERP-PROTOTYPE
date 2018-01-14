@@ -340,13 +340,6 @@ public class OfficeFXML {
             success.setHeaderText(null);
             success.setContentText("Order created successfully!");
             success.showAndWait();
-        } catch (InvalidInputException e) {
-            LOG.warn(e.getMessage());
-            Alert error = new Alert(Alert.AlertType.ERROR);
-            error.setTitle("Creation failed");
-            error.setHeaderText(null);
-            error.setContentText("Order Creation failed!");
-            error.showAndWait();
         } catch (ServiceLayerException e) {
             LOG.warn(e.getMessage());
         }
@@ -505,7 +498,7 @@ public class OfficeFXML {
         gridPane.add(finishing,2,1);
 
         ComboBox<String> wood_type =  new ComboBox<>();
-        wood_type.setItems(FXCollections.observableArrayList(  "Fi", "Ta", "Lä", "Ki", "Zi"));
+        wood_type.setItems(FXCollections.observableArrayList(  "Fi", "Ta", "Lae"));
         wood_type.setMaxWidth(200);
         wood_type.getSelectionModel().selectFirst();
         wood_type.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
@@ -588,14 +581,28 @@ public class OfficeFXML {
         gridPane.add(l_width,0,5,2,1);
         gridPane.add(width,2,5);
 
-        TextField length = new TextField("");
-        length.textProperty().addListener(new ChangeListener<String>() {
+        ComboBox<String> length =  new ComboBox<>();
+        length.setItems(FXCollections.observableArrayList(  "3500","4000","4500","5000"));
+        length.setMaxWidth(200);
+        length.getSelectionModel().selectFirst();
+        length.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    length.setText(newValue.replaceAll("[^\\d]", ""));
-                }
+            public ListCell<String> call(ListView<String> param) {
+                ListCell cell = new ListCell<String>() {
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        getListView().setMaxWidth(200);
+                        if (!empty) {
+                            setText(item);
+                        } else {
+                            setText(null);
+                        }
+                    }
+                };
+                return cell;
             }
         });
         Label l_length =  new Label("Länge:");
@@ -635,7 +642,7 @@ public class OfficeFXML {
         Platform.runLater(description::requestFocus);
         dialog.setResultConverter((ButtonType button) -> {
             if (button == ButtonType.OK) {
-                return new UnvalidatedTask(description.getText(),finishing.getSelectionModel().getSelectedItem(),wood_type.getSelectionModel().getSelectedItem(),quality.getSelectionModel().getSelectedItem(),size.getText(),width.getText(),length.getText(),quantity.getText(),cost.getText());
+                return new UnvalidatedTask(description.getText(),finishing.getSelectionModel().getSelectedItem(),wood_type.getSelectionModel().getSelectedItem(),quality.getSelectionModel().getSelectedItem(),size.getText(),width.getText(),length.getSelectionModel().getSelectedItem(),quantity.getText(),cost.getText());
             }
             return null;
         });
@@ -654,6 +661,7 @@ public class OfficeFXML {
                 alert.setHeaderText(null);
                 alert.setContentText("Task successfully created and added to your Order");
                 alert.showAndWait();
+                initiateCostValueFunction(null);
             } catch(InvalidInputException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error creating Task");
@@ -727,13 +735,57 @@ public class OfficeFXML {
             error.showAndWait();
             return;
         }
-        int randomized = costBenefitService.costValueFunctionStub(currentOrderSum);
-        if(randomized < 0) {
-            kn_result.setTextFill(Color.web("#dd0000"));
-            kn_result.setText(randomized+"");
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                costValueThread();
+            }
+
+        });
+        thread.start();
+    }
+
+
+    private void costValueThread() {
+        double evaluation;
+        try {
+            evaluation = costBenefitService.costValueFunction(currentOrderTaskList);
+        } catch(ServiceLayerException e) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    alertBuilder.showErrorAlert("Fehler bei Kosten/Nutzen Schätzung", null, "Ein Fehler trat bei der Kosten/Nutzen Schätzung auf\n Reason: " + e.getMessage());
+                }
+            });
+            return;
+        }
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                if(evaluation < 0) {
+                    kn_result.setTextFill(Color.web("#dd0000"));
+                    kn_result.setText("  " + evaluation + " €");
+                } else {
+                    kn_result.setTextFill(Color.web("#00dd00"));
+                    kn_result.setText("+ " + evaluation + " €");
+                }
+            }
+        });
+
+    }
+
+    public void deleteSelectedTask(ActionEvent actionEvent) {
+        if(table_addedTask.getSelectionModel().getSelectedIndex() == -1) {
+            alertBuilder.showErrorAlert("Kein Auftrag ausgewählt",null,"Bitte wählen sie einen Auftrag zum löschen aus");
         } else {
-            kn_result.setTextFill(Color.web("#00dd00"));
-            kn_result.setText(randomized+"");
+            int index = table_addedTask.getSelectionModel().getSelectedIndex();
+            int deletePrice = currentOrderTaskList.get(index).getPrice();
+            LOG.info("tablesize: " + table_addedTask.getItems().size() + " tasklistsize: " + currentOrderTaskList.size());
+            LOG.info("index: " + index);
+            table_addedTask.getItems().remove(index);
+            currentOrderTaskList.remove(index);
+            currentOrderSum -= deletePrice;
+            LOG.info("tablesize: " + table_addedTask.getItems().size() + " tasklistsize: " + currentOrderTaskList.size());
+            initiateCostValueFunction(null);
         }
     }
 

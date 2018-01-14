@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 
 import java.sql.SQLException;
@@ -42,4 +43,12 @@ public interface LumberDAO {
      */
     List<Lumber> getAllLumber(Lumber filter) throws PersistenceLayerException;
 
+    /**
+     * gets the lumber amount which is not reserved and fits the needs of a task
+     * @author Markus Fugger
+     * @param toCheck task which needs lumber
+     * @return how much lumber is aviable
+     * @throws PersistenceLayerException if an sqlexception occurs
+     */
+    int getLumberCountForTask(Task toCheck) throws PersistenceLayerException;
 }

@@ -4,7 +4,9 @@ import at.ac.tuwien.sepm.assignment.group02.server.entity.OptAlgorithmResult;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.convert.ConversionException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OptAlgorithmConverter implements SimpleConverter<OptAlgorithmResult, OptAlgorithmResultDTO>{
 
     @Override

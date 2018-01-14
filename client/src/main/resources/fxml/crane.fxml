@@ -5,31 +5,65 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="610.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.CraneOperatorFXML">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.CraneOperatorFXML">
    <children>
-      <Label layoutX="233.0" layoutY="136.0" text="Crane">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fff021" height="155.0" layoutX="50.0" layoutY="332.0" stroke="BLACK" strokeType="INSIDE" width="452.0" />
+      <Label layoutX="56.0" layoutY="341.0" text="Aktuell in Arbeit:">
+         <font>
+            <Font size="24.0" />
+         </font>
       </Label>
-      <Button layoutX="233.0" layoutY="542.0" mnemonicParsing="false" onAction="#setDone" text="Erledigt">
+      <Label layoutX="233.0" layoutY="136.0" text="Kranfahrer_in">
+      </Label>
+       <Button fx:id="btn_inProgress" layoutX="50.0" layoutY="508.0" mnemonicParsing="false" onAction="#setInProgressButtonPressed" text="In Arbeit">
+           <font>
+               <Font size="36.0" />
+           </font>
+       </Button>
+      <Button fx:id="btn_done" layoutX="312.0" layoutY="508.0" mnemonicParsing="false" onAction="#setDoneButtonPressed" text="Erledigt">
           <font>
-              <Font size="30.0" />
+              <Font size="36.0" />
           </font>
       </Button>
 
-      <Label layoutX="226.0" layoutY="14.0" text="Aufgaben">
+      <Label layoutX="414.0" text="Aufgaben">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
-      <TableView fx:id="table_assignment" layoutX="14.0" layoutY="67.0" prefHeight="457.0" prefWidth="583.0" style="-fx-font-size: 200%">
+      <TableView fx:id="table_open_assignment" layoutX="50.0" layoutY="73.0" prefHeight="249.0" prefWidth="452" style="-fx-font-size: 175%; -fx-border-width: 0px;">
           <columns>
-          <TableColumn fx:id="col_assignmentNr" prefWidth="75.0" text="Nr" />
-          <TableColumn fx:id="col_assignmentCreated" prefWidth="268.0" text="Eingang" />
-            <TableColumn fx:id="col_assignmentAmount" prefWidth="138.0" text="RH Anzahl" />
-            <TableColumn fx:id="col_assignmentBoxID" prefWidth="100.0" text="BoxNr" />
-              <TableColumn fx:id="col_assignmentDone" prefWidth="100.0" text="Erledigt" visible="false" />
+          <TableColumn fx:id="col_open_assignmentNr" prefWidth="50.0" text="Nr" />
+          <TableColumn fx:id="col_open_assignmentCreated" prefWidth="150.0" text="Eingang" />
+            <TableColumn fx:id="col_open_assignmentAmount" prefWidth="150.0" text="RH Anzahl" />
+            <TableColumn fx:id="col_open_assignmentBoxID" prefWidth="100.0" text="BoxNr" />
         </columns>
       </TableView>
+
+       <TableView fx:id="table_done_assignment" layoutX="600.0" layoutY="73.0" prefHeight="415.0" prefWidth="352" style="-fx-font-size: 125%; -fx-border-width: 0px;">
+           <columns>
+               <TableColumn fx:id="col_done_assignmentNr" prefWidth="35.0" text="Nr" />
+               <TableColumn fx:id="col_done_assignmentCreated" prefWidth="125.0" text="Eingang" />
+               <TableColumn fx:id="col_done_assignmentAmount" prefWidth="115.0" text="RH Anzahl" />
+               <TableColumn fx:id="col_done_assignmentBoxID" prefWidth="75.0" text="BoxNr" />
+           </columns>
+       </TableView>
+      <Label fx:id="currentAssignment_amount" layoutX="68.0" layoutY="400.0" prefHeight="30.0" prefWidth="188.0">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
+      <Label fx:id="currentAssignment_box" layoutX="280.0" layoutY="400.0" prefHeight="30.0" prefWidth="202.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="btn_inProgressAbort" layoutX="50.0" layoutY="508.0" mnemonicParsing="false" onAction="#abortInProgressButtonPressed" text="Abbrechen">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
@@ -142,6 +143,34 @@ public class LumberDAOJDBC implements LumberDAO {
         }
 
         return lumberList;
+    }
+
+    @Override
+    public int getLumberCountForTask(Task toCheck) throws PersistenceLayerException {
+        String checkSentence = "SELECT SUM(QUANTITY) , SUM(RESERVED_QUANTITY) FROM LUMBER WHERE " +
+                "LOWER(DESCRIPTION) = ? AND LOWER(FINISHING) = ? AND " +
+                "WOOD_TYPE LIKE ? AND QUALITY LIKE ? AND " +
+                "SIZE = ? AND WIDTH = ? AND LENGTH = ?";
+        try {
+            PreparedStatement stmt = dbConnection.prepareStatement(checkSentence);
+            stmt.setString(1,toCheck.getDescription().toLowerCase());
+            stmt.setString(2,toCheck.getFinishing().toLowerCase());
+            stmt.setString(3,"%" + toCheck.getWood_type() + "%");
+            stmt.setString(4,"%" + toCheck.getQuality() + "%");
+            stmt.setInt(5,toCheck.getSize());
+            stmt.setInt(6,toCheck.getWidth());
+            stmt.setInt(7,toCheck.getLength());
+            ResultSet rs = stmt.executeQuery();
+            int result = 0;
+            if(rs.next()) {
+                result += rs.getInt(1);
+                result -= rs.getInt(2);
+            }
+            return result;
+        } catch(SQLException e) {
+            LOG.error("Database Problem, Reason: " + e.getMessage());
+            throw new PersistenceLayerException("Database Problems");
+        }
     }
 
     @Override

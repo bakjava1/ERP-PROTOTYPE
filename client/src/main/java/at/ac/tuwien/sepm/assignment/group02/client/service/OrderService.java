@@ -20,7 +20,7 @@ public interface OrderService {
      * @throws InvalidInputException
      * @throws ServiceLayerException
      */
-    void addOrder(Order order, List<Task> tasks) throws InvalidInputException, ServiceLayerException;
+    void addOrder(Order order, List<Task> tasks) throws ServiceLayerException;
 
     /**
      * delete an order
