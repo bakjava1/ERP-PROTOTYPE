@@ -238,14 +238,15 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
 
         //side task vertical
-        double xCoordinateLeft = optBuffer.getxVertical();
-        double xCoordinateRight = (currentRadius + (widthMainTask/2)) + SCHNITTFUGE;
-        yCoordinate = optBuffer.getyVertical();
+        double xCoordinateLeft = currentRadius - widthMainTask - SCHNITTFUGE * 2 - SCHNITTFUGE/2;
+        double xCoordinateRight = currentRadius + optBuffer.getSmallerSize() - SCHNITTFUGE;
+        yCoordinate = optBuffer.getyVertical() + (optBuffer.getMaxHeightSideTaskVertical() - optBuffer.getHeightSideTaskVertical())/2;
+        //yCoordinate = currentRadius - heightMainTask/2;
 
         for(int i = 0; i < optBuffer.getVerticalCount(); i++) {
             System.out.print("");
-            rectangles.add(new RectangleDTO(xCoordinateLeft, yCoordinate, "red", optBuffer.getWidthSideTaskVertical(), optBuffer.getHeightSideTaskVertical()));
-            rectangles.add(new RectangleDTO(xCoordinateRight, yCoordinate, "red", optBuffer.getWidthSideTaskVertical(), optBuffer.getHeightSideTaskVertical()));
+            rectangles.add(new RectangleDTO(xCoordinateLeft, yCoordinate, "red", optBuffer.getBiggerSizeVertical(), optBuffer.getSmallerSizeVertical()));
+            rectangles.add(new RectangleDTO(xCoordinateRight, yCoordinate, "red", optBuffer.getBiggerSizeVertical(), optBuffer.getSmallerSizeVertical()));
             yCoordinate += (optBuffer.getBiggerSizeVertical() + SCHNITTFUGE);
         }
 
@@ -254,13 +255,14 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
         //side task horizontal
         xCoordinate = optBuffer.getxHorizontal();
-        double yCoordinateTop = optBuffer.getyHorizontal();
-        double yCoordinateBottom = currentRadius - heightMainTask/2 - SCHNITTFUGE;
+        //double yCoordinateTop = currentRadius - heightMainTask/2 - SCHNITTFUGE * optBuffer.getNachschnittAnzahl() - SCHNITTFUGE;
+        double yCoordinateTop = currentRadius - heightMainTask/2 - optBuffer.getSmallerSizeHorizontal() - SCHNITTFUGE;
+        double yCoordinateBottom = heightMainTask + SCHNITTFUGE + SCHNITTFUGE/2;
 
         for(int i = 0; i < optBuffer.getHorizontalCount(); i++) {
             System.out.print("");
-            rectangles.add(new RectangleDTO(xCoordinate, yCoordinateTop, "blue", optBuffer.getWidthSideTaskHorizontal(), optBuffer.getHeightSideTaskVertical()));
-            rectangles.add(new RectangleDTO(xCoordinate, yCoordinateBottom, "blue", optBuffer.getWidthSideTaskHorizontal(), optBuffer.getHeightSideTaskVertical()));
+            rectangles.add(new RectangleDTO(xCoordinate, yCoordinateTop, "blue", optBuffer.getSmallerSizeHorizontal(), optBuffer.getBiggerSizeHorizontal()));
+            rectangles.add(new RectangleDTO(xCoordinate, yCoordinateBottom, "blue", optBuffer.getSmallerSizeHorizontal(), optBuffer.getBiggerSizeHorizontal()));
             xCoordinate += (optBuffer.getBiggerSizeHorizontal() + SCHNITTFUGE);
         }
 
@@ -337,9 +339,14 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
                     optAlgorithmResult.setTimberResult(currentTimber);
 
+                    //check if y1 is upper left corner
+                    //for drawing the rectangle shape
+                    if(y1 > y2) {
+                        y1 = y2;
+                    }
                     optBuffer.setNewValues(currentRadius, nachschnittAnzahl, vorschnittAnzahl, widthMainTask, heightMainTask, biggerSize, smallerSize,
                             horizontalCount, widthSideTaskHorizontal, heightSideTaskHorizontal, xCoordinateSideTaskHorizontal, yCoordinateSideTaskHorizontal, smallerSizeHorizontal, biggerSizeHorizontal,
-                            verticalCount, widthSideTaskVertical, heightSideTaskVertical, xCoordinateSideTaskVertical, y1, smallerSizeVertical, biggerSizeVertical);
+                            verticalCount, widthSideTaskVertical, heightSideTaskVertical, xCoordinateSideTaskVertical, y1, smallerSizeVertical, biggerSizeVertical, maxHeightSideTaskVertical);
                 }
 
                 if (horizontalIndex < possibleSideTasks.size() - 1) {

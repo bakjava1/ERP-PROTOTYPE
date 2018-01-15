@@ -19,7 +19,7 @@ public class OptimisationBuffer {
     private double xHorizontal;
     private double yHorizontal;
     private double smallerSizeHorizontal;
-    private double biggerSizeVertical;
+    private double biggerSizeHorizontal;
 
     //side task vertical (left and right)
     private int verticalCount;
@@ -28,14 +28,15 @@ public class OptimisationBuffer {
     private double xVertical;
     private double yVertical;
     private double smallerSizeVertical;
-    private double biggerSizeHorizontal;
+    private double biggerSizeVertical;
+    private double maxHeightSideTaskVertical;
 
     public OptimisationBuffer(){}
 
     public void setNewValues(double radius, int nachschnittAnzahl, int vorschnittAnzahl, double widthHauptware,
                              double heightHauptware, double biggerSize, double smallerSize,
                              int horizontalCount, double widthSideTaskHorizontal, double heightSideTaskHorizontal, double xHorizontal, double yHorizontal, double smallerSizeHorizontal, double biggerSizeHorizontal,
-                             int verticalCount, double widthSideTaskVertical, double heightSideTaskVertical, double xVertical, double yVertical, double smallerSizeVertical, double biggerSizeVertical) {
+                             int verticalCount, double widthSideTaskVertical, double heightSideTaskVertical, double xVertical, double yVertical, double smallerSizeVertical, double biggerSizeVertical, double maxHeightSideTaskVertical) {
         this.radius = radius;
         this.nachschnittAnzahl = nachschnittAnzahl;
         this.vorschnittAnzahl = vorschnittAnzahl;
@@ -59,6 +60,7 @@ public class OptimisationBuffer {
         this.yVertical = yVertical;
         this.smallerSizeVertical = smallerSizeVertical;
         this.biggerSizeVertical = biggerSizeVertical;
+        this.maxHeightSideTaskVertical = maxHeightSideTaskVertical;
     }
 
     //TODO delete; for testing purpose only
@@ -133,4 +135,6 @@ public class OptimisationBuffer {
     public double getBiggerSizeVertical() { return biggerSizeVertical; }
 
     public double getBiggerSizeHorizontal() { return biggerSizeHorizontal; }
+
+    public double getMaxHeightSideTaskVertical() { return maxHeightSideTaskVertical; }
 }
