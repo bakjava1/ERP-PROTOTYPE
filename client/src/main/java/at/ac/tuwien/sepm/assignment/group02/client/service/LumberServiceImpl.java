@@ -117,7 +117,7 @@ public class LumberServiceImpl implements LumberService {
 
         // validate method parameters
         validateLumber(lumber);
-        validator.validateNumber(quantity+"");
+        validator.validateNumber(quantity+"",1000);
         //validateTask(taskDTO); TODO
 
         // check if reservation quantity is needed for task

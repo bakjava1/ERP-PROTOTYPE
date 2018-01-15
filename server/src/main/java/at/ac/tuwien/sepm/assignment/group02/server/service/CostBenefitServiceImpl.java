@@ -61,7 +61,8 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                 LOG.debug("Aviable for Task " + i + ": " + aviable);
                 if(toEvaluate.get(i).getQuantity() <= aviable) {
                     LOG.debug("Lumber Quantity " + toEvaluate.get(i).getQuantity() + " completely aviable in Storage -> + " + toEvaluate.get(i).getPrice());
-                    summe += toEvaluate.get(i).getPrice();
+                    double fromCentToEuro = centToEuro(toEvaluate.get(i).getPrice());
+                    summe += fromCentToEuro;
                 } else {
                     LOG.debug("Lumber Quantity " + toEvaluate.get(i).getQuantity() + " not completely aviable in Storage");
                     int toBeProduced = toEvaluate.get(i).getQuantity() - aviable;
@@ -130,7 +131,8 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                         LOG.error("Lumber with Values length: " + toEvaluate.get(i).getLength() + " width: " + toEvaluate.get(i).getWidth() + " size: " + toEvaluate.get(i).getSize() + " can not be produced");
                         throw new ServiceLayerException("Lumber with Values length: " + toEvaluate.get(i).getLength() + " width: " + toEvaluate.get(i).getWidth() + " size: " + toEvaluate.get(i).getSize() + " can not be produced");
                     } else {
-                        double difference = (double) toEvaluate.get(i).getPrice() - optimalProduceCost;
+                        double fromCentToEuro = centToEuro(toEvaluate.get(i).getPrice());
+                        double difference = fromCentToEuro - optimalProduceCost;
                         LOG.debug("Optimal Production Costs are: " + optimalProduceCost + " Resulting in: " + difference + " €");
                         summe += difference;
                     }
@@ -145,5 +147,12 @@ public class CostBenefitServiceImpl implements CostBenefitService {
         bd = bd.setScale(4, RoundingMode.HALF_UP);
         summe = bd.doubleValue();
         return summe;
+    }
+
+    private double centToEuro(int price) {
+        double result = 0.0;
+        result = Math.floor((double) price / (double) 100);
+        result += ((double) price % (double) 100) / (double) 100;
+        return result;
     }
 }

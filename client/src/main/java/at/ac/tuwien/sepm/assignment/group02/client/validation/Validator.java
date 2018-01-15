@@ -21,7 +21,7 @@ public class Validator {
         int[] result = new int[2];
         int validatedId;
         try {
-            validatedId = validateNumber(id);
+            validatedId = validateNumber(id,Integer.MAX_VALUE);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Id: " + e.getMessage());
             throw new InvalidInputException("Error at Id: " + e.getMessage());
@@ -29,7 +29,7 @@ public class Validator {
         result[0] = validatedId;
         int validatedAmount;
         try {
-            validatedAmount = validateNumber(amount);
+            validatedAmount = validateNumber(amount,Integer.MAX_VALUE);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Amount: " + e.getMessage());
             throw new InvalidInputException("Error at Amount: " + e.getMessage());
@@ -160,35 +160,38 @@ public class Validator {
         }
         int validatedSize;
         try {
-            validatedSize = validateNumber(toValidate.getSize());
+            validatedSize = validateNumber(toValidate.getSize(),1000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Size: " + e.getMessage());
             throw new InvalidInputException("Error at Size: " + e.getMessage());
         }
         int validatedWidth;
         try {
-            validatedWidth = validateNumber(toValidate.getWidth());
+            validatedWidth = validateNumber(toValidate.getWidth(),1000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Width: " + e.getMessage());
             throw new InvalidInputException("Error at Width: " + e.getMessage());
         }
         int validatedLength;
         try {
-            validatedLength = validateNumber(toValidate.getLength());
+            validatedLength = validateNumber(toValidate.getLength(),5000);
+            if(validatedLength != 3500 && validatedLength != 4000 && validatedLength != 4500 && validatedLength != 5000) {
+                throw new InvalidInputException("Please enter a producable Length! (3500,4000,4500,5000");
+            }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Length: " + e.getMessage());
             throw new InvalidInputException("Error at Length: " + e.getMessage());
         }
         int validatedQuantity;
         try {
-            validatedQuantity = validateNumber(toValidate.getQuantity());
+            validatedQuantity = validateNumber(toValidate.getQuantity(),1000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Quantity: " + e.getMessage());
             throw new InvalidInputException("Error at Quantity: " + e.getMessage());
         }
         int validatedPrice;
         try {
-            validatedPrice = validateNumber(toValidate.getPrice());
+            validatedPrice = validateNumber(toValidate.getPrice(),10000000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Price: " + e.getMessage());
             throw new InvalidInputException("Error at Price: " + e.getMessage());
@@ -202,7 +205,7 @@ public class Validator {
 
     }
 
-    public int validateNumber(String toValidate) throws NoValidIntegerException {
+    public int validateNumber(String toValidate,int size) throws NoValidIntegerException {
         int num;
         if(toValidate == null || toValidate.length() == 0) {
             throw new NoValidIntegerException("Empty Field, No Number entered");
@@ -211,6 +214,9 @@ public class Validator {
             num = Integer.parseInt(toValidate);
             if (num <= 0) {
                 throw new NoValidIntegerException("Negative Integer or Null entered");
+            }
+            if(num > size) {
+                throw new NoValidIntegerException("Value entered was too big! Enter Value < " + size);
             }
         } catch (NumberFormatException e) {
             LOG.error("No valid Integer entered");
@@ -224,7 +230,7 @@ public class Validator {
             throw new EmptyInputException("Empty Field");
         }
         if(toValidate.length() > length && length != -1) {
-            throw new EmptyInputException("Input too long");
+            throw new EmptyInputException("Input was too long! Enter Input which is max. " + length + " long");
         }
     }
 

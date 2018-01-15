@@ -11,7 +11,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +49,7 @@ public class CostBenefitServerSideTest {
         task1.setWidth(52);
         task1.setLength(4500);
         task1.setQuantity(5);
-        task1.setPrice(15);
+        task1.setPrice(1500);
         taskDTOList.add(task1);
 
         TaskDTO task2 = new TaskDTO();
@@ -62,7 +61,7 @@ public class CostBenefitServerSideTest {
         task2.setWidth(54);
         task2.setLength(4500);
         task2.setQuantity(10);
-        task2.setPrice(50);
+        task2.setPrice(5000);
         taskDTOList.add(task2);
 
         double result = costBenefitService.costValueFunction(taskDTOList);
@@ -80,7 +79,7 @@ public class CostBenefitServerSideTest {
         task1.setWidth(52);
         task1.setLength(4500);
         task1.setQuantity(5);
-        task1.setPrice(15);
+        task1.setPrice(1500);
         taskDTOList.add(task1);
 
         TaskDTO task2 = new TaskDTO();
@@ -92,7 +91,7 @@ public class CostBenefitServerSideTest {
         task2.setWidth(40);
         task2.setLength(4000);
         task2.setQuantity(20);
-        task2.setPrice(100);
+        task2.setPrice(10000);
         taskDTOList.add(task2);
 
         double result = costBenefitService.costValueFunction(taskDTOList);
@@ -110,7 +109,7 @@ public class CostBenefitServerSideTest {
         task1.setWidth(52);
         task1.setLength(4500);
         task1.setQuantity(5);
-        task1.setPrice(15);
+        task1.setPrice(1500);
         taskDTOList.add(task1);
 
         TaskDTO task2 = new TaskDTO();
@@ -122,7 +121,7 @@ public class CostBenefitServerSideTest {
         task2.setWidth(54);
         task2.setLength(4500);
         task2.setQuantity(2);
-        task2.setPrice(10);
+        task2.setPrice(1000);
         taskDTOList.add(task2);
 
         double result = costBenefitService.costValueFunction(taskDTOList);
@@ -140,7 +139,7 @@ public class CostBenefitServerSideTest {
         task1.setWidth(52);
         task1.setLength(4500);
         task1.setQuantity(5);
-        task1.setPrice(15);
+        task1.setPrice(1500);
         taskDTOList.add(task1);
 
         TaskDTO task2 = new TaskDTO();
@@ -152,7 +151,7 @@ public class CostBenefitServerSideTest {
         task2.setWidth(60);
         task2.setLength(5000);
         task2.setQuantity(100);
-        task2.setPrice(200);
+        task2.setPrice(20000);
         taskDTOList.add(task2);
 
         double result = costBenefitService.costValueFunction(taskDTOList);
@@ -170,7 +169,7 @@ public class CostBenefitServerSideTest {
         task1.setWidth(52);
         task1.setLength(4500);
         task1.setQuantity(5);
-        task1.setPrice(15);
+        task1.setPrice(1500);
         taskDTOList.add(task1);
 
         TaskDTO task2 = new TaskDTO();
@@ -182,7 +181,7 @@ public class CostBenefitServerSideTest {
         task2.setWidth(60);
         task2.setLength(5000);
         task2.setQuantity(100);
-        task2.setPrice(100);
+        task2.setPrice(10000);
         taskDTOList.add(task2);
 
         double result = costBenefitService.costValueFunction(taskDTOList);
@@ -200,7 +199,7 @@ public class CostBenefitServerSideTest {
         task1.setWidth(52);
         task1.setLength(4000);
         task1.setQuantity(5);
-        task1.setPrice(150);
+        task1.setPrice(15000);
         taskDTOList.add(task1);
 
         TaskDTO task2 = new TaskDTO();
@@ -212,7 +211,7 @@ public class CostBenefitServerSideTest {
         task2.setWidth(54);
         task2.setLength(4000);
         task2.setQuantity(10);
-        task2.setPrice(100);
+        task2.setPrice(10000);
         taskDTOList.add(task2);
 
         double result = costBenefitService.costValueFunction(taskDTOList);
@@ -230,7 +229,7 @@ public class CostBenefitServerSideTest {
         task1.setWidth(52);
         task1.setLength(4000);
         task1.setQuantity(5);
-        task1.setPrice(15);
+        task1.setPrice(1500);
         taskDTOList.add(task1);
 
         TaskDTO task2 = new TaskDTO();
@@ -242,7 +241,7 @@ public class CostBenefitServerSideTest {
         task2.setWidth(54);
         task2.setLength(4000);
         task2.setQuantity(10);
-        task2.setPrice(50);
+        task2.setPrice(5000);
         taskDTOList.add(task2);
 
         double result = costBenefitService.costValueFunction(taskDTOList);
@@ -271,7 +270,7 @@ public class CostBenefitServerSideTest {
         task1.setWidth(52);
         task1.setLength(2000);
         task1.setQuantity(5);
-        task1.setPrice(15);
+        task1.setPrice(1500);
         taskDTOList.add(task1);
 
         costBenefitService.costValueFunction(taskDTOList);
@@ -288,7 +287,7 @@ public class CostBenefitServerSideTest {
         task1.setWidth(530);
         task1.setLength(4000);
         task1.setQuantity(5);
-        task1.setPrice(15);
+        task1.setPrice(1500);
         taskDTOList.add(task1);
 
         costBenefitService.costValueFunction(taskDTOList);
