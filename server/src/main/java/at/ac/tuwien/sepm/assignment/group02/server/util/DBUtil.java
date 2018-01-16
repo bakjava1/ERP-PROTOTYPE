@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.group02.server.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -46,6 +47,14 @@ public class DBUtil {
         }
 
         return connection;
+    }
+
+    public static void dropDB(){
+//TODO
+    }
+
+    public static void initDB(String filepath){
+//TODO
     }
 
     public void createTestData(){

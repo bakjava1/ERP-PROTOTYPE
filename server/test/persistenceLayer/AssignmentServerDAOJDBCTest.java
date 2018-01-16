@@ -25,11 +25,6 @@ public class AssignmentServerDAOJDBCTest {
     private Connection dbConnection;
 
     @Test
-    public void testCreateAssignment_works() throws Exception {
-
-    }
-
-    @Test
     public void testSetAssignmentDone_works() throws Exception {
         AssignmentDAO assignmentDAO
                 = new AssignmentDAOJDBC(dbConnection);

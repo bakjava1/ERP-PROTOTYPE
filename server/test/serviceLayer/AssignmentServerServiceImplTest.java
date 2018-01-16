@@ -45,7 +45,7 @@ public class AssignmentServerServiceImplTest {
     private TaskService taskService;
 
     @Test
-    public void testCreateTask_works() throws Exception {
+    public void testCreateAssignment_works() throws Exception {
         AssignmentService assignmentService
                 = new AssignmentServiceImpl(assignmentManagementDAO, assignmentConverter, validateAssignment,
                 timberService, lumberService, taskService);
@@ -58,7 +58,7 @@ public class AssignmentServerServiceImplTest {
     }
 
     @Test(expected = InvalidInputException.class)
-    public void testCreateTask_ValidationException() throws Exception {
+    public void testCreateAssignment_ValidationException() throws Exception {
         AssignmentService assignmentService
                 = new AssignmentServiceImpl(assignmentManagementDAO, assignmentConverter, validateAssignment,
                 timberService, lumberService, taskService);
@@ -71,7 +71,7 @@ public class AssignmentServerServiceImplTest {
     }
 
     @Test(expected = ServiceLayerException.class)
-    public void testCreateTask_PersistenceLayerException() throws Exception {
+    public void testCreateAssignment_PersistenceLayerException() throws Exception {
         AssignmentService assignmentService
                 = new AssignmentServiceImpl(assignmentManagementDAO, assignmentConverter, validateAssignment,
                 timberService, lumberService, taskService);
@@ -306,9 +306,8 @@ public class AssignmentServerServiceImplTest {
         TaskDTO mockTaskDTO = Mockito.mock(TaskDTO.class);
         when(taskService.getTaskById(mockAssignment.getTask_id())).thenReturn(mockTaskDTO);
 
-        // return a mocked array list of LumberDTO that is empty
-        List<LumberDTO> mockLumberDTOList = new ArrayList<>();
-        doReturn(mockLumberDTOList).when(lumberService).getAllLumber(any(LumberDTO.class));
+        // return null instead of array list
+        doReturn(null).when(lumberService).getAllLumber(any(LumberDTO.class));
 
         assignmentService.setDone(any(AssignmentDTO.class));
 

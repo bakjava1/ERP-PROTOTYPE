@@ -2,17 +2,16 @@ package at.ac.tuwien.sepm.assignment.group02.server.entity;
 
 public class Timber {
 
-    private int box_id;
-    private String wood_type;
-    private double festmeter;
-    private int amount;
     private int MAX_AMOUNT;
-    private int length;
-    private String quality;
+    private int box_id;
     private int diameter;
+    private int amount;
+    private String wood_type;
+    private String quality;
+    private int length;
+    private double festmeter;
     private int price;
     private String last_edited;
-
 
     public Timber() {
 

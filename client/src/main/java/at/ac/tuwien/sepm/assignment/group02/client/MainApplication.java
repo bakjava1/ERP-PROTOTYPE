@@ -54,7 +54,7 @@ public class MainApplication extends Application {
             primaryStage.setTitle("Kranfahrer");
             //primaryStage.setTitle("Crame Operator");
 
-            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/crane.fxml"), 610, 625));
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/crane.fxml"), 1000, 600));
         }
 
         primaryStage.centerOnScreen();
