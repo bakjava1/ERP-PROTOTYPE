@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.entity.Assignment;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundExceptionService;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.AssignmentDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateAssignment;
 import org.slf4j.Logger;
@@ -64,7 +65,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException {
-        LOG.debug("get all open assignments called in server service layer");
+        LOG.trace("get all open assignments called in server service layer");
 
         List<Assignment> allOpenAssignments = new LinkedList<>();
         List<AssignmentDTO> allOpenAssignmentsConverted = new LinkedList<>();
@@ -84,7 +85,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public List<AssignmentDTO> getAllAssignments() throws ServiceLayerException {
-        LOG.debug("get all open assignments called in server service layer");
+        LOG.trace("get all open assignments called in server service layer");
 
         List<Assignment> allAssignments = new LinkedList<>();
         List<AssignmentDTO> allAssignmentsConverted = new LinkedList<>();
@@ -117,10 +118,10 @@ public class AssignmentServiceImpl implements AssignmentService {
             assignmentManagementDAO.setAssignmentDone(assignment);
         } catch (EntityNotFoundException e){
             LOG.error("Entity Not Found: " + e.getMessage());
-            throw new ServiceLayerException("entity not found");
+            throw new EntityNotFoundExceptionService(e.getMessage());
         } catch(PersistenceLayerException e) {
             LOG.error("Database Problems: " + e.getMessage());
-            throw new ServiceLayerException("database problem.");
+            throw new ServiceLayerException(e.getMessage());
         }
 
         // 3.2.3 (rest/TimberController) Rundholz aus dem Lager entfernen.

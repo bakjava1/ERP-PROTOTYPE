@@ -4,7 +4,6 @@ import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface LumberDAO {

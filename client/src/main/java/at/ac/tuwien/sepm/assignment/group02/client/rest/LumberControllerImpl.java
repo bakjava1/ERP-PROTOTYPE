@@ -2,15 +2,15 @@ package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.util.HandleException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -19,12 +19,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implements interface from rest/restController
- */
-
-@RestController
-@RequestMapping("/lumbers")
+@Component
 public class LumberControllerImpl implements LumberController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -48,12 +43,10 @@ public class LumberControllerImpl implements LumberController {
         try {
             restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/reserveLumber", lumberDTO, LumberDTO.class);
         } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-            throw new PersistenceLayerException("Ressource nicht gefunden.");
+            HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("Server nicht erreichbar.");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 
@@ -62,19 +55,15 @@ public class LumberControllerImpl implements LumberController {
         LOG.debug("get lumber");
 
         List<LumberDTO> lumberList = new ArrayList<>();
-
-//        LumberDTO[] lumberArray = restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllLumber", filter, LumberDTO[].class);
-        LumberDTO[] lumberArray;
+        LumberDTO[] lumberArray = null;
 
         try {
             lumberArray = restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllLumber", filter, LumberDTO[].class);
         } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
         }
 
             for (int i = 0; lumberArray!= null && i < lumberArray.length; i++) {
@@ -93,12 +82,10 @@ public class LumberControllerImpl implements LumberController {
             //restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, OrderDTO.class);
             restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, OrderDTO.class);
         } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 
@@ -133,19 +120,17 @@ public class LumberControllerImpl implements LumberController {
     public LumberDTO getLumberById(@RequestParam(value="id", defaultValue="0") int id) throws PersistenceLayerException {
         LOG.debug("called getLumber");
 
-        LumberDTO lumberDTO;
+        LumberDTO lumberDTO = null;
 
         try {
             lumberDTO = restTemplate.getForObject(
                     "http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/getLumberById/{id}",
                     LumberDTO.class, id);
         } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
         }
 
         return lumberDTO;

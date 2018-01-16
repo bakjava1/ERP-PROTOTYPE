@@ -41,7 +41,7 @@ public class CostBenefitServiceImpl implements CostBenefitService {
             result = costBenefitController.costValueFunction(toEvaluate);
         } catch(PersistenceLayerException e) {
             LOG.error("Error at Server: " + e.getMessage());
-            throw new ServiceLayerException("Error at Server: " + e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
         return result;
     }

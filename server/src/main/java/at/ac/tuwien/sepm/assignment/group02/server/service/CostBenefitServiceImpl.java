@@ -68,7 +68,10 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                     int cost1 = -1;
                     int cost2 = -1;
                     try {
-                        input = new FileInputStream(System.getProperty("user.home")+"/Desktop/proj_ws17_sepm_qse_02/server/src/main/resources/cost.properties");
+//                        input = new FileInputStream(System.getProperty("user.home")+"/Desktop/proj_ws17_sepm_qse_02/server/src/main/resources/cost.properties");
+                        input = new FileInputStream(CostBenefitService.class
+                                .getClassLoader()
+                                .getResource("cost.properties").getFile());
                         properties.load(input);
                         cost1 = Integer.parseInt(properties.getProperty("cost/bankmeter/riftsaw"));
                         cost2 = Integer.parseInt(properties.getProperty("cost/bankmeter/bandsaw"));

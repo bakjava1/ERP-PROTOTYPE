@@ -48,7 +48,7 @@ public class LumberServiceImpl implements LumberService {
         try {
             lumberDTO = lumberController.getLumberById(id);
         } catch (PersistenceLayerException e) {
-            e.printStackTrace();
+            LOG.warn(e.getMessage());
         }
 
         return lumberConverter.convertRestDTOToPlainObject(lumberDTO);
@@ -67,7 +67,7 @@ public class LumberServiceImpl implements LumberService {
             throw new InvalidInputException(e.getMessage());
         } catch(PersistenceLayerException e) {
             LOG.error("Failed to reserve Lumber in Task: " + e.getMessage());
-            throw new ServiceLayerException("Server Problems");
+            throw new ServiceLayerException(e.getMessage());
         }
     }
 
@@ -84,7 +84,7 @@ public class LumberServiceImpl implements LumberService {
     @Override
     public List<Lumber> getAll(UnvalidatedLumber filter)throws ServiceLayerException {
         LOG.debug("getAllSchnittholz called");
-        List<LumberDTO> allLumber = null;
+        List<LumberDTO> allLumber;
 
         try {
 
@@ -99,7 +99,7 @@ public class LumberServiceImpl implements LumberService {
             throw new InvalidInputException(e.getMessage());
         } catch (PersistenceLayerException e) {
             LOG.warn("Failed to get all Lumber"+e.getMessage());
-            throw new ServiceLayerException("Server Problems");
+            throw new ServiceLayerException(e.getMessage());
         }
 
         List<Lumber> allLumberConverted = new LinkedList<>();
@@ -139,7 +139,7 @@ public class LumberServiceImpl implements LumberService {
             lumberController.reserveLumber(lumberDTO);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
-            throw new ServiceLayerException("Schnittholz konnte nicht reserviert werden.");
+            throw new ServiceLayerException("Schnittholz konnte nicht reserviert werden. "+e.getMessage());
         }
 
         int producedQuantity = taskDTO.getProduced_quantity() + quantity;
@@ -151,7 +151,7 @@ public class LumberServiceImpl implements LumberService {
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
             // TODO reset lumber reservation
-            throw new ServiceLayerException("Schnittholz konnte dem Auftrag nicht hinzugefügt werden.");
+            throw new ServiceLayerException("Schnittholz konnte dem Auftrag nicht hinzugefügt werden."+e.getMessage());
         }
     }
 
@@ -163,9 +163,7 @@ public class LumberServiceImpl implements LumberService {
         try {
             validateLumber(lumber);
         } catch (NoValidIntegerException e) {
-            e.printStackTrace();
-        } catch (InvalidInputException e) {
-            e.printStackTrace();
+            LOG.warn(e.getMessage());
         }
         LumberDTO lumberToDelete = lumberConverter.convertPlainObjectToRestDTO(lumber);
         try {
@@ -182,9 +180,7 @@ public class LumberServiceImpl implements LumberService {
         try {
             validateLumber(lumber);
         } catch (NoValidIntegerException e) {
-            e.printStackTrace();
-        } catch (InvalidInputException e) {
-            e.printStackTrace();
+            LOG.warn(e.getMessage());
         }
         LumberDTO toUpdate = lumberConverter.convertPlainObjectToRestDTO(lumber);
         try {
@@ -203,7 +199,7 @@ public class LumberServiceImpl implements LumberService {
             try {
                 throw new InvalidInputException("Lumber can't be empty.");
             } catch (InvalidInputException e) {
-                e.printStackTrace();
+                LOG.warn(e.getMessage());
             }
         }
 
@@ -212,7 +208,7 @@ public class LumberServiceImpl implements LumberService {
             try {
                 throw new NoValidIntegerException("Invalid ID.");
             } catch (NoValidIntegerException e) {
-                e.printStackTrace();
+                LOG.warn(e.getMessage());
             }
         }
 
@@ -221,7 +217,7 @@ public class LumberServiceImpl implements LumberService {
             try {
                 throw new NoValidIntegerException("Negative Integer or Null entered");
             } catch (NoValidIntegerException e) {
-                e.printStackTrace();
+                LOG.warn(e.getMessage());
             }
         }
 
@@ -230,7 +226,7 @@ public class LumberServiceImpl implements LumberService {
             try {
                 throw new NoValidIntegerException("Negative Integer or Null entered.");
             } catch (NoValidIntegerException e) {
-                e.printStackTrace();
+                LOG.warn(e.getMessage());
             }
         }
 
@@ -239,7 +235,7 @@ public class LumberServiceImpl implements LumberService {
             try {
                 throw new NoValidIntegerException("Negative Integer or Null entered.");
             } catch (NoValidIntegerException e) {
-                e.printStackTrace();
+                LOG.warn(e.getMessage());
             }
         }
         if(lumber.getQuantity()<0){
@@ -247,7 +243,7 @@ public class LumberServiceImpl implements LumberService {
             try {
                 throw new NoValidIntegerException("Negative Integer or Null entered.");
             } catch (NoValidIntegerException e) {
-                e.printStackTrace();
+                LOG.warn(e.getMessage());
             }
         }
         if(lumber.getReserved_quantity()<0){
@@ -255,7 +251,7 @@ public class LumberServiceImpl implements LumberService {
             try {
                 throw new NoValidIntegerException("Negative Integer or Null entered.");
             } catch (NoValidIntegerException e) {
-                e.printStackTrace();
+                LOG.warn(e.getMessage());
             }
         }
         if(lumber.getDelivered_quantity()<0){
@@ -263,7 +259,7 @@ public class LumberServiceImpl implements LumberService {
             try {
                 throw new NoValidIntegerException("Negative Integer or Null entered.");
             } catch (NoValidIntegerException e) {
-                e.printStackTrace();
+                LOG.warn(e.getMessage());
             }
         }
 
@@ -273,7 +269,7 @@ public class LumberServiceImpl implements LumberService {
             try {
                 throw new PersistenceLayerException("All reserved persist.");
             }catch (PersistenceLayerException e){
-                e.printStackTrace();
+                LOG.warn(e.getMessage());
             }
         }
 

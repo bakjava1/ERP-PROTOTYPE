@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.util.HandleException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,12 +35,10 @@ public class TimberControllerImpl implements TimberController {
             restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/createTimber", timberDTO, TimberDTO.class);
 
         } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
         }
 
 
@@ -53,7 +52,7 @@ public class TimberControllerImpl implements TimberController {
     @Override
     public TimberDTO getTimberById(@RequestParam(value="id", defaultValue="0") int id) throws PersistenceLayerException {
         LOG.debug("called getTimberById");
-        TimberDTO timberDTO;
+        TimberDTO timberDTO = null;
 
         try{
             timberDTO = restTemplate.getForObject(
@@ -61,12 +60,10 @@ public class TimberControllerImpl implements TimberController {
                     TimberDTO.class, id);
 
         } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
         }
 
         return timberDTO;
@@ -75,17 +72,15 @@ public class TimberControllerImpl implements TimberController {
     @Override
     public int getNumberOfBoxes() throws PersistenceLayerException {
         LOG.debug("called getNumberOfBoxes");
-        int timber_int;
+        int timber_int = -1;
 
         try {
             timber_int = restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getNumberOfBoxes", Integer.class);
         } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
         }
 
         return timber_int;

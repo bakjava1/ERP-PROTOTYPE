@@ -244,7 +244,7 @@ public class LeadWorkerFXML {
             LOG.warn(e.getMessage());
             AlertBuilder alertBuilder = new AlertBuilder();
             alertBuilder.showInformationAlert("Übersicht Aufträge",
-                    "Übersicht Aufträge", "Fehler bei Erstellung der Auftragsübersicht.");
+                    "Übersicht Aufträge", "Fehler bei Erstellung der Auftragsübersicht. "+ e.getMessage());
         }
 
         if(allOpenTasks != null){
@@ -432,6 +432,8 @@ public class LeadWorkerFXML {
             error.showAndWait();
         } catch (ServiceLayerException e) {
             LOG.warn(e.getMessage());
+            AlertBuilder alertBuilder = new AlertBuilder();
+            alertBuilder.showInformationAlert("Schnittholz-Suche","Schnittholz-Suche", e.getMessage());
         }
 
         if (allLumber != null) {

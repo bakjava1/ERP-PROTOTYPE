@@ -80,7 +80,8 @@ public class MainApplication extends Application {
             lead = true;
         } else {
             //unknown client error
-            return;
+            //return;
+            office = true;
         }
         Application.launch(MainApplication.class, args);
     }

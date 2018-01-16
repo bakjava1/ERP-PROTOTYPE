@@ -74,7 +74,8 @@ public class TaskServiceImpl implements TaskService {
         try {
             taskController.deleteTask(taskToDelete);
         } catch (PersistenceLayerException e) {
-            LOG.warn("Error in client persistence layer: ", e.getMessage());
+            LOG.warn(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
     }
 }

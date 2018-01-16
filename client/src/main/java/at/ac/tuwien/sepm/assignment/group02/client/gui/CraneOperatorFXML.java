@@ -136,7 +136,7 @@ public class CraneOperatorFXML {
             LOG.warn("error while updating assignment table for crane operator");
             AlertBuilder alertBuilder = new AlertBuilder();
             alertBuilder.showErrorAlert("Fehlermeldung", "Aufgaben-Service",
-                    "Tabelle konnte nicht aktualisiert werden.");
+                    "Tabelle konnte nicht aktualisiert werden. "+ e.getMessage());
         }
 
         table_open_assignment.setItems(FXCollections.observableArrayList(allOpenAssignments));
@@ -264,18 +264,12 @@ public class CraneOperatorFXML {
         if(confirmed) {
 
             // create a thread and task to prevent ui from freezing
-            new Thread(new Task<Integer>() {
+            Task task = new Task<Integer>() {
 
                 @Override
-                protected Integer call() {
+                protected Integer call() throws ServiceLayerException {
                     LOG.debug("setDone thread called");
-                    try {
-                        assignmentService.setDone(assignmentDTO);
-                    } catch (ServiceLayerException e) {
-                        LOG.warn(e.getMessage().trim());
-                        AlertBuilder alertBuilder = new AlertBuilder();
-                        alertBuilder.showErrorAlert("Fehlermeldung", "Aufgaben-Service", "Die Aufgabe konnte nicht als erledigt markiert werden.");
-                    }
+                    assignmentService.setDone(assignmentDTO);
                     return 1;
                 }
 
@@ -293,17 +287,18 @@ public class CraneOperatorFXML {
                     currentAssignment_box.setText("");
                 }
 
-                @Override
-                protected void failed() {
-                    super.failed();
-                    LOG.debug("failed to set assignment done: {}", getException());
+            };
 
-                    AlertBuilder alertBuilder = new AlertBuilder();
-                    alertBuilder.showErrorAlert("Fehlermeldung", "Aufgaben-Service", "Die Aufgabe konnte nicht als erledigt markiert werden.");
-
+            task.exceptionProperty().addListener((observable, oldValue, newValue) ->  {
+                if(newValue != null) {
+                    ServiceLayerException e = (ServiceLayerException) newValue;
+                    LOG.warn(e.getMessage().trim());
+                    alertBuilder.showErrorAlert("Fehlermeldung", "Aufgaben-Service", "Die Aufgabe konnte nicht als erledigt markiert werden. "+ e.getMessage());
                 }
+            });
 
-            }, "setDone").start();
+            Thread t = new Thread(task,"setDone");
+            t.start();
         }
     }
 
