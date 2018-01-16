@@ -1,4 +1,4 @@
-package at.ac.tuwien.sepm.assignment.group02.client.rest;
+package at.ac.tuwien.sepm.assignment.group02.client.util;
 
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.LumberNotFountException;
 import org.slf4j.Logger;
@@ -19,7 +19,7 @@ public class RestErrorHandler {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     @ExceptionHandler(LumberNotFountException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void handleTodoNotFoundException(LumberNotFountException ex) {
+    public void handleLumberNotFoundException(LumberNotFountException ex) {
         LOG.debug("handling 404 error on a lumber class");
     }
 }

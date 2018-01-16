@@ -21,10 +21,8 @@ import java.util.List;
 @Component
 public class AssignmentControllerImpl implements AssignmentController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     private RestTemplate restTemplate;
-
-
-
 
     @Autowired
     public AssignmentControllerImpl(RestTemplate restTemplate) {

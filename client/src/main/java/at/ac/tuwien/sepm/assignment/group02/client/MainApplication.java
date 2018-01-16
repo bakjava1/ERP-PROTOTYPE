@@ -26,7 +26,6 @@ public class MainApplication extends Application {
     private static boolean crane = false;
     private static boolean lead = false;
     private static boolean office = false;
-   // private AnchorPane printPage;
     private AnnotationConfigApplicationContext context;
 
 

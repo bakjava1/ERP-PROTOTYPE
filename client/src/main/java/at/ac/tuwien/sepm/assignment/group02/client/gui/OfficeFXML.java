@@ -85,9 +85,6 @@ public class OfficeFXML {
     private Label l_sumorders;
 
 
-
-
-
     @FXML
     private Label kn_result;
 

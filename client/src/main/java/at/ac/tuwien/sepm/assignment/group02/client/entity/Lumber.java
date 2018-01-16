@@ -53,6 +53,11 @@ public class Lumber {
         this.quantity=quantity;
     }
 
+    public Lumber(int id, String description) {
+        this.id = id;
+        this.description=description;
+    }
+
     /**
      * method to retrieve the schnittholz ID
      * @return a value of schnittID to caller

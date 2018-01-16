@@ -45,6 +45,8 @@ public class deleteOrderTest {
         orderService = new OrderServiceImpl(orderController,orderConverter, taskConverter);
 
         order = new Order();
+
+
         order.setID(1);
 
         orderDTO = new OrderDTO();

@@ -22,8 +22,8 @@ import java.util.List;
 public class LumberDAOJDBC implements LumberDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private Connection dbConnection;
 
+    private Connection dbConnection;
 
     @Autowired
     public LumberDAOJDBC(Connection dbConnection){
@@ -35,13 +35,10 @@ public class LumberDAOJDBC implements LumberDAO {
     public List<Lumber> getAllLumber(Lumber filter) throws PersistenceLayerException {
         LOG.debug("Get all Lumber from database");
 
-
         String Query = "SELECT * FROM LUMBER";
         List<Lumber> lumberList = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
-
-
 
         boolean conditions = false;
         String description = filter.getDescription() == null? null :filter.getDescription().toLowerCase();
@@ -138,10 +135,8 @@ public class LumberDAOJDBC implements LumberDAO {
             }
 
         } catch (SQLException e) {
-
             throw new PersistenceLayerException("Database error:"+ e.getMessage());
         }
-
         return lumberList;
     }
 
@@ -257,7 +252,8 @@ public class LumberDAOJDBC implements LumberDAO {
     @Override
     public void updateLumber(Lumber lumber) throws PersistenceLayerException {
         LOG.debug("Entering update Lumber method with parameter:{}" ,lumber);
-        //checkIfLumberIsNull(lumber);
+
+       // checkIfLumberIsNull(lumber);
 
         String updateLumber =    "UPDATE Lumber SET quantity=?, reserved_quantity=? WHERE ID=?";
 
@@ -309,15 +305,7 @@ public class LumberDAOJDBC implements LumberDAO {
             throw new PersistenceLayerException("Database error");
         }
 
-/*        try {
-            dbConnection.rollback();
-
-    }catch (SQLException e1){
-            LOG.error("SQLException: {}", e1.getMessage());
-            throw new PersistenceLayerException("Database error");
-        }*/
-
-        }
+    }
 
 
     @Override
@@ -358,13 +346,12 @@ public class LumberDAOJDBC implements LumberDAO {
         }
     }
 
-
-    private void checkIfLumberIsNull(Lumber lumber) throws ResourceNotFoundException {
+   /* private void checkIfLumberIsNull(Lumber lumber) throws ResourceNotFoundException {
                if(lumber == null){
                         LOG.debug("Lumber is null.");
                         throw new ResourceNotFoundException("Lumber can't be null.");
                     }
-            }
+            }*/
     }
 
 

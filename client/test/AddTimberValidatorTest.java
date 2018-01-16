@@ -48,6 +48,7 @@ public class AddTimberValidatorTest {
 
     @AfterClass
     public static void teardown(){
+
         timberValidator = null;
     }
 }

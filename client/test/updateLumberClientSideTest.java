@@ -13,16 +13,14 @@ import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateAssignment
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import ch.qos.logback.core.db.dialect.DBUtil;
+import org.junit.*;
 import org.mockito.ArgumentCaptor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.web.WebAppConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -47,6 +45,7 @@ import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 
 
+import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -67,8 +66,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@RunWith(MockitoJUnitRunner.class)
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration
-@WebAppConfiguration
 public class updateLumberClientSideTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -87,8 +84,8 @@ public class updateLumberClientSideTest {
     private MockMvc mockMvc;
 
 
-    @Before
-    public  void setUp() throws Exception {
+    @BeforeClass
+    public  static void setUp() throws Exception {
         LOG.debug("update lumber test setup initiated");
 
         restTemplate = mock(RestTemplate.class);
@@ -102,34 +99,7 @@ public class updateLumberClientSideTest {
 
     }
 
-    @Test(expected = InvalidInputException.class)
-    public void test_Update_Lumber_InvalidInput() throws Exception {
 
-    }
-
-   // @Test(expected = ServiceLayerException.class)
-   /* public void test_Update_Lumber_PersistenceLayerException() throws Exception {
-
-        // prepare data and mock's behaviour
-        // here the stub is the updated lumber object with ID equal to ID of
-        // lumber need to be updated
-        Lumber lumber = new Lumber(1, "Latten", "Ta",  120);
-        when(lumberServiceMock.getLumber(any(Integer.class))).thenReturn(lumber);
-
-        // execute
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(DBUtil.objectToJson(lumber)))
-                .andReturn();
-
-        // verify
-        int status = result.getResponse().getStatus();
-        assertEquals("Incorrect Response Status", HttpStatus.OK.value(), status);
-
-        // verify that service method was called once
-        verify(lumberServiceMock).any(Lumber.class));
-    }*/
 
     @Test
     public void findById_LumberNotFound_ShouldReturnHttpStatusCode404() throws Exception {
@@ -142,51 +112,15 @@ public class updateLumberClientSideTest {
         verifyNoMoreInteractions(lumberServiceMock);
     }
 
-
-
-    //@Test
-   /* public void testGetLumber() throws Exception {
-
-        // prepare data and mock's behaviour
-        Lumber lumber = new Lumber(1, "Latten", "Ta", 12);
-        when(lumberServiceMock.getLumber(any(Integer.class))).thenReturn(lumber);
-
-        // execute
-        MvcResult result = mockMvc
-                .perform(MockMvcRequestBuilders.get( "{id}", (1))
-                        .accept(MediaType.APPLICATION_JSON_UTF8))
-                .andReturn();
-
-        // verify
-        int status = result.getResponse().getStatus();
-        assertEquals("Incorrect Response Status", HttpStatus.OK.value(), status);
-
-        // verify that service method was called once
-        verify(lumberServiceMock).getLumber(any(Integer.class));
-        Lumber resultLumber = DBUtil.jsonToObject(result.getResponse()
-                .getContentAsString(), Lumber.class);
-        assertNotNull(lumber); //parameter muss be resultLumber, see it again
-       // assertEquals(1, (resultLumber.getId()));
-        assertEquals(1, resultLumber.getId();
-
-    }*/
-
-   // @Test
-   /* public void findById_LumberFound_ShouldReturnFoundLumber() throws Exception {
+    @Test
+    public void findById_LumberFound_ShouldReturnFoundLumber() throws Exception {
         Lumber found = new Lumber();
 
         when(lumberServiceMock.getLumber(1)).thenReturn(found);
 
-        mockMvc.perform(get("/lumbers/lumber/{id}", 1))
-                .andExpect(status().isOk())
-                .andExpect((content().contentType(DBUtil)
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.description", is("Stafell")))
-                .andExpect(jsonPath("$.wood_type", is("Ta")));
-
-        verify(lumberServiceMock, times(1)).getLumber(1);
         verifyNoMoreInteractions(lumberServiceMock);
-    }*/
+
+    }
 
 
     @AfterClass

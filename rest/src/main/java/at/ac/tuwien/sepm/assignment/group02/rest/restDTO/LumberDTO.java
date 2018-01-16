@@ -67,6 +67,13 @@ public class LumberDTO {
         this.quantity=quantity;
     }
 
+    public LumberDTO(int id, String description) {
+        this.id = id;
+        this.description=description;
+
+    }
+
+
     //Create Setters and Getters
 
     /**
@@ -322,30 +329,6 @@ public class LumberDTO {
 
         return new SimpleIntegerProperty(size);
     }
-
-    /*public SimpleIntegerProperty lengthProperty(){
-        return new SimpleIntegerProperty(length);
-    }
-    public SimpleIntegerProperty widthProperty(){
-        return new SimpleIntegerProperty(width);
-    }
-    public SimpleIntegerProperty quantityProperty(){
-        return new SimpleIntegerProperty(quantity);
-    }
-    public SimpleIntegerProperty reserved_quantityProperty(){
-        return new SimpleIntegerProperty(reserved_quantity);
-    }
-
-    public SimpleIntegerProperty delivered_quantityProperty(){
-        return new SimpleIntegerProperty(delivered_quantity);
-    }
-
-    public SimpleBooleanProperty all_reservedProperty(){
-        return new SimpleBooleanProperty(all_reserved);
-    }
-    public SimpleBooleanProperty all_deliveredProperty(){
-        return new SimpleBooleanProperty(all_delivered);
-    }*/
 
 
     @Override
