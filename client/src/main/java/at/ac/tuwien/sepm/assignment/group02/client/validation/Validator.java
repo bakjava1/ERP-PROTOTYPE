@@ -11,11 +11,78 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 public class Validator {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    public void isValidDate(String inDate) throws InvalidInputException {
+
+        //case not set cause assignment getting created
+        if (inDate == null)
+            return;
+
+        //set the format to use as a constructor argument
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        if (inDate.trim().length() != dateFormat.toPattern().length())
+            throw new InvalidInputException("Date is not in correct format!");
+
+        dateFormat.setLenient(false);
+
+        try {
+            //parse the inDate parameter
+            Date test = dateFormat.parse(inDate.trim());
+            if(!test.before(new Date())) {
+                throw new InvalidInputException("Impossible Date");
+            }
+        }
+        catch (ParseException pe) {
+            throw new InvalidInputException("Date is not in correct format!");
+        }
+    }
+
+    public int validateNumber(String toValidate,int size) throws NoValidIntegerException {
+        int num;
+        if(toValidate == null || toValidate.length() == 0) {
+            throw new NoValidIntegerException("Empty Field, No Number entered");
+        }
+        try {
+            num = Integer.parseInt(toValidate);
+            if (num <= 0) {
+                throw new NoValidIntegerException("Negative Integer or Null entered");
+            }
+            if(num > size && size != -1) {
+                throw new NoValidIntegerException("Value entered was too big! Enter Value < " + size);
+            }
+        } catch (NumberFormatException e) {
+            LOG.error("No valid Integer entered");
+            throw new NoValidIntegerException("No valid Integer entered");
+        }
+        return num;
+    }
+
+    private void validateText(String toValidate, int length) throws EmptyInputException {
+        if(toValidate == null || toValidate.length() == 0) {
+            throw new EmptyInputException("Empty Field");
+        }
+        if(toValidate.length() > length && length != -1) {
+            throw new EmptyInputException("Input was too long! Enter Input which is max. " + length + " long");
+        }
+    }
+
+    private void isNumber(int toCheck,int limit) throws NoValidIntegerException {
+        if (toCheck < 0) {
+            throw new NoValidIntegerException("Negative Integer entered");
+        }
+        if(toCheck > limit && limit != -1) {
+            throw new NoValidIntegerException("Integer entered too big! Value must be < " + limit);
+        }
+    }
 
     public int[] temporaryAddTaskToLumberValidation(String id, String amount) throws InvalidInputException {
         int[] result = new int[2];
@@ -39,23 +106,45 @@ public class Validator {
     }
 
     public void inputValidationOrder(Order toValidate) throws InvalidInputException {
+
+        try {
+            isNumber(toValidate.getID(),-1);
+        } catch(NoValidIntegerException e) {
+            LOG.error("Error in Order Id: "+ e.getMessage());
+            throw new InvalidInputException("Error in Order Id: " + e.getMessage());
+        }
+
         try {
             validateText(toValidate.getCustomerName(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Name: " + e.getMessage());
             throw new InvalidInputException("Error at Customer Name: " + e.getMessage());
         }
+
         try {
             validateText(toValidate.getCustomerAddress(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Address: " + e.getMessage());
             throw new InvalidInputException("Error at Customer Address: " + e.getMessage());
         }
+
         try {
             validateText(toValidate.getCustomerUID(),10);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer UID: " + e.getMessage());
             throw new InvalidInputException("Error at Customer UID: " + e.getMessage());
+        }
+
+        try {
+            isValidDate(toValidate.getOrderDate());
+        } catch(InvalidInputException e) {
+            LOG.error("Error at Order Date: " + e.getMessage());
+            throw new InvalidInputException("Error at Order Date: " + e.getMessage());
+        }
+
+        if(toValidate.getTaskList() == null) {
+            LOG.error("Error at Task List: List cannot be null");
+            throw new InvalidInputException("Error at Order Date: List cannot be null");
         }
     }
 
@@ -140,20 +229,39 @@ public class Validator {
             LOG.error("Error at Description: " + e.getMessage());
             throw new InvalidInputException("Error at Description: " + e.getMessage());
         }
+
         try {
             validateText(toValidate.getFinishing(),15);
+            if(!toValidate.getFinishing().equals("roh") && !toValidate.getFinishing().equals("gehobelt") && !toValidate.getFinishing().equals("besäumt")
+                    && !toValidate.getFinishing().equals("prismiert") && !toValidate.getFinishing().equals("trocken") && !toValidate.getFinishing().equals("lutro")
+                    && !toValidate.getFinishing().equals("frisch") && !toValidate.getFinishing().equals("imprägniert")) {
+                LOG.error("Error at Finishing: Unknown Finishing");
+                throw new InvalidInputException("Error at Finishing: Unknown Finishing");
+            }
         }catch(EmptyInputException e) {
             LOG.error("Error at Finishing: " + e.getMessage());
             throw new InvalidInputException("Error at Finishing: " + e.getMessage());
         }
+
         try {
             validateText(toValidate.getWood_type(),10);
+            if(!toValidate.getWood_type().equals("Fi") && !toValidate.getWood_type().equals("Ta") && !toValidate.getWood_type().equals("Lae")) {
+                LOG.error("Error at Wood Type: Unknown Wood Type");
+                throw new InvalidInputException("Error at Wood Type: Unknown Wood Type");
+            }
         }catch(EmptyInputException e) {
             LOG.error("Error at Wood Type: " + e.getMessage());
             throw new InvalidInputException("Error at Wood Type: " + e.getMessage());
         }
+
         try {
             validateText(toValidate.getQuality(),10);
+            if(!toValidate.getQuality().equals("O") && !toValidate.getQuality().equals("I") && !toValidate.getQuality().equals("II") &&
+                    !toValidate.getQuality().equals("III") && !toValidate.getQuality().equals("IV") && !toValidate.getQuality().equals("V") &&
+                    !toValidate.getQuality().equals("O/III") && !toValidate.getQuality().equals("III/IV") && !toValidate.getQuality().equals("III/V") ) {
+                LOG.error("Error at Quality: Unknown Quality");
+                throw new InvalidInputException("Error at Quality: Unknown Quality");
+            }
         }catch(EmptyInputException e) {
             LOG.error("Error at Quality: " + e.getMessage());
             throw new InvalidInputException("Error at Quality: " + e.getMessage());
@@ -204,36 +312,6 @@ public class Validator {
                 false,validatedPrice);
 
     }
-
-    public int validateNumber(String toValidate,int size) throws NoValidIntegerException {
-        int num;
-        if(toValidate == null || toValidate.length() == 0) {
-            throw new NoValidIntegerException("Empty Field, No Number entered");
-        }
-        try {
-            num = Integer.parseInt(toValidate);
-            if (num <= 0) {
-                throw new NoValidIntegerException("Negative Integer or Null entered");
-            }
-            if(num > size) {
-                throw new NoValidIntegerException("Value entered was too big! Enter Value < " + size);
-            }
-        } catch (NumberFormatException e) {
-            LOG.error("No valid Integer entered");
-            throw new NoValidIntegerException("No valid Integer entered");
-        }
-        return num;
-    }
-
-    private void validateText(String toValidate, int length) throws EmptyInputException {
-        if(toValidate == null || toValidate.length() == 0) {
-            throw new EmptyInputException("Empty Field");
-        }
-        if(toValidate.length() > length && length != -1) {
-            throw new EmptyInputException("Input was too long! Enter Input which is max. " + length + " long");
-        }
-    }
-
 
     public Lumber validateLumber(UnvalidatedLumber filter) throws InvalidInputException{
 
