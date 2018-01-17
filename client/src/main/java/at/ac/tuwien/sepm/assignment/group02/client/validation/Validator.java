@@ -328,62 +328,97 @@ public class Validator {
 
         Lumber validatedLumber = new Lumber();
 
-        if (!description.equals("")){
-            validatedLumber.setDescription(description);
-        }
-        if (!finishing.equals("")){
-            validatedLumber.setFinishing(finishing);
-        }
-
-        if (!wood_type.equals("")){
-            validatedLumber.setWood_type(wood_type);
-        }
-
-        if (!quality.equals("")){
-            validatedLumber.setQuality(quality);
+        try {
+            if(!description.equals("")) {
+                validateText(description, 50);
+                validatedLumber.setDescription(description);
+            }
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Description: " + e.getMessage());
+            throw new InvalidInputException("Error at Description: " + e.getMessage());
         }
 
-        if (!strength.equals("")){
-            if (strength.matches("^\\d+$")) {
-                if (strength.length() < 10) {
-                    validatedLumber.setSize(Integer.parseInt(strength));
-                }else{
-                    throw new InvalidInputException("Die angegebene Stärke ist zu groß.");
+        try {
+            if(!finishing.equals("")) {
+                validateText(finishing, 30);
+                if (!finishing.equals("roh") && !finishing.equals("gehobelt") && !finishing.equals("besäumt")
+                        && !finishing.equals("prismiert") && !finishing.equals("trocken") && !finishing.equals("lutro")
+                        && !finishing.equals("frisch") && !finishing.equals("imprägniert")) {
+                    LOG.error("Error at Finishing: Unknown Finishing");
+                    throw new InvalidInputException("Error at Finishing: Unknown Finishing");
                 }
+                validatedLumber.setFinishing(finishing);
             }
-            else{
-                throw new InvalidInputException("Die angegebene Stärke ist keine positive ganze Zahl.");
-            }
-        }else{
-            validatedLumber.setSize(-1);
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Finishing: " + e.getMessage());
+            throw new InvalidInputException("Error at Finishing: " + e.getMessage());
         }
 
-        if (!width.equals("")){
-            if (width.matches("^\\d+$")) {
-                if (width.length() < 10) {
-                    validatedLumber.setWidth(Integer.parseInt(width));
-                }else{
-                    throw new InvalidInputException("Die angegebene Breite ist zu groß.");
+        try {
+            if(!wood_type.equals("")) {
+                validateText(wood_type, 20);
+                if (!wood_type.equals("Fi") && !wood_type.equals("Ta") && !wood_type.equals("Lae")) {
+                    LOG.error("Error at Wood Type: Unknown Wood Type");
+                    throw new InvalidInputException("Error at Wood Type: Unknown Wood Type");
                 }
-            }else{
-                throw new InvalidInputException("Die angegebene Breite ist keine positive ganze Zahl.");
+                validatedLumber.setWood_type(wood_type);
             }
-        }else{
-            validatedLumber.setWidth(-1);
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Wood Type: " + e.getMessage());
+            throw new InvalidInputException("Error at Wood Type: " + e.getMessage());
         }
 
-        if (!length.equals("")){
-            if (length.matches("^\\d+$")) {
-                if (length.length() < 10) {
-                    validatedLumber.setLength(Integer.parseInt(length));
-                }else{
-                    throw new InvalidInputException("Die angegebene Länge ist zu groß.");
+        try {
+            if(!quality.equals("")) {
+                validateText(quality, 20);
+                if (!quality.equals("O") && !quality.equals("I") && !quality.equals("II") &&
+                        !quality.equals("III") && !quality.equals("IV") && !quality.equals("V") &&
+                        !quality.equals("O/III") && !quality.equals("III/IV") && !quality.equals("III/V")) {
+                    LOG.error("Error at Quality: Unknown Quality");
+                    throw new InvalidInputException("Error at Quality: Unknown Quality");
                 }
-            }else{
-                throw new InvalidInputException("Die angegebene Länge ist keine positive ganze Zahl.");
+                validatedLumber.setQuality(quality);
             }
-        }else{
-            validatedLumber.setLength(-1);
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Quality: " + e.getMessage());
+            throw new InvalidInputException("Error at Quality: " + e.getMessage());
+        }
+
+
+        try {
+            if(strength.equals("")) { validatedLumber.setSize(-1); }
+            else {
+                int validatedStrength = validateNumber(strength, 1000);
+                validatedLumber.setSize(validatedStrength);
+            }
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Size: " + e.getMessage());
+            throw new InvalidInputException("Error at Size: " + e.getMessage());
+        }
+
+        try {
+            if(width.equals("")) { validatedLumber.setWidth(-1); }
+            else {
+                int validatedWidth = validateNumber(width, 1000);
+                validatedLumber.setWidth(validatedWidth);
+            }
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Width: " + e.getMessage());
+            throw new InvalidInputException("Error at Width: " + e.getMessage());
+        }
+
+        try {
+            if(length.equals("")) { validatedLumber.setLength(-1); }
+            else {
+                int validatedLength = validateNumber(length, 5000);
+                if (validatedLength != 3500 && validatedLength != 4000 && validatedLength != 4500 && validatedLength != 5000) {
+                    throw new InvalidInputException("Please enter a producable Length! (3500,4000,4500,5000");
+                }
+                validatedLumber.setLength(validatedLength);
+            }
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Length: " + e.getMessage());
+            throw new InvalidInputException("Error at Length: " + e.getMessage());
         }
 
         return validatedLumber;
