@@ -24,6 +24,7 @@
         <springboot.version>1.5.8.RELEASE</springboot.version>
         <jackson.version>2.9.2</jackson.version>
         <h2.version>1.4.196</h2.version>
+        <javafaker.version>0.12</javafaker.version>
     </properties>
 
     <dependencies>
@@ -76,6 +77,13 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
+        </dependency>
+
+        <!-- java faker to create test database -->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>${javafaker.version}</version>
         </dependency>
 
     </dependencies>
