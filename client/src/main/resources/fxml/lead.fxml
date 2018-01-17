@@ -19,8 +19,10 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="593.0">
                      <children>
-
                          <TableView fx:id="table_task" layoutX="25.0" layoutY="41.0" prefHeight="437.0" prefWidth="779.0">
+                             <placeholder>
+                                 <Label text="Keine offenen Aufträge"/>
+                             </placeholder>
                              <columns>
                                  <TableColumn fx:id="task_col_order_id" prefWidth="87.0" text="Bestellung" />
                                  <TableColumn fx:id="task_col_description" prefWidth="105.0" text="Bezeichnung" />
@@ -75,7 +77,10 @@
                            </graphic>
                         </Button>
                         <TableView fx:id="table_lumber" layoutX="81.0" layoutY="207.0" prefHeight="297.0" prefWidth="655.0">
-                          <columns>
+                            <placeholder>
+                                <Label text="Kein Schnittholz im Lager"/>
+                            </placeholder>
+                            <columns>
                             <TableColumn fx:id="col_description" prefWidth="104.31481170654297" text="Bezeichnung" />
                             <TableColumn fx:id="col_finishing" prefWidth="91.67002868652344" text="Ausführung" />
                               <TableColumn fx:id="col_wood_type" prefWidth="67.82998657226562" text="Holzart" />

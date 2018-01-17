@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.AssignmentConverter;
@@ -127,20 +128,21 @@ public class AssignmentServiceImpl implements AssignmentService {
         // problem: no direct link between lumber and task
         // create lumber by copying task description
         TaskDTO taskDTO = taskService.getTaskById(assignment.getTask_id());
-        LumberDTO lumberDTO = new LumberDTO();
+        FilterDTO filterDTO = new FilterDTO();
 
-        lumberDTO.setDescription(taskDTO.getDescription());
-        lumberDTO.setFinishing(taskDTO.getFinishing());
-        lumberDTO.setWood_type(taskDTO.getWood_type());
-        lumberDTO.setQuality(taskDTO.getQuality());
+        filterDTO.setDescription(taskDTO.getDescription());
+        filterDTO.setFinishing(taskDTO.getFinishing());
+        filterDTO.setWood_type(taskDTO.getWood_type());
+        filterDTO.setQuality(taskDTO.getQuality());
 
-        lumberDTO.setSize(taskDTO.getSize());
-        lumberDTO.setWidth(taskDTO.getWidth());
-        lumberDTO.setLength(taskDTO.getLength());
+        filterDTO.setSize(taskDTO.getSize()+"");
+        filterDTO.setWidth(taskDTO.getWidth()+"");
+        filterDTO.setLength(taskDTO.getLength()+"");
 
         //retrieve a list of all lumber that matches the taskDTO
-        List<LumberDTO> matchingLumber = lumberService.getAllLumber(lumberDTO);
+        List<LumberDTO> matchingLumber = lumberService.getAllLumber(filterDTO);
 
+        LumberDTO lumberDTO;
         // if there is lumber that matches the task produced, increase its quantity
         if(matchingLumber!=null && matchingLumber.size()>0){
             LOG.debug("there is > 0 lumber that matches the task - the first one in the list will be updated");
@@ -154,7 +156,18 @@ public class AssignmentServiceImpl implements AssignmentService {
         } else { // if there is no lumber matching the task, create new lumber
             LOG.debug("there is <= 0 lumber that matches the task - new lumber will be created");
 
+            lumberDTO = new LumberDTO();
+
+            lumberDTO.setDescription(taskDTO.getDescription());
+            lumberDTO.setFinishing(taskDTO.getFinishing());
+            lumberDTO.setWood_type(taskDTO.getWood_type());
+            lumberDTO.setQuality(taskDTO.getQuality());
+
+            lumberDTO.setSize(taskDTO.getSize());
+            lumberDTO.setWidth(taskDTO.getWidth());
+            lumberDTO.setLength(taskDTO.getLength());
             lumberDTO.setQuantity(taskDTO.getQuantity());
+
             int lumberId = lumberService.addLumber(lumberDTO);
             lumberDTO.setId(lumberId);
         }

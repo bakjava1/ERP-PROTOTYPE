@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputExcept
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.NoValidIntegerException;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -313,7 +314,7 @@ public class Validator {
 
     }
 
-    public Lumber validateLumber(UnvalidatedLumber filter) throws InvalidInputException{
+    public FilterDTO validateFilter(FilterDTO filter) throws InvalidInputException{
 
         String description = filter.getDescription().trim();
         String finishing = filter.getFinishing().trim().equals("keine Angabe")? "" :
@@ -326,12 +327,12 @@ public class Validator {
         String width = filter.getWidth().trim();
         String length = filter.getLength().trim();
 
-        Lumber validatedLumber = new Lumber();
+        FilterDTO validatedFilter = new FilterDTO();
 
         try {
             if(!description.equals("")) {
                 validateText(description, 50);
-                validatedLumber.setDescription(description);
+                validatedFilter.setDescription(description);
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Description: " + e.getMessage());
@@ -347,7 +348,7 @@ public class Validator {
                     LOG.error("Error at Finishing: Unknown Finishing");
                     throw new InvalidInputException("Error at Finishing: Unknown Finishing");
                 }
-                validatedLumber.setFinishing(finishing);
+                validatedFilter.setFinishing(finishing);
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Finishing: " + e.getMessage());
@@ -361,7 +362,7 @@ public class Validator {
                     LOG.error("Error at Wood Type: Unknown Wood Type");
                     throw new InvalidInputException("Error at Wood Type: Unknown Wood Type");
                 }
-                validatedLumber.setWood_type(wood_type);
+                validatedFilter.setWood_type(wood_type);
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Wood Type: " + e.getMessage());
@@ -377,7 +378,7 @@ public class Validator {
                     LOG.error("Error at Quality: Unknown Quality");
                     throw new InvalidInputException("Error at Quality: Unknown Quality");
                 }
-                validatedLumber.setQuality(quality);
+                validatedFilter.setQuality(quality);
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Quality: " + e.getMessage());
@@ -386,10 +387,11 @@ public class Validator {
 
 
         try {
-            if(strength.equals("")) { validatedLumber.setSize(-1); }
+            if(strength.equals("")) { validatedFilter.setSize(null); }
             else {
+
                 int validatedStrength = validateNumber(strength, 1000);
-                validatedLumber.setSize(validatedStrength);
+                validatedFilter.setSize(validatedStrength+"");
             }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Size: " + e.getMessage());
@@ -397,10 +399,10 @@ public class Validator {
         }
 
         try {
-            if(width.equals("")) { validatedLumber.setWidth(-1); }
+            if(width.equals("")) { validatedFilter.setWidth(null); }
             else {
                 int validatedWidth = validateNumber(width, 1000);
-                validatedLumber.setWidth(validatedWidth);
+                validatedFilter.setWidth(validatedWidth+"");
             }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Width: " + e.getMessage());
@@ -408,20 +410,20 @@ public class Validator {
         }
 
         try {
-            if(length.equals("")) { validatedLumber.setLength(-1); }
+            if(length.equals("")) { validatedFilter.setLength(null); }
             else {
                 int validatedLength = validateNumber(length, 5000);
                 if (validatedLength != 3500 && validatedLength != 4000 && validatedLength != 4500 && validatedLength != 5000) {
                     throw new InvalidInputException("Please enter a producable Length! (3500,4000,4500,5000");
                 }
-                validatedLumber.setLength(validatedLength);
+                validatedFilter.setLength(validatedLength+"");
             }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Length: " + e.getMessage());
             throw new InvalidInputException("Error at Length: " + e.getMessage());
         }
 
-        return validatedLumber;
+        return validatedFilter;
 
     }
 

@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.rest;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
@@ -59,9 +60,10 @@ public class LumberControllerImpl {
 
     @RequestMapping(value="/getAllLumber",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all lumber")
-    public List<LumberDTO> getAllLumber(@RequestBody LumberDTO filter) throws ServiceLayerException {
+    public List<LumberDTO> getAllLumber(@RequestBody FilterDTO filterDTO) throws ServiceLayerException {
         LOG.debug("Get all lumber");
-        return lumberService.getAllLumber(filter);
+        LOG.debug(filterDTO.toString());
+        return lumberService.getAllLumber(filterDTO);
     }
 
 

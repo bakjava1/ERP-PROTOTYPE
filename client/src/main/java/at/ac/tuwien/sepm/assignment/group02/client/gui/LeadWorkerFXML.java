@@ -1,16 +1,15 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
-import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentService;
-import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OptimisationAlgorithmService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.util.AlertBuilder;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import javafx.collections.FXCollections;
@@ -24,11 +23,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -152,8 +151,6 @@ public class LeadWorkerFXML {
 
     private TaskDTO selectedTask;
 
-    private boolean running = true;
-
     @Autowired
     public LeadWorkerFXML(LumberService lumberService, OptimisationFXML optimisationFXML, TaskService taskService, AssignmentService assignmentService, OptimisationAlgorithmService optimisationAlgorithmService){
 
@@ -167,10 +164,6 @@ public class LeadWorkerFXML {
 
     @FXML
     void initialize() {
-
-        tabPane = new TabPane();
-        tabPane.getTabs().add(tab_task);
-        tabPane.getTabs().add(tab_lumber);
 
         col_description.setCellValueFactory(new PropertyValueFactory("description"));
         col_finishing.setCellValueFactory(new PropertyValueFactory("finishing"));
@@ -387,17 +380,17 @@ public class LeadWorkerFXML {
         tf_quantity.setText(""+(selectedTask.getQuantity()-selectedTask.getProduced_quantity()));
 
         // set the search properties to the task properties
-        UnvalidatedLumber filter = new UnvalidatedLumber();
+        FilterDTO filterDTO = new FilterDTO();
 
-        filter.setDescription(selectedTask.getDescription());
-        filter.setFinishing(selectedTask.getFinishing());
-        filter.setWood_type(selectedTask.getWood_type());
-        filter.setQuality(selectedTask.getQuality());
-        filter.setSize(selectedTask.getSize()+"");
-        filter.setWidth(selectedTask.getWidth()+"");
-        filter.setLength(selectedTask.getLength()+"");
+        filterDTO.setDescription(selectedTask.getDescription());
+        filterDTO.setFinishing(selectedTask.getFinishing());
+        filterDTO.setWood_type(selectedTask.getWood_type());
+        filterDTO.setQuality(selectedTask.getQuality());
+        filterDTO.setSize(selectedTask.getSize()+"");
+        filterDTO.setWidth(selectedTask.getWidth()+"");
+        filterDTO.setLength(selectedTask.getLength()+"");
 
-        executeSearch(filter);
+        executeSearch(filterDTO);
 
         tabPane.getSelectionModel().clearAndSelect(1);
     }
@@ -405,24 +398,24 @@ public class LeadWorkerFXML {
     @FXML
     public void onSearchButtonClicked() {
 
-        UnvalidatedLumber filter = new UnvalidatedLumber();
+        FilterDTO filterDTO = new FilterDTO();
 
-        filter.setDescription(tf_description.getText().trim());
-        filter.setFinishing(cb_finishing.getSelectionModel().getSelectedItem().toString().trim());
-        filter.setWood_type(cb_wood_type.getSelectionModel().getSelectedItem().toString().trim());
-        filter.setQuality(cb_quality.getSelectionModel().getSelectedItem().toString().trim());
-        filter.setSize(tf_strength.getText().trim());
-        filter.setWidth(tf_width.getText().trim());
-        filter.setLength(tf_length.getText().trim());
+        filterDTO.setDescription(tf_description.getText().trim());
+        filterDTO.setFinishing(cb_finishing.getSelectionModel().getSelectedItem().toString().trim());
+        filterDTO.setWood_type(cb_wood_type.getSelectionModel().getSelectedItem().toString().trim());
+        filterDTO.setQuality(cb_quality.getSelectionModel().getSelectedItem().toString().trim());
+        filterDTO.setSize(tf_strength.getText().trim());
+        filterDTO.setWidth(tf_width.getText().trim());
+        filterDTO.setLength(tf_length.getText().trim());
 
-        executeSearch(filter);
+        executeSearch(filterDTO);
 
     }
 
-    private void executeSearch(UnvalidatedLumber filter){
+    private void executeSearch(FilterDTO filterDTO){
         List<Lumber> allLumber = null;
         try {
-            allLumber = lumberService.getAll(filter);
+            allLumber = lumberService.getAll(filterDTO);
         } catch (InvalidInputException e) {
             LOG.warn(e.getMessage());
             Alert error = new Alert(Alert.AlertType.ERROR);

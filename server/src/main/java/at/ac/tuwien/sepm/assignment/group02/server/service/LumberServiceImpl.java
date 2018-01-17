@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
@@ -59,13 +60,14 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public List<LumberDTO> getAllLumber(LumberDTO lumber) throws ServiceLayerException {
+    public List<LumberDTO> getAllLumber(FilterDTO filterDTO) throws ServiceLayerException {
         List<Lumber> allLumber;
         List<LumberDTO> allLumberConverted = null;
-        Lumber filter = lumberConverter.convertRestDTOToPlainObject(lumber);
+        //TODO validate Filter
+        LOG.debug(filterDTO.toString());
 
         try {
-            allLumber = lumberManagementDAO.getAllLumber(filter);
+            allLumber = lumberManagementDAO.getAllLumber(filterDTO);
 
         } catch (PersistenceLayerException e) {
             LOG.error(e.getMessage());

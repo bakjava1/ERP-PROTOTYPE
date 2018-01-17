@@ -293,7 +293,7 @@ public class CraneOperatorFXML {
                 if(newValue != null) {
                     ServiceLayerException e = (ServiceLayerException) newValue;
                     LOG.warn(e.getMessage().trim());
-                    alertBuilder.showErrorAlert("Fehlermeldung", "Aufgaben-Service", "Die Aufgabe konnte nicht als erledigt markiert werden. "+ e.getMessage());
+                    alertBuilder.showErrorAlert("Fehlermeldung", "Aufgaben-Service", "Es gab ein Problem beim Abschließen der Aufgabe. "+ e.getMessage());
                 }
             });
 

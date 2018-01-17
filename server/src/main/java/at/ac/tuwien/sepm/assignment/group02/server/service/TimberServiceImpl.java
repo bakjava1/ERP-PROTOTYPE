@@ -54,7 +54,7 @@ public class TimberServiceImpl implements TimberService{
         timber.setBox_id(box_id);
         timber.setAmount(amount_to_remove);
 
-        validateTimber.isValid(timber);
+        //validateTimber.isValid(timber);
 
         //TODO verify if amount is equal or less to total amount in the box
 

@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerExcept
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberController;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskController;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.slf4j.Logger;
@@ -82,21 +83,19 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public List<Lumber> getAll(UnvalidatedLumber filter)throws ServiceLayerException {
+    public List<Lumber> getAll(FilterDTO filterDTO)throws ServiceLayerException {
         LOG.debug("getAllSchnittholz called");
         List<LumberDTO> allLumber;
 
         try {
 
-            Lumber validatedLumber = validator.validateLumber(filter);
+            //TODO
+            FilterDTO validatedFilter = validator.validateFilter(filterDTO);
 
-            LumberDTO filterDTO = lumberConverter.convertPlainObjectToRestDTO(validatedLumber);
-
-
-            allLumber = lumberController.getAllLumber(filterDTO);
-        } catch(InvalidInputException e) {
-            LOG.error("Failed to validate Input: " + e.getMessage());
-            throw new InvalidInputException(e.getMessage());
+            allLumber = lumberController.getAllLumber(validatedFilter);
+        //} catch(InvalidInputException e) {
+        //    LOG.error("Failed to validate Input: " + e.getMessage());
+        //    throw new InvalidInputException(e.getMessage());
         } catch (PersistenceLayerException e) {
             LOG.warn("Failed to get all Lumber"+e.getMessage());
             throw new ServiceLayerException(e.getMessage());

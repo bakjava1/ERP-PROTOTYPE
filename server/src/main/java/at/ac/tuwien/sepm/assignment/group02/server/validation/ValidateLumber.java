@@ -55,7 +55,7 @@ public class    ValidateLumber implements ValidateInput<Lumber> {
 
         try {
             validateText(wood_type, 20);
-            if (!wood_type.equals("Fi") && !wood_type.equals("Ta") && !wood_type.equals("Lae")) {
+            if (!wood_type.equals("Fi") && !wood_type.equals("Ta") && !wood_type.equals("Lä") && !wood_type.equals("Lae")) {
                 LOG.error("Error at Wood Type: Unknown Wood Type");
                 throw new InvalidInputException("Error at Wood Type: Unknown Wood Type");
             }

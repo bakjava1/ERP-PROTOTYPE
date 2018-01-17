@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.rest;
 import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.util.HandleException;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.slf4j.Logger;
@@ -58,14 +59,14 @@ public class LumberControllerImpl implements LumberController {
     }
 
     @Override
-    public List<LumberDTO> getAllLumber(@RequestBody LumberDTO filter) throws PersistenceLayerException {
+    public List<LumberDTO> getAllLumber(@RequestBody FilterDTO filterDTO) throws PersistenceLayerException {
         LOG.debug("get lumber");
 
         List<LumberDTO> lumberList = new ArrayList<>();
         LumberDTO[] lumberArray = null;
 
         try {
-            lumberArray = restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllLumber", filter, LumberDTO[].class);
+            lumberArray = restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllLumber", filterDTO, LumberDTO[].class);
         } catch(HttpStatusCodeException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){

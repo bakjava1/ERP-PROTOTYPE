@@ -18,14 +18,14 @@ public class ExceptionHandlingImpl {
     @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
     public String defaultError(ServiceLayerException e){
         LOG.debug("defaultError: "+e.getMessage());
-        return e.getMessage();
+        return "Interner Fehler";
     }
 
     @ExceptionHandler({InternalServerException.class})
     @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
     public String defaultError(InternalServerException e){
         LOG.debug("defaultError: "+e.getMessage());
-        return e.getMessage();
+        return "Interner Fehler";
     }
 
     @ExceptionHandler({InvalidInputException.class})
