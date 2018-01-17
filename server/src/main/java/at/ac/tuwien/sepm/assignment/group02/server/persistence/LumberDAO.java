@@ -18,6 +18,7 @@ public interface LumberDAO {
      * inserte a new lumber in lumber sotore
      * @param lumber
      * @throws PersistenceLayerException
+     * @inv lumber is validated
      */
     int createLumber(Lumber lumber) throws PersistenceLayerException;
 
@@ -25,6 +26,7 @@ public interface LumberDAO {
      * update an existing lumber
      * @param lumber
      * @throws PersistenceLayerException
+     * @inv lumber is validated
      */
     void updateLumber(Lumber lumber) throws PersistenceLayerException;
 
@@ -32,6 +34,7 @@ public interface LumberDAO {
      * delete lumber from the lumber store.
      * @param lumber
      * @throws PersistenceLayerException
+     * @inv lumber is validated
      */
     void deleteLumber(Lumber lumber) throws PersistenceLayerException;
 
@@ -40,6 +43,7 @@ public interface LumberDAO {
      * @param filter a object of Lumber with search parameters
      * @return  a list of all lumber that matches the filter.
      * @throws PersistenceLayerException if the database is not available
+     * @inv filter is validated
      */
     List<Lumber> getAllLumber(Lumber filter) throws PersistenceLayerException;
 
@@ -49,6 +53,7 @@ public interface LumberDAO {
      * @param toCheck task which needs lumber
      * @return how much lumber is aviable
      * @throws PersistenceLayerException if an sqlexception occurs
+     * @inv toCheck is validated
      */
     int getLumberCountForTask(Task toCheck) throws PersistenceLayerException;
 }

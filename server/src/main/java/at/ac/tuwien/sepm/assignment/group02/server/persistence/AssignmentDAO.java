@@ -11,6 +11,7 @@ public interface AssignmentDAO {
      * insert a new assignment for cran
      * @param assignment
      * @throws PersistenceLayerException
+     * @inv assignment is validated
      */
     void createAssignment(Assignment assignment) throws PersistenceLayerException;
 
@@ -32,6 +33,7 @@ public interface AssignmentDAO {
      * update an assignment and mark it as a done
      * @param assignment
      * @throws PersistenceLayerException
+     * @inv assignment is validated
      */
     void setAssignmentDone(Assignment assignment) throws PersistenceLayerException;
 

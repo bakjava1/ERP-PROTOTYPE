@@ -11,6 +11,7 @@ public interface AssignmentController {
      * create a new assignment for crane
      * @param assignmentDTO
      * @throws PersistenceLayerException
+     * @inv assignmentDTO is validated
      */
     void createAssignment(AssignmentDTO assignmentDTO) throws PersistenceLayerException;
 
@@ -32,6 +33,7 @@ public interface AssignmentController {
      * to mark an assignment as done
      * @param assignmentDTO
      * @throws PersistenceLayerException
+     * @inv assignmentDTO is validated
      */
     void setDone(AssignmentDTO assignmentDTO) throws PersistenceLayerException;
 

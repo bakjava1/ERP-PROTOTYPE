@@ -12,6 +12,7 @@ public interface OptAlgorithmController {
      * for the selected task by the user
      * @param task selected task by the user
      * @return optimal result including: 3 tasks, 1 timber and the cut view
+     * @inv task is validated
      */
     OptAlgorithmResultDTO getOptAlgorithmResult(TaskDTO task) throws PersistenceLayerException;
 }
