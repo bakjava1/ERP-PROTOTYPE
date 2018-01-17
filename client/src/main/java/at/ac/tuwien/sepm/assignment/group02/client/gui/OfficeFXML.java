@@ -780,7 +780,7 @@ public class OfficeFXML {
             PdfWriter.getInstance(document, new FileOutputStream(file));
 
 
-            HeaderFooter header = new HeaderFooter(new Phrase("SmartHolz\nGewerbegebiet Schratten 26\n 5441 Abtenau im Lammertal (Salzburg)\nUID: 12345>"), false);
+            HeaderFooter header = new HeaderFooter(new Phrase("SmartHolz\nGewerbegebiet Schratten 26\n 5441 Abtenau im Lammertal (Salzburg)\nUID: 12345"), false);
             HeaderFooter footer = new HeaderFooter(new Phrase("Seite "), new Phrase("."));
             document.setHeader(header);
             document.setFooter(footer);

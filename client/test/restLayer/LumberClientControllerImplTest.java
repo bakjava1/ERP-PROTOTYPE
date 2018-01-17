@@ -14,8 +14,10 @@ import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
@@ -47,9 +49,8 @@ public class LumberClientControllerImplTest {
                 , eq(lumberDTO), eq(LumberDTO.class));
     }
 
-
     @Test(expected = PersistenceLayerException.class)
-    public void testUpdate_A_Lumber_reacts_To_Error404() throws PersistenceLayerException, ServiceLayerException {
+    public void testUpdate_A_Lumber_reacts_To_Error404_ShouldThrowException() throws PersistenceLayerException, ServiceLayerException {
         LumberController lumberController = new LumberControllerImpl(restTemplate);
         LumberDTO lumberDTO = new LumberDTO();
         doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND))
@@ -57,16 +58,13 @@ public class LumberClientControllerImplTest {
         lumberController.updateLumber(lumberDTO);
     }
 
-
-
-    @Test(expected = PersistenceLayerException.class)
-    public void testRemove_A_Lumber_Expected_Error404() throws PersistenceLayerException {
+    @Test
+    public void testRemove_A_Lumber_ShouldPersists() throws PersistenceLayerException {
         LumberController lumberController = new LumberControllerImpl(restTemplate);
-        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND))
-                .when(restTemplate).getForObject(Mockito.matches(".*removeLumber"),eq(LumberDTO.class));
-
-        LumberDTO a1 = new LumberDTO();
-        lumberController.removeLumber(a1);
+        LumberDTO lumberDTO = new LumberDTO();
+        doThrow(RestClientException.class)
+                .when(restTemplate).delete(Mockito.matches(".*removeLumber"), eq(lumberDTO), eq(LumberDTO.class));
+        lumberController.removeLumber(lumberDTO);
     }
 
 
