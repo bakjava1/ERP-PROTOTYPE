@@ -227,6 +227,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
         if (horizontalSideTask.isEmpty()){
             //TODO fill default lumber - properties file?
+            System.out.println("-------------------------------------");
         }
 
 
@@ -314,16 +315,41 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         TaskDTO sideTaskHorizontal = possibleSideTasks.get(horizontalIndex);
 
 
-        double xCoordinateSideTaskHorizontal = currentRadius - widthMainTask/2;
         double yCoordinateSideTaskHorizontal = currentRadius + heightMainTask/2 + SCHNITTFUGE + sideTaskHorizontal.getSize();
 
+        //x Werte durch Kreisgleichung und durch abc-formel ermittelt
+        double x1 = (2*currentRadius + Math.sqrt(Math.pow(2*currentRadius,2) - 4*Math.pow(yCoordinateSideTaskHorizontal-currentRadius,2)))/2;
+        double x2 = (2*currentRadius - Math.sqrt(Math.pow(2*currentRadius,2) - 4*Math.pow(yCoordinateSideTaskHorizontal-currentRadius,2)))/2;
+
+
+        double maxWidthSideTaskHorizontal;
+        if(x1 > x2) {
+            maxWidthSideTaskHorizontal = x1 - x2;
+        } else {
+            maxWidthSideTaskHorizontal = x2 - x1;
+        }
 
 
         int horizontalCount = 0;
         if(sideTaskHorizontal.getWidth() <= mainTask.getWidth()) {
-            horizontalCount = vorschnittAnzahl;
-        }
 
+            //check ob es sich in der höhe ausgeht
+            if (maxWidthSideTaskHorizontal >= widthMainTask){
+                horizontalCount = vorschnittAnzahl;
+            }else{
+                //wenn hor-seitenware eher nur in der mitte platz hat, oder garnicht
+                horizontalCount =  (int) floor(maxWidthSideTaskHorizontal/biggerSize);
+
+                if (horizontalCount < 1 && maxWidthSideTaskHorizontal >= sideTaskHorizontal.getWidth()){
+
+                    //wenn sich genau einer innerhalb der grenzen der hauotware ausgeht
+                    horizontalCount = 1;
+
+                }
+
+            }
+
+        }
 
         if(horizontalCount > 0) {
             double smallerSizeHorizontal = sideTaskHorizontal.getSize();
@@ -332,8 +358,11 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             double heightSideTaskHorizontal = sideTaskHorizontal.getSize();
             double sideTaskHorizontalArea = smallerSizeHorizontal * biggerSizeHorizontal * 2 * horizontalCount;
 
-            if (sideTaskHorizontalArea > maxAreaSideTaskHorizontal) {
+            //x Start-Koordinate für hor-seitenware nicht immer x(links/oben) von hauptware
+            // Math.floor((vorschnittAnzahl-horizontalCount)/2)*mainTask.getWidth()  : wieviele stiele muss ich nach rechts rücken?
+            double xCoordinateSideTaskHorizontal = (currentRadius- widthMainTask/2) + (Math.floor((vorschnittAnzahl-horizontalCount)/2)*(biggerSize+SCHNITTFUGE));
 
+            if (sideTaskHorizontalArea > maxAreaSideTaskHorizontal) {
 
                 maxAreaSideTaskHorizontal = sideTaskHorizontalArea;
                 horizontalSideTask.setNewResult(horizontalCount, widthSideTaskHorizontal, heightSideTaskHorizontal, xCoordinateSideTaskHorizontal,
