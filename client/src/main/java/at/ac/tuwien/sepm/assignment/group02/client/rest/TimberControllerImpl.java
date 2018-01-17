@@ -37,8 +37,8 @@ public class TimberControllerImpl implements TimberController {
         } catch(HttpStatusCodeException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            LOG.warn("Unexpected server reaction. Is the server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
 
@@ -62,8 +62,8 @@ public class TimberControllerImpl implements TimberController {
         } catch(HttpStatusCodeException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            LOG.warn("Unexpected server reaction. Is the server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
         return timberDTO;
@@ -79,8 +79,8 @@ public class TimberControllerImpl implements TimberController {
         } catch(HttpStatusCodeException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            LOG.warn("Unexpected server reaction. Is the server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
         return timber_int;

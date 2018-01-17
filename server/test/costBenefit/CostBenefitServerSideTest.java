@@ -7,10 +7,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.persistence.*;
 import at.ac.tuwien.sepm.assignment.group02.server.service.CostBenefitService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.CostBenefitServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +16,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+@Ignore
 public class CostBenefitServerSideTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

@@ -40,7 +40,7 @@ public class AssignmentControllerImpl implements AssignmentController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar? ");
         }
     }
 
@@ -57,7 +57,7 @@ public class AssignmentControllerImpl implements AssignmentController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("RestClientException. Is the server up and running?", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar? ");
         }
 
         if(assignmentArray != null) {
@@ -80,7 +80,7 @@ public class AssignmentControllerImpl implements AssignmentController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("RestClientException. Is the server up and running?", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar? ");
         }
 
         if(assignmentArray != null) {
@@ -102,7 +102,7 @@ public class AssignmentControllerImpl implements AssignmentController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("RestClientException. Is the server up and running?", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar? ");
         }
     }
 }

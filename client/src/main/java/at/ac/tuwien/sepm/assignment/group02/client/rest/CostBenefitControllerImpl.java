@@ -36,7 +36,7 @@ public class CostBenefitControllerImpl implements CostBenefitController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("RestClientException. Is the server up and running?", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
         return estimate;

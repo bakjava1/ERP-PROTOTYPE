@@ -50,7 +50,7 @@ public class TaskControllerImpl implements TaskController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 
@@ -66,7 +66,7 @@ public class TaskControllerImpl implements TaskController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 
@@ -86,7 +86,7 @@ public class TaskControllerImpl implements TaskController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
         return taskList;

@@ -53,7 +53,7 @@ public class LumberControllerImpl implements LumberController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 
@@ -70,7 +70,7 @@ public class LumberControllerImpl implements LumberController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
             for (int i = 0; lumberArray!= null && i < lumberArray.length; i++) {
@@ -95,7 +95,7 @@ public class LumberControllerImpl implements LumberController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 
@@ -140,7 +140,7 @@ public class LumberControllerImpl implements LumberController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
         return lumberDTO;

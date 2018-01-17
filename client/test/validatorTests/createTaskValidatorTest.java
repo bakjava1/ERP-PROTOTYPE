@@ -173,6 +173,7 @@ public class createTaskValidatorTest {
         validator.inputValidationTask(task);
     }
 
+    @Ignore
     @Test
     public void testCorrectTask() {
         boolean success = true;

@@ -103,3 +103,16 @@ INSERT INTO TIMBER(wood_type,festmeter,amount, MAX_AMOUNT, length, quality,diame
 ( 'Tanne',40.17,70,480, 4500, 'CX', 360,60,now()),
 ( 'Laerche',199.25,366,600, 4000, 'CX', 320,60,now()),
 ( 'Laerche',167.54,231,650,4500, 'CX', 300,60,now());
+
+
+INSERT INTO ASSIGNMENT(creation_date, amount,box_ID, isDone, task_id) VALUES
+(now(),2,3,0,1),
+(now(),5,2,1,2),
+(now(),5,6,0,3),
+(now(),8,4,1,4),
+(now(),2,3,0,5),
+(now(),8,2,1,6),
+(now(),9,3,1,7),
+(now(),7,4,0,8),
+(now(),6,3,0,9),
+(now(),4,2,1,10);

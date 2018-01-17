@@ -41,7 +41,7 @@ public class OrderControllerImpl implements OrderController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 
@@ -59,7 +59,7 @@ public class OrderControllerImpl implements OrderController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 
@@ -79,7 +79,7 @@ public class OrderControllerImpl implements OrderController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
         return orderList;
@@ -106,7 +106,7 @@ public class OrderControllerImpl implements OrderController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
         return billList;
@@ -130,7 +130,7 @@ public class OrderControllerImpl implements OrderController {
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine Antwort vom Server. Ist der Server erreichbar?");
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
     }

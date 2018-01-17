@@ -1,10 +1,12 @@
 package at.ac.tuwien.sepm.assignment.group02.server.util;
 
-import at.ac.tuwien.sepm.assignment.group02.server.MainApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -52,19 +54,32 @@ public class DBUtil {
         return connection;
     }
 
-    private static void initDB(boolean isFinalDB){
+    private static void initDB(boolean isFinalDB) {
         if(isFinalDB){
             //create final database
             LOG.debug("creating final database");
-            executeSQLFile("server/src/main/resources/createFinalDB.sql");
+            //executeSQLFile("server/src/main/resources/createFinalDB.sql");
+            String filepath = DBUtil.class
+                    .getClassLoader()
+                    .getResource("createFinalDB.sql").getPath();
+            executeSQLFile(filepath);
         }
         else{
             //create test database
             LOG.debug("creating test database");
-            executeSQLFile("server/src/main/resources/createTestDB.sql");
+            //executeSQLFile("server/src/main/resources/createTestDB.sql");
+            String filepath1 = DBUtil.class
+                    .getClassLoader()
+                    .getResource("createTestDB.sql").getPath();
+            executeSQLFile(filepath1);
+
             //fill database with test data
             LOG.debug("filling test database with test data");
-            executeSQLFile("server/src/main/resources/testData.sql");
+            //executeSQLFile("server/src/main/resources/testData.sql");
+            String filepath2 = DBUtil.class
+                    .getClassLoader()
+                    .getResource("testData.sql").getPath();
+            executeSQLFile(filepath2);
         }
     }
 
