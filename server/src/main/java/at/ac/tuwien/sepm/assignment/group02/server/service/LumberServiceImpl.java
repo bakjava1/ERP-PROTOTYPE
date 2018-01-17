@@ -3,8 +3,7 @@ package at.ac.tuwien.sepm.assignment.group02.server.service;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.*;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateLumber;
 import org.slf4j.Logger;
@@ -34,12 +33,11 @@ public class LumberServiceImpl implements LumberService {
 
     @Override
     public LumberDTO getLumberById(int id) throws ServiceLayerException {
-
         try {
             return lumberConverter.convertPlainObjectToRestDTO(lumberManagementDAO.readLumberById(id));
         } catch (PersistenceLayerException e) {
             LOG.error("Database Problem", e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
+            throw new EntityNotFoundExceptionService(e.getMessage());
         }
     }
 
@@ -54,8 +52,8 @@ public class LumberServiceImpl implements LumberService {
             lumber_id = lumberManagementDAO.createLumber(lumber);
             return lumber_id;
         } catch (PersistenceLayerException e) {
-            LOG.warn("helloWorldLumber Persistence Exception: {}", e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
+            LOG.warn("Persistence Exception: ", e.getMessage());
+            throw new EntityCreationException(e.getMessage());
         }
 
     }
@@ -109,12 +107,12 @@ public class LumberServiceImpl implements LumberService {
                 lumberManagementDAO.updateLumber(existing_lumber);
 
             } else {
-                throw new ServiceLayerException("Reservierte Menge an Schnittholz übersteigt vorhandene Menge.");
+                throw new InvalidInputException("Reservierte Menge an Schnittholz übersteigt vorhandene Menge.");
             }
 
         } catch (PersistenceLayerException e) {
             LOG.warn("Updating Lumber Persistence Exception: {}", e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
+            throw new InternalServerException(e.getMessage());
         }
     }
 

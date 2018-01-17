@@ -10,8 +10,11 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.OrderServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
@@ -40,7 +43,7 @@ public class deleteOrderTest {
 
         restTemplate = mock(RestTemplate.class);
         orderController = new OrderControllerImpl(restTemplate);
-        orderConverter = new OrderConverter();
+        orderConverter = mock(OrderConverter.class);
         taskConverter = new TaskConverter();
         orderService = new OrderServiceImpl(orderController,orderConverter, taskConverter);
 
@@ -56,18 +59,16 @@ public class deleteOrderTest {
     @Test
     public void testdeleteOrder_in_client_serviceLayer() throws ServiceLayerException {
         LOG.debug("test delete order in client service layer");
-
         orderService.deleteOrder(order);
-
-        verify(restTemplate, times(1)).put(any(), any(OrderDTO.class), any(OrderDTO.class));
+        verify(restTemplate, times(1))
+                .exchange(Mockito.matches(".*deleteOrder"), eq(HttpMethod.PUT), any(HttpEntity.class), eq(OrderDTO.class));
     }
 
     @Test (expected = PersistenceLayerException.class)
     public void deleteOrder_throws_RestClientException() throws PersistenceLayerException {
         LOG.debug("delete order throws RestClientException in client rest interface");
-
-        doThrow(RestClientException.class).when(restTemplate).put(any(), any(OrderDTO.class), any(OrderDTO.class));
-
+        doThrow(RestClientException.class).when(restTemplate)
+                .exchange(Mockito.matches(".*deleteOrder"), eq(HttpMethod.PUT), any(HttpEntity.class), eq(OrderDTO.class));
         orderController.deleteOrder(orderDTO);
     }
 
@@ -75,7 +76,8 @@ public class deleteOrderTest {
     public void deleteOrder_throws_HttpStatusCodeException() throws PersistenceLayerException {
         LOG.debug("delete order throws HttpStatusCodeException in client rest interface");
 
-        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).put(any(), any(OrderDTO.class), any(OrderDTO.class));
+        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate)
+                .exchange(Mockito.matches(".*deleteOrder"), eq(HttpMethod.PUT), any(HttpEntity.class), eq(OrderDTO.class));
 
         orderController.deleteOrder(orderDTO);
     }

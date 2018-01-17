@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TaskService;
 import io.swagger.annotations.Api;
@@ -32,61 +31,36 @@ public class TaskControllerImpl {
 
     @RequestMapping(value="/createTask", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "create task")
-    public void createTask(@RequestBody TaskDTO taskDTO) throws ResourceNotFoundException {
+    public void createTask(@RequestBody TaskDTO taskDTO) throws ServiceLayerException {
         LOG.debug("createTask: {}" + taskDTO.toString());
-        try {
-            taskService.createTask(taskDTO);
-        } catch(ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("Failed Creation");
-        }
+        taskService.createTask(taskDTO);
     }
 
     @RequestMapping(value="/updateTask",method = RequestMethod.PUT,produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "update task")
-    public void updateTask(@RequestBody TaskDTO task) throws ResourceNotFoundException {
+    public void updateTask(@RequestBody TaskDTO task) throws ServiceLayerException {
         LOG.debug("Atemmpting to Update Task, {}", task.toString());
-        try {
-            taskService.updateTask(task);
-        } catch (ServiceLayerException e) {
-            LOG.error("Error in Service Layer of Server: " + e.getMessage());
-            throw new ResourceNotFoundException("Failed Update");
-        }
+        taskService.updateTask(task);
     }
 
     @RequestMapping(value="/deleteTask", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "delete task")
-    public void deleteTask(TaskDTO task) throws ResourceNotFoundException {
+    public void deleteTask(TaskDTO task) throws ServiceLayerException {
         LOG.debug("Deleting task " + task.getId());
-        try {
-            taskService.deleteTask(task);
-        } catch (ServiceLayerException e) {
-            LOG.error("Error in service layer of server: " + e.getMessage());
-            throw new ResourceNotFoundException("Failed Delete");
-        }
+        taskService.deleteTask(task);
     }
 
     @RequestMapping(value="/getAllOpenTasks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all open tasks")
-    public List<TaskDTO> getAllOpenTasks() throws ResourceNotFoundException {
+    public List<TaskDTO> getAllOpenTasks() throws ServiceLayerException {
         LOG.debug("called getAllOpenTasks");
-        try {
-            return taskService.getAllOpenTasks();
-        } catch (ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("failed to get all open tasks.");
-        }
+        return taskService.getAllOpenTasks();
     }
 
     @RequestMapping(value="/getTaskById/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get Task By Id")
-    public TaskDTO getTaskById(int task_id) throws ResourceNotFoundException {
+    public TaskDTO getTaskById(int task_id) throws ServiceLayerException {
         LOG.debug("called getTaskById");
-        try {
-            return taskService.getTaskById(task_id);
-        } catch (ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("failed to get task.");
-        }
+        return taskService.getTaskById(task_id);
     }
 }

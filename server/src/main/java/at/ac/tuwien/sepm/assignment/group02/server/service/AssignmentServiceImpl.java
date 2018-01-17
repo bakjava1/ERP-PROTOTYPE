@@ -5,10 +5,7 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.AssignmentConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Assignment;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundExceptionService;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.*;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.AssignmentDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateAssignment;
 import org.slf4j.Logger;
@@ -54,12 +51,11 @@ public class AssignmentServiceImpl implements AssignmentService {
     public void addAssignment(AssignmentDTO assignmentDTO) throws ServiceLayerException {
         Assignment assignment = assignmentConverter.convertRestDTOToPlainObject(assignmentDTO);
         validateAssignment.isValid(assignment);
-
         try {
             assignmentManagementDAO.createAssignment(assignment);
-        } catch (PersistenceLayerException e) {
-            LOG.warn("Database Error", e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
+        } catch(PersistenceLayerException e) {
+            LOG.error("Database Problems: " + e.getMessage());
+            throw new EntityCreationException(e.getMessage());
         }
     }
 
@@ -121,7 +117,7 @@ public class AssignmentServiceImpl implements AssignmentService {
             throw new EntityNotFoundExceptionService(e.getMessage());
         } catch(PersistenceLayerException e) {
             LOG.error("Database Problems: " + e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
+            throw new InternalServerException(e.getMessage());
         }
 
         // 3.2.3 (rest/TimberController) Rundholz aus dem Lager entfernen.

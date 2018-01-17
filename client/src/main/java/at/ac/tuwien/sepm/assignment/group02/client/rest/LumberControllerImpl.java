@@ -8,6 +8,8 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +43,12 @@ public class LumberControllerImpl implements LumberController {
         LOG.debug("Sending request for lumber reservation to server");
 
         try {
-            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/reserveLumber", lumberDTO, LumberDTO.class);
+            //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/reserveLumber",
+            // lumberDTO, LumberDTO.class);
+            restTemplate.exchange(
+                    "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/reserveLumber",
+                    HttpMethod.PUT, new HttpEntity<>(lumberDTO), LumberDTO.class);
+
         } catch(HttpStatusCodeException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
@@ -80,7 +87,10 @@ public class LumberControllerImpl implements LumberController {
 
         try {
             //restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, OrderDTO.class);
-            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, OrderDTO.class);
+            //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, OrderDTO.class);
+            restTemplate.exchange(
+                    "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber",
+                    HttpMethod.PUT, new HttpEntity<>(lumberDTO), OrderDTO.class);
         } catch(HttpStatusCodeException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){

@@ -12,7 +12,6 @@ import at.ac.tuwien.sepm.assignment.group02.server.service.TimberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateTimber;
 import org.junit.*;
-import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
 
 public class AddTimberTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -98,7 +95,7 @@ public class AddTimberTest {
 
     //TODO test not working properly: error in db
     @Test
-    public void testAddTimberController() throws PersistenceLayerException, EntityCreationException {
+    public void testAddTimberController() throws ServiceLayerException, PersistenceLayerException {
         int startAmount = getTimberAmount();
 
         timberController.createTimber(timberDTO1);

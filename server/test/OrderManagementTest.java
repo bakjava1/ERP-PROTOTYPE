@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAOJDBC;
@@ -11,7 +12,10 @@ import at.ac.tuwien.sepm.assignment.group02.server.rest.OrderControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,8 +26,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class OrderManagementTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -80,7 +82,7 @@ public class OrderManagementTest {
     }
 
     @Test
-    public void testDeleteOrder_server_restController() throws EntityNotFoundException {
+    public void testDeleteOrder_server_restController() throws ServiceLayerException {
         LOG.debug("testing for order deletion in server rest controller");
 
         int orderCountBeforeDeletion = getActiveOrders();

@@ -8,6 +8,8 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -48,7 +50,11 @@ public class OrderControllerImpl implements OrderController {
         LOG.debug("sending order to be deleted to server");
 
         try{
-            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteOrder", orderDTO, OrderDTO.class);
+            //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteOrder",
+            // orderDTO, OrderDTO.class);
+            restTemplate.exchange(
+                    "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteOrder",
+                    HttpMethod.PUT, new HttpEntity<>(orderDTO), OrderDTO.class);
         } catch(HttpStatusCodeException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
@@ -116,7 +122,10 @@ public class OrderControllerImpl implements OrderController {
         LOG.debug("sending order that will be invoiced on server");
 
         try{
-            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/invoiceOrder", orderDTO, OrderDTO.class);
+            //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/invoiceOrder", orderDTO, OrderDTO.class);
+            restTemplate.exchange(
+                    "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/invoiceOrder",
+                    HttpMethod.PUT, new HttpEntity<>(orderDTO), OrderDTO.class);
         } catch(HttpStatusCodeException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){

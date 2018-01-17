@@ -6,8 +6,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.*;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
 import org.slf4j.Logger;
@@ -60,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
             orderManagementDAO.createOrder(order);
         } catch(PersistenceLayerException e) {
             LOG.error("Error while trying to create Object in Database");
-            throw new ServiceLayerException("Failed Persistenz");
+            throw new EntityCreationException("Bestellung nicht erstellt.");
         }
     }
 
@@ -126,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
             return orderConverter.convertPlainObjectToRestDTO(orderManagementDAO.getOrderById(order_id));
         } catch (PersistenceLayerException e) {
             LOG.error("Error while trying to get objects from Database: " + e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
+            throw new EntityNotFoundExceptionService(e.getMessage());
         }
     }
 

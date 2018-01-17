@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
@@ -137,15 +139,16 @@ public class AssignmentClientControllerImplTest {
         AssignmentController assignmentController = new AssignmentControllerImpl(restTemplate);
         AssignmentDTO assignmentDTO = new AssignmentDTO();
         assignmentController.setDone(assignmentDTO);
-        verify(restTemplate, times(1)).put(Mockito.matches(".*setAssignmentDone"), any(AssignmentDTO.class), eq(AssignmentDTO.class));
+        verify(restTemplate, times(1))
+                .exchange(Mockito.matches(".*setAssignmentDone"), eq(HttpMethod.PUT), any(HttpEntity.class), eq(AssignmentDTO.class));
     }
 
     @Test(expected = PersistenceLayerException.class)
     public void testSetDone_reactsToRestClientException() throws PersistenceLayerException {
         AssignmentController assignmentController = new AssignmentControllerImpl(restTemplate);
-        doThrow(RestClientException.class)
-                .when(restTemplate).put(Mockito.matches(".*setAssignmentDone"), any(AssignmentDTO.class), eq(AssignmentDTO.class));
         AssignmentDTO assignmentDTO = new AssignmentDTO();
+        doThrow(RestClientException.class)
+                .when(restTemplate).exchange(Mockito.matches(".*setAssignmentDone"), eq(HttpMethod.PUT), any(HttpEntity.class), eq(AssignmentDTO.class));
         assignmentController.setDone(assignmentDTO);
     }
 
@@ -155,7 +158,7 @@ public class AssignmentClientControllerImplTest {
 
         AssignmentDTO assignmentDTO = new AssignmentDTO();
         doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND))
-                .when(restTemplate).put(Mockito.matches(".*setAssignmentDone"), any(AssignmentDTO.class), eq(AssignmentDTO.class));
+                .when(restTemplate).exchange(Mockito.matches(".*setAssignmentDone"), eq(HttpMethod.PUT), any(HttpEntity.class), eq(AssignmentDTO.class));
 
         assignmentController.setDone(assignmentDTO);
     }
