@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.util.CORSFilter;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -54,6 +55,15 @@ public class LumberClientServiceImplTest {
     private static Validator validator;
 
 
+
+    @Before
+    public void init(){
+        MockitoAnnotations.initMocks(this);
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(lumberController)
+                .addFilters(new CORSFilter())
+                .build();
+    }
     @Test
     public void test_update_lumber_success() throws Exception {
 
@@ -70,6 +80,7 @@ public class LumberClientServiceImplTest {
         verify(lumberService, times(1)).getLumber(lumber.getId());
         verify(lumberService, times(1)).updateLumber(lumber);
         verifyNoMoreInteractions(lumberService);
+        verifyZeroInteractions(lumberService);
     }
 
     @Test

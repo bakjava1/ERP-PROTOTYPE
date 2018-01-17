@@ -765,12 +765,14 @@ public class OfficeFXML {
 
     public void rechnungAnzeigenBtnClicked(){
         LOG.info("RechnungAnzeigenBtn clicked");
-
+        //Tablevie von die Bestellung. Wen keine Bestellung ausgewählt ist.
         if (table_bill.getSelectionModel().getSelectedItem() == null) {
             return;
         }
+        //Tablevie von die Bestellung. Da wählt man eine Bestellung aus für die Rechnung.
         Order order = table_bill.getSelectionModel().getSelectedItem();
         Font titleFont = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+
         try {
 
             String file = "Invoice.pdf";
@@ -778,7 +780,7 @@ public class OfficeFXML {
             PdfWriter.getInstance(document, new FileOutputStream(file));
 
 
-            HeaderFooter header = new HeaderFooter(new Phrase("SmartHolz <Anschrift> <UID>"), false); //TODO: insert actual values
+            HeaderFooter header = new HeaderFooter(new Phrase("SmartHolz\nGewerbegebiet Schratten 26\n 5441 Abtenau im Lammertal (Salzburg)\nUID: 12345>"), false);
             HeaderFooter footer = new HeaderFooter(new Phrase("Seite "), new Phrase("."));
             document.setHeader(header);
             document.setFooter(footer);
