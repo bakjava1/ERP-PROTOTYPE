@@ -43,7 +43,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
 
     private static final double SCHNITTFUGE = 4.2; //in mm TODO: in properties file or input?
-    private static final int MAX_STIELE_VORSCHNITT = 2; //in mm TODO: in properties file or input?
+    private static final int MAX_STIELE_VORSCHNITT = 10; //in mm TODO: in properties file or input?
 
     public OptAlgorithmServiceImpl(){}
 
@@ -239,6 +239,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             optimisationBuffer.setVerticalSideTaskResult(new SideTaskResult(verticalSideTask));
             optimisationBuffer.setNewMainOrderValues(currentRadius, nachschnittAnzahl, vorschnittAnzahl, widthMainTask, heightMainTask, biggerSize, smallerSize);
 
+
             optAlgorithmResult.setTimberResult(currentTimber);
         }
 
@@ -278,8 +279,8 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
 
         //side task vertical
-        double xCoordinateLeft = currentRadius - widthMainTask - SCHNITTFUGE * 2 - SCHNITTFUGE/2;
-        double xCoordinateRight = currentRadius + optimisationBuffer.getSmallerSize() - SCHNITTFUGE;
+        double xCoordinateLeft = optimisationBuffer.getRadius() - (optimisationBuffer.getWidthHauptware()/2) - SCHNITTFUGE- optimisationBuffer.getVerticalSideTaskResult().getSmallerSize() ;
+        double xCoordinateRight = optimisationBuffer.getRadius() + optimisationBuffer.getWidthHauptware()/2 + SCHNITTFUGE ;
         yCoordinate = optimisationBuffer.getVerticalSideTaskResult().getY() + (optimisationBuffer.getVerticalSideTaskResult().getMaxHeight() - optimisationBuffer.getVerticalSideTaskResult().getHeightSideTask())/2;
         //yCoordinate = currentRadius - heightMainTask/2;
 
@@ -291,18 +292,17 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         }
 
 
-
         //side task horizontal
-        xCoordinate = optimisationBuffer.getHorizontalSideTaskResult().getX();
+        xCoordinate = optimisationBuffer.getHorizontalSideTaskResult().getX() + (optimisationBuffer.getBiggerSize()-optimisationBuffer.getHorizontalSideTaskResult().getBiggerSize())/2;
         //double yCoordinateTop = currentRadius - heightMainTask/2 - SCHNITTFUGE * optimisationBuffer.getNachschnittAnzahl() - SCHNITTFUGE;
-        double yCoordinateTop = currentRadius - heightMainTask/2 - optimisationBuffer.getHorizontalSideTaskResult().getSmallerSize() - SCHNITTFUGE;
-        double yCoordinateBottom = heightMainTask + SCHNITTFUGE + SCHNITTFUGE/2;
+        double yCoordinateTop = optimisationBuffer.getRadius() - optimisationBuffer.getHeightHauptware()/2 - optimisationBuffer.getHorizontalSideTaskResult().getSmallerSize() - SCHNITTFUGE;
+        double yCoordinateBottom = optimisationBuffer.getRadius() + optimisationBuffer.getHeightHauptware()/2  + SCHNITTFUGE;
 
         for(int i = 0; i < optimisationBuffer.getHorizontalSideTaskResult().getCount(); i++) {
             System.out.print("");
             rectangles.add(new RectangleDTO(xCoordinate, yCoordinateTop, "blue", optimisationBuffer.getHorizontalSideTaskResult().getSmallerSize(), optimisationBuffer.getHorizontalSideTaskResult().getBiggerSize()));
             rectangles.add(new RectangleDTO(xCoordinate, yCoordinateBottom, "blue", optimisationBuffer.getHorizontalSideTaskResult().getSmallerSize(), optimisationBuffer.getHorizontalSideTaskResult().getBiggerSize()));
-            xCoordinate += (optimisationBuffer.getHorizontalSideTaskResult().getBiggerSize() + SCHNITTFUGE);
+            xCoordinate += (optimisationBuffer.getBiggerSize() + SCHNITTFUGE);
         }
 
 
@@ -333,6 +333,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             double sideTaskHorizontalArea = smallerSizeHorizontal * biggerSizeHorizontal * 2 * horizontalCount;
 
             if (sideTaskHorizontalArea > maxAreaSideTaskHorizontal) {
+
 
                 maxAreaSideTaskHorizontal = sideTaskHorizontalArea;
                 horizontalSideTask.setNewResult(horizontalCount, widthSideTaskHorizontal, heightSideTaskHorizontal, xCoordinateSideTaskHorizontal,
@@ -402,6 +403,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                 if(y1 > y2) {
                     y1 = y2;
                 }
+
 
                 verticalSideTask.setNewResult(verticalCount, widthSideTaskVertical, heightSideTaskVertical, xCoordinateSideTaskVertical,
                         y1, smallerSizeVertical, biggerSizeVertical, maxHeightSideTaskVertical, false);
