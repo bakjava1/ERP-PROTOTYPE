@@ -13,7 +13,7 @@ public class Order {
     private String customerName;
     private String customerAddress;
     private String customerUID;
-    private Date orderDate;
+    private String orderDate;
     private boolean isPaid;
     private List<Task> taskList;
 
@@ -25,7 +25,7 @@ public class Order {
     private int taxAmount;
 
     public Order() {
-        this.id = -1;
+        this.id = 0;
         this.orderDate = null;
         this.isPaid = false;
         this.taskList = new ArrayList<>();
@@ -35,7 +35,7 @@ public class Order {
         this.id = ID;
     }
 
-    public Order(int id, Date orderDate) {
+    public Order(int id, String orderDate) {
         this.id = id;
         this.orderDate = orderDate;
     }
@@ -50,11 +50,11 @@ public class Order {
         return this.id;
     }
 
-    public Date getOrderDate() {
+    public String getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
     }
 

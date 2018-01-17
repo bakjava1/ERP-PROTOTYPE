@@ -8,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,7 +31,7 @@ public class CostBenefitControllerImpl implements CostBenefitController {
         double estimate = 0;
 
         try {
-            estimate = restTemplate.postForObject("http://localhost:8080/costBenefit", taskList, Integer.class);
+            estimate = restTemplate.postForObject("http://localhost:8080/costBenefit", taskList, Double.class);
         } catch(HttpClientErrorException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){

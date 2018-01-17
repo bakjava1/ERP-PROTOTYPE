@@ -11,17 +11,84 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 public class Validator {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    public void isValidDate(String inDate) throws InvalidInputException {
+
+        //case not set cause assignment getting created
+        if (inDate == null)
+            return;
+
+        //set the format to use as a constructor argument
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        if (inDate.trim().length() != dateFormat.toPattern().length())
+            throw new InvalidInputException("Date is not in correct format!");
+
+        dateFormat.setLenient(false);
+
+        try {
+            //parse the inDate parameter
+            Date test = dateFormat.parse(inDate.trim());
+            if(!test.before(new Date())) {
+                throw new InvalidInputException("Impossible Date");
+            }
+        }
+        catch (ParseException pe) {
+            throw new InvalidInputException("Date is not in correct format!");
+        }
+    }
+
+    public int validateNumber(String toValidate,int size) throws NoValidIntegerException {
+        int num;
+        if(toValidate == null || toValidate.length() == 0) {
+            throw new NoValidIntegerException("Empty Field, No Number entered");
+        }
+        try {
+            num = Integer.parseInt(toValidate);
+            if (num <= 0) {
+                throw new NoValidIntegerException("Negative Integer or Null entered");
+            }
+            if(num > size && size != -1) {
+                throw new NoValidIntegerException("Value entered was too big! Enter Value < " + size);
+            }
+        } catch (NumberFormatException e) {
+            LOG.error("No valid Integer entered");
+            throw new NoValidIntegerException("No valid Integer entered");
+        }
+        return num;
+    }
+
+    private void validateText(String toValidate, int length) throws EmptyInputException {
+        if(toValidate == null || toValidate.length() == 0) {
+            throw new EmptyInputException("Empty Field");
+        }
+        if(toValidate.length() > length && length != -1) {
+            throw new EmptyInputException("Input was too long! Enter Input which is max. " + length + " long");
+        }
+    }
+
+    private void isNumber(int toCheck,int limit) throws NoValidIntegerException {
+        if (toCheck < 0) {
+            throw new NoValidIntegerException("Negative Integer entered");
+        }
+        if(toCheck > limit && limit != -1) {
+            throw new NoValidIntegerException("Integer entered too big! Value must be < " + limit);
+        }
+    }
+
     public int[] temporaryAddTaskToLumberValidation(String id, String amount) throws InvalidInputException {
         int[] result = new int[2];
         int validatedId;
         try {
-            validatedId = validateNumber(id);
+            validatedId = validateNumber(id,Integer.MAX_VALUE);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Id: " + e.getMessage());
             throw new InvalidInputException("Error at Id: " + e.getMessage());
@@ -29,7 +96,7 @@ public class Validator {
         result[0] = validatedId;
         int validatedAmount;
         try {
-            validatedAmount = validateNumber(amount);
+            validatedAmount = validateNumber(amount,Integer.MAX_VALUE);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Amount: " + e.getMessage());
             throw new InvalidInputException("Error at Amount: " + e.getMessage());
@@ -39,23 +106,45 @@ public class Validator {
     }
 
     public void inputValidationOrder(Order toValidate) throws InvalidInputException {
+
+        try {
+            isNumber(toValidate.getID(),-1);
+        } catch(NoValidIntegerException e) {
+            LOG.error("Error in Order Id: "+ e.getMessage());
+            throw new InvalidInputException("Error in Order Id: " + e.getMessage());
+        }
+
         try {
             validateText(toValidate.getCustomerName(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Name: " + e.getMessage());
             throw new InvalidInputException("Error at Customer Name: " + e.getMessage());
         }
+
         try {
             validateText(toValidate.getCustomerAddress(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Address: " + e.getMessage());
             throw new InvalidInputException("Error at Customer Address: " + e.getMessage());
         }
+
         try {
             validateText(toValidate.getCustomerUID(),10);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer UID: " + e.getMessage());
             throw new InvalidInputException("Error at Customer UID: " + e.getMessage());
+        }
+
+        try {
+            isValidDate(toValidate.getOrderDate());
+        } catch(InvalidInputException e) {
+            LOG.error("Error at Order Date: " + e.getMessage());
+            throw new InvalidInputException("Error at Order Date: " + e.getMessage());
+        }
+
+        if(toValidate.getTaskList() == null) {
+            LOG.error("Error at Task List: List cannot be null");
+            throw new InvalidInputException("Error at Order Date: List cannot be null");
         }
     }
 
@@ -140,55 +229,77 @@ public class Validator {
             LOG.error("Error at Description: " + e.getMessage());
             throw new InvalidInputException("Error at Description: " + e.getMessage());
         }
+
         try {
             validateText(toValidate.getFinishing(),15);
+            if(!toValidate.getFinishing().equals("roh") && !toValidate.getFinishing().equals("gehobelt") && !toValidate.getFinishing().equals("besäumt")
+                    && !toValidate.getFinishing().equals("prismiert") && !toValidate.getFinishing().equals("trocken") && !toValidate.getFinishing().equals("lutro")
+                    && !toValidate.getFinishing().equals("frisch") && !toValidate.getFinishing().equals("imprägniert")) {
+                LOG.error("Error at Finishing: Unknown Finishing");
+                throw new InvalidInputException("Error at Finishing: Unknown Finishing");
+            }
         }catch(EmptyInputException e) {
             LOG.error("Error at Finishing: " + e.getMessage());
             throw new InvalidInputException("Error at Finishing: " + e.getMessage());
         }
+
         try {
             validateText(toValidate.getWood_type(),10);
+            if(!toValidate.getWood_type().equals("Fi") && !toValidate.getWood_type().equals("Ta") && !toValidate.getWood_type().equals("Lae")) {
+                LOG.error("Error at Wood Type: Unknown Wood Type");
+                throw new InvalidInputException("Error at Wood Type: Unknown Wood Type");
+            }
         }catch(EmptyInputException e) {
             LOG.error("Error at Wood Type: " + e.getMessage());
             throw new InvalidInputException("Error at Wood Type: " + e.getMessage());
         }
+
         try {
             validateText(toValidate.getQuality(),10);
+            if(!toValidate.getQuality().equals("O") && !toValidate.getQuality().equals("I") && !toValidate.getQuality().equals("II") &&
+                    !toValidate.getQuality().equals("III") && !toValidate.getQuality().equals("IV") && !toValidate.getQuality().equals("V") &&
+                    !toValidate.getQuality().equals("O/III") && !toValidate.getQuality().equals("III/IV") && !toValidate.getQuality().equals("III/V") ) {
+                LOG.error("Error at Quality: Unknown Quality");
+                throw new InvalidInputException("Error at Quality: Unknown Quality");
+            }
         }catch(EmptyInputException e) {
             LOG.error("Error at Quality: " + e.getMessage());
             throw new InvalidInputException("Error at Quality: " + e.getMessage());
         }
         int validatedSize;
         try {
-            validatedSize = validateNumber(toValidate.getSize());
+            validatedSize = validateNumber(toValidate.getSize(),1000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Size: " + e.getMessage());
             throw new InvalidInputException("Error at Size: " + e.getMessage());
         }
         int validatedWidth;
         try {
-            validatedWidth = validateNumber(toValidate.getWidth());
+            validatedWidth = validateNumber(toValidate.getWidth(),1000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Width: " + e.getMessage());
             throw new InvalidInputException("Error at Width: " + e.getMessage());
         }
         int validatedLength;
         try {
-            validatedLength = validateNumber(toValidate.getLength());
+            validatedLength = validateNumber(toValidate.getLength(),5000);
+            if(validatedLength != 3500 && validatedLength != 4000 && validatedLength != 4500 && validatedLength != 5000) {
+                throw new InvalidInputException("Please enter a producable Length! (3500,4000,4500,5000");
+            }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Length: " + e.getMessage());
             throw new InvalidInputException("Error at Length: " + e.getMessage());
         }
         int validatedQuantity;
         try {
-            validatedQuantity = validateNumber(toValidate.getQuantity());
+            validatedQuantity = validateNumber(toValidate.getQuantity(),1000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Quantity: " + e.getMessage());
             throw new InvalidInputException("Error at Quantity: " + e.getMessage());
         }
         int validatedPrice;
         try {
-            validatedPrice = validateNumber(toValidate.getPrice());
+            validatedPrice = validateNumber(toValidate.getPrice(),10000000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Price: " + e.getMessage());
             throw new InvalidInputException("Error at Price: " + e.getMessage());
@@ -201,33 +312,6 @@ public class Validator {
                 false,validatedPrice);
 
     }
-
-    public int validateNumber(String toValidate) throws NoValidIntegerException {
-        int num;
-        if(toValidate == null || toValidate.length() == 0) {
-            throw new NoValidIntegerException("Empty Field, No Number entered");
-        }
-        try {
-            num = Integer.parseInt(toValidate);
-            if (num <= 0) {
-                throw new NoValidIntegerException("Negative Integer or Null entered");
-            }
-        } catch (NumberFormatException e) {
-            LOG.error("No valid Integer entered");
-            throw new NoValidIntegerException("No valid Integer entered");
-        }
-        return num;
-    }
-
-    private void validateText(String toValidate, int length) throws EmptyInputException {
-        if(toValidate == null || toValidate.length() == 0) {
-            throw new EmptyInputException("Empty Field");
-        }
-        if(toValidate.length() > length && length != -1) {
-            throw new EmptyInputException("Input too long");
-        }
-    }
-
 
     public Lumber validateLumber(UnvalidatedLumber filter) throws InvalidInputException{
 
@@ -244,62 +328,97 @@ public class Validator {
 
         Lumber validatedLumber = new Lumber();
 
-        if (!description.equals("")){
-            validatedLumber.setDescription(description);
-        }
-        if (!finishing.equals("")){
-            validatedLumber.setFinishing(finishing);
-        }
-
-        if (!wood_type.equals("")){
-            validatedLumber.setWood_type(wood_type);
-        }
-
-        if (!quality.equals("")){
-            validatedLumber.setQuality(quality);
+        try {
+            if(!description.equals("")) {
+                validateText(description, 50);
+                validatedLumber.setDescription(description);
+            }
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Description: " + e.getMessage());
+            throw new InvalidInputException("Error at Description: " + e.getMessage());
         }
 
-        if (!strength.equals("")){
-            if (strength.matches("^\\d+$")) {
-                if (strength.length() < 10) {
-                    validatedLumber.setSize(Integer.parseInt(strength));
-                }else{
-                    throw new InvalidInputException("Die angegebene Stärke ist zu groß.");
+        try {
+            if(!finishing.equals("")) {
+                validateText(finishing, 30);
+                if (!finishing.equals("roh") && !finishing.equals("gehobelt") && !finishing.equals("besäumt")
+                        && !finishing.equals("prismiert") && !finishing.equals("trocken") && !finishing.equals("lutro")
+                        && !finishing.equals("frisch") && !finishing.equals("imprägniert")) {
+                    LOG.error("Error at Finishing: Unknown Finishing");
+                    throw new InvalidInputException("Error at Finishing: Unknown Finishing");
                 }
+                validatedLumber.setFinishing(finishing);
             }
-            else{
-                throw new InvalidInputException("Die angegebene Stärke ist keine positive ganze Zahl.");
-            }
-        }else{
-            validatedLumber.setSize(-1);
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Finishing: " + e.getMessage());
+            throw new InvalidInputException("Error at Finishing: " + e.getMessage());
         }
 
-        if (!width.equals("")){
-            if (width.matches("^\\d+$")) {
-                if (width.length() < 10) {
-                    validatedLumber.setWidth(Integer.parseInt(width));
-                }else{
-                    throw new InvalidInputException("Die angegebene Breite ist zu groß.");
+        try {
+            if(!wood_type.equals("")) {
+                validateText(wood_type, 20);
+                if (!wood_type.equals("Fi") && !wood_type.equals("Ta") && !wood_type.equals("Lae")) {
+                    LOG.error("Error at Wood Type: Unknown Wood Type");
+                    throw new InvalidInputException("Error at Wood Type: Unknown Wood Type");
                 }
-            }else{
-                throw new InvalidInputException("Die angegebene Breite ist keine positive ganze Zahl.");
+                validatedLumber.setWood_type(wood_type);
             }
-        }else{
-            validatedLumber.setWidth(-1);
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Wood Type: " + e.getMessage());
+            throw new InvalidInputException("Error at Wood Type: " + e.getMessage());
         }
 
-        if (!length.equals("")){
-            if (length.matches("^\\d+$")) {
-                if (length.length() < 10) {
-                    validatedLumber.setLength(Integer.parseInt(length));
-                }else{
-                    throw new InvalidInputException("Die angegebene Länge ist zu groß.");
+        try {
+            if(!quality.equals("")) {
+                validateText(quality, 20);
+                if (!quality.equals("O") && !quality.equals("I") && !quality.equals("II") &&
+                        !quality.equals("III") && !quality.equals("IV") && !quality.equals("V") &&
+                        !quality.equals("O/III") && !quality.equals("III/IV") && !quality.equals("III/V")) {
+                    LOG.error("Error at Quality: Unknown Quality");
+                    throw new InvalidInputException("Error at Quality: Unknown Quality");
                 }
-            }else{
-                throw new InvalidInputException("Die angegebene Länge ist keine positive ganze Zahl.");
+                validatedLumber.setQuality(quality);
             }
-        }else{
-            validatedLumber.setLength(-1);
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Quality: " + e.getMessage());
+            throw new InvalidInputException("Error at Quality: " + e.getMessage());
+        }
+
+
+        try {
+            if(strength.equals("")) { validatedLumber.setSize(-1); }
+            else {
+                int validatedStrength = validateNumber(strength, 1000);
+                validatedLumber.setSize(validatedStrength);
+            }
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Size: " + e.getMessage());
+            throw new InvalidInputException("Error at Size: " + e.getMessage());
+        }
+
+        try {
+            if(width.equals("")) { validatedLumber.setWidth(-1); }
+            else {
+                int validatedWidth = validateNumber(width, 1000);
+                validatedLumber.setWidth(validatedWidth);
+            }
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Width: " + e.getMessage());
+            throw new InvalidInputException("Error at Width: " + e.getMessage());
+        }
+
+        try {
+            if(length.equals("")) { validatedLumber.setLength(-1); }
+            else {
+                int validatedLength = validateNumber(length, 5000);
+                if (validatedLength != 3500 && validatedLength != 4000 && validatedLength != 4500 && validatedLength != 5000) {
+                    throw new InvalidInputException("Please enter a producable Length! (3500,4000,4500,5000");
+                }
+                validatedLumber.setLength(validatedLength);
+            }
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Length: " + e.getMessage());
+            throw new InvalidInputException("Error at Length: " + e.getMessage());
         }
 
         return validatedLumber;
