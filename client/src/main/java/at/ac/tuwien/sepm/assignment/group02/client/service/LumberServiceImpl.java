@@ -165,10 +165,10 @@ public class LumberServiceImpl implements LumberService {
 
         LOG.debug("deleteLumber called: {}", lumber);
 
-        if (lumberExists(lumber)){
-            return true;
-        }
-        validateLumber(lumber);
+       // if (lumberExists(lumber)){
+         //   return true;
+        //}
+       // validateLumber(lumber);
 
         LumberDTO lumberToDelete = lumberConverter.convertPlainObjectToRestDTO(lumber);
             try {
@@ -177,7 +177,6 @@ public class LumberServiceImpl implements LumberService {
                 LOG.warn(e.getMessage());
             }
             return true;
-
     }
 
 
@@ -194,32 +193,25 @@ public class LumberServiceImpl implements LumberService {
         } catch (InvalidInputException e) {
             e.printStackTrace();
         }
-
-
         LumberDTO toUpdate = lumberConverter.convertPlainObjectToRestDTO(lumberDTO);
         try {
             lumberController.updateLumber(toUpdate);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
         }
-
     }*/
-
-
 
 
 @Override
 public void updateLumber(Lumber lumber) throws ServiceLayerException {
-
         LOG.debug("updateLumber called: {}", lumber);
 
-        try {
-            lumber=new Lumber();
+    try {
         validateLumber(lumber);
-        } catch (InvalidInputException e) {
+    } catch (InvalidInputException e) {
         e.printStackTrace();
-        }
-        LumberDTO toUpdate = lumberConverter.convertPlainObjectToRestDTO(lumber);
+    }
+    LumberDTO toUpdate = lumberConverter.convertPlainObjectToRestDTO(lumber);
         try {
         lumberController.updateLumber(toUpdate);
         } catch (PersistenceLayerException e) {

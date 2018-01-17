@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.lang.invoke.MethodHandles;
 
 @Service
-public class Validator {
+public class Validator implements ValidateInput{
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -307,4 +307,8 @@ public class Validator {
     }
 
 
+    @Override
+    public boolean isValid(Object input) throws InvalidInputException {
+        return false;
+    }
 }

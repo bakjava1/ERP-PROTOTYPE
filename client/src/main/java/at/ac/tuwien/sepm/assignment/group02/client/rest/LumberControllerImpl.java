@@ -93,7 +93,6 @@ public class LumberControllerImpl implements LumberController {
      * @param lumberDTO lumber to update
      * @throws PersistenceLayerException
      */
-
    // @RequestMapping(value = "/lumber/{id}",  method = RequestMethod.PUT,consumes = "application/json", produces = "application/json")
     @Override
     public void updateLumber(@RequestBody LumberDTO lumberDTO) throws PersistenceLayerException, ServiceLayerException {
@@ -123,9 +122,7 @@ public class LumberControllerImpl implements LumberController {
             LOG.debug("sending lumber to be deleted to server");
 
         try{
-               // restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteLumber", lumberDTO, LumberDTO.class);
-                restTemplate.delete("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteLumber", lumberDTO, LumberDTO.class);
-
+            restTemplate.delete("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteLumber", lumberDTO, LumberDTO.class);
             } catch(HttpStatusCodeException e){
                 LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
                 throw new PersistenceLayerException("Connection Problem with Server");
@@ -134,7 +131,6 @@ public class LumberControllerImpl implements LumberController {
                 LOG.warn("server is down? - {}", e.getMessage());
                 throw new PersistenceLayerException("Connection Problem with Server");
             }
-
             return;
         }
 
