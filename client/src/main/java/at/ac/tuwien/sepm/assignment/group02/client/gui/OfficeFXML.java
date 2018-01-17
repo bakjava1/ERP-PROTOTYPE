@@ -55,7 +55,7 @@ public class OfficeFXML {
     private static Order currentOrder = new Order();
     private static List<Task> currentOrderTaskList = new ArrayList<>();
     private static int currentOrderIndex = 1;
-    private static int currentOrderSum = 0;
+    private static double currentOrderSum = 0.0;
 
     @FXML
     private Button bt_deleteOrder;
@@ -639,7 +639,7 @@ public class OfficeFXML {
                 currentOrderIndex++;
                 currentOrderTaskList.add(toAdd);
                 table_addedTask.getItems().add(toAdd);
-                currentOrderSum += toAdd.getPrice();
+                currentOrderSum += centToEuro(toAdd.getPrice());
                 l_sumorders.setText(currentOrderSum + " €");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Successfully created Task");
@@ -768,7 +768,7 @@ public class OfficeFXML {
             LOG.info("index: " + index);
             table_addedTask.getItems().remove(index);
             currentOrderTaskList.remove(index);
-            currentOrderSum -= deletePrice;
+            currentOrderSum -= centToEuro(deletePrice);
             l_sumorders.setText(currentOrderSum + " €");
             LOG.info("tablesize: " + table_addedTask.getItems().size() + " tasklistsize: " + currentOrderTaskList.size());
             if(currentOrderTaskList.size() > 0) { initiateCostValueFunction(null); }
@@ -848,7 +848,12 @@ public class OfficeFXML {
 
     }
 
-
+    private double centToEuro(int price) {
+        double result = 0.0;
+        result = Math.floor((double) price / (double) 100);
+        result += ((double) price % (double) 100) / (double) 100;
+        return result;
+    }
 
 
 
