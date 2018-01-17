@@ -23,7 +23,7 @@ public class DBUtil {
     public static Connection getConnection(){
         LOG.debug("called getConnection");
 
-        boolean isFinalDB = true;
+        boolean isFinalDB = false;
         if (con == null) {
             con = openConnection();
             // insert test data to database
