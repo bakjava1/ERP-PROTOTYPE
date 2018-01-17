@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.OptAlgorithmResult;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.OptimisationAlgorithmException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
@@ -49,7 +50,6 @@ public class OptAlgorithmControllerImpl implements OptAlgorithmController {
 
             throw new PersistenceLayerException("Connection Problem with Server");
         }
-
 
 
         return bestResult;
