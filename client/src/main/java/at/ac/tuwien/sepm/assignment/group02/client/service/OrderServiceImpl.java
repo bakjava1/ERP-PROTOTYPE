@@ -141,8 +141,8 @@ public class OrderServiceImpl implements OrderService {
         int grossAmount = netSumTasks + (int)taxAmount;
         selectedOrder.setGrossAmount(grossAmount);
         selectedOrder.setTaxAmount((int)taxAmount);
-        selectedOrder.setDeliveryDate(new Date());
-        selectedOrder.setInvoiceDate(new Date());
+        selectedOrder.setDeliveryDate(new Date().toString());
+        selectedOrder.setInvoiceDate(new Date().toString());
 
 
         validator.inputValidationInvoice(selectedOrder);

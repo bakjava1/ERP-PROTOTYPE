@@ -86,8 +86,8 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                     double optimalProduceCost = -1.0;
                     List<Timber> possibleBoxes = timberDAO.getBoxesForTask(toEvaluate.get(i));
                     if(possibleBoxes.size() == 0) {
-                        LOG.error("Lumber with Values length: " + toEvaluate.get(i).getLength() + " width: " + toEvaluate.get(i).getWidth() + " size: " + toEvaluate.get(i).getSize() + " can not be produced");
-                        throw new ServiceLayerException("Lumber with Values length: " + toEvaluate.get(i).getLength() + " width: " + toEvaluate.get(i).getWidth() + " size: " + toEvaluate.get(i).getSize() + " can not be produced");
+                        LOG.error("Lumber with Values length: " + toEvaluate.get(i).getLength() + " width: " + toEvaluate.get(i).getWidth() + " size: " + toEvaluate.get(i).getSize() + " quality : " + toEvaluate.get(i).getQuality() + " can not be produced");
+                        throw new ServiceLayerException("Lumber with Values length: " + toEvaluate.get(i).getLength() + " width: " + toEvaluate.get(i).getWidth() + " size: " + toEvaluate.get(i).getSize() + " quality : " + toEvaluate.get(i).getQuality() + " can not be produced");
                     }
                     for(int j = 0; j < possibleBoxes.size();j++) {
                         Timber temp = possibleBoxes.get(j);

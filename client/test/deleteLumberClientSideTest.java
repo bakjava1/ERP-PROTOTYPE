@@ -61,7 +61,7 @@ public class deleteLumberClientSideTest {
         LOG.debug("delete lumber setup completed");
     }
 
-    @Test
+    /*@Test
     public void testDelete_Lumber_client_serviceLayer() throws ServiceLayerException {
         LOG.debug("test delete lumber in client service layer");
 
@@ -84,6 +84,6 @@ public class deleteLumberClientSideTest {
 
         doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).put(any(), any(OrderDTO.class), any(OrderDTO.class));
         lumberController.removeLumber(lumberDTO);
-    }
+    }*/
     
 }

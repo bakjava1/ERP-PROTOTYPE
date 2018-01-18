@@ -46,9 +46,7 @@ public class AddTimberTest {
         timberAmountError.setBox_id(1);
         timberAmountError.setAmount(-1);
 
-        timberNoError = new Timber();
-        timberNoError.setBox_id(1);
-        timberNoError.setAmount(20);
+        timberNoError = new Timber(1,20);
     }
 
     @Test(expected = ServiceLayerException.class)

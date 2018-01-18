@@ -180,12 +180,14 @@ public class TimberDAOJDBC implements TimberDAO{
 
         List<String> qualities = convertLumberQualityToTimberQuality(toCheck.getQuality());
         List<Timber> boxList  = new ArrayList<>();
-        String selectSentence = "SELECT * FROM TIMBER WHERE LENGTH = ? AND QUALITY = ? AND WOOD_TYPE LIKE ?";
+        String selectSentence = "SELECT * FROM TIMBER WHERE LENGTH = ? AND QUALITY = ? AND WOOD_TYPE LIKE ? AND ? < DIAMETER AND ? < DIAMETER";
 
         try{
             stmt = dbConnection.prepareStatement(selectSentence);
             stmt.setInt(1,toCheck.getLength());
             stmt.setString(3,toCheck.getWood_type() + "%");
+            stmt.setInt(4,toCheck.getWidth());
+            stmt.setInt(5,toCheck.getSize());
             for(int i = 0; i < qualities.size();i++) {
                 stmt.setString(2,qualities.get(i));
                 rs = stmt.executeQuery();
