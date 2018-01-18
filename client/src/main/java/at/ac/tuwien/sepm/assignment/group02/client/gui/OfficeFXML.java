@@ -776,10 +776,10 @@ public class OfficeFXML {
         try {
 
             String file = "Invoice.pdf";
-            Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(file));
+            Document document = new Document(); //neu Doc erstellen
+            PdfWriter.getInstance(document, new FileOutputStream(file)); //instance von den Doc. holen um eine neue File zu erstellen
 
-
+            //neu paragraph erstellen
             HeaderFooter header = new HeaderFooter(new Phrase("SmartHolz\nGewerbegebiet Schratten 26\n 5441 Abtenau im Lammertal (Salzburg)\nUID: 12345"), false);
             HeaderFooter footer = new HeaderFooter(new Phrase("Seite "), new Phrase("."));
             document.setHeader(header);
@@ -793,7 +793,7 @@ public class OfficeFXML {
 //            header.add(new Paragraph("Unsere Anschrift: "));
 
 
-
+            // anderen paragraph erstellen
             File fi = new File(this.getClass().getClassLoader().getResource("logo.jpg").getFile());
             byte[] fileContent = Files.readAllBytes(fi.toPath());
             //BufferedImage img = ImageIO.read(new File("logo.jpg"));;
@@ -830,6 +830,7 @@ public class OfficeFXML {
             c0.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(c0);
             table.setHeaderRows(1);
+            // die Arktikeln werden auf die Rechnung gezeigt
             for (Task t: order.getTaskList()) {
                 PdfPCell c1 = new PdfPCell(new Phrase(""+ t.getQuantity()));
                 c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -871,11 +872,11 @@ public class OfficeFXML {
             document.add(table);
             table.setSpacingAfter(20);
 
+            //neue paragraph
             document.add(new Paragraph("Lieferdatum entspricht Rechnungsdatum"));
             document.close();
             File invoice = new File(file);
             Desktop.getDesktop().open(invoice);
-
 
         } catch (DocumentException e) {
             e.printStackTrace();
