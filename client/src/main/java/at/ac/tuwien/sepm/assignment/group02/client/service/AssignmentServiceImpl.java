@@ -42,7 +42,7 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Override
     public List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException {
         LOG.debug("getAllOpenAssignments called in ");
-        List<AssignmentDTO> allOpenAssignments = null;
+        List<AssignmentDTO> allOpenAssignments;
 
         try {
             allOpenAssignments = assignmentController.getAllOpenAssignments();
@@ -92,7 +92,7 @@ public class AssignmentServiceImpl implements AssignmentService {
             assignmentController.setDone(assignmentDTO);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
-            throw new ServiceLayerException("error on persistence layer.");
+            throw new ServiceLayerException(e.getMessage());
         }
 
     }

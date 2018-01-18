@@ -1,5 +1,6 @@
 package serviceLayer;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
@@ -113,11 +114,11 @@ public class LumberServerServiceImplTest {
         Lumber l2 = Mockito.mock(Lumber.class);
         allLumber.add(l1);
         allLumber.add(l2);
-        when(lumberManagementDAO.getAllLumber(any(Lumber.class))).thenReturn(allLumber);
+        when(lumberManagementDAO.getAllLumber(any(FilterDTO.class))).thenReturn(allLumber);
 
-        List<LumberDTO> allLumberConverted = lumberService.getAllLumber(any(LumberDTO.class));
+        List<LumberDTO> allLumberConverted = lumberService.getAllLumber(any(FilterDTO.class));
 
-        verify(lumberManagementDAO, times(1)).getAllLumber(any(Lumber.class));
+        verify(lumberManagementDAO, times(1)).getAllLumber(any(FilterDTO.class));
         verify(lumberConverter, times(2)).convertPlainObjectToRestDTO(any(Lumber.class));
 
         Assert.assertEquals(allLumberConverted.size(),2);
@@ -129,11 +130,11 @@ public class LumberServerServiceImplTest {
                 = new LumberServiceImpl(lumberManagementDAO,lumberConverter,validateLumber);
 
         List<Lumber> allLumber = new LinkedList<>();
-        when(lumberManagementDAO.getAllLumber(any(Lumber.class))).thenReturn(allLumber);
+        when(lumberManagementDAO.getAllLumber(any(FilterDTO.class))).thenReturn(allLumber);
 
-        List<LumberDTO> allLumberConverted = lumberService.getAllLumber(any(LumberDTO.class));
+        List<LumberDTO> allLumberConverted = lumberService.getAllLumber(any(FilterDTO.class));
 
-        verify(lumberManagementDAO, times(1)).getAllLumber(any(Lumber.class));
+        verify(lumberManagementDAO, times(1)).getAllLumber(any(FilterDTO.class));
         verify(lumberConverter, times(0)).convertPlainObjectToRestDTO(any(Lumber.class));
 
         Assert.assertEquals(allLumberConverted.size(),0);
@@ -144,9 +145,9 @@ public class LumberServerServiceImplTest {
         LumberService lumberService
                 = new LumberServiceImpl(lumberManagementDAO,lumberConverter,validateLumber);
 
-        doThrow(PersistenceLayerException.class).when(lumberManagementDAO).getAllLumber(any(Lumber.class));
+        doThrow(PersistenceLayerException.class).when(lumberManagementDAO).getAllLumber(any(FilterDTO.class));
 
-        lumberService.getAllLumber(any(LumberDTO.class));
+        lumberService.getAllLumber(any(FilterDTO.class));
     }
 
     @Test

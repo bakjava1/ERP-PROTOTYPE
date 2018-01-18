@@ -1,9 +1,8 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.OptAlgorithmResult;
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.OptimisationAlgorithmException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.util.HandleException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.slf4j.Logger;
@@ -39,16 +38,11 @@ public class OptAlgorithmControllerImpl implements OptAlgorithmController {
             //return restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getOptAlgorithmResult", OptAlgorithmResultDTO.class);
             bestResult =  restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/getOptAlgorithmResult", taskDTO, OptAlgorithmResultDTO.class);
 
-        } catch(HttpStatusCodeException e) {
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-
-
-            throw new PersistenceLayerException("Connection Problem with Server");
+        } catch(HttpStatusCodeException e){
+            HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-
-            throw new PersistenceLayerException("Connection Problem with Server");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
 

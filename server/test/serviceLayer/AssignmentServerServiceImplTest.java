@@ -1,6 +1,7 @@
 package serviceLayer;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.AssignmentConverter;
@@ -169,7 +170,7 @@ public class AssignmentServerServiceImplTest {
 
         // return a mocked array list of LumberDTO that is empty
         List<LumberDTO> mockLumberDTOList = new ArrayList<>();
-        doReturn(mockLumberDTOList).when(lumberService).getAllLumber(any(LumberDTO.class));
+        doReturn(mockLumberDTOList).when(lumberService).getAllLumber(any(FilterDTO.class));
 
         assignmentService.setDone(any(AssignmentDTO.class));
 
@@ -261,7 +262,7 @@ public class AssignmentServerServiceImplTest {
         List<LumberDTO> mockLumberDTOList = Mockito.mock(List.class);
         doReturn(mockLumberDTOList).when(lumberService).getAllLumber(mockLumberDTO);
         */
-        doThrow(ServiceLayerException.class).when(lumberService).getAllLumber(any(LumberDTO.class));
+        doThrow(ServiceLayerException.class).when(lumberService).getAllLumber(any(FilterDTO.class));
 
         assignmentService.setDone(any(AssignmentDTO.class));
     }
@@ -285,7 +286,7 @@ public class AssignmentServerServiceImplTest {
         mockLumberDTOList.add(l1);
         mockLumberDTOList.add(l2);
 
-        doReturn(mockLumberDTOList).when(lumberService).getAllLumber(any(LumberDTO.class));
+        doReturn(mockLumberDTOList).when(lumberService).getAllLumber(any(FilterDTO.class));
 
         assignmentService.setDone(any(AssignmentDTO.class));
 
@@ -307,7 +308,7 @@ public class AssignmentServerServiceImplTest {
         when(taskService.getTaskById(mockAssignment.getTask_id())).thenReturn(mockTaskDTO);
 
         // return null instead of array list
-        doReturn(null).when(lumberService).getAllLumber(any(LumberDTO.class));
+        doReturn(null).when(lumberService).getAllLumber(any(FilterDTO.class));
 
         assignmentService.setDone(any(AssignmentDTO.class));
 
@@ -331,7 +332,7 @@ public class AssignmentServerServiceImplTest {
 
         // return a mocked array list of LumberDTO that is empty
         List<LumberDTO> mockLumberDTOList = new ArrayList<>();
-        doReturn(mockLumberDTOList).when(lumberService).getAllLumber(any(LumberDTO.class));
+        doReturn(mockLumberDTOList).when(lumberService).getAllLumber(any(FilterDTO.class));
 
         doThrow(ServiceLayerException.class).when(lumberService).reserveLumber(any(LumberDTO.class));
 
@@ -366,7 +367,7 @@ public class AssignmentServerServiceImplTest {
 
         // return a mocked array list of LumberDTO that is empty
         List<LumberDTO> mockLumberDTOList = new ArrayList<>();
-        doReturn(mockLumberDTOList).when(lumberService).getAllLumber(any(LumberDTO.class));
+        doReturn(mockLumberDTOList).when(lumberService).getAllLumber(any(FilterDTO.class));
 
         doThrow(ServiceLayerException.class).when(taskService).updateTask(any(TaskDTO.class));
 

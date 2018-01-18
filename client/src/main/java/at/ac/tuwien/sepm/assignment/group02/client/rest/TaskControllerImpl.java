@@ -2,10 +2,14 @@ package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.util.HandleException;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -38,14 +42,15 @@ public class TaskControllerImpl implements TaskController {
         LOG.debug("sending task to be deleted to server");
 
         try {
-            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteTask", task, TaskDTO.class);
+            //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteTask", task, TaskDTO.class);
+            restTemplate.exchange(
+                    "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteTask",
+                    HttpMethod.PUT, new HttpEntity<>(task), TaskDTO.class);
         } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 
@@ -53,14 +58,15 @@ public class TaskControllerImpl implements TaskController {
     public void updateTask(@RequestBody TaskDTO task) throws PersistenceLayerException {
         LOG.info("Attempting to update Task");
         try {
-            restTemplate.put("http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/updateTask", task, TaskDTO.class);
+            //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/updateTask", task, TaskDTO.class);
+            restTemplate.exchange(
+                    "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateTask",
+                    HttpMethod.PUT, new HttpEntity<>(task), TaskDTO.class);
         } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
     }
 
@@ -77,12 +83,10 @@ public class TaskControllerImpl implements TaskController {
                 taskList.add(taskArray[i]);
             }
         } catch(HttpStatusCodeException e){
-            LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
-            //no response payload, probably server not running
-            LOG.warn("server is down? - {}", e.getMessage());
-            throw new PersistenceLayerException("Connection Problem with Server");
+            LOG.warn("server down? ", e.getMessage());
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
         }
 
         return taskList;

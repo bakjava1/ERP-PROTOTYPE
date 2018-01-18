@@ -11,7 +11,6 @@ import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateAssignment
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

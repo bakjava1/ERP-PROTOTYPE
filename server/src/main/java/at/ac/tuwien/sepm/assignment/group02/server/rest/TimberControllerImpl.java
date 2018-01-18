@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TimberService;
 import io.swagger.annotations.Api;
@@ -34,14 +33,9 @@ public class TimberControllerImpl {
 
     @RequestMapping(value="/createTimber", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "create timber")
-    public void createTimber(@RequestBody TimberDTO timberDTO) throws ResourceNotFoundException {
+    public void createTimber(@RequestBody TimberDTO timberDTO) throws ServiceLayerException {
         LOG.debug("Trying creation of Timber in box: " + timberDTO.getBox_id());
-        try {
-            timberService.addTimber(timberDTO);
-        } catch (ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("failed to add timber.");
-        }
+        timberService.addTimber(timberDTO);
     }
 
     /*
@@ -74,13 +68,8 @@ public class TimberControllerImpl {
 
     @RequestMapping(value="/getNumberOfBoxes",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get number of boxes")
-    public int getNumberOfBoxes() throws ResourceNotFoundException {
+    public int getNumberOfBoxes() throws ServiceLayerException {
         LOG.debug("Trying return number of boxes");
-        try {
-            return timberService.numberOfBoxes();
-        } catch (ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("failed to return number of boxes");
-        }
+        return timberService.numberOfBoxes();
     }
 }

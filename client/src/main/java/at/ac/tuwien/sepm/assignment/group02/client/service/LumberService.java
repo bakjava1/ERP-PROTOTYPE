@@ -1,33 +1,25 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
-import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 
 import java.util.List;
 
-/**
- * CONVERSION HAPPENS ON THIS LAYER
- * VALIDATION HAPPENS ON THIS LAYER
- */
 public interface LumberService {
 
     /**
-     * retrieve all lumbers
-     *
-     * @param filter
-     * @param filter an UnvalidatedLumber object with the parameter to be searched
+     * retrieve all lumber matching the filter
+     * @param filterDTO an UnvalidatedLumber object with the parameter to be searched
      * @return list of searched lumber
-     * @throws InvalidInputException if the search parameters are not valid
      * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
      */
-    List<Lumber> getAll(UnvalidatedLumber filter) throws ServiceLayerException;
+    List<Lumber> getAll(FilterDTO filterDTO) throws ServiceLayerException;
 
     /**
      * choose a lumber from the list and mark it as reserved
-     *
      * @param lumber
      * @param quantity
      * @throws InvalidInputException

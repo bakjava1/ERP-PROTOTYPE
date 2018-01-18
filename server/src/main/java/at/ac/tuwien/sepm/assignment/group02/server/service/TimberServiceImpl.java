@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.group02.server.service;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.TimberConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityCreationException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TimberDAO;
@@ -43,7 +44,7 @@ public class TimberServiceImpl implements TimberService{
             timberManagementDAO.createTimber(timber);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while trying to create Object in Database");
-            throw new ServiceLayerException("Failed Persistence");
+            throw new EntityCreationException("Failed Persistence");
         }
     }
 
@@ -53,7 +54,7 @@ public class TimberServiceImpl implements TimberService{
         timber.setBox_id(box_id);
         timber.setAmount(amount_to_remove);
 
-        validateTimber.isValid(timber);
+        //validateTimber.isValid(timber);
 
         //TODO verify if amount is equal or less to total amount in the box
 

@@ -11,6 +11,7 @@ public class DBUtilConfiguration {
 
     @Bean
     public Connection getDBConnection() {
+        //true if final data base, false to create test data base
         return DBUtil.getConnection();
     }
 

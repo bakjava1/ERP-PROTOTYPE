@@ -60,14 +60,14 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
             ps2.close();
 
         } catch (SQLException e) {
-            LOG.warn("SQLException: {}", e.getMessage());
-            throw new PersistenceLayerException("Database error");
+            LOG.error("SQL Exception: " + e.getMessage());
+            throw new PersistenceLayerException("Datenbank Problem");
         }
     }
 
     @Override
     public List<Assignment> getAllOpenAssignments() throws PersistenceLayerException {
-        LOG.debug("get all assignments called in server persistence layer");
+        LOG.trace("get all assignments called in server persistence layer");
 
         List<Assignment> assignmentList = new LinkedList<>();
         Assignment assignment;
@@ -90,8 +90,8 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
                 assignmentList.add(assignment);
             }
         } catch (SQLException e) {
-            LOG.warn("SQLException: {}", e.getMessage());
-            throw new PersistenceLayerException("Database error");
+            LOG.error("SQL Exception: " + e.getMessage());
+            throw new PersistenceLayerException("Datenbank Problem");
         }
 
         return assignmentList;
@@ -99,7 +99,7 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
 
     @Override
     public List<Assignment> getAllAssignments() throws PersistenceLayerException {
-        LOG.debug("get all assignments called in server persistence layer");
+        LOG.trace("get all assignments called in server persistence layer");
 
         List<Assignment> assignmentList = new LinkedList<>();
         Assignment assignment;
@@ -122,8 +122,8 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
                 assignmentList.add(assignment);
             }
         } catch (SQLException e) {
-            LOG.warn("SQLException: {}", e.getMessage());
-            throw new PersistenceLayerException("Database error");
+            LOG.error("SQL Exception: " + e.getMessage());
+            throw new PersistenceLayerException("Datenbank Problem");
         }
 
         return assignmentList;
@@ -131,18 +131,17 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
 
     @Override
     public void setAssignmentDone(Assignment assignment) throws PersistenceLayerException {
-        LOG.debug("called updateAssignment: {}", assignment.toString());
+        LOG.debug("called setAssignmentDone: {}", assignment.toString());
         String updateStatement = "UPDATE ASSIGNMENT SET isDone = TRUE WHERE ID = ?";
-
         try {
             PreparedStatement stmt = dbConnection.prepareStatement(updateStatement);
             stmt.setInt(1,assignment.getId());
             int result = stmt.executeUpdate();
-            LOG.debug("number of updated rows: {}", result);
-            if(result<1) throw new EntityNotFoundException("number of updated rows less than 1");
+            LOG.debug("number of updated rows: ", result);
+            if(result<1) throw new EntityNotFoundException("Keine Aufgabe mit dieser ID gefunden.");
         } catch(SQLException e) {
             LOG.error("SQL Exception: " + e.getMessage());
-            throw new PersistenceLayerException("Database Error");
+            throw new PersistenceLayerException("Datenbank Problem");
         }
 
     }

@@ -1,4 +1,4 @@
-
+package validatorTests;
 
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
@@ -173,6 +173,7 @@ public class createTaskValidatorTest {
         validator.inputValidationTask(task);
     }
 
+    @Ignore
     @Test
     public void testCorrectTask() {
         boolean success = true;

@@ -27,13 +27,8 @@ public class CostBenefitControllerImpl {
 
     @RequestMapping(value="/costBenefit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "costBenefitEvaluation")
-    public double costBenefit(@RequestBody List<TaskDTO> taskList) throws ResourceNotFoundException {
+    public double costBenefit(@RequestBody List<TaskDTO> taskList) throws ServiceLayerException {
         LOG.debug("called costBenefit");
-
-        try {
-            return costBenefitService.costValueFunction(taskList);
-        } catch (ServiceLayerException e) {
-            throw new ResourceNotFoundException("Failed to execute Cost Benefit Service.");
-        }
+        return costBenefitService.costValueFunction(taskList);
     }
 }

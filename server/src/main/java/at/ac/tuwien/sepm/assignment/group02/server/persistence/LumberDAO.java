@@ -1,10 +1,10 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface LumberDAO {
@@ -41,7 +41,7 @@ public interface LumberDAO {
      * @return  a list of all lumber that matches the filter.
      * @throws PersistenceLayerException if the database is not available
      */
-    List<Lumber> getAllLumber(Lumber filter) throws PersistenceLayerException;
+    List<Lumber> getAllLumber(FilterDTO filter) throws PersistenceLayerException;
 
     /**
      * gets the lumber amount which is not reserved and fits the needs of a task

@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
 
-
+@Ignore
 public class AddTimberTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 

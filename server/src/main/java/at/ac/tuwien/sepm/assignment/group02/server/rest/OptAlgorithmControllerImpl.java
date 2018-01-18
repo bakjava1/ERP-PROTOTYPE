@@ -1,10 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.rest;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.entity.OptAlgorithmResult;
-import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.OptimisationAlgorithmException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
@@ -15,7 +12,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
 
 @RestController
 @Api(value= "Optimisation Algorithm Controller")
