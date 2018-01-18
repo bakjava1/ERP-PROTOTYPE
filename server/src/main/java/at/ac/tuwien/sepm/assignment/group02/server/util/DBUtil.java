@@ -20,19 +20,49 @@ public class DBUtil {
 
     private static Connection con = null;
 
+    private static boolean isFinalDB = false;
+
+    public static void setIsFinalDB(boolean finalDB){
+        isFinalDB = finalDB;
+    }
+
     public static Connection getConnection(){
         LOG.debug("called getConnection");
 
-        boolean isFinalDB = false;
         if (con == null) {
-            con = openConnection();
-            // insert test data to database
+            if(isFinalDB){
+                con = openFinalConnection();
+                // insert test data to database
+            }
+            else{
+                con = openTestConnection();
+            }
             initDB(isFinalDB);
         }
         return con;
     }
 
-    private static Connection openConnection() {
+    private static Connection openTestConnection() {
+        LOG.debug("called openConnection");
+
+        Connection connection = null;
+        try {
+            Class.forName("org.h2.Driver");
+        } catch (ClassNotFoundException e) {
+            LOG.error("ERROR: failed to load H2 JDBC driver.");
+            e.printStackTrace();
+        }
+
+        try {
+            connection = DriverManager.getConnection("jdbc:h2:~/smartholzTestDB", "sa", "");
+        } catch (SQLException e) {
+            LOG.error("ERROR: SQLException{}",e);
+            e.printStackTrace();
+        }
+        return connection;
+    }
+
+    private static Connection openFinalConnection() {
         LOG.debug("called openConnection");
 
         Connection connection = null;
