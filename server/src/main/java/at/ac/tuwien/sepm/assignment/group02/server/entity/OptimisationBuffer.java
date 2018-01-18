@@ -15,7 +15,7 @@ public class OptimisationBuffer {
     private double smallerSize;
 
     private List<SideTaskResult> horizontalSideTaskResult;
-    private SideTaskResult verticalSideTaskResult;
+    private List<SideTaskResult> verticalSideTaskResult;
 
     public OptimisationBuffer(){}
 
@@ -40,11 +40,11 @@ public class OptimisationBuffer {
         this.horizontalSideTaskResult = horizontalSideTaskResult;
     }
 
-    public SideTaskResult getVerticalSideTaskResult() {
+    public List<SideTaskResult>  getVerticalSideTaskResult() {
         return verticalSideTaskResult;
     }
 
-    public void setVerticalSideTaskResult(SideTaskResult verticalSideTaskResult) {
+    public void setVerticalSideTaskResult(List<SideTaskResult>  verticalSideTaskResult) {
         this.verticalSideTaskResult = verticalSideTaskResult;
     }
 
