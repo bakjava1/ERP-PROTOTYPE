@@ -111,12 +111,12 @@ public class CreateTestData {
      */
     public static void main(String[] args) {
         CreateTestData createTestData = new CreateTestData();
-        for(int i = 0; i < 500; i++){
+/*        for(int i = 0; i < 500; i++){
             createTestData.insertLumber("Latten");
             createTestData.insertLumber("Kantholz");
             createTestData.insertLumber("Dielen");
             createTestData.insertLumber("Balken");
-        }
+        }*/
         createTestData.writer.println();
         createTestData.writer.println();
 
@@ -247,6 +247,8 @@ public class CreateTestData {
         command += "true, false, false";
 
         writer.println(command+");");
+        insertLumberForTask(description, finishing, woodType, quality, size, width, length, producedQuantity);
+
     }
 
     private void insertTaskForOrder(int orderID){
@@ -304,7 +306,7 @@ public class CreateTestData {
         command += length+", ";
 
         //quantity
-        int quantity = faker.number().numberBetween(2, 42);
+        int quantity = faker.number().numberBetween(20, 100);
         command += quantity + ", ";
 
         //produced quantity
@@ -327,6 +329,38 @@ public class CreateTestData {
         command += faker.bool().bool()+", false";
 
         writer.println(command+");");
+
+        insertLumberForTask(description, finishing, woodType, quality, size, width, length, producedQuantity);
+    }
+
+    private void insertLumberForTask(String description, String finishing, String woodType, String quality, int size, int width, int length, int reservedQuantity){
+        String command = "INSERT INTO " + LUMBER_TABLE+"("+LUMBER_DESCRIPTION+", "+LUMBER_FINISHING+", "+LUMBER_WOOD_TYPE+", "+LUMBER_QUALITY+", "+LUMBER_SIZE+", "+LUMBER_WIDTH+", "
+                +LUMBER_LENGTH+", "+LUMBER_QUANTITY+", "+LUMBER_RESERVED_QUANTITY+") VALUES (";
+
+        //add description
+        command += "'"+description +"', ";
+
+        //finishing
+        command += "'"+finishing+"', ";
+
+        //wood type
+        command += "'"+woodType+"', ";
+
+        //quality
+        command += "'"+quality+"', ";
+
+        command += size + ", " + width + ", ";
+
+        //length
+        command += length+", ";
+
+
+        //reserved quantity is produced quantity from task
+        //quantity is reserved
+        int quantity = reservedQuantity * faker.number().numberBetween(12, 20);
+        command += quantity + ", " +reservedQuantity;
+
+        writer.println(command + ");");
     }
 
     private void insertLumber(String description){
@@ -384,8 +418,8 @@ public class CreateTestData {
         command += quantity + ", ";
 
         //reserved quantity
-        int reseveredQuantity = faker.number().numberBetween(0, quantity);
-        command += reseveredQuantity;
+        int reservedQuantity = faker.number().numberBetween(0, quantity);
+        command += reservedQuantity;
 
         writer.println(command + ");");
     }
