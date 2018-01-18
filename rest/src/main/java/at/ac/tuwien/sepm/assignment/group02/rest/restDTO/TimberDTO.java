@@ -18,6 +18,7 @@ public class TimberDTO {
     private double festmeter;
     private int price;
     private String last_edited;
+    private int taken_amount;
 
     public TimberDTO() {
 
@@ -107,4 +108,8 @@ public class TimberDTO {
     public void setLast_edited(String last_edited) {
         this.last_edited = last_edited;
     }
+
+    public void setTaken_amount(int taken_amount) { this.taken_amount = taken_amount; }
+
+    public int getTaken_amount() { return taken_amount; }
 }

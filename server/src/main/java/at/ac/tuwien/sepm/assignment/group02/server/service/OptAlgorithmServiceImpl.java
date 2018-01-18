@@ -107,7 +107,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             calculateRectangleCoordinates();
         }else{
             LOG.debug("Optimierungsalgorithmus: Keine geeignete Box gefunden.");
-            //TODO exception for client
+            throw new OptimisationAlgorithmException("Keine geeignete Box gefunden.");
         }
 
         return optAlgorithmResult;
@@ -237,6 +237,12 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
             currentTimber.setTaken_amount((int) Math.ceil((double) (mainTask.getQuantity() - mainTask.getProduced_quantity()) / (nachschnittAnzahl * vorschnittAnzahl)));
             optAlgorithmResult.setTimberResult(currentTimber);
+
+            ArrayList<TaskDTO> taskList = new ArrayList<>();
+            taskList.add(mainTask);
+            taskList.add(horizontalSideTask.getTask());
+            taskList.add(verticalSideTask.getTask());
+            optAlgorithmResult.setTaskResult(taskList);
         }
 
         maxAreaSideTaskHorizontal = Double.MIN_VALUE;
@@ -346,7 +352,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
             if (sideTaskHorizontalArea > maxAreaSideTaskHorizontal) {
                 maxAreaSideTaskHorizontal = sideTaskHorizontalArea;
-                horizontalSideTask.setNewResult(horizontalCount, widthSideTaskHorizontal, heightSideTaskHorizontal, xCoordinateSideTaskHorizontal,
+                horizontalSideTask.setNewResult(sideTaskHorizontal, horizontalCount, widthSideTaskHorizontal, heightSideTaskHorizontal, xCoordinateSideTaskHorizontal,
                         yCoordinateSideTaskHorizontal, smallerSizeHorizontal, biggerSizeHorizontal,0,false);
             }
         }
@@ -403,7 +409,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                     y1 = y2;
                 }
 
-                verticalSideTask.setNewResult(verticalCount, widthSideTaskVertical, heightSideTaskVertical, xCoordinateSideTaskVertical,
+                verticalSideTask.setNewResult(sideTaskVertical, verticalCount, widthSideTaskVertical, heightSideTaskVertical, xCoordinateSideTaskVertical,
                         y1, smallerSizeVertical, biggerSizeVertical, maxHeightSideTaskVertical, false);
             }
         }

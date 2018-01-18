@@ -616,8 +616,12 @@ public class LeadWorkerFXML {
 
                 }*/
 
-
-                bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(table_task.getSelectionModel().getSelectedItem());
+                TaskDTO task = table_task.getSelectionModel().getSelectedItem();
+                if(task.getQuantity() - task.getProduced_quantity() > 0) {
+                    bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(task);
+                } else {
+                    failed();
+                }
 
 
                 return null;
@@ -625,9 +629,6 @@ public class LeadWorkerFXML {
 
             @Override
             protected void succeeded(){
-
-
-
                 if (bestResult[0] != null) {
 
                     optimisationFXML.setData(bestResult[0]);
@@ -645,23 +646,17 @@ public class LeadWorkerFXML {
                         stage.setScene(scene);
                         stage.centerOnScreen();
                         stage.show();
-
-
-                } catch (IOException e) {
-                    LOG.error(e.getMessage());
-
-
+                    } catch (IOException e) {
+                        LOG.error(e.getMessage());
                     }
-
-
-
                 }
-
             }
 
             @Override
             protected void failed(){
-
+                AlertBuilder alertBuilder = new AlertBuilder();
+                alertBuilder.showInformationAlert("Information", "Auftrag ist bereits fertig!", "Bitte wählen Sie einen anderen Auftrag aus.");
+                btn_opt_alg.setDisable(false);
             }
         }, "optimisation-algorithm").start();
 

@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.entity;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+
 public class SideTaskResult {
 
 
@@ -15,6 +17,7 @@ public class SideTaskResult {
     private double biggerSize;
     private double maxHeight;
     private boolean isEmpty;
+    private TaskDTO task;
 
 
 
@@ -33,7 +36,7 @@ public class SideTaskResult {
         this.isEmpty = other.isEmpty;
     }
 
-    public void setNewResult(int count, double widthSideTask, double heightSideTask, double x, double y, double smallerSize, double biggerSize, double maxHeight, boolean isEmpty) {
+    public void setNewResult(TaskDTO task, int count, double widthSideTask, double heightSideTask, double x, double y, double smallerSize, double biggerSize, double maxHeight, boolean isEmpty) {
         Count = count;
         this.widthSideTask = widthSideTask;
         this.heightSideTask = heightSideTask;
@@ -43,6 +46,7 @@ public class SideTaskResult {
         this.biggerSize = biggerSize;
         this.maxHeight = maxHeight;
         this.isEmpty = isEmpty;
+        this.task = task;
     }
 
 
@@ -139,5 +143,7 @@ public class SideTaskResult {
     public void setMaxHeight(double maxHeight) {
         this.maxHeight = maxHeight;
     }
+
+    public TaskDTO getTask() { return task; }
 
 }
