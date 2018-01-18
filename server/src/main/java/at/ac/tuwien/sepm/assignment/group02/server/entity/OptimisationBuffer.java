@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.server.entity;
 
+import java.util.List;
+
 public class OptimisationBuffer {
 
     private double radius;
@@ -12,7 +14,7 @@ public class OptimisationBuffer {
     private double biggerSize;
     private double smallerSize;
 
-    private SideTaskResult horizontalSideTaskResult;
+    private List<SideTaskResult> horizontalSideTaskResult;
     private SideTaskResult verticalSideTaskResult;
 
     public OptimisationBuffer(){}
@@ -30,11 +32,11 @@ public class OptimisationBuffer {
 
     }
 
-    public SideTaskResult getHorizontalSideTaskResult() {
+    public List<SideTaskResult> getHorizontalSideTaskResult() {
         return horizontalSideTaskResult;
     }
 
-    public void setHorizontalSideTaskResult(SideTaskResult horizontalSideTaskResult) {
+    public void setHorizontalSideTaskResult(List<SideTaskResult> horizontalSideTaskResult) {
         this.horizontalSideTaskResult = horizontalSideTaskResult;
     }
 

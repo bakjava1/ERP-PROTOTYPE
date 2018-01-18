@@ -38,12 +38,12 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
     private OptAlgorithmResultDTO optAlgorithmResult= new OptAlgorithmResultDTO();
     private OptimisationBuffer optimisationBuffer = new OptimisationBuffer();
-    private SideTaskResult horizontalSideTask = new SideTaskResult();
+    private List<SideTaskResult>  horizontalSideTask = new ArrayList<>();
     private SideTaskResult verticalSideTask = new SideTaskResult();
 
 
     private static final double SCHNITTFUGE = 4.2; //in mm TODO: in properties file or input?
-    private static final int MAX_STIELE_VORSCHNITT = 10; //in mm TODO: in properties file or input?
+    private static final int MAX_STIELE_VORSCHNITT =    400; //in mm TODO: in properties file or input?
 
     public OptAlgorithmServiceImpl(){}
 
@@ -57,7 +57,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
     private double mainTaskArea, currentCircleArea, currentDiameter, currentRadius;
     private double minMainTaskWasteRelation,  minWaste = Double.POSITIVE_INFINITY;
-    private double maxAreaSideTaskHorizontal, maxAreaSideTaskVertical = Double.MIN_VALUE;
+    private double maxAreaSideTaskHorizontal, maxAreaSideTaskVertical, horizontalMaxA = Double.MIN_VALUE;
 
 
 
@@ -121,7 +121,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
         for(TimberDTO timber : timbers){
             //compare wood type
-            if (timber.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
+         //   if (timber.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
                 //area of main task is smaller than area of timber
                 if((mainTask.getSize()*mainTask.getWidth())< pow(timber.getDiameter()/2,2)*Math.PI){
                     //length of main task = length of timber
@@ -132,7 +132,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                         possibleTimbers.add(timber);
                     }
                 }
-            }
+            //}
 
         }
         return possibleTimbers;
@@ -147,9 +147,9 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         List<Task> tasks = taskDAO.getAllOpenTasks();
         for (Task task : tasks) {
             //main task is not allowed as side task
-            if (task.getId() != mainTask.getId()) {
+            //if (task.getId() != mainTask.getId()) {
                 //compare wood type
-                if (task.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
+                //if (task.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
                     //length of side task is not bigger than length of main task
                     if (task.getLength() == mainTask.getLength()) {
                         //quality of side task is not better than quality of main task
@@ -159,8 +159,8 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                         //}
 
                     }
-                }
-            }
+               // }
+            //}
         }
 
         return possibleTasks;
@@ -195,24 +195,13 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         }
 
 
+
+
         widthMainTask = (vorschnittAnzahl * (biggerSize + SCHNITTFUGE)) - SCHNITTFUGE;
         heightMainTask = (nachschnittAnzahl * (smallerSize + SCHNITTFUGE)) - SCHNITTFUGE;
         mainTaskArea = vorschnittAnzahl*nachschnittAnzahl*smallerSize*biggerSize;
         currentCircleArea = (pow(currentRadius,2)*Math.PI);
 
-
-        /*
-        //TODO delete; for testing purpose only
-        double currentWaste = currentCircleArea - mainTaskArea;
-
-        if(currentWaste <= minWaste) {
-            minWaste = currentWaste;
-
-            optAlgorithmResult.setTimberResult(timber);
-            optimisationBuffer.setNewValues(currentRadius, nachschnittAnzahl, vorschnittAnzahl, widthMainTask, heightMainTask, biggerSize, smallerSize);
-        }*/
-
-        //starting optimisation for current main task (checking every side tasks)
 
 
         calculateVerticalSideTasks(0);
@@ -223,11 +212,12 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
 
 
-        calculateHorizontalSideTasks(0);
+        horizontalMaxA = widthMainTask * (currentRadius-(heightMainTask/2))*2;
+        calculateHorizontalSideTasks(0, new ArrayList<>(),currentRadius + (heightMainTask / 2) +SCHNITTFUGE,  1);
 
         if (horizontalSideTask.isEmpty()){
             //TODO fill default lumber - properties file?
-            System.out.println("-------------------------------------");
+
         }
 
 
@@ -236,7 +226,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         if (currentWaste < minWaste){
             minWaste = currentWaste;
 
-            optimisationBuffer.setHorizontalSideTaskResult(new SideTaskResult(horizontalSideTask));
+            optimisationBuffer.setHorizontalSideTaskResult(new ArrayList<>(horizontalSideTask));
             optimisationBuffer.setVerticalSideTaskResult(new SideTaskResult(verticalSideTask));
             optimisationBuffer.setNewMainOrderValues(currentRadius, nachschnittAnzahl, vorschnittAnzahl, widthMainTask, heightMainTask, biggerSize, smallerSize);
 
@@ -249,6 +239,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         //horizontalSideTask.clear();
         //verticalSideTask.clear();
         maxAreaSideTaskHorizontal = Double.MIN_VALUE;
+        horizontalMaxA = Double.MIN_VALUE;
         maxAreaSideTaskVertical = Double.MIN_VALUE;
         verticalSideTask.clear();
         horizontalSideTask.clear();
@@ -293,17 +284,25 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         }
 
 
-        //side task horizontal
-        xCoordinate = optimisationBuffer.getHorizontalSideTaskResult().getX() + (optimisationBuffer.getBiggerSize()-optimisationBuffer.getHorizontalSideTaskResult().getBiggerSize())/2;
-        //double yCoordinateTop = currentRadius - heightMainTask/2 - SCHNITTFUGE * optimisationBuffer.getNachschnittAnzahl() - SCHNITTFUGE;
-        double yCoordinateTop = optimisationBuffer.getRadius() - optimisationBuffer.getHeightHauptware()/2 - optimisationBuffer.getHorizontalSideTaskResult().getSmallerSize() - SCHNITTFUGE;
-        double yCoordinateBottom = optimisationBuffer.getRadius() + optimisationBuffer.getHeightHauptware()/2  + SCHNITTFUGE;
 
-        for(int i = 0; i < optimisationBuffer.getHorizontalSideTaskResult().getCount(); i++) {
-            System.out.print("");
-            rectangles.add(new RectangleDTO(xCoordinate, yCoordinateTop, "blue", optimisationBuffer.getHorizontalSideTaskResult().getSmallerSize(), optimisationBuffer.getHorizontalSideTaskResult().getBiggerSize()));
-            rectangles.add(new RectangleDTO(xCoordinate, yCoordinateBottom, "blue", optimisationBuffer.getHorizontalSideTaskResult().getSmallerSize(), optimisationBuffer.getHorizontalSideTaskResult().getBiggerSize()));
-            xCoordinate += (optimisationBuffer.getBiggerSize() + SCHNITTFUGE);
+        for (int k = 0; k < optimisationBuffer.getHorizontalSideTaskResult().size(); k++) {
+
+            //side task horizontal
+            xCoordinate = optimisationBuffer.getHorizontalSideTaskResult().get(k).getX() + (optimisationBuffer.getBiggerSize()-optimisationBuffer.getHorizontalSideTaskResult().get(k).getBiggerSize())/2;
+            double yCoordinateBottom = optimisationBuffer.getHorizontalSideTaskResult().get(k).getY();
+            //double yCoordinateTop = currentRadius - heightMainTask/2 - SCHNITTFUGE * optimisationBuffer.getNachschnittAnzahl() - SCHNITTFUGE;
+            double yCoordinateTop = (optimisationBuffer.getRadius()*2) - optimisationBuffer.getHorizontalSideTaskResult().get(k).getY() -  optimisationBuffer.getHorizontalSideTaskResult().get(k).getSmallerSize();
+            //double yCoordinateBottom = optimisationBuffer.getHorizontalSideTaskResult().get(k).getY();
+
+            for(int i = 0; i < optimisationBuffer.getHorizontalSideTaskResult().get(k).getCount(); i++) {
+                System.out.print("");
+                rectangles.add(new RectangleDTO(xCoordinate, yCoordinateTop, "blue", optimisationBuffer.getHorizontalSideTaskResult().get(k).getSmallerSize(), optimisationBuffer.getHorizontalSideTaskResult().get(k).getBiggerSize()));
+                rectangles.add(new RectangleDTO(xCoordinate, yCoordinateBottom, "blue", optimisationBuffer.getHorizontalSideTaskResult().get(k).getSmallerSize(), optimisationBuffer.getHorizontalSideTaskResult().get(k).getBiggerSize()));
+                xCoordinate += (optimisationBuffer.getBiggerSize() + SCHNITTFUGE);
+            }
+
+
+
         }
 
 
@@ -311,19 +310,78 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
     }
 
     //horizontal = top and bottom; vertical = left and right
-    private void calculateHorizontalSideTasks(int horizontalIndex) {
-        TaskDTO sideTaskHorizontal = possibleSideTasks.get(horizontalIndex);
+    private void calculateHorizontalSideTasks(double currArea, List<SideTaskResult> currSideTask,  double currY, double currHorizontalAmount) {
 
 
-        double yCoordinateSideTaskHorizontal = currentRadius + heightMainTask/2 + SCHNITTFUGE + sideTaskHorizontal.getSize();
+        if (currArea <= horizontalMaxA) {
+
+            if (currHorizontalAmount > 0 ) {
+
+
+                if (currArea > maxAreaSideTaskHorizontal) {
+
+                    maxAreaSideTaskHorizontal = currArea;
+                    horizontalSideTask = new ArrayList<>(currSideTask);
+
+                }
+
+
+
+
+                for (int i = 0; i < possibleSideTasks.size(); i++) {
+
+
+
+                    TaskDTO sideTaskHorizontal = possibleSideTasks.get(i);
+                    int horizontalAmount =  calculateHorizontalAmount(sideTaskHorizontal, currY);
+
+
+                        //x Start-Koordinate für hor-seitenware nicht immer x(links/oben) von hauptware
+                        // Math.floor((vorschnittAnzahl-horizontalAmount)/2)*mainTask.getWidth()  : wieviele stiele muss ich nach rechts rücken?
+                        double xCoordinateSideTaskHorizontal = (currentRadius - widthMainTask / 2) + (Math.floor((vorschnittAnzahl - horizontalAmount) / 2) * (biggerSize + SCHNITTFUGE));
+
+
+                        double widthSideTaskHorizontal = horizontalAmount * (sideTaskHorizontal.getWidth() + SCHNITTFUGE) - SCHNITTFUGE;
+
+
+
+                        SideTaskResult x = new SideTaskResult(horizontalAmount, widthSideTaskHorizontal, sideTaskHorizontal.getSize(), xCoordinateSideTaskHorizontal,
+                                currY, sideTaskHorizontal.getSize(), sideTaskHorizontal.getWidth(), 0, false);
+
+
+                        currSideTask.add(x);
+
+
+                        calculateHorizontalSideTasks(currArea + (sideTaskHorizontal.getSize() * sideTaskHorizontal.getWidth() * 2 * horizontalAmount), currSideTask,  currY + sideTaskHorizontal.getSize()+ SCHNITTFUGE , horizontalAmount);
+
+
+                        currSideTask.remove(x);
+                }
+
+
+            }
+
+
+        }
+
+
+
+    }
+
+
+    private int calculateHorizontalAmount (TaskDTO task, double currY){
+
+
+        //y-bottom -> links/oben geht sich evtl aus, aber links unten vielleicht nicht -> daher für die Berechnung der Anzahl den Punkt links/unten
+        currY += task.getSize();
 
         //x Werte durch Kreisgleichung und durch abc-formel ermittelt
-        double x1 = (2*currentRadius + Math.sqrt(Math.pow(2*currentRadius,2) - 4*Math.pow(yCoordinateSideTaskHorizontal-currentRadius,2)))/2;
-        double x2 = (2*currentRadius - Math.sqrt(Math.pow(2*currentRadius,2) - 4*Math.pow(yCoordinateSideTaskHorizontal-currentRadius,2)))/2;
+        double x1 = (2 * currentRadius + Math.sqrt(Math.pow(2 * currentRadius, 2) - 4 * Math.pow(currY - currentRadius, 2))) / 2;
+        double x2 = (2 * currentRadius - Math.sqrt(Math.pow(2 * currentRadius, 2) - 4 * Math.pow(currY - currentRadius, 2))) / 2;
 
 
         double maxWidthSideTaskHorizontal;
-        if(x1 > x2) {
+        if (x1 > x2) {
             maxWidthSideTaskHorizontal = x1 - x2;
         } else {
             maxWidthSideTaskHorizontal = x2 - x1;
@@ -331,51 +389,35 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
 
         int horizontalCount = 0;
-        if(sideTaskHorizontal.getWidth() <= mainTask.getWidth()) {
+        if (task.getWidth() <= mainTask.getWidth()) {
 
             //check ob es sich in der höhe ausgeht
-            if (maxWidthSideTaskHorizontal >= widthMainTask){
+            if (maxWidthSideTaskHorizontal >= widthMainTask) {
                 horizontalCount = vorschnittAnzahl;
-            }else{
-                //wenn hor-seitenware eher nur in der mitte platz hat, oder garnicht
-                horizontalCount =  (int) floor(maxWidthSideTaskHorizontal/biggerSize);
+            } else {
 
-                if (horizontalCount < 1 && maxWidthSideTaskHorizontal >= sideTaskHorizontal.getWidth()){
+                //volle vorschnittanzahl für horizontale seitenware nicht möglich
+                horizontalCount = (int) floor((maxWidthSideTaskHorizontal+SCHNITTFUGE) / (biggerSize+SCHNITTFUGE));
 
-                    //wenn sich genau einer innerhalb der grenzen der hauotware ausgeht
+                if (horizontalCount < 1 && maxWidthSideTaskHorizontal >= task.getWidth()) {
+
+                    //wenn sich genau einer innerhalb der grenzen der hauptware ausgeht
                     horizontalCount = 1;
 
                 }
 
-            }
 
-        }
-
-        if(horizontalCount > 0) {
-            double smallerSizeHorizontal = sideTaskHorizontal.getSize();
-            double biggerSizeHorizontal = sideTaskHorizontal.getWidth();
-            double widthSideTaskHorizontal = horizontalCount * (sideTaskHorizontal.getWidth() + SCHNITTFUGE) - SCHNITTFUGE;
-            double heightSideTaskHorizontal = sideTaskHorizontal.getSize();
-            double sideTaskHorizontalArea = smallerSizeHorizontal * biggerSizeHorizontal * 2 * horizontalCount;
-
-            //x Start-Koordinate für hor-seitenware nicht immer x(links/oben) von hauptware
-            // Math.floor((vorschnittAnzahl-horizontalCount)/2)*mainTask.getWidth()  : wieviele stiele muss ich nach rechts rücken?
-            double xCoordinateSideTaskHorizontal = (currentRadius- widthMainTask/2) + (Math.floor((vorschnittAnzahl-horizontalCount)/2)*(biggerSize+SCHNITTFUGE));
-
-            if (sideTaskHorizontalArea > maxAreaSideTaskHorizontal) {
-
-                maxAreaSideTaskHorizontal = sideTaskHorizontalArea;
-                horizontalSideTask.setNewResult(horizontalCount, widthSideTaskHorizontal, heightSideTaskHorizontal, xCoordinateSideTaskHorizontal,
-                        yCoordinateSideTaskHorizontal, smallerSizeHorizontal, biggerSizeHorizontal,0,false);
+                //symmetrisch verteilung auf horizontaler ebene:
+                //wenn vorschnittanzahl = gerade -> nur gerade anzahl an horizontalcount möglich
+                if (vorschnittAnzahl % 2 == 0){
+                    if (horizontalCount %2 != 0) {
+                        horizontalCount -= 1;
+                    }
+                }
 
             }
 
-        }
-
-
-        if (horizontalIndex < possibleSideTasks.size() - 1) {
-            calculateHorizontalSideTasks(horizontalIndex + 1);
-        }
+        } return horizontalCount;
 
 
     }
