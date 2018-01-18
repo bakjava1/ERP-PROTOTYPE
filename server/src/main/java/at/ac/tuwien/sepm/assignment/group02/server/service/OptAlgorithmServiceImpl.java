@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.converter.TimberConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.*;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.OptimisationAlgorithmException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TimberDAO;
 import org.slf4j.Logger;
@@ -17,9 +18,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static java.lang.Math.*;
 
@@ -39,9 +44,9 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
     private SideTaskResult horizontalSideTask = new SideTaskResult();
     private SideTaskResult verticalSideTask = new SideTaskResult();
 
-
-    private static final double SCHNITTFUGE = 4.2; //in mm TODO: in properties file or input?
-    private static final int MAX_STIELE_VORSCHNITT = 2; //in mm TODO: in properties file or input?
+    private InputStream inputStream;
+    private double SCHNITTFUGE;
+    private int MAX_STIELE_VORSCHNITT;
 
     private TimberDTO currentTimber;
     private TaskDTO mainTask;
@@ -67,7 +72,19 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
     }
 
     @Override
-    public OptAlgorithmResultDTO getOptAlgorithmResult(TaskDTO task) throws PersistenceLayerException, OptimisationAlgorithmException {
+    public OptAlgorithmResultDTO getOptAlgorithmResult(TaskDTO task) throws PersistenceLayerException, OptimisationAlgorithmException, ServiceLayerException {
+        try {
+            Properties properties = new Properties();
+            inputStream = new FileInputStream(OptAlgorithmService.class.getClassLoader().getResource("algorithm.properties").getFile());
+            properties.load(inputStream);
+            SCHNITTFUGE = Double.parseDouble(properties.getProperty("SCHNITTFUGE"));
+            MAX_STIELE_VORSCHNITT = Integer.parseInt(properties.getProperty("MAX_STIELE_VORSCHNITT"));
+            inputStream.close();
+        } catch (IOException e) {
+            LOG.error("Properties file for optimisation algorithm not found: {}", e.getMessage());
+            throw new ServiceLayerException("Properties file for optimisation algorithm not found: " + e.getMessage());
+        }
+
         mainTask = task;
 
         List<TimberDTO> possibleTimbers = getPossibleTimbers(mainTask);

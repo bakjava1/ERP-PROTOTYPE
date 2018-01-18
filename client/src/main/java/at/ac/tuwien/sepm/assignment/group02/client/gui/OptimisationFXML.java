@@ -29,13 +29,13 @@ public class OptimisationFXML {
     @FXML
     private Button btn_discard;
     @FXML
-    private TableColumn tc_task_woodtype;
-    @FXML
     private TableView<TaskDTO> tv_tasks;
     @FXML
     private TableColumn tc_task_description;
     @FXML
     private TableColumn tc_task_finishing;
+    @FXML
+    private TableColumn tc_task_wood_type;
     @FXML
     private TableColumn tc_task_length;
     @FXML
@@ -46,6 +46,8 @@ public class OptimisationFXML {
     private TableView<TimberDTO> tv_timber;
     @FXML
     private TableColumn tc_timber_boxNr;
+    @FXML
+    private TableColumn tc_timber_wood_type;
     @FXML
     private TableColumn tc_timber_length;
     @FXML
@@ -78,10 +80,11 @@ public class OptimisationFXML {
         tc_task_finishing.setCellValueFactory(new PropertyValueFactory("finishing"));
         tc_task_length.setCellValueFactory(new PropertyValueFactory("length"));
         tc_task_width.setCellValueFactory(new PropertyValueFactory("width"));
-        tc_task_woodtype.setCellValueFactory(new PropertyValueFactory("wood_type"));
+        tc_task_wood_type.setCellValueFactory(new PropertyValueFactory("wood_type"));
 
         tv_timber.setSelectionModel(null);
         tc_timber_boxNr.setCellValueFactory(new PropertyValueFactory("box_id"));
+        tc_timber_wood_type.setCellValueFactory(new PropertyValueFactory("wood_type"));
         tc_timber_diameter.setCellValueFactory(new PropertyValueFactory("diameter"));
         tc_timber_length.setCellValueFactory(new PropertyValueFactory("length"));
         tc_timber_quality.setCellValueFactory(new PropertyValueFactory("quality"));

@@ -16,7 +16,7 @@
         <columns>
           <TableColumn fx:id="tc_task_description" prefWidth="222.0" text="Bezeichnung" />
             <TableColumn fx:id="tc_task_finishing" prefWidth="150.0" text="Verarbeitung" />
-            <TableColumn fx:id="tc_task_woodtype" prefWidth="178.0" text="Holzart" />
+            <TableColumn fx:id="tc_task_wood_type" prefWidth="178.0" text="Holzart" />
           <TableColumn fx:id="tc_task_length" minWidth="2.0" prefWidth="134.0" text="Länge" />
             <TableColumn fx:id="tc_task_width" prefWidth="107.0" text="Breite" />
             <TableColumn fx:id="tc_task_amount" prefWidth="108.0" text="Menge" />
@@ -25,7 +25,7 @@
       <TableView fx:id="tv_timber" layoutX="25.0" layoutY="245.0" prefHeight="65.0" prefWidth="900.0">
          <columns>
             <TableColumn fx:id="tc_timber_boxNr" prefWidth="69.0" text="BoxNr" />
-            <TableColumn fx:id="tc_timber_boxNr1" prefWidth="119.0" text="Holzart" />
+            <TableColumn fx:id="tc_timber_wood_type" prefWidth="119.0" text="Holzart" />
             <TableColumn fx:id="tc_timber_length" prefWidth="120.0" text="Länge" />
             <TableColumn fx:id="tc_timber_diameter" prefWidth="146.0" text="Durchmesser" />
             <TableColumn fx:id="tc_timber_stored_amount" prefWidth="160.0" text="gelagerte Menge" />
