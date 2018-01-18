@@ -12,7 +12,6 @@ public class OptAlgorithmResult {
 
     private ArrayList<Task> taskResult; //Length <= 3
     private Timber timberResult;
-    //private Schnittbild cutView; //TODO BufferedImage or Image or List<Rectangle> or something else to store cutView
     private List<Rectangle> cutViewInRectangle;
     private BufferedImage renderedImage;
 

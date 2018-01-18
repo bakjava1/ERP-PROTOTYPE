@@ -2,6 +2,8 @@ package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.OptimisationAlgorithmException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
@@ -150,6 +152,7 @@ public class LeadWorkerFXML {
     private OptimisationAlgorithmService optimisationAlgorithmService;
 
     private TaskDTO selectedTask;
+    private AlertBuilder alertBuilder = new AlertBuilder();
 
     @Autowired
     public LeadWorkerFXML(LumberService lumberService, OptimisationFXML optimisationFXML, TaskService taskService, AssignmentService assignmentService, OptimisationAlgorithmService optimisationAlgorithmService){
@@ -590,7 +593,7 @@ public class LeadWorkerFXML {
 
         new Thread(new Task<Object>() {
             @Override
-            protected Object call() throws Exception {
+            protected Object call() {
 
 
                 //TODO not able to debug autowiring not working
@@ -618,7 +621,15 @@ public class LeadWorkerFXML {
 
                 TaskDTO task = table_task.getSelectionModel().getSelectedItem();
                 if(task.getQuantity() - task.getProduced_quantity() > 0) {
-                    bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(task);
+                    try {
+                        bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(task);
+                    } catch (PersistenceLayerException e) {
+                        LOG.error("Fehler bei der Optimierung in der Persistenzschicht" + e.getMessage());
+                        alertBuilder.showErrorAlert("Fehler", "Fehler in der Persistenzschicht", e.getMessage());
+                    } catch (OptimisationAlgorithmException e) {
+                        LOG.error("Fehler beim Optimierungsalgorithmus:" + e.getMessage());
+                        alertBuilder.showErrorAlert("Fehler", "Fehler bei der Optimierung", e.getMessage());
+                    }
                 } else {
                     failed();
                 }
@@ -654,7 +665,6 @@ public class LeadWorkerFXML {
 
             @Override
             protected void failed(){
-                AlertBuilder alertBuilder = new AlertBuilder();
                 alertBuilder.showInformationAlert("Information", "Auftrag ist bereits fertig!", "Bitte wählen Sie einen anderen Auftrag aus.");
                 btn_opt_alg.setDisable(false);
             }

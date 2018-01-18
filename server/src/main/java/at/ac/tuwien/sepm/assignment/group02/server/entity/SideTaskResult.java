@@ -36,7 +36,7 @@ public class SideTaskResult {
         this.isEmpty = other.isEmpty;
     }
 
-    public SideTaskResult(int count, double widthSideTask, double heightSideTask, double x, double y, double smallerSize, double biggerSize, double maxHeight, boolean isEmpty) {
+    public SideTaskResult(TaskDTO task, int count, double widthSideTask, double heightSideTask, double x, double y, double smallerSize, double biggerSize, double maxHeight, boolean isEmpty) {
         Count = count;
         this.widthSideTask = widthSideTask;
         this.heightSideTask = heightSideTask;
@@ -46,9 +46,10 @@ public class SideTaskResult {
         this.biggerSize = biggerSize;
         this.maxHeight = maxHeight;
         this.isEmpty = isEmpty;
+        this.task = task;
     }
 
-    public void setNewResult(TaskDTO task, int count, double widthSideTask, double heightSideTask, double x, double y, double smallerSize, double biggerSize, double maxHeight, boolean isEmpty) {
+    public void setNewResult(int count, double widthSideTask, double heightSideTask, double x, double y, double smallerSize, double biggerSize, double maxHeight, boolean isEmpty) {
         Count = count;
         this.widthSideTask = widthSideTask;
         this.heightSideTask = heightSideTask;

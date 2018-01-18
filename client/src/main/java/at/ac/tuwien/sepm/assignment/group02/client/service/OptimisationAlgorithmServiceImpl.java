@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.converter.OptAlgorithmConvert
 import at.ac.tuwien.sepm.assignment.group02.client.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.OptAlgorithmResult;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Rectangle;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.OptimisationAlgorithmException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.OptAlgorithmController;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
@@ -39,7 +40,7 @@ public class OptimisationAlgorithmServiceImpl implements OptimisationAlgorithmSe
     public OptimisationAlgorithmServiceImpl(){}
 
     @Override
-    public OptAlgorithmResultDTO getOptAlgorithmResult(TaskDTO task) throws PersistenceLayerException {
+    public OptAlgorithmResultDTO getOptAlgorithmResult(TaskDTO task) throws PersistenceLayerException, OptimisationAlgorithmException {
 
 
         OptAlgorithmResultDTO optAlgorithmResultDTO = optAlgorithmController.getOptAlgorithmResult(task);
@@ -48,9 +49,11 @@ public class OptimisationAlgorithmServiceImpl implements OptimisationAlgorithmSe
 
         renderImage(optAlgorithmResultDTO);
 
+        if(optAlgorithmResultDTO.getTimberResult() == null || optAlgorithmResultDTO.getTaskResult() == null) {
+            throw new OptimisationAlgorithmException("Es konnte keine Optimierung gefunden werden!");
+        }
 
         return optAlgorithmResultDTO;
-        //TODO check if optAlgorithmResult is empty and throw new exception to show user that no optimisation can be found
     }
 
     private void renderImage(OptAlgorithmResultDTO optAlgorithmResult){

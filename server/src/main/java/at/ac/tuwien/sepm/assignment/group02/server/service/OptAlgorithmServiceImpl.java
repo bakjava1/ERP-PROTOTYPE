@@ -44,7 +44,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
     private OptAlgorithmResultDTO optAlgorithmResult= new OptAlgorithmResultDTO();
     private OptimisationBuffer optimisationBuffer = new OptimisationBuffer();
-    private List<SideTaskResult>  horizontalSideTask = new ArrayList<>();
+    private List<SideTaskResult> horizontalSideTask = new ArrayList<>();
     private List<SideTaskResult> verticalSideTask = new ArrayList<>();
 
     private InputStream inputStream;
@@ -127,7 +127,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
         for(TimberDTO timber : timbers){
             //compare wood type
-         //   if (timber.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
+            if (timber.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
                 //area of main task is smaller than area of timber
                 if((mainTask.getSize()*mainTask.getWidth())< pow(timber.getDiameter()/2,2)*Math.PI){
                     //length of main task = length of timber
@@ -137,7 +137,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                         possibleTimbers.add(timber);
                     }
                 }
-            //}
+            }
         }
         return possibleTimbers;
     }
@@ -239,11 +239,16 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             currentTimber.setTaken_amount((int) Math.ceil((double) (mainTask.getQuantity() - mainTask.getProduced_quantity()) / (nachschnittAnzahl * vorschnittAnzahl)));
             optAlgorithmResult.setTimberResult(currentTimber);
 
-            ArrayList<TaskDTO> taskList = new ArrayList<>();
-            taskList.add(mainTask);
-            taskList.add(horizontalSideTask.getTask());
-            taskList.add(verticalSideTask.getTask());
-            optAlgorithmResult.setTaskResult(taskList);
+            ArrayList<TaskDTO> taskResult = new ArrayList<>();
+            for(SideTaskResult sideTaskResult : horizontalSideTask) {
+                taskResult.add(sideTaskResult.getTask());
+            }
+
+            for(SideTaskResult sideTaskResult : verticalSideTask) {
+                taskResult.add(sideTaskResult.getTask());
+            }
+
+            optAlgorithmResult.setTaskResult(taskResult);
         }
 
         maxAreaSideTaskHorizontal = Double.MIN_VALUE;
@@ -322,68 +327,37 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
     //horizontal = top and bottom; vertical = left and right
     private void calculateHorizontalSideTasks(double currArea, List<SideTaskResult> currSideTask,  double currY, double currHorizontalAmount) {
-
-
         if (currArea <= horizontalMaxA) {
-
             if (currHorizontalAmount > 0 ) {
-
-
                 if (currArea > maxAreaSideTaskHorizontal) {
-
                     maxAreaSideTaskHorizontal = currArea;
                     horizontalSideTask = new ArrayList<>(currSideTask);
-
                 }
 
-
-
-
-                for (int i = 0; i < possibleSideTasks.size(); i++) {
-
-
-
-                    TaskDTO sideTaskHorizontal = possibleSideTasks.get(i);
+                for (int i = 0; i < possibleSideTasksHorizontal.size(); i++) {
+                    TaskDTO sideTaskHorizontal = possibleSideTasksHorizontal.get(i);
                     int horizontalAmount =  calculateHorizontalAmount(sideTaskHorizontal, currY);
 
 
                     //x Start-Koordinate für hor-seitenware nicht immer x(links/oben) von hauptware
                     // Math.floor((vorschnittAnzahl-horizontalAmount)/2)*mainTask.getWidth()  : wieviele stiele muss ich nach rechts rücken?
                     double xCoordinateSideTaskHorizontal = (currentRadius - widthMainTask / 2) + (Math.floor((vorschnittAnzahl - horizontalAmount) / 2) * (biggerSize + SCHNITTFUGE));
-
                     double widthSideTaskHorizontal = horizontalAmount * (sideTaskHorizontal.getWidth() + SCHNITTFUGE) - SCHNITTFUGE;
 
-
-
-                    SideTaskResult x = new SideTaskResult(horizontalAmount, widthSideTaskHorizontal, sideTaskHorizontal.getSize(), xCoordinateSideTaskHorizontal,
+                    SideTaskResult x = new SideTaskResult(sideTaskHorizontal, horizontalAmount, widthSideTaskHorizontal, sideTaskHorizontal.getSize(), xCoordinateSideTaskHorizontal,
                             currY, sideTaskHorizontal.getSize(), sideTaskHorizontal.getWidth(), 0, false);
 
 
                     currSideTask.add(x);
-
-
                     calculateHorizontalSideTasks(currArea + (sideTaskHorizontal.getSize() * sideTaskHorizontal.getWidth() * 2 * horizontalAmount), currSideTask,  currY + sideTaskHorizontal.getSize()+ SCHNITTFUGE , horizontalAmount);
-
-
                     currSideTask.remove(x);
-
-
                 }
-
-
             }
-
-
         }
-
-
-
     }
 
 
     private int calculateHorizontalAmount (TaskDTO task, double currY){
-
-
         //y-bottom -> links/oben geht sich evtl aus, aber links unten vielleicht nicht -> daher für die Berechnung der Anzahl den Punkt links/unten
         currY += task.getSize();
 
@@ -399,15 +373,12 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             maxWidthSideTaskHorizontal = x2 - x1;
         }
 
-
         int horizontalCount = 0;
         if (task.getWidth() <= mainTask.getWidth()) {
-
             //check ob es sich in der höhe ausgeht
             if (maxWidthSideTaskHorizontal >= widthMainTask) {
                 horizontalCount = vorschnittAnzahl;
             } else {
-
                 //volle vorschnittanzahl für horizontale seitenware nicht möglich
                 horizontalCount = (int) floor((maxWidthSideTaskHorizontal+SCHNITTFUGE) / (biggerSize+SCHNITTFUGE));
 
@@ -416,7 +387,6 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                     horizontalCount = 1;
                 }
 
-
                 //symmetrisch verteilung auf horizontaler ebene:
                 //wenn vorschnittanzahl = gerade -> nur gerade anzahl an horizontalcount möglich
                 if (vorschnittAnzahl % 2 == 0){
@@ -424,89 +394,66 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                         horizontalCount -= 1;
                     }
                 }
-
             }
+        }
 
-        } return horizontalCount;
-
-
+        return horizontalCount;
     }
 
     //horizontal = top and bottom; vertical = left and right
     private void calculateVerticalSideTasks(double currArea, List<SideTaskResult> currSideTask,  double currX, double currVerticalAmount) {
-
-
         if (currArea <= verticalMaxA) {
-
             if (currVerticalAmount > 0 ) {
-
-
                 if (currArea > maxAreaSideTaskVertical) {
-
                     maxAreaSideTaskVertical = currArea;
                     verticalSideTask = new ArrayList<>(currSideTask);
-
-
                 }
 
 
+                for (int i = 0; i < possibleSideTasksVertical.size(); i++) {
+                    TaskDTO sideTaskVertical= possibleSideTasksVertical.get(i);
 
-                for (int i = 0; i < possibleSideTasks.size(); i++) {
+                    //y^2 - 2*y*radius + (radius^2 - (r*r - (xCoordinate - radius)^2)) = 0
+                    //a = 1 (unser y in der quadratischen gleichung ist immer 1)
+                    //b = -2*radius
+                    //c = radius^2 - (radius^2 - ((xCoordinate - radius)^2)) = (xCoordinate - radius)^2)
 
-                    TaskDTO sideTaskVertical= possibleSideTasks.get(i);
+                    //y1 = (-b + sqrt(b^2 - 4*a*c))/2*a
+                    //y2 = (-b - sqrt(b^2 - 4*a*c))/2*a
 
-                        //y^2 - 2*y*radius + (radius^2 - (r*r - (xCoordinate - radius)^2)) = 0
-                        //a = 1 (unser y in der quadratischen gleichung ist immer 1)
-                        //b = -2*radius
-                        //c = radius^2 - (radius^2 - ((xCoordinate - radius)^2)) = (xCoordinate - radius)^2)
+                    double a = 1;
+                    double b = 2 * currentRadius * -1;
+                    double c = pow((currX+sideTaskVertical.getSize() - currentRadius), 2);
 
-                        //y1 = (-b + sqrt(b^2 - 4*a*c))/2*a
-                        //y2 = (-b - sqrt(b^2 - 4*a*c))/2*a
+                    double y1 = (-b + sqrt(b * b - 4 * a * c)) / 2 * a;
+                    double y2 = (-b - sqrt(b * b - 4 * a * c)) / 2 * a;
 
-                        double a = 1;
-                        double b = 2 * currentRadius * -1;
-                        double c = pow((currX+sideTaskVertical.getSize() - currentRadius), 2);
+                    //y1 - y2
+                    double maxHeightSideTaskVertical;
+                    if (y1 > y2) {
+                        maxHeightSideTaskVertical = y1 - y2;
+                    } else {
+                        maxHeightSideTaskVertical = y2 - y1;
+                    }
 
-                        double y1 = (-b + sqrt(b * b - 4 * a * c)) / 2 * a;
-                        double y2 = (-b - sqrt(b * b - 4 * a * c)) / 2 * a;
+                    int verticalAmount = (int) floor((maxHeightSideTaskVertical + SCHNITTFUGE) / (sideTaskVertical.getWidth() + SCHNITTFUGE));
 
-                        //y1 - y2
-                        double maxHeightSideTaskVertical;
-                        if (y1 > y2) {
-                            maxHeightSideTaskVertical = y1 - y2;
-                        } else {
-                            maxHeightSideTaskVertical = y2 - y1;
-                        }
-
-                        int verticalAmount = (int) floor((maxHeightSideTaskVertical + SCHNITTFUGE) / (sideTaskVertical.getWidth() + SCHNITTFUGE));
-
-
-
-
-            double heightSideTaskVertical = verticalAmount * (sideTaskVertical.getWidth() + SCHNITTFUGE) - SCHNITTFUGE;
+                    double heightSideTaskVertical = verticalAmount * (sideTaskVertical.getWidth() + SCHNITTFUGE) - SCHNITTFUGE;
 
 
 
-
-            //bound
+                    //bound
                     //momentane fläche + restplatz * prozentsatz
                     //TODO change U
 
-                double U = currArea +sideTaskVertical.getSize()*sideTaskVertical.getWidth()*verticalAmount*2 +  (sideTaskVertical.getSize()*sideTaskVertical.getWidth()) * (verticalMaxA - currArea)/(sideTaskVertical.getSize()*sideTaskVertical.getWidth());
+                    double U = currArea +sideTaskVertical.getSize()*sideTaskVertical.getWidth()*verticalAmount*2 +  (sideTaskVertical.getSize()*sideTaskVertical.getWidth()) * (verticalMaxA - currArea)/(sideTaskVertical.getSize()*sideTaskVertical.getWidth());
 
                     if (U >maxAreaSideTaskVertical ) {
-
-                        SideTaskResult x = new SideTaskResult(verticalAmount, sideTaskVertical.getSize(), heightSideTaskVertical, currX, y2, sideTaskVertical.getSize(), sideTaskVertical.getWidth(), maxHeightSideTaskVertical, false);
-
+                        SideTaskResult x = new SideTaskResult(sideTaskVertical, verticalAmount, sideTaskVertical.getSize(), heightSideTaskVertical, currX, y2, sideTaskVertical.getSize(), sideTaskVertical.getWidth(), maxHeightSideTaskVertical, false);
 
                         currSideTask.add(x);
-
-
                         calculateVerticalSideTasks(currArea + (sideTaskVertical.getSize() * sideTaskVertical.getWidth() * 2 * verticalAmount), currSideTask, currX + sideTaskVertical.getSize() + SCHNITTFUGE, verticalAmount);
-
-
                         currSideTask.remove(x);
-
                     }
                 }
             }
