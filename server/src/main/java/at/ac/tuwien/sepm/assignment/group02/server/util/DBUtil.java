@@ -13,9 +13,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-/**
- * Created by e0701149 on 20.11.17.
- */
 
 public class DBUtil {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
