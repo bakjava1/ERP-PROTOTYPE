@@ -8,65 +8,70 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.CraneOperatorFXML">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.CraneOperatorFXML">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fff021" height="155.0" layoutX="50.0" layoutY="332.0" stroke="BLACK" strokeType="INSIDE" width="452.0" />
-      <Label layoutX="56.0" layoutY="341.0" text="Aktuell in Arbeit:">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffa0080" height="111.0" layoutX="74.0" layoutY="377.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="452.0" />
+      <Label layoutX="185.0" layoutY="20.0" text="Offene Aufgaben">
          <font>
-            <Font size="24.0" />
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="209.0" layoutY="388.0" text="Aktuell in Arbeit">
+         <font>
+            <Font name="System Bold" size="20.0" />
          </font>
       </Label>
       <Label layoutX="233.0" layoutY="136.0" text="Kranfahrer_in">
       </Label>
-       <Button fx:id="btn_inProgress" layoutX="50.0" layoutY="508.0" mnemonicParsing="false" onAction="#setInProgressButtonPressed" text="In Arbeit">
+       <Button fx:id="btn_inProgress" layoutX="74.0" layoutY="499.0" mnemonicParsing="false" onAction="#setInProgressButtonPressed" prefHeight="68.0" prefWidth="452.0" style="-fx-background-color:#fffa0080;" text="In Arbeit">
            <font>
                <Font size="36.0" />
            </font>
        </Button>
-      <Button fx:id="btn_done" layoutX="312.0" layoutY="508.0" mnemonicParsing="false" onAction="#setDoneButtonPressed" text="Erledigt">
+      <Button fx:id="btn_done" layoutX="338.0" layoutY="499.0" mnemonicParsing="false" onAction="#setDoneButtonPressed" style="-fx-background-color: lightgreen;" text="Erledigt">
           <font>
               <Font size="36.0" />
           </font>
       </Button>
 
-      <Label layoutX="414.0" text="Aufgaben">
+      <Label layoutX="168.0" layoutY="601.0" text="Abgeschlossene Aufgaben" textFill="#00000083">
          <font>
-            <Font size="36.0" />
+            <Font name="System Italic" size="20.0" />
          </font>
       </Label>
-      <TableView fx:id="table_open_assignment" layoutX="50.0" layoutY="73.0" prefHeight="249.0" prefWidth="452" style="-fx-font-size: 175%; -fx-border-width: 0px;">
+      <TableView fx:id="table_open_assignment" layoutX="74.0" layoutY="66.0" prefHeight="300.0" prefWidth="452" style="-fx-font-size: 175%; -fx-border-width: 0px;">
           <placeholder>
-              <Label text="Keine offenen Aufgaben"/>
+              <Label text="Keine offenen Aufgaben" />
           </placeholder>
           <columns>
-          <TableColumn fx:id="col_open_assignmentNr" prefWidth="50.0" text="Nr" />
-          <TableColumn fx:id="col_open_assignmentCreated" prefWidth="150.0" text="Eingang" />
-            <TableColumn fx:id="col_open_assignmentAmount" prefWidth="150.0" text="RH Anzahl" />
-            <TableColumn fx:id="col_open_assignmentBoxID" prefWidth="100.0" text="BoxNr" />
+          <TableColumn fx:id="col_open_assignmentNr" editable="false" prefWidth="50.0" sortable="false" text="Nr" />
+          <TableColumn fx:id="col_open_assignmentCreated" editable="false" prefWidth="150.0" sortable="false" text="Eingang" />
+            <TableColumn fx:id="col_open_assignmentAmount" editable="false" prefWidth="150.0" sortable="false" text="RH Anzahl" />
+            <TableColumn fx:id="col_open_assignmentBoxID" editable="false" prefWidth="100.0" sortable="false" text="BoxNr" />
         </columns>
       </TableView>
 
-       <TableView fx:id="table_done_assignment" layoutX="600.0" layoutY="73.0" prefHeight="415.0" prefWidth="352" style="-fx-font-size: 125%; -fx-border-width: 0px;">
+       <TableView fx:id="table_done_assignment" layoutX="74.0" layoutY="631.0" prefHeight="150.0" prefWidth="452.0" style="-fx-font-size: 125%; -fx-border-width: 0px;">
            <placeholder>
-               <Label text="Keine erledigten Aufgaben"/>
+               <Label text="Keine erledigten Aufgaben" />
            </placeholder>
            <columns>
-               <TableColumn fx:id="col_done_assignmentNr" prefWidth="35.0" text="Nr" />
-               <TableColumn fx:id="col_done_assignmentCreated" prefWidth="125.0" text="Eingang" />
-               <TableColumn fx:id="col_done_assignmentAmount" prefWidth="115.0" text="RH Anzahl" />
-               <TableColumn fx:id="col_done_assignmentBoxID" prefWidth="75.0" text="BoxNr" />
+               <TableColumn fx:id="col_done_assignmentNr" prefWidth="50.0" sortable="false" text="Nr" />
+               <TableColumn fx:id="col_done_assignmentCreated" prefWidth="150.0" sortable="false" text="Eingang" />
+               <TableColumn fx:id="col_done_assignmentAmount" prefWidth="150.0" sortable="false" text="RH Anzahl" />
+               <TableColumn fx:id="col_done_assignmentBoxID" prefWidth="100.0" sortable="false" text="BoxNr" />
            </columns>
        </TableView>
-      <Label fx:id="currentAssignment_amount" layoutX="68.0" layoutY="400.0" prefHeight="30.0" prefWidth="188.0">
+      <Label fx:id="currentAssignment_amount" alignment="CENTER" layoutX="99.0" layoutY="426.0" prefHeight="30.0" prefWidth="201.0">
          <font>
             <Font size="24.0" />
          </font></Label>
-      <Label fx:id="currentAssignment_box" layoutX="280.0" layoutY="400.0" prefHeight="30.0" prefWidth="202.0">
+      <Label fx:id="currentAssignment_box" alignment="CENTER" layoutX="301.0" layoutY="426.0" prefHeight="30.0" prefWidth="201.0">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="btn_inProgressAbort" layoutX="50.0" layoutY="508.0" mnemonicParsing="false" onAction="#abortInProgressButtonPressed" text="Abbrechen">
+      <Button fx:id="btn_inProgressAbort" layoutX="74.0" layoutY="499.0" mnemonicParsing="false" onAction="#abortInProgressButtonPressed" prefWidth="249.0" style="-fx-background-color: lightsalmon;" text="Abbrechen">
          <font>
             <Font size="36.0" />
          </font>

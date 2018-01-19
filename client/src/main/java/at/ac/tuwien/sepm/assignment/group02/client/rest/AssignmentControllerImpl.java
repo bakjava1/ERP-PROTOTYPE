@@ -46,7 +46,7 @@ public class AssignmentControllerImpl implements AssignmentController {
 
     @Override
     public List<AssignmentDTO> getAllOpenAssignments() throws PersistenceLayerException {
-        LOG.debug("get all open assignments called in client assignment controller");
+        LOG.trace("get all open assignments called in client assignment controller");
 
         List<AssignmentDTO> assignmentList = new ArrayList<>();
         AssignmentDTO[] assignmentArray = null;
@@ -69,7 +69,7 @@ public class AssignmentControllerImpl implements AssignmentController {
 
     @Override
     public List<AssignmentDTO> getAllAssignments() throws PersistenceLayerException {
-        LOG.debug("get all open assignments called in client assignment controller");
+        LOG.trace("get all open assignments called in client assignment controller");
 
         List<AssignmentDTO> assignmentList = new ArrayList<>();
         AssignmentDTO[] assignmentArray = null;

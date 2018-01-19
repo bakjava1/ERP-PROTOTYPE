@@ -53,7 +53,7 @@ public class TaskControllerImpl {
     @RequestMapping(value="/getAllOpenTasks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all open tasks")
     public List<TaskDTO> getAllOpenTasks() throws ServiceLayerException {
-        LOG.debug("called getAllOpenTasks");
+        LOG.trace("called getAllOpenTasks");
         return taskService.getAllOpenTasks();
     }
 
