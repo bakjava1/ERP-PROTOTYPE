@@ -34,7 +34,7 @@ public interface LumberService {
      * @param lumber
      * @throws ServiceLayerException
      */
-    boolean deleteLumber(Lumber lumber) throws ServiceLayerException, PersistenceLayerException;
+    boolean deleteLumber(Lumber lumber) throws ServiceLayerException;
 
     /**
      * update a lumber
@@ -51,7 +51,7 @@ public interface LumberService {
      * @return an id of lumber
      * @throws InvalidInputException
      */
-    Lumber getLumber(int id) throws InvalidInputException;
+    Lumber getLumber(int id) throws ServiceLayerException;
 
     /**
      * add a reserved lumber to task
@@ -61,7 +61,7 @@ public interface LumberService {
      * @throws InvalidInputException
      * @throws ServiceLayerException
      */
-    void addReservedLumberToTask(String id, String quantity) throws ServiceLayerException,InvalidInputException;
+    void addReservedLumberToTask(String id, String quantity) throws ServiceLayerException;
 
     /**
      * @param lumber

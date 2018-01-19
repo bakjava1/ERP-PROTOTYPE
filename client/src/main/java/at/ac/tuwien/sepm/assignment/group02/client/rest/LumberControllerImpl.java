@@ -93,10 +93,11 @@ public class LumberControllerImpl implements LumberController {
         LOG.debug("Sending request for lumber updating to server");
 
         try {
-            restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, LumberDTO.class);
-            //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, LumberDTO.class);restTemplate.exchange(
+            //restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, LumberDTO.class);
+            //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, LumberDTO.class);
+            restTemplate.exchange(
                     "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber",
-                    HttpMethod.PUT, new HttpEntity<>(lumberDTO), OrderDTO.class);
+                    HttpMethod.PUT, new HttpEntity<>(lumberDTO), LumberDTO.class);
         } catch(HttpStatusCodeException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){

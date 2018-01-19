@@ -153,7 +153,7 @@ public class LumberServiceImpl implements LumberService {
 
 
     @Override
-    public boolean deleteLumber(Lumber lumber) throws ServiceLayerException, PersistenceLayerException {
+    public boolean deleteLumber(Lumber lumber) throws ServiceLayerException {
 
         LOG.debug("deleteLumber called: {}", lumber);
 

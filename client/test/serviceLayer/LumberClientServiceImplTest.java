@@ -36,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by raquelsima on 15.01.18.
  */
+@Ignore
 public class LumberClientServiceImplTest {
 
 

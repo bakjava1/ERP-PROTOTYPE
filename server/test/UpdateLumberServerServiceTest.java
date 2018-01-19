@@ -1,4 +1,3 @@
-import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
@@ -9,15 +8,14 @@ import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateLumber;
 import org.junit.After;
 import org.junit.BeforeClass;
-
-
+import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.RestTemplate;
-import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestTemplate;
+
+import java.lang.invoke.MethodHandles;
+import java.sql.Connection;
 
 
 
@@ -26,6 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by raquelsima on 16.01.18.
  */
+@Ignore
 public class UpdateLumberServerServiceTest {
 
 
@@ -37,18 +36,6 @@ public class UpdateLumberServerServiceTest {
     private static ValidateLumber validateLumber=new ValidateLumber();
     private static Connection dbConnection;
     private static LumberDAO lumberDAO;
-    //private static LumberController lumberController;
-
-
-    private static RestTemplate restTemplate;
-    private static Validator validator = new Validator();
-
-
-    //private static LumberDTO lumberDTO;
-
-    private MockMvc mockMvc;
-
-
 
     @BeforeClass
     public  static void setUp() throws Exception {

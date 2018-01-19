@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 
 //@RunWith(MockitoJUnitRunner.class)
-
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 public class updateLumberClientSideTest {
 
