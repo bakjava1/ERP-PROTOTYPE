@@ -30,7 +30,6 @@ public class MainApplication {
 
     @PreDestroy
     public void stop() throws Exception {
-        //DBUtil.dropTable();
         LOG.debug("Closing Database Connection");
         DBUtil.closeConnection();
     }

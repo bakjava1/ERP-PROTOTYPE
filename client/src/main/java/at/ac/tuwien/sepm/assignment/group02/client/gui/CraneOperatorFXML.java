@@ -252,12 +252,6 @@ public class CraneOperatorFXML {
                     super.succeeded();
                     LOG.debug("set-done succeeded with value {}", getValue());
                     alertBuilder.showInformationAlert("Aufgaben-Service", null, "Aufgabe " + assignmentDTO.getId() + " wurde als erledigt markiert.");
-                    updateAssignmentTable();
-                    btn_done.setVisible(false);
-                    btn_inProgress.setVisible(true);
-                    btn_inProgressAbort.setVisible(false);
-                    currentAssignment_amount.setText("");
-                    currentAssignment_box.setText("");
                 }
 
                 @Override
@@ -271,6 +265,13 @@ public class CraneOperatorFXML {
 
             Thread t = new Thread(task,"set-done");
             t.start();
+
+            updateAssignmentTable();
+            btn_done.setVisible(false);
+            btn_inProgress.setVisible(true);
+            btn_inProgressAbort.setVisible(false);
+            currentAssignment_amount.setText("");
+            currentAssignment_box.setText("");
         }
     }
 

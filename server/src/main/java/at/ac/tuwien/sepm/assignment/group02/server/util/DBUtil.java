@@ -91,7 +91,7 @@ public class DBUtil {
             //executeSQLFile("server/src/main/resources/createFinalDB.sql");
             String filepath = DBUtil.class
                     .getClassLoader()
-                    .getResource("create.sql").getPath();
+                    .getResource("createFinalDB.sql").getPath();
             executeSQLFile(filepath);
         }
         else{
