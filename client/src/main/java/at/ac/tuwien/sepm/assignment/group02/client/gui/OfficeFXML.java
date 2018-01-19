@@ -611,24 +611,7 @@ public class OfficeFXML {
                 toAdd.setId(currentOrderIndex);
                 currentOrderIndex++;
                 currentOrderTaskList.add(toAdd);
-                try {
-                    initiateCostValueFunction(null);
-                    toAdd.setId(currentOrderIndex);
-                    currentOrderIndex++;
-                    currentOrderTaskList.add(toAdd);
-                    table_addedTask.getItems().add(toAdd);
-                    currentOrderSum += centToEuro(toAdd.getPrice());
-                    l_sumorders.setText(currentOrderSum + " €");
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Successfully created Task");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Task successfully created and added to your Order");
-                    alert.showAndWait();
-                } catch(ServiceLayerException e) {
-                    currentOrderTaskList.remove(toAdd);
-                    addTaskToOrder(null);
-                    return;
-                }
+                initiateCostValueFunction(toAdd);
             } catch(InvalidInputException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error creating Task");
@@ -695,7 +678,7 @@ public class OfficeFXML {
         kn_result.setText("");
     }
 
-    public void initiateCostValueFunction(ActionEvent actionEvent) throws ServiceLayerException{
+    public void initiateCostValueFunction(Task task) {
         if(currentOrderTaskList.size() == 0) {
             Alert error = new Alert(Alert.AlertType.ERROR);
             error.setTitle("No Tasks to evaluate");
@@ -704,32 +687,19 @@ public class OfficeFXML {
             error.showAndWait();
             return;
         }
-        final CountDownLatch latch = new CountDownLatch(1);
-        final boolean[] value = new boolean[1];
         Thread thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
-                value[0] = costValueThread();
-                latch.countDown();
+                costValueThread(task);
             }
 
         });
         thread.start();
-        try {
-            latch.await();
-        } catch(InterruptedException e) {
-            LOG.error("Interrupt while Thread wait");
-            throw new ServiceLayerException("Interrupt while Thread wait");
-        }
-        if(!value[0]) {
-            LOG.error("Error at Cost Value");
-            throw new ServiceLayerException("Error at Cost Value");
-        }
     }
 
 
-    private boolean costValueThread() {
+    private boolean costValueThread(Task task) {
         double evaluation;
         try {
             evaluation = costBenefitService.costValueFunction(currentOrderTaskList);
@@ -740,6 +710,7 @@ public class OfficeFXML {
                     alertBuilder.showErrorAlert("Fehler bei Kosten/Nutzen Schätzung", null, "Ein Fehler trat bei der Kosten/Nutzen Schätzung auf\n Reason: " + e.getMessage());
                 }
             });
+            currentOrderTaskList.remove(task);
             return false;
         }
         Platform.runLater(new Runnable() {
@@ -751,8 +722,19 @@ public class OfficeFXML {
                     kn_result.setTextFill(Color.web("#00dd00"));
                     kn_result.setText("+ " + evaluation + " €");
                 }
+                task.setId(currentOrderIndex);
+                currentOrderIndex++;
+                table_addedTask.getItems().add(task);
+                currentOrderSum += centToEuro(task.getPrice());
+                l_sumorders.setText(currentOrderSum + " €");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Successfully created Task");
+                alert.setHeaderText(null);
+                alert.setContentText("Task successfully created and added to your Order");
+                alert.showAndWait();
             }
         });
+        addTaskToOrder(null);
         return true;
     }
 
@@ -769,12 +751,8 @@ public class OfficeFXML {
             currentOrderSum -= centToEuro(deletePrice);
             l_sumorders.setText(currentOrderSum + " €");
             LOG.info("tablesize: " + table_addedTask.getItems().size() + " tasklistsize: " + currentOrderTaskList.size());
-            if(currentOrderTaskList.size() > 0) { try {
+            if(currentOrderTaskList.size() > 0) {
                 initiateCostValueFunction(null);
-            }catch(ServiceLayerException e) {
-                LOG.error("Error at Cost Value");
-                return;
-            }
             }
             else { kn_result.setText(""); }
         }
