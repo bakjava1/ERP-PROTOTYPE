@@ -24,7 +24,7 @@
         <smartholz-rest.version>1.0</smartholz-rest.version>
         <springboot.version>1.5.8.RELEASE</springboot.version>
         <jackson.version>2.9.2</jackson.version>
-
+        <itext.version>2.1.7</itext.version>
         <maven-shade-plugin.version>3.1.0</maven-shade-plugin.version>
     </properties>
 
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
-            <version>2.1.7</version>
+            <version>${itext.version}</version>
         </dependency>
 
     </dependencies>

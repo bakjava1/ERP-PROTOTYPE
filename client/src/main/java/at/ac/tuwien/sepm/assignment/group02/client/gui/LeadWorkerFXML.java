@@ -155,7 +155,6 @@ public class LeadWorkerFXML {
     private OptimisationAlgorithmService optimisationAlgorithmService;
 
     private TaskDTO selectedTask;
-    private AlertBuilder alertBuilder = new AlertBuilder();
 
     @Autowired
     public LeadWorkerFXML(LumberService lumberService, OptimisationFXML optimisationFXML, TaskService taskService, AssignmentService assignmentService, OptimisationAlgorithmService optimisationAlgorithmService){
