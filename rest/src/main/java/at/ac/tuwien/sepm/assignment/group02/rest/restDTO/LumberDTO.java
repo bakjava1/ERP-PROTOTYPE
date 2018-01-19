@@ -2,10 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.rest.restDTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ApiModel(value = "LumberDTO", description = "LumberDTO")
@@ -285,61 +282,6 @@ public class LumberDTO {
     public void setAll_delivered(boolean all_delivered) {
         this.all_delivered = all_delivered;
     }
-
-    /**
-     * JavaFX  BEAN Property Methods
-     */
-    public SimpleStringProperty lagerProperty(){
-        return new SimpleStringProperty(lager);
-
-    }
-    public SimpleStringProperty descriptionProperty(){
-        return new SimpleStringProperty(description);
-
-    }public SimpleStringProperty wood_typeProperty(){
-        return new SimpleStringProperty(wood_type);
-
-    }public SimpleStringProperty finishingProperty(){
-        return new SimpleStringProperty(finishing);
-
-    }public SimpleStringProperty qualityProperty() {
-        return new SimpleStringProperty(quality);
-    }
-
-    public SimpleIntegerProperty idProperty(){
-
-        return new SimpleIntegerProperty(id);
-    }
-
-    public SimpleIntegerProperty sizeProperty(){
-
-        return new SimpleIntegerProperty(size);
-    }
-
-    public SimpleIntegerProperty lengthProperty(){
-        return new SimpleIntegerProperty(length);
-    }
-    public SimpleIntegerProperty widthProperty(){
-        return new SimpleIntegerProperty(width);
-    }
-    public SimpleIntegerProperty quantityProperty(){
-        return new SimpleIntegerProperty(quantity);
-    }
-    public SimpleIntegerProperty reserved_quantityProperty(){
-        return new SimpleIntegerProperty(reserved_quantity);
-    }
-
-    public SimpleIntegerProperty delivered_quantityProperty(){
-        return new SimpleIntegerProperty(delivered_quantity);
-    }
-
-    public SimpleBooleanProperty all_reservedProperty(){
-        return new SimpleBooleanProperty(all_reserved);
-    }
-    public SimpleBooleanProperty all_deliveredProperty(){
-        return new SimpleBooleanProperty(all_delivered);
-    }
-
 
     @Override
     public String toString() {

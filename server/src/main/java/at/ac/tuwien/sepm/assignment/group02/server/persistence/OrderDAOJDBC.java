@@ -105,7 +105,7 @@ public class OrderDAOJDBC implements OrderDAO {
                 currentOrder.setCustomerName(rs.getString("customer_name"));
                 currentOrder.setCustomerAddress(rs.getString("customer_address"));
                 currentOrder.setCustomerUID(rs.getString("customer_uid"));
-                currentOrder.setOrderDate(rs.getTimestamp("order_date"));
+                currentOrder.setOrderDate(rs.getString("order_date"));
                 currentOrder.setPaid(rs.getBoolean("isPaidFlag"));
                 //currentOrder.setGrossAmount(rs.getInt("summe"));
 

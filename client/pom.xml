@@ -16,33 +16,33 @@
 
     <properties>
         <!-- project settings -->
-        <start-class>at.ac.tuwien.sepm.assignment.group02.client.MainApplication</start-class>
-        <exec.mainClass>at.ac.tuwien.sepm.assignment.group02.client.MainApplication</exec.mainClass>
+        <project.mainClass>at.ac.tuwien.sepm.assignment.group02.client.MainApplication</project.mainClass>
+        <start-class>${project.mainClass}</start-class>
+        <exec.mainClass>${project.mainClass}</exec.mainClass>
 
         <!-- dependency -->
         <smartholz-rest.version>1.0</smartholz-rest.version>
-        <slf4j.version>1.7.25</slf4j.version>
-        <logback.version>1.1.11</logback.version>
         <springboot.version>1.5.8.RELEASE</springboot.version>
         <jackson.version>2.9.2</jackson.version>
 
-        <!-- test dependencies -->
-        <junit.version>4.12</junit.version>
-
-        <!-- plugins  -->
-        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
-        <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
-
+        <maven-shade-plugin.version>3.1.0</maven-shade-plugin.version>
     </properties>
 
 
     <dependencies>
-
         <dependency>
             <groupId>at.ac.tuwien.sepm.assignment.group02</groupId>
             <artifactId>smartholz-rest</artifactId>
             <version>${smartholz-rest.version}</version>
+        </dependency>
+
+        <!-- Import dependency management from Spring Boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>${springboot.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
         </dependency>
 
         <!-- Starter for building web, including RESTful, applications using Spring MVC.
@@ -55,10 +55,6 @@
                 <exclusion>
                     <groupId>org.springframework.data</groupId>
                     <artifactId>spring-data-jpa</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-web</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -78,42 +74,43 @@
             <version>${jackson.version}</version>
         </dependency>
 
-        <!-- compile dependencies -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <!-- runtime dependencies -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- test dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
 
     <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <testSourceDirectory>${project.basedir}/test</testSourceDirectory>
 
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${maven-shade-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <transformers>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>${project.mainClass}</mainClass>
+                        </transformer>
+                    </transformers>
+                    <shadedArtifactAttached>false</shadedArtifactAttached>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
+            </plugin>
 
             <!--
             The Spring Boot Maven Plugin provides Spring Boot support in Maven,
@@ -125,59 +122,15 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${springboot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
-            <!-- mvn compile -->
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <!-- JAXB, along with the other APIs shared with Java EE
-                    (JAX-WS, JAF, JTA, and the so-called "Common Annotations")
-                    are deprecated in Java SE 9 and are proposed to be removed
-                    in a future release of Java SE and the JDK.
-                    A first step towards dropping these APIs from Java SE and the
-                    JDK is to not resolve the modules containing these APIs by default.
-                    When you compile or run code on the class path with JDK 9 then
-                    it will initially appear that the APIs do not exist.
-                    That CLI option adds the "java.xml.bind" module to the set of root
-                    modules to resolve at startup and it works with JDK 9 because
-                    this module is included in the JDK run-time image. -->
-                    <compilerArgs>
-                        <arg>--add-modules</arg>
-                        <arg>java.xml.bind</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
-
-            <!-- mvn surefire:test
-            Only one goal: surefire:test runs the unit tests of an application.
-            -->
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <argLine>--add-modules java.xml.bind</argLine>
-                </configuration>
-            </plugin>
-
-            <!-- mvn package
-            Usually there is no need to mentioned the 'maven-jar-plugin'
-            explicit cause it's bound to the Maven Build Life Cycle.
-            We do need it because of the manifest declaration.
-            -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>at.ac.tuwien.sepm.assignment.group02.client.MainApplication</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 

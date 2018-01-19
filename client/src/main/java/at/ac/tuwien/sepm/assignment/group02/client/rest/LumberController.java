@@ -11,10 +11,10 @@ public interface LumberController {
     /**
      * show an overview of all availables lumbers
      * @return list of searched lumber
-     * @param filter a LumberDTO object with the parameter to be searched
+     * @param filterDTO a FilterDTO object with the parameter to be searched
      * @throws PersistenceLayerException if the server is not available
      */
-    List<LumberDTO> getAllLumber(LumberDTO filter) throws PersistenceLayerException;
+    List<LumberDTO> getAllLumber(FilterDTO filterDTO) throws PersistenceLayerException;
 
     /**
      * remove lumber from the stock

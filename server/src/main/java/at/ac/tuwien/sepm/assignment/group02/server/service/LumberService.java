@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 
@@ -28,7 +29,7 @@ public interface LumberService {
      * @return a list of all lumber that matches the filter.
      * @throws ServiceLayerException if the database is not available for the persistence layer
      */
-    List<LumberDTO> getAllLumber(LumberDTO filter) throws ServiceLayerException;
+    List<LumberDTO> getAllLumber(FilterDTO filter) throws ServiceLayerException;
 
     /**
      * delete a lumber from lumber store

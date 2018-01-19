@@ -35,6 +35,9 @@
          </font>
       </Label>
       <TableView fx:id="table_open_assignment" layoutX="50.0" layoutY="73.0" prefHeight="249.0" prefWidth="452" style="-fx-font-size: 175%; -fx-border-width: 0px;">
+          <placeholder>
+              <Label text="Keine offenen Aufgaben"/>
+          </placeholder>
           <columns>
           <TableColumn fx:id="col_open_assignmentNr" prefWidth="50.0" text="Nr" />
           <TableColumn fx:id="col_open_assignmentCreated" prefWidth="150.0" text="Eingang" />
@@ -44,6 +47,9 @@
       </TableView>
 
        <TableView fx:id="table_done_assignment" layoutX="600.0" layoutY="73.0" prefHeight="415.0" prefWidth="352" style="-fx-font-size: 125%; -fx-border-width: 0px;">
+           <placeholder>
+               <Label text="Keine erledigten Aufgaben"/>
+           </placeholder>
            <columns>
                <TableColumn fx:id="col_done_assignmentNr" prefWidth="35.0" text="Nr" />
                <TableColumn fx:id="col_done_assignmentCreated" prefWidth="125.0" text="Eingang" />

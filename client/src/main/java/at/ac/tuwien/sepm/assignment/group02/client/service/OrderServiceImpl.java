@@ -61,25 +61,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void deleteOrder(Order order) {
+    public void deleteOrder(Order order) throws ServiceLayerException {
         LOG.debug("deleteOrder called: {}", order);
         OrderDTO orderToDelete = orderConverter.convertPlainObjectToRestDTO(order);
         try {
             orderController.deleteOrder(orderToDelete);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
     }
 
     @Override
-    public List<Order> getAllOpen() {
+    public List<Order> getAllOpen() throws ServiceLayerException {
         LOG.debug("getAllOpen called");
-        List<OrderDTO> allOpen = new LinkedList<>();
+        List<OrderDTO> allOpen;
 
         try {
             allOpen = orderController.getAllOpen();
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
 
         List<Order> convertedOrders = convertTaskLists(allOpen);
@@ -95,14 +97,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllClosed() {
+    public List<Order> getAllClosed() throws ServiceLayerException {
         LOG.debug("getAllClosed called");
-        List<OrderDTO> allClosed = new LinkedList<>();
+        List<OrderDTO> allClosed;
 
         try {
             allClosed = orderController.getAllClosed();
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
 
 
@@ -153,6 +156,7 @@ public class OrderServiceImpl implements OrderService {
         try {
             orderController.invoiceOrder(orderDTO);
         } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
             throw new ServiceLayerException(e.getMessage());
         }
     }

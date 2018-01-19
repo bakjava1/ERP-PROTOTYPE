@@ -769,8 +769,10 @@ public class OfficeFXML {
             table_addedTask.getItems().remove(index);
             currentOrderTaskList.remove(index);
             currentOrderSum -= deletePrice;
+            l_sumorders.setText(currentOrderSum + " €");
             LOG.info("tablesize: " + table_addedTask.getItems().size() + " tasklistsize: " + currentOrderTaskList.size());
-            initiateCostValueFunction(null);
+            if(currentOrderTaskList.size() > 0) { initiateCostValueFunction(null); }
+            else { kn_result.setText(""); }
         }
     }
 

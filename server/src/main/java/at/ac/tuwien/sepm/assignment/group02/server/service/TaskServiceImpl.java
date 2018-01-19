@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.assignment.group02.server.service;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityCreationException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundExceptionService;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
@@ -42,7 +44,7 @@ public class TaskServiceImpl implements TaskService {
             return task_id;
         } catch (PersistenceLayerException e) {
             LOG.warn("Database Error", e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
+            throw new EntityCreationException(e.getMessage());
         }
     }
 
@@ -106,7 +108,7 @@ public class TaskServiceImpl implements TaskService {
             return taskConverter.convertPlainObjectToRestDTO(taskManagementDAO.getTaskById(task_id));
         } catch (PersistenceLayerException e) {
             LOG.error("Error while trying to get objects from Database: " + e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
+            throw new EntityNotFoundExceptionService(e.getMessage());
         }
     }
 }

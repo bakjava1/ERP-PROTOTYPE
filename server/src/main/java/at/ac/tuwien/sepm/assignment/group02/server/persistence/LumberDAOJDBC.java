@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.persistence;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
@@ -32,7 +33,7 @@ public class LumberDAOJDBC implements LumberDAO {
 
 
     @Override
-    public List<Lumber> getAllLumber(Lumber filter) throws PersistenceLayerException {
+    public List<Lumber> getAllLumber(FilterDTO filter) throws PersistenceLayerException {
         LOG.debug("Get all Lumber from database");
 
 
@@ -41,16 +42,16 @@ public class LumberDAOJDBC implements LumberDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-
+        LOG.debug(filter.toString());
 
         boolean conditions = false;
         String description = filter.getDescription() == null? null :filter.getDescription().toLowerCase();
         String finishing = filter.getFinishing() == null? null: filter.getFinishing().toLowerCase();
         String wood_type = filter.getWood_type() == null? null: filter.getWood_type().toLowerCase();
         String quality = filter.getQuality() == null? null : filter.getQuality().toLowerCase();
-        int strength = filter.getSize();
-        int width = filter.getWidth();
-        int length = filter.getLength();
+        String strength = filter.getSize() == null? null : filter.getSize();
+        String width = filter.getWidth() == null? null : filter.getWidth();
+        String length = filter.getLength() == null? null : filter.getLength();
 
         if (description != null && !description.equals("")){
             Query += " WHERE (LOWER(description) LIKE '"+description+"%' OR LOWER(description) LIKE '%"+description+"')";
@@ -84,7 +85,7 @@ public class LumberDAOJDBC implements LumberDAO {
             }
         }
 
-        if (strength != -1){
+        if (strength != null && !strength.equals("")){
             if (conditions) {
                 Query += " AND size = " + strength;
             }else{
@@ -93,7 +94,7 @@ public class LumberDAOJDBC implements LumberDAO {
             }
         }
 
-        if (width != -1){
+        if (width != null && !width.equals("")){
             if (conditions) {
                 Query += " AND width = " + width;
             }else{
@@ -101,7 +102,7 @@ public class LumberDAOJDBC implements LumberDAO {
                 conditions = true;
             }
         }
-        if (length != -1){
+        if (length != null && !length.equals("")){
             if (conditions) {
                 Query += " AND length = " + length;
             }else{
@@ -134,11 +135,12 @@ public class LumberDAOJDBC implements LumberDAO {
 
             if (lumberList.size() == 0) {
                 //no open order was found
+                LOG.debug("lumberList.size == 0");
                 return null;
             }
 
         } catch (SQLException e) {
-
+            LOG.error("SQLException: ", e.getMessage());
             throw new PersistenceLayerException("Database error:"+ e.getMessage());
         }
 

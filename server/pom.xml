@@ -16,28 +16,16 @@
 
     <properties>
         <!-- project settings -->
-        <start-class>at.ac.tuwien.sepm.assignment.group02.server.MainApplication</start-class>
-        <exec.mainClass>at.ac.tuwien.sepm.assignment.group02.server.MainApplication</exec.mainClass>
-
-        <!-- dependency -->
+        <project.mainClass>at.ac.tuwien.sepm.assignment.group02.server.MainApplication</project.mainClass>
+        <start-class>${project.mainClass}</start-class>
+        <exec.mainClass>${project.mainClass}</exec.mainClass>
+        <!-- dependencies -->
         <smartholz-rest.version>1.0</smartholz-rest.version>
-        <slf4j.version>1.7.25</slf4j.version>
-        <logback.version>1.1.11</logback.version>
         <springboot.version>1.5.8.RELEASE</springboot.version>
-        <springfox-swagger.version>2.7.0</springfox-swagger.version>
         <jackson.version>2.9.2</jackson.version>
         <h2.version>1.4.196</h2.version>
-
-        <!-- test dependencies -->
-        <junit.version>4.12</junit.version>
-
-        <!-- plugins  -->
-        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
-        <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
-
+        <javafaker.version>0.12</javafaker.version>
     </properties>
-
 
     <dependencies>
 
@@ -45,6 +33,15 @@
             <groupId>at.ac.tuwien.sepm.assignment.group02</groupId>
             <artifactId>smartholz-rest</artifactId>
             <version>${smartholz-rest.version}</version>
+        </dependency>
+
+        <!-- Import dependency management from Spring Boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>${springboot.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
         </dependency>
 
         <!-- Starter for building web, including RESTful, applications using Spring MVC.
@@ -71,17 +68,6 @@
         </dependency>
 
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox-swagger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox-swagger.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
@@ -93,54 +79,26 @@
             <version>${h2.version}</version>
         </dependency>
 
-        <!-- compile dependencies -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <!-- runtime dependencies -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
         <!-- java faker to create test database -->
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
-            <version>0.12</version>
-        </dependency>
-
-        <!-- test dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>at.ac.tuwien.sepm.assignment.group02</groupId>
-            <artifactId>smartholz-client</artifactId>
-            <version>1.0</version>
+            <version>${javafaker.version}</version>
         </dependency>
 
     </dependencies>
 
 
     <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <testSourceDirectory>${project.basedir}/test</testSourceDirectory>
-        <plugins>
 
+        <plugins>
             <!--
             The Spring Boot Maven Plugin provides Spring Boot support in Maven,
             allowing you to package executable jar or war archives and
@@ -151,47 +109,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${springboot.version}</version>
-            </plugin>
-
-            <!-- mvn compile -->
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <compilerArgs>
-                        <arg>--add-modules</arg>
-                        <arg>java.xml.bind</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
-
-            <!-- mvn surefire:test
-            Only one goal: surefire:test runs the unit tests of an application.
-            -->
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <argLine>--add-modules java.xml.bind</argLine>
-                </configuration>
-            </plugin>
-
-            <!-- mvn package
-            Usually there is no need to mentioned the 'maven-jar-plugin'
-            explicit cause it's bound to the Maven Build Life Cycle.
-            We do need it because of the manifest declaration.
-            -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>at.ac.tuwien.sepm.assignment.group02.client.MainApplication</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

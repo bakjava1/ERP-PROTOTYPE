@@ -37,15 +37,9 @@ public class OrderControllerImpl {
      */
     @RequestMapping(value="/createOrder", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "create order")
-    public void createOrder(@RequestBody OrderDTO orderDTO) throws ResourceNotFoundException {
+    public void createOrder(@RequestBody OrderDTO orderDTO) throws ServiceLayerException {
         LOG.debug("Trying creation of Order with id: " + orderDTO.getID());
-
-        try {
-            orderService.createOrder(orderDTO);
-        } catch(ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("Failed Creation");
-        }
+        orderService.createOrder(orderDTO);
     }
 
     /**
@@ -55,73 +49,43 @@ public class OrderControllerImpl {
      */
     @RequestMapping(value="/deleteOrder", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "delete order")
-    public void deleteOrder(@RequestBody OrderDTO orderDTO) throws ResourceNotFoundException {
+    public void deleteOrder(@RequestBody OrderDTO orderDTO) throws ServiceLayerException {
         LOG.debug("Deleting order " + orderDTO.getID());
-        try {
-            orderService.deleteOrder(orderDTO);
-        } catch (ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("Failed to delete order.");
-        }
+        orderService.deleteOrder(orderDTO);
     }
 
     @RequestMapping(value="/getAllOpen", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get open orders")
-    public List<OrderDTO> getAllOpen() throws ResourceNotFoundException{
+    public List<OrderDTO> getAllOpen() throws ServiceLayerException {
         LOG.debug("Get all order");
-        try {
-            return orderService.getAllOpen();
-        } catch (ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("failed to get all orders.");
-        }
+        return orderService.getAllOpen();
     }
 
     @RequestMapping(value="/updateOrder", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "update order")
-    public void updateOrder(OrderDTO orderDTO) throws ResourceNotFoundException {
+    public void updateOrder(OrderDTO orderDTO) throws ServiceLayerException {
         LOG.debug("called updateOrder, {}", orderDTO.toString());
-        try {
-            orderService.updateOrder(orderDTO);
-        } catch (ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("failed to update order.");
-        }
+        orderService.updateOrder(orderDTO);
     }
 
     @RequestMapping(value="/getAllClosedOrders", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all closed orders")
-    public List<OrderDTO> getAllClosed() throws ResourceNotFoundException {
+    public List<OrderDTO> getAllClosed() throws ServiceLayerException {
         LOG.debug("called getAllClosed");
-        try {
-            return orderService.getAllClosed();
-        } catch (ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("failed to get all closed orders.");
-        }
+        return orderService.getAllClosed();
     }
 
     @RequestMapping(value="/getOrderById/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get Order By Id")
-    public OrderDTO getOrderById(int order_id) throws ResourceNotFoundException {
+    public OrderDTO getOrderById(int order_id) throws ServiceLayerException {
         LOG.debug("called getOrderById");
-        try {
-            return orderService.getOrderById(order_id);
-        } catch (ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("failed to get order by id.");
-        }
+        return orderService.getOrderById(order_id);
     }
 
     @RequestMapping(value="/invoiceOrder", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "invoice order")
-    public void invoiceOrder(@RequestBody OrderDTO orderDTO) throws ResourceNotFoundException {
+    public void invoiceOrder(@RequestBody OrderDTO orderDTO) throws ServiceLayerException {
         LOG.debug("invoice Order " + orderDTO.getID());
-        try {
-            orderService.invoiceOrder(orderDTO);
-        } catch (ServiceLayerException e) {
-            LOG.error(e.getMessage());
-            throw new ResourceNotFoundException("failed to edit order.");
-        }
+        orderService.invoiceOrder(orderDTO);
     }
 }
