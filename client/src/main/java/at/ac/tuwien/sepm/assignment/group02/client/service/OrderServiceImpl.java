@@ -74,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllOpen() {
         LOG.debug("getAllOpen called");
-        List<OrderDTO> allOpen = null;
+        List<OrderDTO> allOpen = new LinkedList<>();
 
         try {
             allOpen = orderController.getAllOpen();
@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllClosed() {
         LOG.debug("getAllClosed called");
-        List<OrderDTO> allClosed = null;
+        List<OrderDTO> allClosed = new LinkedList<>();
 
         try {
             allClosed = orderController.getAllClosed();

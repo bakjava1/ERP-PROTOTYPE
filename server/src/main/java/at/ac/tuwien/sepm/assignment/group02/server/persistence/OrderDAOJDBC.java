@@ -69,7 +69,7 @@ public class OrderDAOJDBC implements OrderDAO {
     public void deleteOrder(Order order) throws PersistenceLayerException {
         LOG.debug("deleting order number {} from database", order.getID());
 
-        String deleteOrder = "UPDATE ORDERS SET isDoneFlag = 1 WHERE ID = ?";
+        String deleteOrder = "UPDATE ORDERS SET isDoneFlag = TRUE WHERE ID = ?";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(deleteOrder);
@@ -94,7 +94,7 @@ public class OrderDAOJDBC implements OrderDAO {
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = 0 AND ISPAIDFLAG = 0 ORDER BY ORDER_DATE");
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = FALSE AND ISPAIDFLAG = FALSE ORDER BY ORDER_DATE");
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -154,7 +154,7 @@ public class OrderDAOJDBC implements OrderDAO {
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = 0 AND ISPAIDFLAG = 1 ORDER BY ORDER_DATE");
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = FALSE AND ISPAIDFLAG = TRUE ORDER BY ORDER_DATE");
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -195,7 +195,7 @@ public class OrderDAOJDBC implements OrderDAO {
         try {
             PreparedStatement stmt = dbConnection.prepareStatement(updateSentence);
             //set necessary fields in order
-            stmt.setInt(1, 1);
+            stmt.setBoolean(1, true);
             stmt.setString(2, order.getDeliveryDate());
             stmt.setString(3,  order.getInvoiceDate());
             stmt.setInt(4, order.getGrossAmount());
