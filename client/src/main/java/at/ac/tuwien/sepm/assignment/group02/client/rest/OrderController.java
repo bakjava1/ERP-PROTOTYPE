@@ -31,14 +31,6 @@ public interface OrderController {
     List<OrderDTO> getAllOpen() throws PersistenceLayerException;
 
     /**
-     * update an order, put flag and save additional values
-     * @param orderDTO
-     * @throws PersistenceLayerException
-     * @inv orderDTO is validated
-     */
-    void updateOrder(OrderDTO orderDTO) throws PersistenceLayerException;
-
-    /**
      * all closed orders equal request of invoice
      * @return list of all closed Order
      * @throws PersistenceLayerException if the server is not available
