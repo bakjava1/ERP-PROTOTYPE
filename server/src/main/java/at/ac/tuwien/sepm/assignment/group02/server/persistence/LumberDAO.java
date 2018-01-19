@@ -15,7 +15,7 @@ public interface LumberDAO {
     Lumber readLumberById(int id) throws PersistenceLayerException;
 
     /**
-     * inserte a new lumber in lumber sotore
+     * inserte a new lumber in lumber store
      * @param lumber
      * @throws PersistenceLayerException
      */
@@ -51,4 +51,7 @@ public interface LumberDAO {
      * @throws PersistenceLayerException if an sqlexception occurs
      */
     int getLumberCountForTask(Task toCheck) throws PersistenceLayerException;
+
+
+    void removeLumber(int id, int removedQuantity) throws PersistenceLayerException;
 }

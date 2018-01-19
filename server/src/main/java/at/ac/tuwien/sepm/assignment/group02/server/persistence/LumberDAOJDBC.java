@@ -322,6 +322,8 @@ public class LumberDAOJDBC implements LumberDAO {
         }
 
 
+
+
     @Override
     public void deleteLumber(Lumber lumber) throws PersistenceLayerException {
 
@@ -360,13 +362,41 @@ public class LumberDAOJDBC implements LumberDAO {
         }
     }
 
+    @Override
+    public void removeLumber(int id, int removedQuantity) throws PersistenceLayerException {
+        LOG.debug("removing lumber from database");
 
-    private void checkIfLumberIsNull(Lumber lumber) throws ResourceNotFoundException {
-               if(lumber == null){
-                        LOG.debug("Lumber is null.");
-                        throw new ResourceNotFoundException("Lumber can't be null.");
-                    }
+
+        String selectStatement = "SELECT QUANTITY, RESERVED_QUANTITY FROM LUMBER WHERE ID = ?";
+        String removeStatement = "UPDATE LUMBER SET QUANTITY = ?, RESERVED_QUANTITY = ? WHERE ID = ?";
+
+        try {
+            PreparedStatement ps = dbConnection.prepareStatement(selectStatement    );
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            int currentQuantity = rs.getInt(1);
+            int currentReservedQuantity = rs.getInt(2);
+
+            if(removedQuantity > (currentQuantity-currentReservedQuantity)) {
+                throw new PersistenceLayerException("Trying to remove more lumber than existing");
             }
+
+            ps = dbConnection.prepareStatement(removeStatement);
+            currentQuantity = currentQuantity -removedQuantity;
+            currentReservedQuantity = currentReservedQuantity - removedQuantity;
+            ps.setInt(1, currentQuantity);
+            ps.setInt(2, currentReservedQuantity);
+            ps.setInt(3, id);
+            ps.executeUpdate();
+
+            ps.close();
+        }catch (SQLException e){
+            LOG.error("SQLException: {}", e.getMessage());
+            throw new PersistenceLayerException("Database error");
+        }
     }
+}
+
 
 

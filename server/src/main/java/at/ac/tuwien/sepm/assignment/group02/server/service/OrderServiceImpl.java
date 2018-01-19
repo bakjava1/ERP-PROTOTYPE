@@ -139,6 +139,15 @@ public class OrderServiceImpl implements OrderService {
     public void invoiceOrder(OrderDTO orderDTO) throws ServiceLayerException {
         Order order = orderConverter.convertRestDTOToPlainObject(orderDTO);
 
+        List<TaskDTO> taskDTOList = orderDTO.getTaskList();
+
+        List<Task> taskList = new ArrayList<>();
+
+        for(TaskDTO taskDTO : taskDTOList){
+            taskList.add(taskConverter.convertRestDTOToPlainObject(taskDTO));
+        }
+
+        order.setTaskList(taskList);
         //TODO delete lumber from database
 
         try {
@@ -153,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private void deleteLumberForInvoicedTask(Task task) throws PersistenceLayerException {
+    private void deleteLumberForInvoicedTask(Task task) throws PersistenceLayerException, ServiceLayerException {
         FilterDTO filterDTO = new FilterDTO();
         filterDTO.setLength(task.getLength()+"");
         filterDTO.setSize(task.getSize()+"");
@@ -163,7 +172,21 @@ public class OrderServiceImpl implements OrderService {
         filterDTO.setQuality(task.getQuality());
         filterDTO.setWood_type(task.getWood_type());
         List<Lumber> compatibleLumber = lumberDAO.getAllLumber(filterDTO);
-        int adf = 2;
+        int remainingQuantity = task.getQuantity()-task.getProduced_quantity();
+        for(Lumber lumber : compatibleLumber){
+            int availableLumber = lumber.getQuantity()-lumber.getReserved_quantity();
+            remainingQuantity = remainingQuantity - availableLumber;
+            if(remainingQuantity <= 0){
+                lumberDAO.removeLumber(lumber.getId(), remainingQuantity);
+                break;
+            }
+            else{
+                lumberDAO.removeLumber(lumber.getId(), availableLumber);
+            }
+        }
+        if(remainingQuantity > 0){
+                throw new ServiceLayerException("Not enough Lumber for task {" + task.toString() + "} available");
+        }
     }
 
 

@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAOJDBC;
@@ -48,7 +49,7 @@ public class InvoiceOrderTest {
         orderDAO = new OrderDAOJDBC(dbConnection);
         orderDAOMock = mock(OrderDAOJDBC.class);
 
-        orderService = new OrderServiceImpl(orderDAO, new TaskDAOJDBC(dbConnection),new OrderConverter(),new TaskConverter());
+        orderService = new OrderServiceImpl(orderDAO, new TaskDAOJDBC(dbConnection), new LumberDAOJDBC(dbConnection),new OrderConverter(),new TaskConverter());
 
         orderDTONoError.setPaid(false);
         orderDTONoError.setCustomerName("Max Mustermmann");
@@ -56,8 +57,8 @@ public class InvoiceOrderTest {
         orderDTONoError.setCustomerUID("1234567890");
         orderDTONoError.setID(5);
         orderDTONoError.setNetAmount(123456);
-        orderDTONoError.setDeliveryDate(new java.util.Date());
-        orderDTONoError.setInvoiceDate(new java.util.Date());
+        orderDTONoError.setDeliveryDate("");
+        orderDTONoError.setInvoiceDate("");
         orderDTONoError.setGrossAmount(123);
         orderDTONoError.setNetAmount(111);
         orderDTONoError.setTaxAmount(12);
@@ -69,8 +70,8 @@ public class InvoiceOrderTest {
         orderNoError1.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
         orderNoError1.setCustomerUID("1234567890");
         orderNoError1.setNetAmount(123456);
-        orderNoError1.setDeliveryDate(new java.util.Date());
-        orderNoError1.setInvoiceDate(new java.util.Date());
+        orderNoError1.setDeliveryDate("");
+        orderNoError1.setInvoiceDate("");
         orderNoError1.setGrossAmount(123);
         orderNoError1.setNetAmount(111);
         orderNoError1.setTaxAmount(12);
@@ -81,8 +82,8 @@ public class InvoiceOrderTest {
         orderNoError2.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
         orderNoError2.setCustomerUID("1234567890");
         orderNoError2.setNetAmount(123456);
-        orderNoError2.setDeliveryDate(new java.util.Date());
-        orderNoError2.setInvoiceDate(new java.util.Date());
+        orderNoError2.setDeliveryDate("");
+        orderNoError2.setInvoiceDate("");
         orderNoError2.setGrossAmount(123);
         orderNoError2.setNetAmount(111);
         orderNoError2.setTaxAmount(12);
