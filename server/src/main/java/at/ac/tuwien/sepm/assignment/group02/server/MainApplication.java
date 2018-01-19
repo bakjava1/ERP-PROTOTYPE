@@ -24,6 +24,7 @@ public class MainApplication {
      */
     public static void main(String[] args) {
         LOG.debug("Application starting with arguments={}", (Object) args);
+        DBUtil.setIsFinalDB(true);
         SpringApplication.run(MainApplication.class, args);
     }
 
