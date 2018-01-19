@@ -6,10 +6,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
-import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAOJDBC;
-import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
-import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAOJDBC;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.*;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OrderServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
@@ -35,6 +32,7 @@ public class createOrderServerSideTest {
     private OrderService orderService;
     private OrderDAO orderDAO;
     private TaskDAO taskDAO;
+    private LumberDAO lumberDAO;
     private Connection dbConnection;
     private OrderDTO orderDTO;
     private Order order;
@@ -47,8 +45,9 @@ public class createOrderServerSideTest {
 
         orderDAO = new OrderDAOJDBC(dbConnection);
         taskDAO = new TaskDAOJDBC(dbConnection);
+        lumberDAO = new LumberDAOJDBC(dbConnection);
 
-        orderService = new OrderServiceImpl(orderDAO,taskDAO,new OrderConverter(),new TaskConverter());
+        orderService = new OrderServiceImpl(orderDAO,taskDAO,lumberDAO, new OrderConverter(),new TaskConverter());
 
         orderDTO = new OrderDTO();
         order = new Order();

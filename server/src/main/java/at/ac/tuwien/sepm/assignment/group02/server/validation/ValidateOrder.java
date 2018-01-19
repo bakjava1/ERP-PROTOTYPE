@@ -56,7 +56,7 @@ public class ValidateOrder implements ValidateInput<Order>{
         }
 
         try {
-            isValidDate(order.getOrderDate());
+            isValidDate(order.getOrderDate().toString());
         } catch(InvalidInputException e) {
             LOG.error("Error at Order Date: " + e.getMessage());
             throw new InvalidInputException("Error at Order Date: " + e.getMessage());

@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class InvoiceOrderTest {
@@ -94,12 +95,12 @@ public class InvoiceOrderTest {
         orderDTONoError.setTaxAmount(12);
         orderDTONoError.setNetAmount(111);
         orderDTONoError.setGrossAmount(123);
-        orderDTONoError.setInvoiceDate(new java.util.Date());
-        orderDTONoError.setDeliveryDate(new java.util.Date());
+        orderDTONoError.setInvoiceDate("");
+        orderDTONoError.setDeliveryDate("");
         orderDTONoError.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
         orderDTONoError.setCustomerName("Max Mustermann");
         orderDTONoError.setCustomerUID("123456");
-        orderDTONoError.setOrderDate(new java.util.Date());
+        orderDTONoError.setOrderDate("");
         orderDTONoError.setPaid(false);
         orderDTONoError.setTaskList(new ArrayList<TaskDTO>());
 

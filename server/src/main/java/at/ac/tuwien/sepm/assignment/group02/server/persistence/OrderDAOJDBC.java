@@ -163,7 +163,7 @@ public class OrderDAOJDBC implements OrderDAO {
                 Order currentBill = new Order();
                 currentBill.setID(rs.getInt("ID"));
                 currentBill.setCustomerName(rs.getString("customer_name"));
-                currentBill.setInvoiceDate(rs.getTimestamp("order_date"));
+                currentBill.setInvoiceDate(rs.getString("order_date"));
                 //currentBill.setGrossAmount(rs.getInt("summe"));
 
 
@@ -188,24 +188,21 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public void invoiceOrder(Order order) throws PersistenceLayerException {
-        String updateSentence = "UPDATE ORDERS SET isPaidFlag=?, delivery_date=?, invoice_date=?, gross_amount=?, net_amount=?, tax_amount=? WHERE ID=?";
+        String updateSentence = "UPDATE ORDERS SET isPaidFlag=?, delivery_date=now(), invoice_date=now(), gross_amount=?, net_amount=?, tax_amount=? WHERE ID=?";
 
-        //TODO prices get not written because not clear how they are working now
-        System.err.println(order.toString());
         try {
             PreparedStatement stmt = dbConnection.prepareStatement(updateSentence);
             //set necessary fields in order
             stmt.setBoolean(1, true);
-            stmt.setTimestamp(2, new Timestamp(order.getDeliveryDate().getTime()));
-            stmt.setTimestamp(3,  new Timestamp(order.getInvoiceDate().getTime()));
-            stmt.setInt(4, order.getGrossAmount());
-            stmt.setInt(5, order.getNetAmount());
-            stmt.setInt(6, order.getTaxAmount());
-            stmt.setInt(7, order.getID());
+            stmt.setInt(2, order.getGrossAmount());
+            stmt.setInt(3, order.getNetAmount());
+            stmt.setInt(4, order.getTaxAmount());
+            stmt.setInt(5, order.getID());
             stmt.execute();
 
             stmt.close();
         } catch (SQLException e) {
+            System.err.println(order.toString());
             LOG.error("SQLException: {}", e.getMessage());
             throw new PersistenceLayerException("Database error");
         }

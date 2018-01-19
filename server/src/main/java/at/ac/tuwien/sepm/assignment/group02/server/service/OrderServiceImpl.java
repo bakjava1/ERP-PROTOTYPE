@@ -1,12 +1,16 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.OrderConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Filter;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.*;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
 import org.slf4j.Logger;
@@ -23,13 +27,15 @@ public class OrderServiceImpl implements OrderService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static OrderDAO orderManagementDAO;
     private static TaskDAO taskManagementDAO;
+    private static LumberDAO lumberDAO;
     private static OrderConverter orderConverter;
     private static TaskConverter taskConverter;
 
     @Autowired
-    public OrderServiceImpl(OrderDAO orderManagementDAO,TaskDAO taskManagementDAO, OrderConverter orderConverter, TaskConverter taskConverter) {
+    public OrderServiceImpl(OrderDAO orderManagementDAO,TaskDAO taskManagementDAO, LumberDAO lumberDAO, OrderConverter orderConverter, TaskConverter taskConverter) {
         OrderServiceImpl.orderManagementDAO = orderManagementDAO;
         OrderServiceImpl.taskManagementDAO = taskManagementDAO;
+        OrderServiceImpl.lumberDAO = lumberDAO;
         OrderServiceImpl.orderConverter = orderConverter;
         OrderServiceImpl.taskConverter = taskConverter;
     }
@@ -133,12 +139,31 @@ public class OrderServiceImpl implements OrderService {
     public void invoiceOrder(OrderDTO orderDTO) throws ServiceLayerException {
         Order order = orderConverter.convertRestDTOToPlainObject(orderDTO);
 
+        //TODO delete lumber from database
+
         try {
             orderManagementDAO.invoiceOrder(order);
+            for(Task task : order.getTaskList()){
+                //delete lumber for this task
+                deleteLumberForInvoicedTask(task);
+            }
         } catch (PersistenceLayerException e) {
             LOG.error("Error while tying to invoice Order: " + e.getMessage());
             throw new ServiceLayerException("couldn't edit order");
         }
+    }
+
+    private void deleteLumberForInvoicedTask(Task task) throws PersistenceLayerException {
+        FilterDTO filterDTO = new FilterDTO();
+        filterDTO.setLength(task.getLength()+"");
+        filterDTO.setSize(task.getSize()+"");
+        filterDTO.setWidth(task.getWidth()+"");
+        filterDTO.setDescription(task.getDescription());
+        filterDTO.setFinishing(task.getFinishing());
+        filterDTO.setQuality(task.getQuality());
+        filterDTO.setWood_type(task.getWood_type());
+        List<Lumber> compatibleLumber = lumberDAO.getAllLumber(filterDTO);
+        int adf = 2;
     }
 
 

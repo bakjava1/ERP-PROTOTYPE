@@ -144,14 +144,13 @@ public class OrderServiceImpl implements OrderService {
         int grossAmount = netSumTasks + (int)taxAmount;
         selectedOrder.setGrossAmount(grossAmount);
         selectedOrder.setTaxAmount((int)taxAmount);
-        selectedOrder.setDeliveryDate(new Date());
-        selectedOrder.setInvoiceDate(new Date());
-
+        selectedOrder.setDeliveryDate(null);
+        selectedOrder.setInvoiceDate(null);
+        selectedOrder.setPaid(true);
 
         validator.inputValidationInvoice(selectedOrder);
 
         OrderDTO orderDTO = orderConverter.convertPlainObjectToRestDTO(selectedOrder);
-
 
         try {
             orderController.invoiceOrder(orderDTO);

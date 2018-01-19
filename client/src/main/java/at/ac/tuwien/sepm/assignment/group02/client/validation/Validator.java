@@ -130,18 +130,18 @@ public class Validator {
         }
 
         try {
-            validateText(toValidate.getCustomerUID(),10);
+            validateText(toValidate.getCustomerUID(),20);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer UID: " + e.getMessage());
             throw new InvalidInputException("Error at Customer UID: " + e.getMessage());
         }
 
-        try {
-            isValidDate(toValidate.getOrderDate());
+     /*   try {
+            isValidDate(toValidate.getOrderDate().toString());
         } catch(InvalidInputException e) {
             LOG.error("Error at Order Date: " + e.getMessage());
             throw new InvalidInputException("Error at Order Date: " + e.getMessage());
-        }
+        }*/
 
         if(toValidate.getTaskList() == null) {
             LOG.error("Error at Task List: List cannot be null");
@@ -154,14 +154,6 @@ public class Validator {
         if(invoice.getTaskList()==null || invoice.getTaskList().size()==0){
             LOG.error("Error in Invoice: No Tasks");
             throw new InvalidInputException("Error in Invoice: No Tasks");
-        }
-        if(invoice.getDeliveryDate() == null){
-            LOG.error("Error in Invoice: No Delivery Date");
-            throw new InvalidInputException("Error in Invoice: No Delivery Date");
-        }
-        if(invoice.getInvoiceDate() == null){
-            LOG.error("Error in Invoice: No Invoice Date");
-            throw new InvalidInputException("Error in Invoice: No Invoice Date");
         }
         if(invoice.getOrderDate() == null){
             LOG.error("Error in Invoice: No Order Date");

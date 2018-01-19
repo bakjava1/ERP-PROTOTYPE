@@ -8,8 +8,8 @@ public class Order {
 
     private int id;
     private int invoiceNumber;
-    private Date invoiceDate;
-    private Date deliveryDate;
+    private String invoiceDate;
+    private String deliveryDate;
     private String customerName;
     private String customerAddress;
     private String customerUID;
@@ -29,11 +29,6 @@ public class Order {
         this.orderDate = null;
         this.isPaid = false;
         this.taskList = new ArrayList<>();
-    }
-
-    public Order(int id, String orderDate) {
-        this.id = id;
-        this.orderDate = orderDate;
     }
 
     public void addTask(Task toAdd) { taskList.add(toAdd); }
@@ -95,19 +90,19 @@ public class Order {
         this.customerUID = customerUID;
     }
 
-    public Date getDeliveryDate() {
+    public String getDeliveryDate() {
         return deliveryDate;
     }
 
-    public void setDeliveryDate(Date deliveryDate) {
+    public void setDeliveryDate(String deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
 
-    public Date getInvoiceDate() {
+    public String getInvoiceDate() {
         return invoiceDate;
     }
 
-    public void setInvoiceDate(Date invoiceDate) {
+    public void setInvoiceDate(String invoiceDate) {
         this.invoiceDate = invoiceDate;
     }
 

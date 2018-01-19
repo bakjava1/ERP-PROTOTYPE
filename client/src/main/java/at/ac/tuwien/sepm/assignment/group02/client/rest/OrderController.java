@@ -29,26 +29,11 @@ public interface OrderController {
     List<OrderDTO> getAllOpen() throws PersistenceLayerException;
 
     /**
-     * update an order, put flag and save additional values
-     * @param orderDTO
-     * @throws PersistenceLayerException
-     */
-    void updateOrder(OrderDTO orderDTO) throws PersistenceLayerException;
-
-    /**
      * all closed orders equal request of invoice
      * @return list of all closed Order
      * @throws PersistenceLayerException if the server is not available
      */
     List<OrderDTO> getAllClosed() throws PersistenceLayerException;
-
-    /**
-     * get an order by id
-     * @param order_id
-     * @return an id of order
-     * @throws PersistenceLayerException
-     */
-    OrderDTO getOrderById(int order_id) throws PersistenceLayerException;
 
     /**
      * get the invoice of order

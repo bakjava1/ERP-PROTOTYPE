@@ -87,11 +87,6 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public void updateOrder(OrderDTO orderDTO) throws PersistenceLayerException {
-
-    }
-
-    @Override
     public List<OrderDTO> getAllClosed() throws PersistenceLayerException {
         LOG.debug("get all closed order");
         List<OrderDTO> billList = new ArrayList<>();
@@ -110,11 +105,6 @@ public class OrderControllerImpl implements OrderController {
         }
 
         return billList;
-    }
-
-    @Override
-    public OrderDTO getOrderById(int order_id) throws PersistenceLayerException  {
-        return null;
     }
 
     @Override
