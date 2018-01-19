@@ -666,7 +666,6 @@ public class LeadWorkerFXML {
 
 
                 }
-
             }
 
             @Override

@@ -122,13 +122,13 @@ public class orderValidatorTest {
 
     @After
     public void afterMethod() {
+
         order = null;
     }
 
     @AfterClass
     public static void tearDown() {
+
         validator = null;
     }
-
-
 }

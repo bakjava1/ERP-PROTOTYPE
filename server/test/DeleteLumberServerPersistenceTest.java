@@ -12,6 +12,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.service.LumberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateLumber;
 import org.junit.*;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
@@ -23,11 +24,12 @@ import java.sql.SQLException;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by raquelsima on 06.01.18.
+ * Created by raquelsima on 16.01.18.
  */
-public class LumberManagementServerSideTest {
+public class DeleteLumberServerPersistenceTest {
 
-    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static Connection dbConnection;
     private static LumberDAO lumberDAO;
@@ -48,7 +50,7 @@ public class LumberManagementServerSideTest {
         dbConnection = DBUtil.getConnection();
         lumberDAO = new LumberDAOJDBC(dbConnection);
 
-        activateLumbers();
+//        activateLumbers();
         lumber1.setId(1);
         lumber1.setId(1);
         lumber2.setId(2);
@@ -91,11 +93,11 @@ public class LumberManagementServerSideTest {
         lumberService = new LumberServiceImpl(lumberDAO, lumberConverter, validateLumber);
         lumberController = new LumberControllerImpl(lumberService);
 
-        LOG.debug("task management test setup initiated");
+        LOG.debug("lumber management test setup initiated");
     }
 
-    @Before
-    public void initDBConnection() throws EntityCreationException {
+    @BeforeClass
+    public  static void initDBConnection() throws EntityCreationException {
         dbConnection = DBUtil.getConnection();
         lumberDAO = new LumberDAOJDBC(dbConnection);
 
@@ -151,26 +153,13 @@ public class LumberManagementServerSideTest {
 
     @AfterClass
     public static void teardown() {
-        LOG.debug("task management test teardown initiated");
+        LOG.debug("lumber management test teardown initiated");
 
         DBUtil.closeConnection();
 
-        LOG.debug("task management test teardown completed");
+        LOG.debug("lumber management test teardown completed");
     }
 
-
-
-    private static void activateLumbers() {
-        String activateTasks = "UPDATE LUMBER SET QUANTITY = 0 WHERE ID = 1 OR ID = 2 OR ID = 3 OR ID = 4 OR ID = 5";
-
-        try {
-            PreparedStatement ps = dbConnection.prepareStatement(activateTasks);
-            ps.execute();
-            ps.close();
-        } catch (SQLException e) {
-            LOG.info("Error at praparing test for deleting lumbers");
-        }
-    }
 
     private int getActiveLumbers() {
         int count = 0;
@@ -195,4 +184,6 @@ public class LumberManagementServerSideTest {
 
         return count;
     }
+
+
 }

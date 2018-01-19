@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<TabPane prefHeight="550.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
+<TabPane prefHeight="566.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.OfficeFXML">
    <tabs>
       <Tab text="Bestellungen">
          <content>
@@ -108,22 +108,22 @@
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="490.0" prefWidth="885.0">
                <children>
-                  <TableView fx:id="table_bill" prefHeight="396.0" prefWidth="513.0">
+                  <TableView fx:id="table_bill" prefHeight="511.0" prefWidth="544.0">
                      <columns>
-                        <TableColumn fx:id="col_billID" prefWidth="37.0" text="Nr" />
-                        <TableColumn fx:id="col_billCostumerName" prefWidth="91.0" text="Kundenname" />
-                        <TableColumn fx:id="col_billTaskAmount" prefWidth="125.0" text="Anzahl Aufträge" />
-                        <TableColumn fx:id="col_billAmount" prefWidth="131.0" text="Anzahl Stück Gesamt" />
-                        <TableColumn fx:id="col_billGrossSum" prefWidth="99.0" text="Summe (Brutto)" />
+                        <TableColumn fx:id="col_billID" prefWidth="43.0" text="Nr" />
+                        <TableColumn fx:id="col_billCostumerName" prefWidth="106.0" text="Kundenname" />
+                        <TableColumn fx:id="col_billTaskAmount" prefWidth="132.0" text="Anzahl Aufträge" />
+                        <TableColumn fx:id="col_billAmount" prefWidth="147.0" text="Anzahl Stück Gesamt" />
+                        <TableColumn fx:id="col_billGrossSum" prefWidth="112.0" text="Summe (Brutto)" />
                      </columns>
                   </TableView>
-                  <Button layoutX="612.0" layoutY="408.0" mnemonicParsing="false" onAction="#rechnungAnzeigenBtnClicked" prefWidth="156.0" text="Rechnung drucken" />
+                  <Button fx:id="bt_rechnungAnzeigen" layoutX="612.0" layoutY="408.0" mnemonicParsing="false" onAction="#rechnungAnzeigenBtnClicked" prefWidth="156.0" text="Rechnung drucken" />
                   <Label layoutX="664.0" layoutY="21.0" text="Rechnung anzeigen">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <SplitPane dividerPositions="0.4" layoutX="522.0" layoutY="1.0" prefHeight="399.0" prefWidth="20.0">
+                  <SplitPane dividerPositions="0.5" layoutX="546.0" layoutY="1.0" prefHeight="516.0" prefWidth="11.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="16.0" />
@@ -131,13 +131,13 @@
                   </SplitPane>
                   <GridPane layoutX="572.0" layoutY="69.0" prefHeight="190.0" prefWidth="305.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.0" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="163.0" minWidth="10.0" prefWidth="163.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.0" minWidth="10.0" prefWidth="112.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="193.0" minWidth="10.0" prefWidth="193.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
@@ -148,7 +148,7 @@
                         <Label prefHeight="9.0" prefWidth="102.0" text="Anzahl Stück" GridPane.rowIndex="3" />
                         <Label prefHeight="20.0" prefWidth="106.0" text="Summe(Brutto)" GridPane.rowIndex="4" />
 
-                         <Label fx:id="dateLabel" prefHeight="18.0" prefWidth="160.0" text="" GridPane.columnIndex="1" />
+                         <Label fx:id="dateLabel" prefHeight="18.0" prefWidth="191.0" text="" GridPane.columnIndex="1" />
                          <Label fx:id="billCostumerNameLabel" prefHeight="18.0" prefWidth="91.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                          <Label fx:id="billTaskAmountLabel" prefHeight="18.0" prefWidth="102.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                          <Label fx:id="billAmountLabel" prefHeight="9.0" prefWidth="139.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="3" />

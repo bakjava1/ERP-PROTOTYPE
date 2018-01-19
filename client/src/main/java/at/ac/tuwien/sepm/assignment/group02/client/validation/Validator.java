@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
-public class Validator {
+public class Validator implements ValidateInput{
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -424,4 +424,8 @@ public class Validator {
     }
 
 
+    @Override
+    public boolean isValid(Object input) throws InvalidInputException {
+        return false;
+    }
 }

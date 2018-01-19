@@ -280,15 +280,6 @@ public class LumberServerServiceImplTest {
         verify(lumberManagementDAO,times(1)).updateLumber(lumber);
     }
 
-    @Test(expected = InvalidInputException.class)
-    public void testUpdateLumber_InvalidInputException() throws Exception {
-        LumberService lumberService
-                = new LumberServiceImpl(lumberManagementDAO,lumberConverter,validateLumber);
-
-        doThrow(InvalidInputException.class).when(validateLumber).isValid(any(Lumber.class));
-
-        lumberService.updateLumber(any(LumberDTO.class));
-    }
 
     @Test(expected = ServiceLayerException.class)
     public void testUpdateLumber_PersistenceLayerException() throws Exception {

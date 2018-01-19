@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedLumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.NoValidIntegerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
@@ -29,7 +28,7 @@ public class LumberServiceImpl implements LumberService {
     private static LumberController lumberController;
     private static LumberConverter lumberConverter;
     private static TaskController taskController;
-    private static Validator validator;
+    private static Validator validator=new Validator();
 
     @Autowired
     public LumberServiceImpl (LumberController lumberController, LumberConverter lumberConverter,TaskController taskController,Validator validator){
@@ -51,8 +50,9 @@ public class LumberServiceImpl implements LumberService {
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
         }
+        Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
 
-        return lumberConverter.convertRestDTOToPlainObject(lumberDTO);
+        return lumber;
     }
 
     @Override
@@ -74,8 +74,10 @@ public class LumberServiceImpl implements LumberService {
 
     @Override
     public boolean lumberExists(Lumber lumber) {
-        return false;
+
+        return getLumber(lumber.getId()) != null;
     }
+
 
     @Override
     public void createLumber(Lumber lumber) {
@@ -85,17 +87,12 @@ public class LumberServiceImpl implements LumberService {
     @Override
     public List<Lumber> getAll(FilterDTO filterDTO)throws ServiceLayerException {
         LOG.debug("getAllSchnittholz called");
+
         List<LumberDTO> allLumber;
 
         try {
-
-            //TODO
             FilterDTO validatedFilter = validator.validateFilter(filterDTO);
-
             allLumber = lumberController.getAllLumber(validatedFilter);
-        //} catch(InvalidInputException e) {
-        //    LOG.error("Failed to validate Input: " + e.getMessage());
-        //    throw new InvalidInputException(e.getMessage());
         } catch (PersistenceLayerException e) {
             LOG.warn("Failed to get all Lumber"+e.getMessage());
             throw new ServiceLayerException(e.getMessage());
@@ -154,27 +151,49 @@ public class LumberServiceImpl implements LumberService {
         }
     }
 
+
     @Override
-    public void deleteLumber(Lumber lumber) throws ServiceLayerException {
+    public boolean deleteLumber(Lumber lumber) throws ServiceLayerException, PersistenceLayerException {
 
         LOG.debug("deleteLumber called: {}", lumber);
 
+       // if (lumberExists(lumber)){
+         //   return true;
+        //}
+       // validateLumber(lumber);
+
+        LumberDTO lumberToDelete = lumberConverter.convertPlainObjectToRestDTO(lumber);
+            try {
+                lumberController.removeLumber(lumberToDelete);
+            } catch (PersistenceLayerException e) {
+                LOG.warn(e.getMessage());
+            }
+            return true;
+    }
+
+
+
+   // @Override
+   /* public void updateLumber(LumberDTO lumberDTO) throws ServiceLayerException {
+
+        LOG.debug("updateLumber called: {}", lumberDTO);
         try {
+            Lumber lumber=new Lumber();
             validateLumber(lumber);
         } catch (NoValidIntegerException e) {
             LOG.warn(e.getMessage());
         }
-        LumberDTO lumberToDelete = lumberConverter.convertPlainObjectToRestDTO(lumber);
+        LumberDTO toUpdate = lumberConverter.convertPlainObjectToRestDTO(lumberDTO);
         try {
-            lumberController.removeLumber(lumberToDelete);
+            lumberController.updateLumber(toUpdate);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
         }
-    }
+    }*/
 
-    @Override
-    public void updateLumber(Lumber lumber) throws ServiceLayerException {
 
+@Override
+public void updateLumber(Lumber lumber) throws ServiceLayerException {
         LOG.debug("updateLumber called: {}", lumber);
         try {
             validateLumber(lumber);
@@ -183,12 +202,11 @@ public class LumberServiceImpl implements LumberService {
         }
         LumberDTO toUpdate = lumberConverter.convertPlainObjectToRestDTO(lumber);
         try {
-            lumberController.updateLumber(toUpdate);
+        lumberController.updateLumber(toUpdate);
         } catch (PersistenceLayerException e) {
-            LOG.warn(e.getMessage());
+        LOG.warn(e.getMessage());
         }
-
-    }
+}
 
     private void validateLumber(Lumber lumber) throws InvalidInputException {
         LOG.debug("Validating lumber: {}",lumber);

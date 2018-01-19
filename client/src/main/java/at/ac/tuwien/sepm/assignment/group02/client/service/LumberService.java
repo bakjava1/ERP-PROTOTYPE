@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
@@ -33,7 +34,7 @@ public interface LumberService {
      * @param lumber
      * @throws ServiceLayerException
      */
-    void deleteLumber(Lumber lumber) throws ServiceLayerException;
+    boolean deleteLumber(Lumber lumber) throws ServiceLayerException, PersistenceLayerException;
 
     /**
      * update a lumber
@@ -60,13 +61,15 @@ public interface LumberService {
      * @throws InvalidInputException
      * @throws ServiceLayerException
      */
-    void addReservedLumberToTask(String id, String quantity) throws InvalidInputException, ServiceLayerException;
+    void addReservedLumberToTask(String id, String quantity) throws ServiceLayerException,InvalidInputException;
 
     /**
      * @param lumber
      * @return
      */
     public boolean lumberExists(Lumber lumber);
+
+
 
     /**
      * @param lumber

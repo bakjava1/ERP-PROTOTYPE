@@ -33,7 +33,6 @@ public class deleteLumberClientSideTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static LumberService lumberService;
     private static LumberController lumberController;
     private static LumberConverter lumberConverter;
     private static TaskController taskController;
@@ -42,7 +41,7 @@ public class deleteLumberClientSideTest {
 
     private static Lumber lumber;
     private static LumberDTO lumberDTO;
-
+    private static LumberService lumberService;
 
     @BeforeClass
     public static void setUp() {
