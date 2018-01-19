@@ -114,9 +114,10 @@ public class LumberServerServiceImplTest {
         Lumber l2 = Mockito.mock(Lumber.class);
         allLumber.add(l1);
         allLumber.add(l2);
-        when(lumberManagementDAO.getAllLumber(any(FilterDTO.class))).thenReturn(allLumber);
+        FilterDTO filterDTO = new FilterDTO();
 
-        List<LumberDTO> allLumberConverted = lumberService.getAllLumber(any(FilterDTO.class));
+        when(lumberManagementDAO.getAllLumber(filterDTO)).thenReturn(allLumber);
+        List<LumberDTO> allLumberConverted = lumberService.getAllLumber(filterDTO);
 
         verify(lumberManagementDAO, times(1)).getAllLumber(any(FilterDTO.class));
         verify(lumberConverter, times(2)).convertPlainObjectToRestDTO(any(Lumber.class));
@@ -132,7 +133,8 @@ public class LumberServerServiceImplTest {
         List<Lumber> allLumber = new LinkedList<>();
         when(lumberManagementDAO.getAllLumber(any(FilterDTO.class))).thenReturn(allLumber);
 
-        List<LumberDTO> allLumberConverted = lumberService.getAllLumber(any(FilterDTO.class));
+        FilterDTO filterDTO = new FilterDTO();
+        List<LumberDTO> allLumberConverted = lumberService.getAllLumber(filterDTO);
 
         verify(lumberManagementDAO, times(1)).getAllLumber(any(FilterDTO.class));
         verify(lumberConverter, times(0)).convertPlainObjectToRestDTO(any(Lumber.class));
@@ -144,10 +146,9 @@ public class LumberServerServiceImplTest {
     public void testGetAllLumber_PersistenceLayerException() throws Exception {
         LumberService lumberService
                 = new LumberServiceImpl(lumberManagementDAO,lumberConverter,validateLumber);
-
-        doThrow(PersistenceLayerException.class).when(lumberManagementDAO).getAllLumber(any(FilterDTO.class));
-
-        lumberService.getAllLumber(any(FilterDTO.class));
+        FilterDTO filterDTO = new FilterDTO();
+        doThrow(PersistenceLayerException.class).when(lumberManagementDAO).getAllLumber(filterDTO);
+        lumberService.getAllLumber(filterDTO);
     }
 
     @Test
@@ -219,7 +220,7 @@ public class LumberServerServiceImplTest {
         try {
             lumberService.reserveLumber(any(LumberDTO.class));
         } catch (ServiceLayerException e){
-
+            //
         }
 
         //if(lumber.getQuantity() <= existingQuantity)

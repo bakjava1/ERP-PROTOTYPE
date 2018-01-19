@@ -6,7 +6,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputExcept
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import org.junit.*;
 
-public class createTaskValidatorTest {
+public class taskValidatorTest {
 
     private static Validator validator;
     private static UnvalidatedTask task;
