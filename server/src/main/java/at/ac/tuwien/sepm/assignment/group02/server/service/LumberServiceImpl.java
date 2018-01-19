@@ -63,6 +63,7 @@ public class LumberServiceImpl implements LumberService {
     public List<LumberDTO> getAllLumber(FilterDTO filterDTO) throws ServiceLayerException {
         List<Lumber> allLumber;
         List<LumberDTO> allLumberConverted = null;
+
         //TODO validate Filter
         LOG.debug(filterDTO.toString());
 
@@ -96,26 +97,30 @@ public class LumberServiceImpl implements LumberService {
         try {
             existing_lumber = lumberManagementDAO.readLumberById(lumber.getId());
             LOG.debug("lumber reservation - existing lumber: {}", existing_lumber.toString());
-
-            int toReserve = lumber.getQuantity();
-            int existingQuantity = existing_lumber.getQuantity();
-            int existingReservedQuantity = existing_lumber.getReserved_quantity();
-
-            if(lumber.getQuantity() <= existingQuantity) {
-
-                existing_lumber.setReserved_quantity( existingReservedQuantity + toReserve );
-                existing_lumber.setQuantity( existingQuantity - toReserve );
-                LOG.debug("lumber reservation - updated lumber: {}", existing_lumber.toString());
-                lumberManagementDAO.updateLumber(existing_lumber);
-
-            } else {
-                throw new InvalidInputException("Reservierte Menge an Schnittholz übersteigt vorhandene Menge.");
-            }
-
         } catch (PersistenceLayerException e) {
-            LOG.warn("Updating Lumber Persistence Exception: {}", e.getMessage());
-            throw new InternalServerException(e.getMessage());
+            LOG.warn("Persistence Exception: {}", e.getMessage());
+            throw new ResourceNotFoundException("Zu reservierendes Schnittholz konnte nicht gefunden werden.");
         }
+
+        int toReserve = lumber.getQuantity();
+        int existingQuantity = existing_lumber.getQuantity();
+        int existingReservedQuantity = existing_lumber.getReserved_quantity();
+
+        if(lumber.getQuantity() <= existingQuantity) {
+            existing_lumber.setReserved_quantity( existingReservedQuantity + toReserve );
+            existing_lumber.setQuantity( existingQuantity - toReserve );
+            LOG.debug("lumber reservation - updated lumber: {}", existing_lumber.toString());
+            try {
+                lumberManagementDAO.updateLumber(existing_lumber);
+            } catch (PersistenceLayerException e) {
+                LOG.warn("Persistence Exception: {}", e.getMessage());
+                throw new InternalServerException("Zu reservierendes Schnittholz konnte nicht reserviert werden.");
+            }
+        } else {
+            LOG.warn("Not enough lumber to reserve it.");
+            throw new InvalidInputException("Zu reservierende Menge übersteigt vorhandene Menge an Schnittholz.");
+        }
+
     }
 
     @Override
@@ -127,8 +132,8 @@ public class LumberServiceImpl implements LumberService {
         try {
             lumberManagementDAO.updateLumber(lumber);
         } catch (PersistenceLayerException e) {
-            LOG.warn("Updating Lumber Persistence Exception: {}", e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
+            LOG.warn("Persistence Exception: {}", e.getMessage());
+            throw new InternalServerException("Schnittholz konnte nicht aktualisiert werden.");
         }
     }
 
@@ -143,7 +148,7 @@ public class LumberServiceImpl implements LumberService {
             lumberManagementDAO.deleteLumber(lumber);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while deleting an order");
-            throw new ServiceLayerException(e.getMessage());
+            throw new ServiceLayerException("Schnittholz konnte nicht entfernt werden");
         }
     }
 

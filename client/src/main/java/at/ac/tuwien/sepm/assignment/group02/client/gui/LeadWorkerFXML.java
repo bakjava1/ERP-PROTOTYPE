@@ -2,6 +2,8 @@ package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.OptimisationAlgorithmException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.AssignmentService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
@@ -20,7 +22,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Region;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
@@ -30,6 +33,7 @@ import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.net.URL;
 import java.util.List;
 
 
@@ -37,6 +41,9 @@ import java.util.List;
 public class LeadWorkerFXML {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    @Autowired
+    private AlertBuilder alertBuilder;
 
     @FXML
     private TextField tf_description;
@@ -51,97 +58,95 @@ public class LeadWorkerFXML {
     private TextField tf_width;
 
     @FXML
-    private ChoiceBox cb_finishing;
+    private ChoiceBox<String> cb_finishing;
 
     @FXML
-    private ChoiceBox cb_quality;
+    private ChoiceBox<String> cb_quality;
 
     @FXML
-    private ChoiceBox cb_wood_type;
+    private ChoiceBox<String> cb_wood_type;
 
     @FXML
     private TextField tf_quantity;
 
     @FXML
-    private TableColumn col_reserved_quantity;
+    private TableColumn<Lumber, Integer> col_reserved_quantity;
 
     @FXML
-    private TableColumn col_quantity;
+    private TableColumn<Lumber, Integer> col_quantity;
 
     @FXML
-    private TableColumn col_length;
+    private TableColumn<Lumber, Integer> col_length;
 
     @FXML
-    private TableColumn col_width;
+    private TableColumn<Lumber, Integer> col_width;
 
     @FXML
-    private TableColumn col_size;
+    private TableColumn<Lumber, Integer> col_size;
 
     @FXML
-    private TableColumn col_quality;
+    private TableColumn<Lumber, String> col_quality;
 
     @FXML
-    private TableColumn col_wood_type;
+    private TableColumn<Lumber, String> col_wood_type;
 
     @FXML
-    private TableColumn col_finishing;
+    private TableColumn<Lumber, String> col_finishing;
 
     @FXML
-    private TableColumn col_description;
+    private TableColumn<Lumber, String> col_description;
 
     @FXML
-    TableView<Lumber> table_lumber;
+    private TableView<Lumber> table_lumber;
 
     @FXML
     private Button btn_opt_alg;
+    @FXML
+    private Button btn_reserve;
+    @FXML
+    private Button btn_resetSearch;
 
     @FXML
-    private TableColumn task_col_order_id;
+    private TableColumn<TaskDTO, Integer> task_col_order_id;
 
     @FXML
-    private TableColumn task_col_produced_quantity;
+    private TableColumn<TaskDTO, Integer> task_col_produced_quantity;
 
     @FXML
-    private TableColumn task_col_quantity;
+    private TableColumn<TaskDTO, Integer> task_col_quantity;
 
     @FXML
-    private TableColumn task_col_length;
+    private TableColumn<TaskDTO, Integer> task_col_length;
 
     @FXML
-    private TableColumn task_col_width;
+    private TableColumn<TaskDTO, Integer> task_col_width;
 
     @FXML
-    private TableColumn task_col_size;
+    private TableColumn<TaskDTO, Integer> task_col_size;
 
     @FXML
-    private TableColumn task_col_quality;
+    private TableColumn<TaskDTO, String> task_col_quality;
 
     @FXML
-    private TableColumn task_col_wood_type;
+    private TableColumn<TaskDTO, String> task_col_wood_type;
 
     @FXML
-    private TableColumn task_col_finishing;
+    private TableColumn<TaskDTO, String> task_col_finishing;
 
     @FXML
-    private TableColumn task_col_description;
+    private TableColumn<TaskDTO, String> task_col_description;
 
     @FXML
-    private TableColumn task_col_done;
+    private TableColumn<TaskDTO, Boolean> task_col_done;
 
     @FXML
-    private TableColumn task_col_in_progress;
+    private TableColumn<TaskDTO, Boolean> task_col_in_progress;
 
     @FXML
     TableView<TaskDTO> table_task;
 
     @FXML
     private TabPane tabPane;
-
-    @FXML
-    private Tab tab_task;
-
-    @FXML
-    private Tab tab_lumber;
 
     private LumberService lumberService;
     private OptimisationFXML optimisationFXML;
@@ -165,15 +170,15 @@ public class LeadWorkerFXML {
     @FXML
     void initialize() {
 
-        col_description.setCellValueFactory(new PropertyValueFactory("description"));
-        col_finishing.setCellValueFactory(new PropertyValueFactory("finishing"));
-        col_wood_type.setCellValueFactory(new PropertyValueFactory("wood_type"));
-        col_quality.setCellValueFactory(new PropertyValueFactory("quality"));
-        col_size.setCellValueFactory(new PropertyValueFactory("size"));
-        col_width.setCellValueFactory(new PropertyValueFactory("width"));
-        col_length.setCellValueFactory(new PropertyValueFactory("length"));
-        col_quantity.setCellValueFactory(new PropertyValueFactory("quantity"));
-        col_reserved_quantity.setCellValueFactory(new PropertyValueFactory("reserved_quantity"));
+        col_description.setCellValueFactory(new PropertyValueFactory<>("description"));
+        col_finishing.setCellValueFactory(new PropertyValueFactory<>("finishing"));
+        col_wood_type.setCellValueFactory(new PropertyValueFactory<>("wood_type"));
+        col_quality.setCellValueFactory(new PropertyValueFactory<>("quality"));
+        col_size.setCellValueFactory(new PropertyValueFactory<>("size"));
+        col_width.setCellValueFactory(new PropertyValueFactory<>("width"));
+        col_length.setCellValueFactory(new PropertyValueFactory<>("length"));
+        col_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        col_reserved_quantity.setCellValueFactory(new PropertyValueFactory<>("reserved_quantity"));
 
         cb_finishing.setItems(FXCollections.observableArrayList("keine Angabe", "roh", "gehobelt", "besäumt", "prismiert", "trocken","lutro","frisch", "imprägniert"));
         cb_wood_type.setItems(FXCollections.observableArrayList("keine Angabe", "Fi", "Ta", "Lä", "Ki", "Zi"));
@@ -183,6 +188,21 @@ public class LeadWorkerFXML {
         cb_wood_type.getSelectionModel().selectFirst();
         cb_quality.getSelectionModel().selectFirst();
 
+        //hide button "Reservieren" (only show it after task is selected)
+        btn_reserve.setVisible(false);
+
+        //add image to reset search parameters button
+        URL imgpath = LeadWorkerFXML.class
+                .getClassLoader()
+                .getResource("reset_search.png");
+        if(imgpath!=null) {
+            ImageView imageView = new ImageView(new Image(imgpath.toString()));
+            imageView.setFitWidth(30.00);
+            imageView.setPreserveRatio(true);
+            btn_resetSearch.setGraphic(imageView);
+        } else {
+            btn_resetSearch.setText("Reset");
+        }
         //initial lumber overview
         onSearchButtonClicked();
 
@@ -193,18 +213,18 @@ public class LeadWorkerFXML {
 
     private void initializeTaskTable(){
 
-        task_col_order_id.setCellValueFactory(new PropertyValueFactory("order_id"));
-        task_col_description.setCellValueFactory(new PropertyValueFactory("description"));
-        task_col_finishing.setCellValueFactory(new PropertyValueFactory("finishing"));
-        task_col_wood_type.setCellValueFactory(new PropertyValueFactory("wood_type"));
-        task_col_quality.setCellValueFactory(new PropertyValueFactory("quality"));
-        task_col_size.setCellValueFactory(new PropertyValueFactory("size"));
-        task_col_width.setCellValueFactory(new PropertyValueFactory("width"));
-        task_col_length.setCellValueFactory(new PropertyValueFactory("length"));
-        task_col_quantity.setCellValueFactory(new PropertyValueFactory("quantity"));
-        task_col_produced_quantity.setCellValueFactory(new PropertyValueFactory("produced_quantity"));
-        task_col_done.setCellValueFactory(new PropertyValueFactory("done"));
-        task_col_in_progress.setCellValueFactory(new PropertyValueFactory("in_progress"));
+        task_col_order_id.setCellValueFactory(new PropertyValueFactory<>("order_id"));
+        task_col_description.setCellValueFactory(new PropertyValueFactory<>("description"));
+        task_col_finishing.setCellValueFactory(new PropertyValueFactory<>("finishing"));
+        task_col_wood_type.setCellValueFactory(new PropertyValueFactory<>("wood_type"));
+        task_col_quality.setCellValueFactory(new PropertyValueFactory<>("quality"));
+        task_col_size.setCellValueFactory(new PropertyValueFactory<>("size"));
+        task_col_width.setCellValueFactory(new PropertyValueFactory<>("width"));
+        task_col_length.setCellValueFactory(new PropertyValueFactory<>("length"));
+        task_col_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        task_col_produced_quantity.setCellValueFactory(new PropertyValueFactory<>("produced_quantity"));
+        task_col_done.setCellValueFactory(new PropertyValueFactory<>("done"));
+        task_col_in_progress.setCellValueFactory(new PropertyValueFactory<>("in_progress"));
 
         Task<Integer> task = new Task<>() {
             @Override
@@ -235,9 +255,8 @@ public class LeadWorkerFXML {
             allOpenTasks = taskService.getAllOpenTasks();
         } catch (ServiceLayerException e){
             LOG.warn(e.getMessage());
-            AlertBuilder alertBuilder = new AlertBuilder();
-            alertBuilder.showInformationAlert("Übersicht Aufträge",
-                    "Übersicht Aufträge", "Fehler bei Erstellung der Auftragsübersicht. "+ e.getMessage());
+            alertBuilder.showErrorAlert("Übersicht Aufträge",
+                    null, "Fehler bei Erstellung der Auftragsübersicht. "+ e.getMessage());
         }
 
         if(allOpenTasks != null){
@@ -254,12 +273,9 @@ public class LeadWorkerFXML {
 
         // set row factory in order to create the context menu and set row color
         table_task.setRowFactory(
-                new Callback<TableView<TaskDTO>, TableRow<TaskDTO>>() {
+                new Callback<>() {
                     @Override
                     public TableRow<TaskDTO> call(TableView<TaskDTO> tableView) {
-
-                        //final ContextMenu rowMenu = new ContextMenu();
-
                         final TableRow<TaskDTO> row = new TableRow<>() {
                             @Override
                             protected void updateItem(TaskDTO taskDTO, boolean empty){
@@ -279,25 +295,7 @@ public class LeadWorkerFXML {
 
                             }
                         };
-
-                        /*
-                        MenuItem reserveLumber = new MenuItem("Schnittholz hinzufügen");
-                        reserveLumber.setOnAction((ActionEvent event) -> {
-                            LOG.debug("selected product: {}",row.getItem().toString());
-                            selectedTask = table_task.getSelectionModel().getSelectedItem();
-
-                            tabPane.getSelectionModel().select(tab_lumber);
-
-                            table_task.getSelectionModel().clearSelection();
-                        });
-
-                        rowMenu.getItems().addAll(reserveLumber);
-
-                        // only display context menu for non-null items:
-                        row.contextMenuProperty().bind(Bindings.when(Bindings.isNotNull(row.itemProperty()))
-                                .then(rowMenu)
-                                .otherwise((ContextMenu)null));
-                        */
+                        LOG.trace(row.getId());
                         return row;
                     }
                 });
@@ -311,9 +309,8 @@ public class LeadWorkerFXML {
         TaskDTO taskDTO = table_task.getSelectionModel().getSelectedItem();
 
         if(taskDTO == null || taskDTO.isDone()) {
-            AlertBuilder alertBuilder = new AlertBuilder();
             alertBuilder.showInformationAlert("Schnittholz-Produktion",
-                    "Schnittholz-Produktion", "Bitte wählen Sie einen nicht abgeschlossenen Auftrag zur Produktion aus!");
+                    null, "Bitte wählen Sie einen nicht abgeschlossenen Auftrag zur Produktion aus!");
             return;
         }
 
@@ -328,39 +325,50 @@ public class LeadWorkerFXML {
         assignmentDTO.setBox_id(box_id);
         assignmentDTO.setAmount(amount);
 
-        new Thread(new Task<>() {
-            @Override
-            protected Object call() throws Exception {
-                LOG.debug("create-assignment thread called");
+        boolean confirmed = alertBuilder.showConfirmationAlert("Schnittholz-Produktion",
+                null, "Möchten Sie die Produktion von "+assignmentDTO.getAmount()+" Schnitthölzer in Auftrag geben?");
+        if(confirmed) {
+            new Thread(new Task<>() {
+                @Override
+                protected Object call() throws Exception {
+                    LOG.debug("create-assignment thread called");
+                    assignmentService.createAssignment(assignmentDTO);
+                    return null;
+                }
 
-                assignmentService.createAssignment(assignmentDTO);
+                @Override
+                protected void succeeded() {
+                    super.succeeded();
+                    LOG.debug("create-assignment succeeded with value: ", getValue());
+                    alertBuilder.showInformationAlert("Schnittholz-Produktion",
+                            null, "Schnittholz Produktion wurde erfolgreich in Auftrag gegeben.");
+                    updateTaskTable();
+                    table_task.getSelectionModel().clearSelection();
+                }
 
-                return 1;
-            }
+                @Override
+                protected void failed() {
+                    super.failed();
+                    LOG.debug("create-assignment failed with exception:", getException().getMessage());
 
-            @Override
-            protected void succeeded() {
-                super.succeeded();
-                LOG.debug("create-assignment succeeded with value: ", getValue());
-                AlertBuilder alertBuilder = new AlertBuilder();
-                alertBuilder.showInformationAlert("Schnittholz-Produktion",
-                        "Schnittholz-Produktion", "Schnittholz Produktion wurde erfolgreich in Auftrag gegeben.");
-                updateTaskTable();
-                table_task.getSelectionModel().clearSelection();
-            }
+                    alertBuilder.showErrorAlert("Schnittholz-Produktion",
+                            null, "Schnittholz Produktion wurde nicht in Auftrag gegeben. " + getException().getMessage());
 
-            @Override
-            protected void failed() {
-                super.failed();
-                LOG.debug("create-assignment failed with exception:", getException().getMessage());
+                    table_task.getSelectionModel().clearSelection();
+                }
+            }, "create-assignment").start();
+        }
+    }
 
-                AlertBuilder alertBuilder = new AlertBuilder();
-                alertBuilder.showErrorAlert("Schnittholz-Produktion",
-                        "Schnittholz-Produktion","Schnittholz Produktion wurde nicht in Auftrag gegeben. "+ getException().getMessage());
-
-                table_task.getSelectionModel().clearSelection();
-            }
-        }, "create-assignment").start();
+    @FXML
+    public void resetSearchClicked(){
+        tf_description.setText("");
+        cb_finishing.getSelectionModel().select(0);
+        cb_wood_type.getSelectionModel().select(0);
+        cb_quality.getSelectionModel().select(0);
+        tf_strength.setText("");
+        tf_width.setText("");
+        tf_length.setText("");
     }
 
     @FXML
@@ -369,19 +377,31 @@ public class LeadWorkerFXML {
         selectedTask = table_task.getSelectionModel().getSelectedItem();
 
         if(selectedTask == null || selectedTask.isDone()) {
-            AlertBuilder alertBuilder = new AlertBuilder();
             alertBuilder.showInformationAlert("Schnittholz-Reservierung",
-                    "Schnittholz-Reservierung", "Bitte wählen Sie einen nicht abgeschlossenen Auftrag zur Reservierung aus!");
+                    null, "Bitte wählen Sie einen nicht abgeschlossenen Auftrag zur Reservierung aus!");
             tabPane.getSelectionModel().clearAndSelect(0);
             return;
         }
 
         // set the textfield quantity of lumber to reserve to the needed amount of lumber
         tf_quantity.setText(""+(selectedTask.getQuantity()-selectedTask.getProduced_quantity()));
+        // make the reserve button visible
+        btn_reserve.setVisible(true);
+
+        // reset all search fields
+        resetSearchClicked();
+
+        // fill search fields with the values of the selected task
+        tf_description.setText(selectedTask.getDescription());
+        cb_finishing.getSelectionModel().select(selectedTask.getFinishing());
+        cb_wood_type.getSelectionModel().select(selectedTask.getWood_type());
+        cb_quality.getSelectionModel().select(selectedTask.getQuality());
+        tf_strength.setText(selectedTask.getSize()+"");
+        tf_width.setText(selectedTask.getWidth()+"");
+        tf_length.setText(selectedTask.getLength()+"");
 
         // set the search properties to the task properties
         FilterDTO filterDTO = new FilterDTO();
-
         filterDTO.setDescription(selectedTask.getDescription());
         filterDTO.setFinishing(selectedTask.getFinishing());
         filterDTO.setWood_type(selectedTask.getWood_type());
@@ -390,8 +410,10 @@ public class LeadWorkerFXML {
         filterDTO.setWidth(selectedTask.getWidth()+"");
         filterDTO.setLength(selectedTask.getLength()+"");
 
+        // execute lumber search with task-filter
         executeSearch(filterDTO);
 
+        // change tab to lumber overview
         tabPane.getSelectionModel().clearAndSelect(1);
     }
 
@@ -401,9 +423,9 @@ public class LeadWorkerFXML {
         FilterDTO filterDTO = new FilterDTO();
 
         filterDTO.setDescription(tf_description.getText().trim());
-        filterDTO.setFinishing(cb_finishing.getSelectionModel().getSelectedItem().toString().trim());
-        filterDTO.setWood_type(cb_wood_type.getSelectionModel().getSelectedItem().toString().trim());
-        filterDTO.setQuality(cb_quality.getSelectionModel().getSelectedItem().toString().trim());
+        filterDTO.setFinishing(cb_finishing.getSelectionModel().getSelectedItem().trim());
+        filterDTO.setWood_type(cb_wood_type.getSelectionModel().getSelectedItem().trim());
+        filterDTO.setQuality(cb_quality.getSelectionModel().getSelectedItem().trim());
         filterDTO.setSize(tf_strength.getText().trim());
         filterDTO.setWidth(tf_width.getText().trim());
         filterDTO.setLength(tf_length.getText().trim());
@@ -413,32 +435,45 @@ public class LeadWorkerFXML {
     }
 
     private void executeSearch(FilterDTO filterDTO){
-        List<Lumber> allLumber = null;
-        try {
-            allLumber = lumberService.getAll(filterDTO);
-        } catch (InvalidInputException e) {
-            LOG.warn(e.getMessage());
-            Alert error = new Alert(Alert.AlertType.ERROR);
-            error.setTitle("Eingabe nicht korrekt");
-            error.setHeaderText(null);
-            error.setContentText(e.getMessage());
-            error.showAndWait();
-        } catch (ServiceLayerException e) {
-            LOG.warn(e.getMessage());
-            AlertBuilder alertBuilder = new AlertBuilder();
-            alertBuilder.showInformationAlert("Schnittholz-Suche","Schnittholz-Suche", e.getMessage());
-        }
 
-        if (allLumber != null) {
-            ObservableList<Lumber> lumberForTable = FXCollections.observableArrayList();
-            lumberForTable.addAll(allLumber);
-            table_lumber.setItems(lumberForTable);
-            table_lumber.refresh();
+        Task task = new Task<>() {
+            @Override
+            protected List<Lumber> call() throws Exception {
+                LOG.debug("search-lumber thread called");
+                return lumberService.getAll(filterDTO);
+            }
 
-        } else {
-            table_lumber.refresh();
-        }
+            @Override
+            protected void failed() {
+                super.failed();
+                Throwable e = getException();
+                LOG.warn("search-lumber failed with exception:", getException().getMessage());
+                if (e instanceof InvalidInputException){
+                    alertBuilder.showErrorAlert("Schnittholz-Suche", null, "Bitte korrigieren Sie Ihre Eingabe! " + e.getMessage());
+                } else {
+                    alertBuilder.showErrorAlert("Schnittholz-Suche", null, "Bei der Schnittholz Suche ist ein Problem aufgetreten: " + e.getMessage());
+                }
+            }
+        };
 
+        task.setOnSucceeded((e) ->  {
+            Object obj = task.getValue();
+            if(obj instanceof List<?>) {
+                List<Lumber> allLumber = (List<Lumber>) obj;
+                //if (allLumber != null) {
+                    ObservableList<Lumber> lumberForTable = FXCollections.observableArrayList();
+                    lumberForTable.addAll(allLumber);
+                    table_lumber.setItems(lumberForTable);
+                    table_lumber.refresh();
+                //}
+            } else {
+                // no list was returned
+                table_lumber.refresh();
+            }
+        });
+
+        Thread t = new Thread(task,"search-lumber");
+        t.start();
     }
 
 
@@ -447,26 +482,23 @@ public class LeadWorkerFXML {
         LOG.info("onReserveButtonClicked clicked");
 
         if(selectedTask == null || selectedTask.isDone()) {
-            AlertBuilder alertBuilder = new AlertBuilder();
             alertBuilder.showInformationAlert("Schnittholz-Reservierung",
-                    "Schnittholz-Reservierung", "Bitte wählen Sie einen nicht abgeschlossenen Auftrag zur Reservierung aus!");
+                    null, "Bitte wählen Sie einen nicht abgeschlossenen Auftrag zur Reservierung aus!");
             tabPane.getSelectionModel().clearAndSelect(0);
             return;
         }
 
         if(selectedTask.isIn_progress()) {
-            AlertBuilder alertBuilder = new AlertBuilder();
             alertBuilder.showInformationAlert("Schnittholz-Reservierung",
-                    "Schnittholz-Reservierung", "Der ausgewählte Auftrag ist bereits in Produktion!");
+                    null, "Der ausgewählte Auftrag ist bereits in Produktion!");
             tabPane.getSelectionModel().clearAndSelect(0);
             return;
         }
 
         // get the selected lumberDTO from the table
         if(table_lumber.getSelectionModel().getSelectedItem() == null) {
-            AlertBuilder alertBuilder = new AlertBuilder();
             alertBuilder.showInformationAlert("Schnittholz-Reservierung",
-                    "Schnittholz-Reservierung", "Bitte wählen Sie ein Schnittholz zur Reservierung aus!");
+                    null, "Bitte wählen Sie ein Schnittholz zur Reservierung aus!");
             return;
         }
 
@@ -477,42 +509,39 @@ public class LeadWorkerFXML {
 
         // get the entered quantity from the text field
         if( tf_quantity.getText().isEmpty() || tf_quantity.getText().length() < 1 ) {
-            AlertBuilder alertBuilder = new AlertBuilder();
             alertBuilder.showInformationAlert("Schnittholz-Reservierung",
-                    "Schnittholz-Reservierung", "Bitte definieren Sie die Menge an Schnittholz, die reserviert werden soll!");
+                    null, "Bitte definieren Sie die Menge an Schnittholz, die reserviert werden soll!");
             return;
         } else {
             if (tf_quantity.getText().trim().matches("^\\d+$")){
                 quantity = Integer.parseInt(tf_quantity.getText().trim());
             } else {
-                AlertBuilder alertBuilder = new AlertBuilder();
                 alertBuilder.showInformationAlert("Schnittholz-Reservierung",
-                        "Schnittholz-Reservierung", "Bitte definieren Sie eine positive ganze Zahl als Reservierungsmenge!");
-
+                        null, "Bitte definieren Sie eine positive ganze Zahl als Reservierungsmenge!");
                 return;
             }
         }
 
         final int qu = quantity;
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                "Möchten Sie Schnittholz (Id:"+lumber.getId()+", "+lumber.getDescription()+", Menge: "+qu+") dem Auftrag (Id: "+selectedTask.getId()+", "+selectedTask.getDescription()+") hinzufügen?",
-                ButtonType.YES, ButtonType.NO);
-        alert.setTitle("Schnittholz-Reservierung");
-        alert.setHeaderText("Schnittholz-Reservierung");
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        alert.showAndWait();
-
-        if (alert.getResult() == ButtonType.YES) {
-
-            new Thread(new Task<>() {
+        boolean confirmed = alertBuilder.showConfirmationAlert("Schnittholz-Reservierung",
+                null,"Möchten Sie nachfolgende Menge an Schnittholz für den Auftrag reservieren?"+
+                        "\n "+
+                        "\nSchnittholz: "+lumber.getDescription()+", "+lumber.getFinishing()+", "+
+                        lumber.getWood_type()+", "+lumber.getQuality()+", "+
+                        lumber.getSize()+", "+lumber.getWidth()+", "+lumber.getLength()+
+                        "\nMenge: "+qu+
+                        "\n "+
+                        "\nAuftrag: "+selectedTask.getDescription()+", "+selectedTask.getFinishing()+", "+
+                        selectedTask.getWood_type()+", "+selectedTask.getQuality()+", "+
+                        selectedTask.getSize()+", "+selectedTask.getWidth()+", "+selectedTask.getLength());
+        if(confirmed) {
+            Task task = new Task<>() {
                 @Override
                 protected Object call() throws Exception {
                     LOG.debug("reserve-lumber thread called");
-
                     lumberService.reserveLumber(lumber, qu, selectedTask);
-
-                    return 1;
+                    return null;
                 }
 
                 @Override
@@ -522,21 +551,9 @@ public class LeadWorkerFXML {
                     table_lumber.getSelectionModel().clearSelection();
                     tf_quantity.setText("");
 
-                    //refresh tables
-                    onSearchButtonClicked();
-                    updateTaskTable();
+                    alertBuilder.showInformationAlert("Schnittholz-Reservierung",
+                            null, "Schnittholz wurde dem Auftrag erfolgreich hinzugefügt.");
 
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                            "Schnittholz wurde dem Auftrag erfolgreich hinzugefügt.");
-                    alert.setTitle("Schnittholz-Reservierung");
-                    alert.setHeaderText("Schnittholz-Reservierung");
-                    alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-                    alert.show();
-
-                    //change tab
-                    tabPane.getSelectionModel().clearAndSelect(0);
-
-                    selectedTask = null;
                 }
 
                 @Override
@@ -546,37 +563,32 @@ public class LeadWorkerFXML {
                     table_lumber.getSelectionModel().clearSelection();
                     tf_quantity.setText("");
 
-                    Alert alert = new Alert(Alert.AlertType.WARNING,
-                            "Schnittholz-Reservierung wurde nicht durchgeführt. "+ getException().getMessage());
-                    alert.setTitle("Schnittholz-Reservierung");
-                    alert.setHeaderText("Schnittholz-Reservierung");
-                    alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-                    alert.show();
-
-                    //refresh tables
-                    onSearchButtonClicked();
-                    updateTaskTable();
-                    //change tab
-                    tabPane.getSelectionModel().clearAndSelect(0);
+                    alertBuilder.showErrorAlert("Schnittholz-Reservierung",
+                            null, "Schnittholz-Reservierung wurde nicht durchgeführt. "+ getException().getMessage());
 
                 }
-            }, "reserve-lumber").start();
+            };
+
+            new Thread(task,"reserve-lumber").start();
 
         } else {
 
-            AlertBuilder alertBuilder = new AlertBuilder();
             alertBuilder.showInformationAlert("Schnittholz-Reservierung",
-                    "Schnittholz-Reservierung", "Reservierungsvorgang wurde abgebrochen.");
-
-
-            //refresh tables
-            onSearchButtonClicked();
-            updateTaskTable();
-            //change tab
-            tabPane.getSelectionModel().clearAndSelect(0);
-
-            selectedTask = null;
+                    null, "Reservierungsvorgang wurde abgebrochen.");
         }
+
+        //refresh tables
+        onSearchButtonClicked();
+        updateTaskTable();
+
+        // hide the reserve button
+        btn_reserve.setVisible(false);
+
+        //change tab
+        tabPane.getSelectionModel().clearAndSelect(0);
+
+        // reset the selected task
+        selectedTask = null;
     }
 
     @FXML
@@ -588,9 +600,9 @@ public class LeadWorkerFXML {
         final OptAlgorithmResultDTO[] bestResult = {null};
 
 
-        new Thread(new Task<Object>() {
+        new Thread(new Task<>() {
             @Override
-            protected Object call() throws Exception {
+            protected Object call() {
 
 
                 //TODO not able to debug autowiring not working
@@ -616,8 +628,20 @@ public class LeadWorkerFXML {
 
                 }*/
 
-
-                bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(table_task.getSelectionModel().getSelectedItem());
+                TaskDTO task = table_task.getSelectionModel().getSelectedItem();
+                if(!task.isDone()) {
+                    try {
+                        bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(task);
+                    } catch (PersistenceLayerException e) {
+                        LOG.error("Fehler bei der Optimierung in der Persistenzschicht" + e.getMessage());
+                        alertBuilder.showErrorAlert("Fehler", "Fehler in der Persistenzschicht", e.getMessage());
+                    } catch (OptimisationAlgorithmException e) {
+                        LOG.error("Fehler beim Optimierungsalgorithmus:" + e.getMessage());
+                        alertBuilder.showErrorAlert("Fehler", "Fehler bei der Optimierung", e.getMessage());
+                    }
+                } else {
+                    failed();
+                }
 
 
                 return null;
@@ -625,9 +649,6 @@ public class LeadWorkerFXML {
 
             @Override
             protected void succeeded(){
-
-
-
                 if (bestResult[0] != null) {
 
                     optimisationFXML.setData(bestResult[0]);
@@ -645,23 +666,16 @@ public class LeadWorkerFXML {
                         stage.setScene(scene);
                         stage.centerOnScreen();
                         stage.show();
-
-
-                } catch (IOException e) {
-                    LOG.error(e.getMessage());
-
-
+                    } catch (IOException e) {
+                        LOG.error(e.getMessage());
                     }
-
-
-
                 }
-
             }
 
             @Override
             protected void failed(){
-
+                alertBuilder.showInformationAlert("Information", "Auftrag ist bereits fertig!", "Bitte wählen Sie einen anderen Auftrag aus.");
+                btn_opt_alg.setDisable(false);
             }
         }, "optimisation-algorithm").start();
 

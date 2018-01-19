@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.server.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.OptimisationAlgorithmException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
@@ -38,7 +39,7 @@ public class OptAlgorithmControllerImpl {
 
     @RequestMapping(value="/getOptAlgorithmResult",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get optimisation algorithm result")
-    public OptAlgorithmResultDTO getOptAlgorithmResult(@RequestBody TaskDTO taskDTO) throws ResourceNotFoundException {
+    public OptAlgorithmResultDTO getOptAlgorithmResult(@RequestBody TaskDTO taskDTO) throws ResourceNotFoundException, OptimisationAlgorithmException {
         optAlgorithmService = new OptAlgorithmServiceImpl();
         LOG.debug("getOptAlgorithmResult: {}", taskDTO.toString());
 
@@ -51,6 +52,8 @@ public class OptAlgorithmControllerImpl {
             throw new ResourceNotFoundException("failed to get optimisation algorithm result."+ e.getMessage());
         } catch (PersistenceLayerException e) {
             throw new ResourceNotFoundException("failed to get optimisation algorithm result."+ e.getMessage());
+        } catch (OptimisationAlgorithmException e) {
+            throw new OptimisationAlgorithmException(e.getMessage());
         }
 
         return optAlgorithmResultDTO;

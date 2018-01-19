@@ -10,9 +10,9 @@ public class OptAlgorithmResult {
 
     private ArrayList<Task> taskResult; //Length <= 3
     private Timber timberResult;
-    //private Schnittbild cutView; //TODO BufferedImage or Image or List<Rectangle> or something else to store cutView
     private List<Rectangle> cutViewInRectangle;
     private BufferedImage renderedImage;
+    private int timberCount;
 
 
     public Timber getTimberResult() {
@@ -54,4 +54,6 @@ public class OptAlgorithmResult {
     public void setRenderedImage(BufferedImage renderedImage) {
         this.renderedImage = renderedImage;
     }
+
+    public void setTimberCount(int timberCount) { this.timberCount = timberCount; }
 }

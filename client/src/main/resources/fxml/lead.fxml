@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -21,21 +22,21 @@
                      <children>
                          <TableView fx:id="table_task" layoutX="25.0" layoutY="41.0" prefHeight="437.0" prefWidth="779.0">
                              <placeholder>
-                                 <Label text="Keine offenen Aufträge"/>
+                                 <Label text="Keine offenen Aufträge" />
                              </placeholder>
                              <columns>
-                                 <TableColumn fx:id="task_col_order_id" prefWidth="87.0" text="Bestellung" />
-                                 <TableColumn fx:id="task_col_description" prefWidth="105.0" text="Bezeichnung" />
-                                 <TableColumn fx:id="task_col_finishing" prefWidth="92.0" text="Ausführung" />
-                                 <TableColumn fx:id="task_col_wood_type" prefWidth="64.0" text="Holzart" />
-                                 <TableColumn fx:id="task_col_quality" prefWidth="69.0" text="Qualität" />
-                                 <TableColumn fx:id="task_col_size" prefWidth="59.0" text="Stärke" />
-                                 <TableColumn fx:id="task_col_width" prefWidth="61.0" text="Breite" />
-                                 <TableColumn fx:id="task_col_length" prefWidth="58.0" text="Länge" />
-                                 <TableColumn fx:id="task_col_quantity" prefWidth="92.0" text="Anzahl" />
-                                 <TableColumn fx:id="task_col_produced_quantity" prefWidth="90.0" text="Produziert" />
-                                 <TableColumn fx:id="task_col_done" prefWidth="0.0" text="Fertig" visible="false" />
-                                 <TableColumn fx:id="task_col_in_progress" prefWidth="0.0" text="In_Arbeit" visible="false" />
+                                 <TableColumn fx:id="task_col_order_id" editable="false" prefWidth="87.0" sortable="false" text="Bestellung" />
+                                 <TableColumn fx:id="task_col_description" editable="false" prefWidth="105.0" sortable="false" text="Bezeichnung" />
+                                 <TableColumn fx:id="task_col_finishing" editable="false" prefWidth="92.0" sortable="false" text="Ausführung" />
+                                 <TableColumn fx:id="task_col_wood_type" editable="false" prefWidth="64.0" sortable="false" text="Holzart" />
+                                 <TableColumn fx:id="task_col_quality" editable="false" prefWidth="69.0" sortable="false" text="Qualität" />
+                                 <TableColumn fx:id="task_col_size" editable="false" prefWidth="59.0" sortable="false" text="Stärke" />
+                                 <TableColumn fx:id="task_col_width" editable="false" prefWidth="61.0" sortable="false" text="Breite" />
+                                 <TableColumn fx:id="task_col_length" editable="false" prefWidth="58.0" sortable="false" text="Länge" />
+                                 <TableColumn fx:id="task_col_quantity" editable="false" prefWidth="92.0" sortable="false" text="Anzahl" />
+                                 <TableColumn fx:id="task_col_produced_quantity" editable="false" prefWidth="90.0" sortable="false" text="Produziert" />
+                                 <TableColumn fx:id="task_col_done" prefWidth="0.0" sortable="false" text="Fertig" visible="false" />
+                                 <TableColumn fx:id="task_col_in_progress" prefWidth="0.0" sortable="false" text="In_Arbeit" visible="false" />
                              </columns>
                          </TableView>
 
@@ -68,7 +69,7 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="297.0" layoutY="526.0" mnemonicParsing="false" onAction="#onReserveButtonClicked" prefHeight="36.0" prefWidth="233.0" text="Reservieren">
+                        <Button fx:id="btn_reserve" layoutX="297.0" layoutY="526.0" mnemonicParsing="false" onAction="#onReserveButtonClicked" prefHeight="36.0" prefWidth="233.0" text="Reservieren">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -78,7 +79,7 @@
                         </Button>
                         <TableView fx:id="table_lumber" layoutX="81.0" layoutY="207.0" prefHeight="297.0" prefWidth="655.0">
                             <placeholder>
-                                <Label text="Kein Schnittholz im Lager"/>
+                                <Label text="Kein Schnittholz im Lager" />
                             </placeholder>
                             <columns>
                             <TableColumn fx:id="col_description" prefWidth="104.31481170654297" text="Bezeichnung" />
@@ -92,6 +93,11 @@
                               <TableColumn fx:id="col_reserved_quantity" prefWidth="82.33001708984375" text="reserviert" />
                           </columns>
                         </TableView>
+                        <Button fx:id="btn_resetSearch" layoutX="754.0" layoutY="14.0" mnemonicParsing="false" onAction="#resetSearchClicked">
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </Button>
                      </children>
                   </AnchorPane>
             </content>

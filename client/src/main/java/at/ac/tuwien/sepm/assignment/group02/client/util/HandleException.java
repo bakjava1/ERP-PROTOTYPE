@@ -18,7 +18,7 @@ public class HandleException {
         LOG.debug("called handleHttpStatusCodeException: ", e.getResponseBodyAsString());
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY); //throw JsonProcessingException on duplicate key or any other error
-        String msg = "Fehlermeldung konnte nicht interpretiert werden. Status Code:";
+        String msg = "Fehlermeldung konnte nicht interpretiert werden. ";
         try {
             if (mapper.readTree(e.getResponseBodyAsString()) != null) {
                 msg = mapper.readTree(e.getResponseBodyAsString()).get("message").asText();
@@ -29,6 +29,6 @@ public class HandleException {
             LOG.warn(e1.getMessage().trim());
         }
         LOG.warn("HttpStatusCodeException: ", msg);
-        throw new PersistenceLayerException("Problem am Server. "+"Status Code "+e.getStatusCode()+": "+msg);
+        throw new PersistenceLayerException("Problem am Server. "+msg);
     }
 }

@@ -11,6 +11,7 @@ public interface OrderController {
      * create an order with all relevant data
      * @param orderDTO
      * @throws PersistenceLayerException
+     * @inv orderDTO is validated
      */
     void createOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 
@@ -18,6 +19,7 @@ public interface OrderController {
      * delete an order
      * @param orderDTO
      * @throws PersistenceLayerException
+     * @inv orderDTO is validated
      */
     void deleteOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 
@@ -27,6 +29,14 @@ public interface OrderController {
      * @throws PersistenceLayerException if the server is not available
      */
     List<OrderDTO> getAllOpen() throws PersistenceLayerException;
+
+    /**
+     * update an order, put flag and save additional values
+     * @param orderDTO
+     * @throws PersistenceLayerException
+     * @inv orderDTO is validated
+     */
+    void updateOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 
     /**
      * all closed orders equal request of invoice
@@ -39,6 +49,7 @@ public interface OrderController {
      * get the invoice of order
      * @param orderDTO
      * @throws PersistenceLayerException
+     * @inv orderDTO is validated
      */
     void invoiceOrder(OrderDTO orderDTO) throws PersistenceLayerException;
 }

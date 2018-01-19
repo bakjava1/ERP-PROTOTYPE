@@ -154,7 +154,7 @@ public class TaskDAOJDBC implements TaskDAO {
     @Override
     public List<Task> getAllOpenTasks() throws PersistenceLayerException {
 
-        LOG.debug("called getAllOpenTasks");
+        LOG.trace("called getAllOpenTasks");
 
         List<Task> taskList = new ArrayList<>();
 
@@ -207,7 +207,7 @@ public class TaskDAOJDBC implements TaskDAO {
 
     @Override
     public List<Task> getAllTasks() throws PersistenceLayerException {
-        LOG.debug("called getAllTasks");
+        LOG.trace("called getAllTasks");
 
         List<Task> taskList = new ArrayList<>();
 

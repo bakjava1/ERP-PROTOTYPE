@@ -1,6 +1,9 @@
 import at.ac.tuwien.sepm.assignment.group02.server.MainApplication;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.AssignmentDAO;
+import at.ac.tuwien.sepm.assignment.group02.server.persistence.AssignmentDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.rest.AssignmentControllerImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +24,12 @@ public class AssignmentServerRestTest {
 
     @Autowired
     private MockMvc mvc;
+    private AssignmentDAO assignmentDAO;
 
-    @Autowired
-    private ObjectMapper mapper;
+    @Before
+    public void beforeMethod() {
+        assignmentDAO = new AssignmentDAOJDBC(DBUtil.getConnection());
+    }
 
     @Test
     public void smthNonExistent() throws Exception {
@@ -33,8 +39,9 @@ public class AssignmentServerRestTest {
 
     @Test
     public void getAllOpenAssignments_works() throws Exception {
-
-        this.mvc.perform(get("/getAllOpenAssignments").accept(MediaType.APPLICATION_JSON_VALUE))
+        int size = assignmentDAO.getAllOpenAssignments().size();
+        if(size>0)
+            this.mvc.perform(get("/getAllOpenAssignments").accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0]done")
                         .value("false"));
@@ -42,7 +49,9 @@ public class AssignmentServerRestTest {
 
     @Test
     public void getAllAssignments_works() throws Exception {
-        this.mvc.perform(get("/getAllAssignments").accept(MediaType.APPLICATION_JSON_VALUE))
+        int size = assignmentDAO.getAllOpenAssignments().size();
+        if(size>0)
+            this.mvc.perform(get("/getAllAssignments").accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0]done")
                         .isNotEmpty());

@@ -164,6 +164,8 @@ public class OrderDAOJDBC implements OrderDAO {
                 currentBill.setID(rs.getInt("ID"));
                 currentBill.setCustomerName(rs.getString("customer_name"));
                 currentBill.setInvoiceDate(rs.getString("order_date"));
+                currentBill.setCustomerAddress(rs.getString("customer_address"));
+                currentBill.setCustomerUID(rs.getString("customer_uid"));
                 //currentBill.setGrossAmount(rs.getInt("summe"));
 
 

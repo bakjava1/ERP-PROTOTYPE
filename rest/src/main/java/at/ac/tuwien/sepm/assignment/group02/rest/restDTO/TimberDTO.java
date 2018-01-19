@@ -18,14 +18,24 @@ public class TimberDTO {
     private double festmeter;
     private int price;
     private String last_edited;
+    private int taken_amount;
 
     public TimberDTO() {
 
     }
 
+    //constructor for timber creation extra values to pass Validator
     public TimberDTO(int box_id, int amount) {
         this.box_id = box_id;
         this.amount = amount;
+        this.MAX_AMOUNT = 0;
+        this.diameter = 0;
+        this.wood_type = "Fichte";
+        this.quality = "A";
+        this.length = 0;
+        this.festmeter = 0.0;
+        this.price = 0;
+        this.last_edited = null;
     }
 
     public int getBox_id() {
@@ -107,4 +117,8 @@ public class TimberDTO {
     public void setLast_edited(String last_edited) {
         this.last_edited = last_edited;
     }
+
+    public void setTaken_amount(int taken_amount) { this.taken_amount = taken_amount; }
+
+    public int getTaken_amount() { return taken_amount; }
 }

@@ -72,7 +72,7 @@ public class TaskControllerImpl implements TaskController {
 
     @Override
     public List<TaskDTO> getAllOpenTasks() throws PersistenceLayerException {
-        LOG.debug("called getAllOpenTasks");
+        LOG.trace("called getAllOpenTasks");
 
         List<TaskDTO> taskList = new ArrayList<>();
         TaskDTO[] taskArray;

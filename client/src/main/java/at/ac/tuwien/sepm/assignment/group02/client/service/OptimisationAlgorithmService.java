@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.service;
 
 import at.ac.tuwien.sepm.assignment.group02.client.entity.OptAlgorithmResult;
 
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.OptimisationAlgorithmException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
@@ -27,6 +28,6 @@ public interface OptimisationAlgorithmService {
      * @param task task selected by user
      * @return optimal result including: 3 tasks, 1 timber and the cut view
      */
-    OptAlgorithmResultDTO getOptAlgorithmResult(TaskDTO task) throws PersistenceLayerException;
+    OptAlgorithmResultDTO getOptAlgorithmResult(TaskDTO task) throws PersistenceLayerException, OptimisationAlgorithmException;
 
 }

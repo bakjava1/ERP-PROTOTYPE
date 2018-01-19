@@ -5,7 +5,6 @@ import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,8 @@ import java.util.List;
 public class LumberDAOJDBC implements LumberDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private Connection dbConnection;
 
+    private Connection dbConnection;
 
     @Autowired
     public LumberDAOJDBC(Connection dbConnection){
@@ -35,7 +34,6 @@ public class LumberDAOJDBC implements LumberDAO {
     @Override
     public List<Lumber> getAllLumber(FilterDTO filter) throws PersistenceLayerException {
         LOG.debug("Get all Lumber from database");
-
 
         String Query = "SELECT * FROM LUMBER";
         List<Lumber> lumberList = new ArrayList<>();
@@ -143,7 +141,6 @@ public class LumberDAOJDBC implements LumberDAO {
             LOG.error("SQLException: ", e.getMessage());
             throw new PersistenceLayerException("Database error:"+ e.getMessage());
         }
-
         return lumberList;
     }
 
@@ -259,7 +256,8 @@ public class LumberDAOJDBC implements LumberDAO {
     @Override
     public void updateLumber(Lumber lumber) throws PersistenceLayerException {
         LOG.debug("Entering update Lumber method with parameter:{}" ,lumber);
-        //checkIfLumberIsNull(lumber);
+
+       // checkIfLumberIsNull(lumber);
 
         String updateLumber =    "UPDATE Lumber SET quantity=?, reserved_quantity=? WHERE ID=?";
 
@@ -311,15 +309,7 @@ public class LumberDAOJDBC implements LumberDAO {
             throw new PersistenceLayerException("Database error");
         }
 
-/*        try {
-            dbConnection.rollback();
-
-    }catch (SQLException e1){
-            LOG.error("SQLException: {}", e1.getMessage());
-            throw new PersistenceLayerException("Database error");
-        }*/
-
-        }
+    }
 
 
 

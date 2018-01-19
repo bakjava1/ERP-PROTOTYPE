@@ -1,9 +1,13 @@
 package at.ac.tuwien.sepm.assignment.group02.client;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_SpringFXMLLoader;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.print.PrinterJob;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
 @SpringBootApplication
@@ -21,7 +26,6 @@ public class MainApplication extends Application {
     private static boolean crane = false;
     private static boolean lead = false;
     private static boolean office = false;
-
     private AnnotationConfigApplicationContext context;
 
 
@@ -54,7 +58,7 @@ public class MainApplication extends Application {
             primaryStage.setTitle("Kranfahrer");
             //primaryStage.setTitle("Crame Operator");
 
-            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/crane.fxml"), 1000, 600));
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/crane.fxml"), 600, 800));
         }
 
         primaryStage.centerOnScreen();
@@ -84,7 +88,9 @@ public class MainApplication extends Application {
             office = true;
         }
         Application.launch(MainApplication.class, args);
+
     }
+
 
     @Override
     public void stop() throws Exception {

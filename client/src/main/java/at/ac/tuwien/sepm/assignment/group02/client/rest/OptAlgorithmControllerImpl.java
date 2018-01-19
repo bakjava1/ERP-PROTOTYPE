@@ -46,7 +46,6 @@ public class OptAlgorithmControllerImpl implements OptAlgorithmController {
         }
 
 
-
         return bestResult;
     }
 

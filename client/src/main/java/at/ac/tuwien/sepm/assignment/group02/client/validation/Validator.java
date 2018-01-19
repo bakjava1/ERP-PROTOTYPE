@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
-public class Validator {
+public class Validator implements ValidateInput{
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -28,16 +28,11 @@ public class Validator {
             return;
 
         //set the format to use as a constructor argument
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        if (inDate.trim().length() != dateFormat.toPattern().length())
-            throw new InvalidInputException("Date is not in correct format!");
-
-        dateFormat.setLenient(false);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
             //parse the inDate parameter
-            Date test = dateFormat.parse(inDate.trim());
+            Date test = dateFormat.parse(inDate);
             if(!test.before(new Date())) {
                 throw new InvalidInputException("Impossible Date");
             }
@@ -277,6 +272,7 @@ public class Validator {
         try {
             validatedLength = validateNumber(toValidate.getLength(),5000);
             if(validatedLength != 3500 && validatedLength != 4000 && validatedLength != 4500 && validatedLength != 5000) {
+                LOG.error("No producable Length!");
                 throw new InvalidInputException("Please enter a producable Length! (3500,4000,4500,5000");
             }
         }catch(NoValidIntegerException e) {
@@ -420,4 +416,8 @@ public class Validator {
     }
 
 
+    @Override
+    public boolean isValid(Object input) throws InvalidInputException {
+        return false;
+    }
 }

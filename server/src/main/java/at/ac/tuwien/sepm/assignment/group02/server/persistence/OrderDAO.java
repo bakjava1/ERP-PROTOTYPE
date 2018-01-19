@@ -11,6 +11,7 @@ public interface OrderDAO {
      * create an order and a task with all theire relevant data
      * @param order
      * @throws PersistenceLayerException
+     * @inv order is validated
      */
     void createOrder(Order order) throws PersistenceLayerException;
 
@@ -18,6 +19,7 @@ public interface OrderDAO {
      * delete an existing order from the data base
      * @param order
      * @throws PersistenceLayerException
+     * @inv order is validated
      */
     void deleteOrder(Order order) throws PersistenceLayerException;
 
@@ -32,6 +34,7 @@ public interface OrderDAO {
      * update an existing order, put flag and save additional values
      * @param order
      * @throws PersistenceLayerException
+     * @inv order is validated
      */
     void updateOrder(Order order) throws PersistenceLayerException;
 
@@ -55,6 +58,7 @@ public interface OrderDAO {
      * @author Philipp Klein
      * @param order order that will be invoiced
      * @throws PersistenceLayerException when error executing update of order
+     * @inv order is validated
      */
     void invoiceOrder(Order order) throws PersistenceLayerException;
 }

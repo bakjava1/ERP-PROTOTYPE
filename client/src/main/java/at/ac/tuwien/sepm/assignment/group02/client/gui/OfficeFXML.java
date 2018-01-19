@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
-import at.ac.tuwien.sepm.assignment.group02.client.MainApplication;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
@@ -12,8 +11,11 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.client.util.AlertBuilder;
-import at.ac.tuwien.sepm.assignment.group02.client.util.ExampleQSE_SpringFXMLLoader;
-import at.ac.tuwien.sepm.assignment.group02.client.util.InvoicePrinter;
+import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,33 +23,33 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.print.Printer;
-import javafx.print.PrinterJob;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 
-
+import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CountDownLatch;
+import java.util.List;
+
 
 @Controller
 public class OfficeFXML {
@@ -55,7 +57,7 @@ public class OfficeFXML {
     private static Order currentOrder = new Order();
     private static List<Task> currentOrderTaskList = new ArrayList<>();
     private static int currentOrderIndex = 1;
-    private static int currentOrderSum = 0;
+    private static double currentOrderSum = 0.0;
 
     @FXML
     private Button bt_deleteOrder;
@@ -65,27 +67,6 @@ public class OfficeFXML {
     private Button bt_rechnungAnzeigen;
     @FXML
     private Label l_sumorders;
-
-
-    @FXML
-    private AnchorPane printPage;
-
-    @FXML
-    private Label sumNet;
-    @FXML
-    private Label sumGross;
-    @FXML
-    private Label sumTax;
-    @FXML
-    private Label address;
-    @FXML
-    private Label nameL;
-    @FXML
-    private Label uid;
-    @FXML
-    private Label invoiceNumber;
-    @FXML
-    private Label date;
 
 
     @FXML
@@ -181,6 +162,10 @@ public class OfficeFXML {
     @FXML
     TableView<Order> table_bill;
 
+    @FXML
+    TableView<Task> task_table;
+
+
     private OrderService orderService;
     private TimberService timberService;
     private TaskService taskService;
@@ -215,40 +200,27 @@ public class OfficeFXML {
         col_billAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
         col_billGrossSum.setCellValueFactory(new PropertyValueFactory<Order, Integer>("grossAmount"));
 
-        col_taskNr.setCellValueFactory(
-                new PropertyValueFactory<Task, Integer>("id")
-        );
-        col_taskDescription.setCellValueFactory(
-                new PropertyValueFactory<Task, String>("description")
-        );
-        col_taskQuantity.setCellValueFactory(
-                new PropertyValueFactory<Task, Integer>("quantity")
-        );
-        col_taskSize.setCellValueFactory(
-                new PropertyValueFactory<Task, Integer>("size")
-        );
-        col_taskWidth.setCellValueFactory(
-                new PropertyValueFactory<Task, Integer>("width")
-        );
-        col_taskLength.setCellValueFactory(
-                new PropertyValueFactory<Task, Integer>("length")
-        );
+
+        col_taskNr.setCellValueFactory(new PropertyValueFactory<Task, Integer>("id"));
+        col_taskQuantity.setCellValueFactory(new PropertyValueFactory<Task, Integer>("quantity"));
+        col_taskDescription.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
+        col_taskSize.setCellValueFactory(new PropertyValueFactory<Task, Integer>("size"));
+        col_taskWidth.setCellValueFactory(new PropertyValueFactory<Task, Integer>("width"));
+        col_taskLength.setCellValueFactory(new PropertyValueFactory<Task, Integer>("length"));
 
         ObservableList<Task> orderTasks = FXCollections.observableArrayList();
         table_addedTask.setItems(orderTasks);
         ObservableList<Order> orders=FXCollections.observableArrayList();
         table_bill.setItems(orders);
+
         l_sumorders.setText(currentOrderSum + " €");
         initTimberTab();
         updateTable();
         updateBillTable();
-
+        rechnungAnzeigenBtnClicked();
 
         // Auto resize columns
         table_bill.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        // clear rechnung
-//        showRechnungDetails(null);
 
         // Listen for selection changes
         table_bill.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showRechnungDetails(newValue));
@@ -327,6 +299,7 @@ public class OfficeFXML {
             success.showAndWait();
         } catch (ServiceLayerException e) {
             LOG.warn(e.getMessage());
+            alertBuilder.showErrorAlert("Error at creating Order",null,"Error at creating Order\nReason: " + e.getMessage());
         }
 
         updateTable();
@@ -638,21 +611,15 @@ public class OfficeFXML {
                 toAdd.setId(currentOrderIndex);
                 currentOrderIndex++;
                 currentOrderTaskList.add(toAdd);
-                table_addedTask.getItems().add(toAdd);
-                currentOrderSum += toAdd.getPrice();
-                l_sumorders.setText(currentOrderSum + " €");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Successfully created Task");
-                alert.setHeaderText(null);
-                alert.setContentText("Task successfully created and added to your Order");
-                alert.showAndWait();
-                initiateCostValueFunction(null);
+                initiateCostValueFunction(toAdd);
             } catch(InvalidInputException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error creating Task");
                 alert.setHeaderText(null);
                 alert.setContentText("Error creating Task!\nReason: " + e.getMessage());
                 alert.showAndWait();
+                addTaskToOrder(null);
+                return;
             }
         });
 
@@ -711,7 +678,7 @@ public class OfficeFXML {
         kn_result.setText("");
     }
 
-    public void initiateCostValueFunction(ActionEvent actionEvent) {
+    public void initiateCostValueFunction(Task task) {
         if(currentOrderTaskList.size() == 0) {
             Alert error = new Alert(Alert.AlertType.ERROR);
             error.setTitle("No Tasks to evaluate");
@@ -724,7 +691,7 @@ public class OfficeFXML {
 
             @Override
             public void run() {
-                costValueThread();
+                costValueThread(task);
             }
 
         });
@@ -732,17 +699,19 @@ public class OfficeFXML {
     }
 
 
-    private void costValueThread() {
+    private boolean costValueThread(Task task) {
         double evaluation;
         try {
             evaluation = costBenefitService.costValueFunction(currentOrderTaskList);
         } catch(ServiceLayerException e) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     alertBuilder.showErrorAlert("Fehler bei Kosten/Nutzen Schätzung", null, "Ein Fehler trat bei der Kosten/Nutzen Schätzung auf\n Reason: " + e.getMessage());
                 }
             });
-            return;
+            currentOrderTaskList.remove(task);
+            return false;
         }
         Platform.runLater(new Runnable() {
             @Override public void run() {
@@ -753,9 +722,20 @@ public class OfficeFXML {
                     kn_result.setTextFill(Color.web("#00dd00"));
                     kn_result.setText("+ " + evaluation + " €");
                 }
+                task.setId(currentOrderIndex);
+                currentOrderIndex++;
+                table_addedTask.getItems().add(task);
+                currentOrderSum += centToEuro(task.getPrice());
+                l_sumorders.setText(currentOrderSum + " €");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Successfully created Task");
+                alert.setHeaderText(null);
+                alert.setContentText("Task successfully created and added to your Order");
+                alert.showAndWait();
             }
         });
-
+        addTaskToOrder(null);
+        return true;
     }
 
     public void deleteSelectedTask(ActionEvent actionEvent) {
@@ -768,59 +748,140 @@ public class OfficeFXML {
             LOG.info("index: " + index);
             table_addedTask.getItems().remove(index);
             currentOrderTaskList.remove(index);
-            currentOrderSum -= deletePrice;
+            currentOrderSum -= centToEuro(deletePrice);
             l_sumorders.setText(currentOrderSum + " €");
             LOG.info("tablesize: " + table_addedTask.getItems().size() + " tasklistsize: " + currentOrderTaskList.size());
-            if(currentOrderTaskList.size() > 0) { initiateCostValueFunction(null); }
+            if(currentOrderTaskList.size() > 0) {
+                initiateCostValueFunction(null);
+            }
             else { kn_result.setText(""); }
         }
     }
 
 
-    @FXML
-    public void rechnungAnzeigenBtnClicked(ActionEvent actionEvent){
+    public void rechnungAnzeigenBtnClicked(){
         LOG.info("RechnungAnzeigenBtn clicked");
-
+        //Tablevie von die Bestellung. Wen keine Bestellung ausgewählt ist.
         if (table_bill.getSelectionModel().getSelectedItem() == null) {
             return;
         }
+        //Tablevie von die Bestellung. Da wählt man eine Bestellung aus für die Rechnung.
         Order order = table_bill.getSelectionModel().getSelectedItem();
+        Font titleFont = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
 
-                try {
+        try {
 
-                    FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/rechnungOverview.fxml"));
+            String file = "Invoice.pdf";
+            Document document = new Document(); //neu Doc erstellen
+            PdfWriter.getInstance(document, new FileOutputStream(file)); //instance von den Doc. holen um eine neue File zu erstellen
 
-                    Stage stage = new Stage();
-                    stage.setTitle("Detail Ansicht Rechnung");
-                    stage.setWidth(680);
-                    stage.setHeight(900);
-                    stage.centerOnScreen();
-                    fxmlLoader.setController(this);
+            //neu paragraph erstellen
+            HeaderFooter header = new HeaderFooter(new Phrase("SmartHolz\nGewerbegebiet Schratten 26\n 5441 Abtenau im Lammertal (Salzburg)\nUID: 12345"), false);
+            HeaderFooter footer = new HeaderFooter(new Phrase("Seite "), new Phrase("."));
+            document.setHeader(header);
+            document.setFooter(footer);
+            document.open();
 
-                    stage.setScene(new Scene(fxmlLoader.load()));
+            document.addTitle("Rechnung");
+            document.addAuthor("SmartHolz");
 
-                    stage.show();
-                    nameL.setText(order.getCustomerName());
-                    address.setText(order.getCustomerAddress());
-                    uid.setText(order.getCustomerUID());
-                    date.setText(""+order.getInvoiceDate());
-                    sumNet.setText("€ " +order.getNetAmount());
-                    sumTax.setText("€ "+order.getTaxAmount());
-                    sumGross.setText("€ "+order.getGrossAmount());
-                    invoiceNumber.setText("Rechnung #"+order.getID());
+//            header.add(new Paragraph("Unsere UID: "));
+//            header.add(new Paragraph("Unsere Anschrift: "));
 
 
+            // anderen paragraph erstellen
+            File fi = new File(this.getClass().getClassLoader().getResource("logo.jpg").getFile());
+            byte[] fileContent = Files.readAllBytes(fi.toPath());
+            //BufferedImage img = ImageIO.read(new File("logo.jpg"));;
+            Jpeg logo = new Jpeg(fileContent);
+            logo.setAlignment(Element.ALIGN_RIGHT);
 
-                    PrinterJob printerJob = PrinterJob.createPrinterJob();
-                    if (printerJob.showPrintDialog(stage)) {
-                        printerJob.printPage(printPage);
-                    }
+            Paragraph addressDetails = new Paragraph();
+            addressDetails.add(new Paragraph(order.getCustomerName()));
+            addressDetails.add(new Paragraph(order.getCustomerAddress()));
+            addressDetails.add(new Paragraph(order.getCustomerUID()));
+            addressDetails.setSpacingAfter(10);
+
+            Paragraph invoiceDetails = new Paragraph();
+            invoiceDetails.add(new Paragraph("Rechnung " + order.getID() + " - " + order.getInvoiceDate()));
+            invoiceDetails.setSpacingAfter(20);
+            document.add(logo);
+            document.add(addressDetails);
+            document.add(invoiceDetails);
+
+            PdfPTable table = new PdfPTable(4);
+
+            PdfPCell c0 = new PdfPCell(new Phrase("Menge"));
+            c0.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c0);
+            table.setWidthPercentage(100);
+            table.setWidths(new int[] {10,65,15,10});
+            c0 = new PdfPCell(new Phrase("Bezeichnung"));
+            c0.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c0);
+            c0 = new PdfPCell(new Phrase("Einzelpreis"));
+            c0.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c0);
+            c0 = new PdfPCell(new Phrase("Steuer"));
+            c0.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c0);
+            table.setHeaderRows(1);
+            // die Arktikeln werden auf die Rechnung gezeigt
+            for (Task t: order.getTaskList()) {
+                PdfPCell c1 = new PdfPCell(new Phrase(""+ t.getQuantity()));
+                c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(c1);
+                table.addCell(t.getDescription());
+                PdfPCell c3 = new PdfPCell(new Phrase("€ "+t.getPrice()));
+                c3.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(c3);
+                PdfPCell c4 = new PdfPCell(new Phrase("20 %"));
+                c4.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(c4);
+            }
+            PdfPCell empty = new PdfPCell(new Phrase(""));
+            empty.setColspan(4);
+            table.addCell(empty);
 
 
-                } catch (IOException e) {
-                    LOG.error(e.getMessage());
+            PdfPCell e1 = new PdfPCell(new Phrase("Summe Netto"));
+            e1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            e1.setColspan(3);
+            table.addCell(e1);
+            PdfPCell e2 = new PdfPCell(new Phrase("€ " + order.getNetAmount()));
+            e2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            table.addCell(e2);
+            e1 = new PdfPCell(new Phrase("Steuer"));
+            e1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            e1.setColspan(3);
+            table.addCell(e1);
+            e2 = new PdfPCell(new Phrase("€ " + order.getTaxAmount()));
+            e2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            table.addCell(e2);
+            e1 = new PdfPCell(new Phrase("Summe Brutto"));
+            e1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            e1.setColspan(3);
+            table.addCell(e1);
+            e2 = new PdfPCell(new Phrase("€ "+order.getGrossAmount()));
+            e2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            table.addCell(e2);
+            document.add(table);
+            table.setSpacingAfter(20);
 
-                }
+            //neue paragraph
+            document.add(new Paragraph("Lieferdatum entspricht Rechnungsdatum"));
+            document.close();
+            File invoice = new File(file);
+            Desktop.getDesktop().open(invoice);
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -845,10 +906,14 @@ public class OfficeFXML {
         billAmountLabel.setText(Integer.toString(order.getQuantity()));
         billGrossSum.setText("€ " + String.valueOf(order.getGrossAmount()));
 
-
     }
 
-
+    private double centToEuro(int price) {
+        double result = 0.0;
+        result = Math.floor((double) price / (double) 100);
+        result += ((double) price % (double) 100) / (double) 100;
+        return result;
+    }
 
 
 
