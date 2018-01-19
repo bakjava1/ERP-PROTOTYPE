@@ -2,7 +2,6 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityCreationException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
@@ -58,33 +57,33 @@ public class LumberManagementServerSideTest {
         lumber3.setId(3);
         lumber3.setId(2);
         lumber3.setDescription("Latten");
-        lumber3.setFinishing("Prismiert");
+        lumber3.setFinishing("prismiert");
         lumber3.setWood_type("Ta");
-        lumber3.setQuality("I/III");
+        lumber3.setQuality("O/III");
         lumber3.setSize(22);
         lumber3.setWidth(48);
-        lumber3.setLength(3000);
+        lumber3.setLength(3500);
         lumber3.setQuantity(40);
 
         lumberDTO1.setId(4);
         lumberDTO1.setId(3);
         lumberDTO1.setDescription("Latten");
-        lumberDTO1.setFinishing("Prismiert");
+        lumberDTO1.setFinishing("prismiert");
         lumberDTO1.setWood_type("Ta");
-        lumberDTO1.setQuality("I/III");
+        lumberDTO1.setQuality("O/III");
         lumberDTO1.setSize(22);
         lumberDTO1.setWidth(48);
-        lumberDTO1.setLength(3000);
+        lumberDTO1.setLength(3500);
         lumberDTO1.setQuantity(40);
 
         lumberDTO2.setId(5);
         lumberDTO2.setDescription("Latten");
-        lumberDTO2.setFinishing("Prismiert");
+        lumberDTO2.setFinishing("prismiert");
         lumberDTO2.setWood_type("Ta");
-        lumberDTO2.setQuality("I/III");
+        lumberDTO2.setQuality("O/III");
         lumberDTO2.setSize(22);
         lumberDTO2.setWidth(48);
-        lumberDTO2.setLength(3000);
+        lumberDTO2.setLength(3500);
         lumberDTO2.setQuantity(40);
 
         validateLumber = new ValidateLumber();
@@ -114,6 +113,7 @@ public class LumberManagementServerSideTest {
         lumberDAO.deleteLumber(lumber1);
     }
 
+    //TODO rework test with no dependency on actual objects
     @Ignore
     @Test
     public void testDeleteLumber_server_persistenceLayer() throws PersistenceLayerException {
@@ -131,6 +131,7 @@ public class LumberManagementServerSideTest {
         assertEquals(lumberCountBeforeDeletion,lumberCountAfterDeletion);
     }
 
+    //TODO rework test with no dependency on actual objects
     @Ignore
     @Test
     public void testDeleteLumber_server_restController() throws ServiceLayerException {

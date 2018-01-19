@@ -2,7 +2,6 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.rest.TaskControllerImpl;
@@ -10,7 +9,10 @@ import at.ac.tuwien.sepm.assignment.group02.server.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TaskServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateTask;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +21,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static org.junit.Assert.assertEquals;
 
 public class TaskManagementTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -110,7 +110,8 @@ public class TaskManagementTest {
         taskDAO.deleteTask(task1);
     }
 
-    @Ignore
+    //TODO: rework
+    /*@Ignore
     @Test
     public void testDeleteTask_server_persistenceLayer() throws PersistenceLayerException {
         LOG.debug("testing for task deletion in server persistence layer");
@@ -156,7 +157,7 @@ public class TaskManagementTest {
         int taskCountAfterDeletion = getActiveTasks();
 
         assertEquals(taskCountBeforeDeletion,taskCountAfterDeletion);
-    }
+    }*/
 
     @AfterClass
     public static void teardown() {

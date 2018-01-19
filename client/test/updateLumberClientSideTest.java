@@ -1,18 +1,9 @@
 import at.ac.tuwien.sepm.assignment.group02.client.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberController;
-import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
@@ -20,13 +11,11 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 
-import static org.mockito.Mockito.mock;
-
 /**
  * Created by raquelsima on 01.01.18.
  */
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class updateLumberClientSideTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -44,7 +33,7 @@ public class updateLumberClientSideTest {
 
 
 
-    @Before
+    /*@Before
     public  void setUp() throws Exception {
         LOG.debug("update lumber test setup initiated");
 
@@ -57,9 +46,9 @@ public class updateLumberClientSideTest {
 
         LOG.debug("assignment management test setup completed");
 
-    }
+    }*/
 
-    @Ignore
+    /*@Ignore
     @Test(expected = InvalidInputException.class)
     public void test_Update_Lumber_InvalidInput() throws Exception {
 
@@ -68,12 +57,12 @@ public class updateLumberClientSideTest {
     @Ignore
     @Test(expected = ServiceLayerException.class)
     public void test_Update_Lumber_PersistenceLayerException() throws Exception {
-    }
+    }*/
 
-    @AfterClass
+    /*@AfterClass
     public static void tearDown() throws Exception {
 
-    }
+    }*/
 }
 
 

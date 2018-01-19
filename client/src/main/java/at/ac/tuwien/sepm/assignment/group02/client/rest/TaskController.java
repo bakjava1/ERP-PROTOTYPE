@@ -11,6 +11,7 @@ public interface TaskController {
      * create a new task
      * @param task
      * @throws PersistenceLayerException
+     * @inv task is validated
      */
     void createTask(TaskDTO task) throws PersistenceLayerException;
 
@@ -18,6 +19,7 @@ public interface TaskController {
      * delete a task
      * @param task
      * @throws PersistenceLayerException
+     * @inv task is validated
      */
     void deleteTask(TaskDTO task) throws PersistenceLayerException;
 
@@ -25,6 +27,7 @@ public interface TaskController {
      * adding a reserved lumber to the task
      * @param task
      * @throws PersistenceLayerException
+     * @inv task is validated
      */
     void updateTask(TaskDTO task) throws PersistenceLayerException;
 
