@@ -7,6 +7,13 @@ import java.util.List;
 
 public interface CostBenefitController {
 
+    /**
+     * cost Value Function
+     * @param taskList represents Tasks to be evaluated
+     * @return double containing evaluation
+     * @throws PersistenceLayerException if an Error at server occurs
+     * @inv taskList is validated
+     */
     double costValueFunction(List<TaskDTO> taskList) throws PersistenceLayerException;
 
 }

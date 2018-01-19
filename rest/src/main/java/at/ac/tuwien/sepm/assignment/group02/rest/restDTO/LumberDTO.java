@@ -57,6 +57,20 @@ public class LumberDTO {
         this.all_delivered=all_delivered;
     }
 
+    public LumberDTO(int id, String description, String wood_type, int quantity) {
+        this.id = id;
+        this.description=description;
+        this.wood_type=wood_type;
+        this.quantity=quantity;
+    }
+
+    public LumberDTO(int id, String description) {
+        this.id = id;
+        this.description=description;
+
+    }
+
+
     //Create Setters and Getters
 
     /**

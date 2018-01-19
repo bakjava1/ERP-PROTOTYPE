@@ -44,7 +44,7 @@ public class TimberServiceImpl implements TimberService{
             timberManagementDAO.createTimber(timber);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while trying to create Object in Database");
-            throw new EntityCreationException("Failed Persistence");
+            throw new EntityCreationException("Rundholz konnte nicht zum Lagerbestand hinzugefügt werden.");
         }
     }
 
@@ -62,7 +62,7 @@ public class TimberServiceImpl implements TimberService{
             timberManagementDAO.removeTimber(timber);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while trying to update timber in Database");
-            throw new ServiceLayerException("Fehlermeldung. Rundholz konnte nicht bearbeitet werden.");
+            throw new ServiceLayerException("Rundholz konnte nicht bearbeitet werden.");
         }
     }
 
@@ -72,7 +72,7 @@ public class TimberServiceImpl implements TimberService{
             return timberManagementDAO.getNumberOfBoxes();
         } catch (PersistenceLayerException e) {
             LOG.error("Error while trying to get Number of Boxes");
-            throw new ServiceLayerException("Failed Persistence");
+            throw new ServiceLayerException("Anzahl vorhandener Rundholzboxen konnte nicht ermittelt werden.");
 
         }
     }

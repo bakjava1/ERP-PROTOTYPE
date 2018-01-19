@@ -13,9 +13,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-/**
- * Created by e0701149 on 20.11.17.
- */
 
 public class DBUtil {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -91,7 +88,7 @@ public class DBUtil {
             //executeSQLFile("server/src/main/resources/createFinalDB.sql");
             String filepath = DBUtil.class
                     .getClassLoader()
-                    .getResource("create.sql").getPath();
+                    .getResource("createFinalDB.sql").getPath();
             executeSQLFile(filepath);
         }
         else{

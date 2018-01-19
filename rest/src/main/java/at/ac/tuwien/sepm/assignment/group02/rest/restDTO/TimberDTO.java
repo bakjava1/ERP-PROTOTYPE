@@ -24,9 +24,18 @@ public class TimberDTO {
 
     }
 
+    //constructor for timber creation extra values to pass Validator
     public TimberDTO(int box_id, int amount) {
         this.box_id = box_id;
         this.amount = amount;
+        this.MAX_AMOUNT = 0;
+        this.diameter = 0;
+        this.wood_type = "Fichte";
+        this.quality = "A";
+        this.length = 0;
+        this.festmeter = 0.0;
+        this.price = 0;
+        this.last_edited = null;
     }
 
     public int getBox_id() {

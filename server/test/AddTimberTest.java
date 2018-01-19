@@ -58,11 +58,9 @@ public class AddTimberTest {
         timberDTONegativeAmount.setBox_id(1);
         timberDTONegativeAmount.setAmount(-1);
 
-        timberDTO1.setBox_id(1);
-        timberDTO1.setAmount(12);
+        timberDTO1 = new TimberDTO(1,12);
 
-        timberDTO2.setBox_id(1);
-        timberDTO2.setAmount(38);
+        timberDTO2 = new TimberDTO(1,38);
 
         timber1.setBox_id(1);
         timber1.setAmount(12);

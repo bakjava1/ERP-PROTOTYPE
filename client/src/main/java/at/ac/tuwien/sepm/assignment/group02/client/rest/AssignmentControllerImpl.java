@@ -24,6 +24,7 @@ import java.util.List;
 @Component
 public class AssignmentControllerImpl implements AssignmentController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     private RestTemplate restTemplate;
 
 
@@ -46,7 +47,7 @@ public class AssignmentControllerImpl implements AssignmentController {
 
     @Override
     public List<AssignmentDTO> getAllOpenAssignments() throws PersistenceLayerException {
-        LOG.debug("get all open assignments called in client assignment controller");
+        LOG.trace("get all open assignments called in client assignment controller");
 
         List<AssignmentDTO> assignmentList = new ArrayList<>();
         AssignmentDTO[] assignmentArray = null;
@@ -69,7 +70,7 @@ public class AssignmentControllerImpl implements AssignmentController {
 
     @Override
     public List<AssignmentDTO> getAllAssignments() throws PersistenceLayerException {
-        LOG.debug("get all open assignments called in client assignment controller");
+        LOG.trace("get all open assignments called in client assignment controller");
 
         List<AssignmentDTO> assignmentList = new ArrayList<>();
         AssignmentDTO[] assignmentArray = null;

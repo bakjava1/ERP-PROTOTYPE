@@ -16,7 +16,7 @@ public class Lumber {
     private int reserved_quantity;
     private int delivered_quantity;
     private boolean all_reserved;
-    private boolean all_delivered;
+
 
     /**
      * Default constructor
@@ -30,7 +30,7 @@ public class Lumber {
      */
     public Lumber(int id,String lager,String description,String finishing, String wood_type, String quality,
                      int size,int width,int length,int quantity, int reserved_quantity, int delivered_quantity,
-                     boolean all_reserved, boolean all_delivered) {
+                     boolean all_reserved) {
         this.id = id;
         this.lager=lager;
         this.description=description;
@@ -44,7 +44,7 @@ public class Lumber {
         this.reserved_quantity=reserved_quantity;
         this.delivered_quantity=delivered_quantity;
         this.all_reserved=all_reserved;
-        this.all_delivered=all_delivered;
+
     }
     /**
      * method to retrieve the schnittholz ID
@@ -254,22 +254,6 @@ public class Lumber {
         this.all_reserved = all_reserved;
     }
 
-    /**
-     * method to retrieve all_delivered
-     * @return a value of all_delivered to caller
-     */
-    public boolean isAll_delivered() {
-        return all_delivered;
-    }
-
-    /**
-     * metho to set all_delivered
-     * @param all_delivered
-     */
-    public void setAll_delivered(boolean all_delivered) {
-        this.all_delivered = all_delivered;
-    }
-
 
     @Override
     public String toString() {
@@ -287,7 +271,6 @@ public class Lumber {
                 ", reserved_quantity=" + reserved_quantity +
                 ", delivered_quantity=" + delivered_quantity +
                 ", all_reserved=" + all_reserved +
-                ", all_delivered=" + all_delivered +
                 '}';
     }
 }

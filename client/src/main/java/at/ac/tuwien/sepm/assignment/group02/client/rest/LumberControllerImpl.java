@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.util.HandleException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
@@ -30,7 +31,6 @@ public class LumberControllerImpl implements LumberController {
 
     @Autowired
     public LumberControllerImpl(RestTemplate restTemplate){
-
         this.restTemplate = restTemplate;
     }
 
@@ -82,16 +82,22 @@ public class LumberControllerImpl implements LumberController {
 
     }
 
+    /**
+     * update an existing lumber
+     * @param lumberDTO lumber to update
+     * @throws PersistenceLayerException
+     */
+   // @RequestMapping(value = "/lumber/{id}",  method = RequestMethod.PUT,consumes = "application/json", produces = "application/json")
     @Override
-    public void updateLumber(@RequestBody LumberDTO lumberDTO)  throws PersistenceLayerException {
+    public void updateLumber(@RequestBody LumberDTO lumberDTO) throws PersistenceLayerException, ServiceLayerException {
         LOG.debug("Sending request for lumber updating to server");
 
         try {
-            //restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, OrderDTO.class);
-            //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, OrderDTO.class);
+            //restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, LumberDTO.class);
+            //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber", lumberDTO, LumberDTO.class);
             restTemplate.exchange(
                     "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateLumber",
-                    HttpMethod.PUT, new HttpEntity<>(lumberDTO), OrderDTO.class);
+                    HttpMethod.PUT, new HttpEntity<>(lumberDTO), LumberDTO.class);
         } catch(HttpStatusCodeException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
@@ -100,16 +106,18 @@ public class LumberControllerImpl implements LumberController {
         }
     }
 
+    /**
+     * delete an existing lumber
+     * @param lumberDTO lumber to remove
+     * @throws PersistenceLayerException
+     */
+    //@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
     @Override
     public void removeLumber(@RequestBody LumberDTO lumberDTO) throws PersistenceLayerException {
-
             LOG.debug("sending lumber to be deleted to server");
 
-            try{
-                //restTemplate.postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteLumber", lumberDTO, LumberDTO.class);
-                restTemplate.delete("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteLumber", lumberDTO, LumberDTO.class);
-                //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteLumber", lumberDTO, LumberDTO.class);
-
+        try{
+            restTemplate.delete("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteLumber", lumberDTO, LumberDTO.class);
             } catch(HttpStatusCodeException e){
                 LOG.warn("HttpStatusCodeException {}", e.getResponseBodyAsString());
                 throw new PersistenceLayerException("Connection Problem with Server");
@@ -118,13 +126,13 @@ public class LumberControllerImpl implements LumberController {
                 LOG.warn("server is down? - {}", e.getMessage());
                 throw new PersistenceLayerException("Connection Problem with Server");
             }
+            return;
         }
-
 
     /**
      *
      * @param id int id of lumber to get
-     * @return
+     * @return a lumber
      * @throws PersistenceLayerException
      */
     @Override

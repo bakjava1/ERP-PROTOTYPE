@@ -48,7 +48,7 @@ public class deleteLumberServerSideTest {
     @BeforeClass
     public static void setUp() throws EntityCreationException {
 
-        LOG.debug("lumber management test setup initiated");
+        LOG.debug(" delete lumber management test setup initiated");
         dbConnection = DBUtil.getConnection();
         lumberDAO=new LumberDAOJDBC(dbConnection);
 
@@ -67,10 +67,9 @@ public class deleteLumberServerSideTest {
         //lumberDTO3.setID(6);
 
         lumberController= new LumberControllerImpl(lumberService);
-       // lumberService=new LumberServiceImpl(lumberDAO,lumberConverter);
         lumberConverter=new LumberConverter();
 
-        LOG.debug("lumber management test setup completed");
+        LOG.debug("delete lumber management test setup completed");
 
     }
 
@@ -95,19 +94,16 @@ public class deleteLumberServerSideTest {
     @Ignore
     @Test
     public void testDeleteLumber_server_PersistenceLayer() throws ServiceLayerException {
-
-
         LOG.debug("delete lumber throws HttpStatusCodeException in client rest interface");
-        doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(restTemplate).put(any(), any(OrderDTO.class), any(OrderDTO.class));
-        lumberController.removeLumber(lumberDTO1);
+
 
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.debug("lumber management test teardown initiated");
+        LOG.debug("delete lumber test teardown initiated");
         DBUtil.closeConnection();
-        LOG.debug("lumber management test teardown completed");
+        LOG.debug("delete lumber test teardown completed");
 
     }
 

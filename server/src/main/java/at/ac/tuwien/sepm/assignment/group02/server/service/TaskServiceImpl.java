@@ -84,7 +84,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDTO> getAllOpenTasks() throws ServiceLayerException {
-        LOG.debug("called getAllOpenTasks");
+        LOG.trace("called getAllOpenTasks");
         List<TaskDTO> allOpenConverted = new ArrayList<>();
 
         try{

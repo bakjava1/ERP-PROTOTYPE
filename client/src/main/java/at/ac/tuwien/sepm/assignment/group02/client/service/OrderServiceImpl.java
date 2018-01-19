@@ -108,7 +108,6 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceLayerException(e.getMessage());
         }
 
-
         List<Order> convertedOrders = convertTaskLists(allClosed);
 
         setPrices(convertedOrders);
@@ -144,8 +143,8 @@ public class OrderServiceImpl implements OrderService {
         int grossAmount = netSumTasks + (int)taxAmount;
         selectedOrder.setGrossAmount(grossAmount);
         selectedOrder.setTaxAmount((int)taxAmount);
-        selectedOrder.setDeliveryDate(new Date());
-        selectedOrder.setInvoiceDate(new Date());
+        selectedOrder.setDeliveryDate(new Date().toString());
+        selectedOrder.setInvoiceDate(new Date().toString());
 
 
         validator.inputValidationInvoice(selectedOrder);
@@ -191,14 +190,11 @@ public class OrderServiceImpl implements OrderService {
 
             for (Task task : order.getTaskList()) {
                 sum += task.getPrice();
-
-
             }
 
             order.setNetAmount(sum);
             order.setTaxAmount((int) (sum * 0.2));
             order.setGrossAmount(order.getNetAmount() + order.getTaxAmount());
-
         }
 
     }

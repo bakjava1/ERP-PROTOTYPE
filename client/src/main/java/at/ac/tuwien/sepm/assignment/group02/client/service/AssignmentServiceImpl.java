@@ -41,7 +41,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException {
-        LOG.debug("getAllOpenAssignments called in ");
+        LOG.trace("getAllOpenAssignments called in ");
         List<AssignmentDTO> allOpenAssignments;
 
         try {
@@ -63,7 +63,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public List<AssignmentDTO> getAllAssignments() throws ServiceLayerException {
-        LOG.debug("getAllAssignments called");
+        LOG.trace("getAllAssignments called");
         List<AssignmentDTO> allAssignments;
 
         try {

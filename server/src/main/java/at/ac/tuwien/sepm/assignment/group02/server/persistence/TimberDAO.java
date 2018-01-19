@@ -18,6 +18,7 @@ public interface TimberDAO {
      * @author Philipp Klein
      * @param timber Timber entity to update / insert new timber
      * @throws PersistenceLayerException if could not execute update of box specified by {@code timber}
+     * @inv timber is validated
      */
     void createTimber(Timber timber) throws PersistenceLayerException;
 
@@ -25,6 +26,7 @@ public interface TimberDAO {
      * This method removes timber from the round timber store.
      * @param timber the updated round timber entity
      * @throws PersistenceLayerException
+     * @inv timber is validated
      */
     void removeTimber(Timber timber) throws PersistenceLayerException;
 
@@ -32,6 +34,7 @@ public interface TimberDAO {
      * This method returns the number of boxes currently existing in the database.
      * @return number of boxes
      * @throws PersistenceLayerException if could not get number of saved boxes
+     * @inv timber is validated
      */
     int getNumberOfBoxes() throws PersistenceLayerException;
 
@@ -39,10 +42,17 @@ public interface TimberDAO {
      * This method returns all boxes currently saved.
      * @return list of all boxes
      * @throws PersistenceLayerException if could not return a list of all boxes
+     * @inv timber is validated
      */
     List<Timber> getAllBoxes() throws PersistenceLayerException;
 
-
+    /**
+     * Method returns Boxes fitting Requirements of Task
+     * @param toCheck Task with requirements
+     * @return List of Boxes , an empty list if no Box for Task could be found
+     * @throws PersistenceLayerException if an error in the database occurs
+     * @inv toCheck is validated
+     */
     List<Timber> getBoxesForTask(Task toCheck) throws PersistenceLayerException;
 
 }

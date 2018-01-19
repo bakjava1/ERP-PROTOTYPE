@@ -15,7 +15,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
-import java.util.List;
 
 public class InvoiceOrderTest {
 
@@ -59,7 +57,7 @@ public class InvoiceOrderTest {
         orderNoError.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
         orderNoError.setCustomerUID("1234567890");
         orderNoError.setID(1);
-        orderNoError.setOrderDate("");
+        orderNoError.setOrderDate("2018-01-01 12:38:40");
         Task temp = new Task();
         temp.setDescription("test");
         temp.setDone(false);
@@ -94,12 +92,12 @@ public class InvoiceOrderTest {
         orderDTONoError.setTaxAmount(12);
         orderDTONoError.setNetAmount(111);
         orderDTONoError.setGrossAmount(123);
-        orderDTONoError.setInvoiceDate(new java.util.Date());
-        orderDTONoError.setDeliveryDate(new java.util.Date());
+        orderDTONoError.setInvoiceDate("2018-01-01 12:38:40");
+        orderDTONoError.setDeliveryDate("2018-01-01 12:38:40");
         orderDTONoError.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
         orderDTONoError.setCustomerName("Max Mustermann");
         orderDTONoError.setCustomerUID("123456");
-        orderDTONoError.setOrderDate(new java.util.Date());
+        orderDTONoError.setOrderDate("2018-01-01 12:38:40");
         orderDTONoError.setPaid(false);
         orderDTONoError.setTaskList(new ArrayList<TaskDTO>());
 

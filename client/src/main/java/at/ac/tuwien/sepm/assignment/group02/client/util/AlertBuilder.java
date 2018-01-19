@@ -5,10 +5,12 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Region;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
+@Component
 public class AlertBuilder {
     public void showInformationAlert(String title, String header, String content){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

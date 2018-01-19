@@ -82,7 +82,7 @@ public class InvoiceOrderValidatorTest {
         order.setCustomerName("test");
         order.setCustomerAddress("test");
         order.setCustomerUID("test");
-        order.setDeliveryDate(new java.util.Date());
+        order.setDeliveryDate(new java.util.Date().toString());
         validator.inputValidationInvoice(order);
     }
 
@@ -91,8 +91,8 @@ public class InvoiceOrderValidatorTest {
         order.setCustomerName("test");
         order.setCustomerAddress("test");
         order.setCustomerUID("test");
-        order.setDeliveryDate(new java.util.Date());
-        order.setOrderDate("");
+        order.setDeliveryDate(new java.util.Date().toString());
+        order.setOrderDate(new java.util.Date().toString());
         validator.inputValidationInvoice(order);
     }
 
@@ -101,9 +101,9 @@ public class InvoiceOrderValidatorTest {
         order.setCustomerName("test");
         order.setCustomerAddress("test");
         order.setCustomerUID("test");
-        order.setDeliveryDate(new java.util.Date());
-        order.setOrderDate("");
-        order.setInvoiceDate(new java.util.Date());
+        order.setDeliveryDate(new java.util.Date().toString());
+        order.setOrderDate(new java.util.Date().toString());
+        order.setInvoiceDate(new java.util.Date().toString());
         validator.inputValidationInvoice(order);
     }
 
@@ -112,9 +112,9 @@ public class InvoiceOrderValidatorTest {
         order.setCustomerName("test");
         order.setCustomerAddress("test");
         order.setCustomerUID("test");
-        order.setDeliveryDate(new java.util.Date());
-        order.setOrderDate("");
-        order.setInvoiceDate(new java.util.Date());
+        order.setDeliveryDate(new java.util.Date().toString());
+        order.setOrderDate(new java.util.Date().toString());
+        order.setInvoiceDate(new java.util.Date().toString());
         Task temp = new Task();
         temp.setPrice(12);
         order.addTask(temp);
@@ -127,9 +127,9 @@ public class InvoiceOrderValidatorTest {
         order.setCustomerName("test");
         order.setCustomerAddress("test");
         order.setCustomerUID("test");
-        order.setDeliveryDate(new java.util.Date());
-        order.setOrderDate("");
-        order.setInvoiceDate(new java.util.Date());
+        order.setDeliveryDate(new java.util.Date().toString());
+        order.setOrderDate(new java.util.Date().toString());
+        order.setInvoiceDate(new java.util.Date().toString());
         Task temp = new Task();
         temp.setPrice(12);
         order.addTask(temp);
@@ -142,9 +142,9 @@ public class InvoiceOrderValidatorTest {
         order.setCustomerName("test");
         order.setCustomerAddress("test");
         order.setCustomerUID("test");
-        order.setDeliveryDate(new java.util.Date());
-        order.setOrderDate("");
-        order.setInvoiceDate(new java.util.Date());
+        order.setDeliveryDate(new java.util.Date().toString());
+        order.setOrderDate(new java.util.Date().toString());
+        order.setInvoiceDate(new java.util.Date().toString());
         Task temp = new Task();
         temp.setPrice(12);
         order.addTask(temp);
@@ -152,16 +152,15 @@ public class InvoiceOrderValidatorTest {
         validator.inputValidationInvoice(order);
     }
 
-    @Ignore
     @Test
     public void testValidOrderNoFail() throws InvalidInputException {
         boolean success =  true;
         order.setCustomerName("test");
         order.setCustomerAddress("test");
         order.setCustomerUID("test");
-        order.setDeliveryDate(new java.util.Date());
-        order.setOrderDate("");
-        order.setInvoiceDate(new java.util.Date());
+        order.setDeliveryDate("2018-01-01 12:38:40");
+        order.setOrderDate("2018-01-01 12:38:40");
+        order.setInvoiceDate("2018-01-01 12:38:40");
         Task temp = new Task();
         temp.setPrice(12);
         order.addTask(temp);

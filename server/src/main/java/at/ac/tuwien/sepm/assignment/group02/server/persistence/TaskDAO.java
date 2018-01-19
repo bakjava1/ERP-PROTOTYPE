@@ -11,6 +11,7 @@ public interface TaskDAO {
      * insert a new task in the data base
      * @param task
      * @throws PersistenceLayerException
+     * @inv task is validated
      */
     int createTask(Task task) throws PersistenceLayerException;
 
@@ -18,6 +19,7 @@ public interface TaskDAO {
      * delete an existing task from the data base
      * @param task
      * @throws PersistenceLayerException
+     * @inv task is validated
      */
     void deleteTask(Task task) throws PersistenceLayerException;
 
@@ -25,6 +27,7 @@ public interface TaskDAO {
      * update a task
      * @param task
      * @throws PersistenceLayerException
+     * @inv task is validated
      */
     void updateTask(Task task) throws PersistenceLayerException;
 

@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.assignment.group02.client.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class Lumber {
 
 
@@ -44,12 +46,16 @@ public class Lumber {
         this.all_delivered=all_delivered;
     }
 
-    public Lumber(String description,String wood_type,int quantity, int reserved_quantity){
-
+    public Lumber(int id, String description,String wood_type,int quantity){
+        this.id=id;
         this.description=description;
         this.wood_type=wood_type;
         this.quantity=quantity;
-        this.reserved_quantity=reserved_quantity;
+    }
+
+    public Lumber(int id, String description) {
+        this.id = id;
+        this.description=description;
     }
 
     /**

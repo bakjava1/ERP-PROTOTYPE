@@ -15,6 +15,7 @@ public interface TimberController {
      * @author Philipp Klein
      * @param timberDTO TimberDTO to update
      * @throws PersistenceLayerException if error in server or no connection to server
+     * @inv timberDTO is validated
      */
     void createTimber(TimberDTO timberDTO) throws PersistenceLayerException;
 
@@ -22,6 +23,7 @@ public interface TimberController {
      * This method removes round timber from the round timber store.
      * @param timberDTO timberDTO that will be removed/amount reduced
      * @throws PersistenceLayerException if error in server or no connection to server
+     * @inv timberDTO is validated
      */
     void deleteTimber(TimberDTO timberDTO) throws PersistenceLayerException;
 

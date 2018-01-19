@@ -6,7 +6,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
 import org.junit.*;
 
-public class createOrderValidatorTest {
+public class orderValidatorTest {
 
     private static Validator validator;
     private static Order order;
@@ -122,13 +122,13 @@ public class createOrderValidatorTest {
 
     @After
     public void afterMethod() {
+
         order = null;
     }
 
     @AfterClass
     public static void tearDown() {
+
         validator = null;
     }
-
-
 }

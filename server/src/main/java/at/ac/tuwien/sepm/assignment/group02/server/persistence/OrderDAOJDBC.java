@@ -163,7 +163,9 @@ public class OrderDAOJDBC implements OrderDAO {
                 Order currentBill = new Order();
                 currentBill.setID(rs.getInt("ID"));
                 currentBill.setCustomerName(rs.getString("customer_name"));
-                currentBill.setInvoiceDate(rs.getTimestamp("order_date"));
+                currentBill.setInvoiceDate(rs.getString("order_date"));
+                currentBill.setCustomerAddress(rs.getString("customer_address"));
+                currentBill.setCustomerUID(rs.getString("customer_uid"));
                 //currentBill.setGrossAmount(rs.getInt("summe"));
 
 
@@ -196,8 +198,8 @@ public class OrderDAOJDBC implements OrderDAO {
             PreparedStatement stmt = dbConnection.prepareStatement(updateSentence);
             //set necessary fields in order
             stmt.setBoolean(1, true);
-            stmt.setTimestamp(2, new Timestamp(order.getDeliveryDate().getTime()));
-            stmt.setTimestamp(3,  new Timestamp(order.getInvoiceDate().getTime()));
+            stmt.setString(2, order.getDeliveryDate());
+            stmt.setString(3,  order.getInvoiceDate());
             stmt.setInt(4, order.getGrossAmount());
             stmt.setInt(5, order.getNetAmount());
             stmt.setInt(6, order.getTaxAmount());

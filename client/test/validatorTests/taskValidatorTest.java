@@ -6,7 +6,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputExcept
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import org.junit.*;
 
-public class createTaskValidatorTest {
+public class taskValidatorTest {
 
     private static Validator validator;
     private static UnvalidatedTask task;
@@ -177,7 +177,7 @@ public class createTaskValidatorTest {
     @Test
     public void testCorrectTask() {
         boolean success = true;
-        task = new UnvalidatedTask("a","b","c","d","1","2","3","4","5");
+        task = new UnvalidatedTask("Latten","roh","Fi","I","1","2","3500","4","5");
         Task temp = null;
         try {
             temp = validator.inputValidationTask(task);
@@ -188,13 +188,13 @@ public class createTaskValidatorTest {
             success = false;
         }
         Assert.assertEquals(success,true);
-        Assert.assertEquals(temp.getDescription(),"a");
-        Assert.assertEquals(temp.getFinishing(),"b");
-        Assert.assertEquals(temp.getWood_type(),"c");
-        Assert.assertEquals(temp.getQuality(),"d");
+        Assert.assertEquals(temp.getDescription(),"Latten");
+        Assert.assertEquals(temp.getFinishing(),"roh");
+        Assert.assertEquals(temp.getWood_type(),"Fi");
+        Assert.assertEquals(temp.getQuality(),"I");
         Assert.assertEquals(temp.getSize(),1);
         Assert.assertEquals(temp.getWidth(),2);
-        Assert.assertEquals(temp.getLength(),3);
+        Assert.assertEquals(temp.getLength(),3500);
         Assert.assertEquals(temp.getQuantity(),4);
         Assert.assertEquals(temp.getPrice(),5);
 
