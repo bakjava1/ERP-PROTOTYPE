@@ -127,7 +127,14 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
         for(TimberDTO timber : timbers){
             //compare wood type
-            if (timber.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
+            String timberWoodType = timber.getWood_type().toLowerCase();
+            String mainTaskWoodType = mainTask.getWood_type().toLowerCase();
+            if(timberWoodType.equals("laerche")) {
+                timberWoodType = timberWoodType.substring(0,3);
+            } else {
+                timberWoodType = timberWoodType.substring(0,2);
+            }
+            if (timberWoodType.equals(mainTaskWoodType)) {
                 //area of main task is smaller than area of timber
                 if((mainTask.getSize()*mainTask.getWidth())< pow(timber.getDiameter()/2,2)*Math.PI){
                     //length of main task = length of timber

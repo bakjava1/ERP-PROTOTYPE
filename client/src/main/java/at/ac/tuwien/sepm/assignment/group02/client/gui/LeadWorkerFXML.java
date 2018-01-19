@@ -620,7 +620,7 @@ public class LeadWorkerFXML {
                 }*/
 
                 TaskDTO task = table_task.getSelectionModel().getSelectedItem();
-                if(task.getQuantity() - task.getProduced_quantity() > 0) {
+                if(!task.isDone()) {
                     try {
                         bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(task);
                     } catch (PersistenceLayerException e) {
