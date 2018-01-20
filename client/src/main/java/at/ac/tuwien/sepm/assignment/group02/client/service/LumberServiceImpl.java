@@ -117,7 +117,17 @@ public class LumberServiceImpl implements LumberService {
         // validate method parameters
         validateLumber(lumber);
         primitiveValidator.validateNumber(quantity+"",1000);
-        //validateTask(taskDTO); TODO
+
+        //check if lumber matches task details
+        if( ! (
+                lumber.getDescription().equals(taskDTO.getDescription()) &&
+                        lumber.getFinishing().equals(taskDTO.getFinishing()) &&
+                        lumber.getWood_type().equals(taskDTO.getWood_type()) &&
+                        lumber.getQuality().equals(taskDTO.getQuality()) &&
+                        lumber.getSize()==taskDTO.getSize() &&
+                        lumber.getWidth()==taskDTO.getWidth() &&
+                        lumber.getLength()==taskDTO.getLength()
+        ) ) throw new ServiceLayerException("Ausgewähltes Schnittholz passt nicht zum Auftrag.");
 
         // check if reservation quantity is needed for task
         int openQuantityForTask = taskDTO.getQuantity()-taskDTO.getProduced_quantity();

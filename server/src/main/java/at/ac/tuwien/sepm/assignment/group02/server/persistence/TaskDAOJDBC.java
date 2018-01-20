@@ -73,62 +73,71 @@ public class TaskDAOJDBC implements TaskDAO {
 
                 if(taskIsDone) {
                     //get amount of reserved lumber in table lumber for the current task
-                    ps = dbConnection.prepareStatement(getTotalReservedLumber);
-                    ps.setString(1, lumber.getDescription());
-                    ps.setString(2, lumber.getFinishing());
-                    ps.setString(3, lumber.getWood_type());
-                    ps.setString(4, lumber.getQuality());
-                    ps.setInt(5, lumber.getSize());
-                    ps.setInt(6, lumber.getWidth());
-                    ps.setInt(7, lumber.getLength());
-                    ps.execute();
-                    ps.getResultSet().next();
-                    totalReservedLumber = ps.getResultSet().getInt("RESERVED_QUANTITY");
-
+                    PreparedStatement ps2 = dbConnection.prepareStatement(getTotalReservedLumber);
+                    ps2.setString(1, lumber.getDescription());
+                    ps2.setString(2, lumber.getFinishing());
+                    ps2.setString(3, lumber.getWood_type());
+                    ps2.setString(4, lumber.getQuality());
+                    ps2.setInt(5, lumber.getSize());
+                    ps2.setInt(6, lumber.getWidth());
+                    ps2.setInt(7, lumber.getLength());
+                    ps2.execute();
+                    ps2.getResultSet().next();
+                    totalReservedLumber = ps2.getResultSet().getInt("RESERVED_QUANTITY");
+                    LOG.debug("totalReservedLumber: "+totalReservedLumber);
+                    ps2.close();
 
                     //get amount of reserved lumber for the current task (table task)
-                    ps = dbConnection.prepareStatement(getTaskLumberAmount, Statement.RETURN_GENERATED_KEYS);
-                    ps.setString(1, lumber.getDescription());
-                    ps.setString(2, lumber.getFinishing());
-                    ps.setString(3, lumber.getWood_type());
-                    ps.setString(4, lumber.getQuality());
-                    ps.setInt(5, lumber.getSize());
-                    ps.setInt(6, lumber.getWidth());
-                    ps.setInt(7, lumber.getLength());
-                    ps.execute();
-                    ps.getResultSet().next();
-                    reservedLumberTask = ps.getResultSet().getInt("QUANTITY");
+                    PreparedStatement ps3 = dbConnection.prepareStatement(getTaskLumberAmount, Statement.RETURN_GENERATED_KEYS);
+                    ps3.setString(1, lumber.getDescription());
+                    ps3.setString(2, lumber.getFinishing());
+                    ps3.setString(3, lumber.getWood_type());
+                    ps3.setString(4, lumber.getQuality());
+                    ps3.setInt(5, lumber.getSize());
+                    ps3.setInt(6, lumber.getWidth());
+                    ps3.setInt(7, lumber.getLength());
+                    ps3.execute();
+                    ps3.getResultSet().next();
+                    reservedLumberTask = ps3.getResultSet().getInt("QUANTITY");
+                    LOG.debug("reservedLumberTask: "+reservedLumberTask);
+                    ps3.close();
 
                     if (totalReservedLumber > reservedLumberTask) {
                         calculatedReservedLumber = totalReservedLumber - reservedLumberTask;
                     } /*else {
-                //TODO add else
-                    calculatedReservedLumber = totalReservedLumber;
-                }*/
+                        //TODO add else
+                        calculatedReservedLumber = totalReservedLumber;
+                    }*/
+                    LOG.debug("calculatedReservedLumber: "+calculatedReservedLumber);
 
                     //set (reduced) amount of reserved lumber in table lumber for the current task
-                    ps = dbConnection.prepareStatement(deleteLumberReservation, Statement.RETURN_GENERATED_KEYS);
-                    ps.setInt(1, calculatedReservedLumber);
-                    ps.setString(2, lumber.getDescription());
-                    ps.setString(3, lumber.getFinishing());
-                    ps.setString(4, lumber.getWood_type());
-                    ps.setString(5, lumber.getQuality());
-                    ps.setInt(6, lumber.getSize());
-                    ps.setInt(7, lumber.getWidth());
-                    ps.setInt(8, lumber.getLength());
-                    ps.execute();
+                    PreparedStatement ps4 = dbConnection.prepareStatement(deleteLumberReservation, Statement.RETURN_GENERATED_KEYS);
+                    ps4.setInt(1, calculatedReservedLumber);
+                    ps4.setString(2, lumber.getDescription());
+                    ps4.setString(3, lumber.getFinishing());
+                    ps4.setString(4, lumber.getWood_type());
+                    ps4.setString(5, lumber.getQuality());
+                    ps4.setInt(6, lumber.getSize());
+                    ps4.setInt(7, lumber.getWidth());
+                    ps4.setInt(8, lumber.getLength());
+                    ps4.execute();
+                    LOG.debug("ps4.execute(): "+ps4.toString());
+                    ps4.close();
                 }
 
                 //set current task to deleted
-                ps = dbConnection.prepareStatement(deleteTask, Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, task.getOrder_id());
-                ps.execute();
+                PreparedStatement ps5 = dbConnection.prepareStatement(deleteTask, Statement.RETURN_GENERATED_KEYS);
+                ps5.setInt(1, task.getOrder_id());
+                ps5.execute();
+                LOG.debug("ps.execute(): "+ps5.toString());
+                ps5.close();
 
                 //set connected assignment to done
-                ps = dbConnection.prepareStatement(deleteAssignment, Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, task.getId());
-                ps.execute();
-
+                PreparedStatement ps6 = dbConnection.prepareStatement(deleteAssignment, Statement.RETURN_GENERATED_KEYS);
+                ps6.setInt(1, task.getId());
+                ps6.execute();
+                LOG.debug("ps.execute(): "+ps6.toString());
+                ps6.close();
             }
         } catch (SQLException e) {
             LOG.error("SQL Exception: " + e.getMessage());
