@@ -58,13 +58,13 @@ public class LeadWorkerFXML {
     private TextField tf_width;
 
     @FXML
-    private ChoiceBox<String> cb_finishing;
+    private ComboBox<String> cb_finishing;
 
     @FXML
-    private ChoiceBox<String> cb_quality;
+    private ComboBox<String> cb_quality;
 
     @FXML
-    private ChoiceBox<String> cb_wood_type;
+    private ComboBox<String> cb_wood_type;
 
     @FXML
     private TextField tf_quantity;

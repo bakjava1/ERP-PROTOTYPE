@@ -52,7 +52,7 @@ public class MainApplication extends Application {
             primaryStage.setTitle("Büroangestellter");
             //primaryStage.setTitle("office");
 
-            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/office.fxml"), 900, 550));
+            primaryStage.setScene(new Scene((Parent) fxmlLoader.load("/fxml/office.fxml"), 1280, 720));
         }
         if(crane) {
             primaryStage.setTitle("Kranfahrer");

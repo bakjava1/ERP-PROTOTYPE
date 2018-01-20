@@ -124,7 +124,7 @@ public class OfficeFXML {
     private TextField tf_timber_amount;
 
     @FXML
-    private ChoiceBox cb_timber_box;
+    private ComboBox cb_timber_box;
 
     @FXML
     private TableColumn col_orderID;
@@ -219,8 +219,6 @@ public class OfficeFXML {
         updateBillTable();
         rechnungAnzeigenBtnClicked();
 
-        // Auto resize columns
-        table_bill.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Listen for selection changes
         table_bill.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showRechnungDetails(newValue));
@@ -399,6 +397,29 @@ public class OfficeFXML {
         }
 
         cb_timber_box.setItems(boxes);
+        cb_timber_box.getSelectionModel().selectFirst();
+        cb_timber_box.setMaxWidth(200);
+        cb_timber_box.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                ListCell cell = new ListCell<String>() {
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        getListView().setMaxWidth(200);
+                        if (!empty) {
+                            setText(item);
+                        } else {
+                            setText(null);
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
+
         // force the field to be numeric only
         tf_timber_amount.textProperty().addListener(new ChangeListener<String>() {
             @Override
