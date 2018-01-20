@@ -33,21 +33,21 @@ public class ValidateInvoice implements ValidateInput<Order> {
         }
 
         try {
-            primitiveValidator.validateText(input.getCustomerName(),50);
+            primitiveValidator.validateText(input.getCustomerName(),100);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Name: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Customer Name: " + e.getMessage());
         }
 
         try {
-            primitiveValidator.validateText(input.getCustomerAddress(),50);
+            primitiveValidator.validateText(input.getCustomerAddress(),100);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Address: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Customer Address: " + e.getMessage());
         }
 
         try {
-            primitiveValidator.validateText(input.getCustomerUID(),20);
+            primitiveValidator.validateText(input.getCustomerUID(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer UID: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Customer UID: " + e.getMessage());
