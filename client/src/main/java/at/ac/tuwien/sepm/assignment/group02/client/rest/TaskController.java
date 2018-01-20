@@ -40,9 +40,9 @@ public interface TaskController {
 
     /**
      * get a task by its id
-     * @param task_id
+     * @param id
      * @throws PersistenceLayerException
      */
-    void getTaskById(int task_id) throws PersistenceLayerException;
+    TaskDTO getTaskById(int id) throws PersistenceLayerException;
 
 }

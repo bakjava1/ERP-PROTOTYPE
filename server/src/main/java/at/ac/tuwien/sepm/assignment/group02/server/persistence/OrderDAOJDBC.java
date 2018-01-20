@@ -94,7 +94,7 @@ public class OrderDAOJDBC implements OrderDAO {
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = FALSE AND ISPAIDFLAG = FALSE ORDER BY ORDER_DATE");
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = FALSE AND ISPAIDFLAG = FALSE ORDER BY ID");
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -154,7 +154,7 @@ public class OrderDAOJDBC implements OrderDAO {
         try {
 
             //connect to db
-            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = FALSE AND ISPAIDFLAG = TRUE ORDER BY ORDER_DATE");
+            ps = dbConnection.prepareStatement("SELECT * FROM ORDERS WHERE ISDONEFLAG = FALSE AND ISPAIDFLAG = TRUE ORDER BY ID");
             rs = ps.executeQuery();
 
             while (rs.next()) {

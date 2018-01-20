@@ -206,7 +206,7 @@ public class OrderServiceImpl implements OrderService {
                 lumberDAO.removeLumber(lumber.getId(), availableLumber);            }
         }
         if(remainingQuantity > 0){
-                throw new ServiceLayerException("Not enough Lumber for task {" + task.toString() + "} available");
+               // throw new ServiceLayerException("Not enough Lumber for task {" + task.toString() + "} available");
         }
     }
 
