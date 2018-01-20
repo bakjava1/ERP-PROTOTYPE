@@ -32,47 +32,47 @@ public class ValidateOrder implements ValidateInput<Order>{
 
         if(order == null){
             LOG.error("Error at Order: Order cannot be null");
-            throw new InvalidInputException("Error at Order: Order cannot be null");
+            throw new InvalidInputException("Fehler bei Bestellung: Bestellung kann nicht null sein!");
         }
 
         try {
             primitiveValidator.isNumber(order.getID(),-1);
         } catch(NoValidIntegerException e) {
             LOG.error("Error in Order Id: "+ e.getMessage());
-            throw new InvalidInputException("Error in Order Id: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Bestellungs ID: " + e.getMessage());
         }
 
         try {
             primitiveValidator.validateText(order.getCustomerName(),100);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Name: " + e.getMessage());
-            throw new InvalidInputException("Error at Customer Name: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Kundenname: " + e.getMessage());
         }
 
         try {
             primitiveValidator.validateText(order.getCustomerAddress(),100);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Address: " + e.getMessage());
-            throw new InvalidInputException("Error at Customer Address: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Kundenaddresse: " + e.getMessage());
         }
 
         try {
             primitiveValidator.validateText(order.getCustomerUID(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer UID: " + e.getMessage());
-            throw new InvalidInputException("Error at Customer UID: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Kunden UID: " + e.getMessage());
         }
 
         try {
             primitiveValidator.isValidDate(order.getOrderDate().toString());
         } catch(InvalidInputException e) {
             LOG.error("Error at Order Date: " + e.getMessage());
-            throw new InvalidInputException("Error at Order Date: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Erstellungsdatum: " + e.getMessage());
         }
 
         if(order.getTaskList() == null) {
             LOG.error("Error at Task List: List cannot be null");
-            throw new InvalidInputException("Error at Order Date: List cannot be null");
+            throw new InvalidInputException("Fehler bei Auftragsliste: Liste kann nicht null sein!");
         }
         return true;
     }

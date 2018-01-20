@@ -40,35 +40,35 @@ public class ValidateAssignment implements ValidateInput<Assignment> {
             primitiveValidator.isNumber(id,-1);
         } catch(NoValidIntegerException e) {
             LOG.error("Error at Id: " + e.getMessage());
-            throw new InvalidInputException("Error at Id: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Aufgaben ID: " + e.getMessage());
         }
 
         try {
             primitiveValidator.isNumber(amount,800);
         } catch(NoValidIntegerException e) {
             LOG.error("Error at Amount: " + e.getMessage());
-            throw new InvalidInputException("Error at Amount: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Anzahl: " + e.getMessage());
         }
 
         try {
             primitiveValidator.isNumber(box_id,25);
         } catch(NoValidIntegerException e) {
             LOG.error("Error at Box Number: " + e.getMessage());
-            throw new InvalidInputException("Error at Box Number: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Box Nummer: " + e.getMessage());
         }
 
         try {
             primitiveValidator.isNumber(task_id,-1);
         } catch(NoValidIntegerException e) {
             LOG.error("Error at Task Id: " + e.getMessage());
-            throw new InvalidInputException("Error at Task Id: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Auftrags ID: " + e.getMessage());
         }
 
         try {
             primitiveValidator.isValidDate(date);
         } catch(InvalidInputException e) {
             LOG.error("Error at Date: " + e.getMessage());
-            throw new InvalidInputException("Error at Date: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Erstellungsdatum: " + e.getMessage());
         }
 
         return true;
