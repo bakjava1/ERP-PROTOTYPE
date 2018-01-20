@@ -29,27 +29,6 @@ public class Validator implements ValidateInput{
         this.primitiveValidator = primitiveValidator;
     }
 
-    public int[] temporaryAddTaskToLumberValidation(String id, String amount) throws InvalidInputException {
-        int[] result = new int[2];
-        int validatedId;
-        try {
-            validatedId = primitiveValidator.validateNumber(id,Integer.MAX_VALUE);
-        }catch(NoValidIntegerException e) {
-            LOG.error("Error at Id: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Id: " + e.getMessage());
-        }
-        result[0] = validatedId;
-        int validatedAmount;
-        try {
-            validatedAmount = primitiveValidator.validateNumber(amount,Integer.MAX_VALUE);
-        }catch(NoValidIntegerException e) {
-            LOG.error("Error at Amount: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Amount: " + e.getMessage());
-        }
-        result[1] = validatedAmount;
-        return result;
-    }
-
     public void inputValidationOrder(Order toValidate) throws InvalidInputException {
 
         try {
@@ -80,12 +59,12 @@ public class Validator implements ValidateInput{
             throw new InvalidInputException("Fehler bei Customer UID: " + e.getMessage());
         }
 
-     /*   try {
-            primitiveValidator.isValidDate(toValidate.getOrderDate().toString());
+        try {
+            primitiveValidator.isValidDate(toValidate.getOrderDate());
         } catch(InvalidInputException e) {
             LOG.error("Error at Order Date: " + e.getMessage());
             throw new InvalidInputException("Error at Order Date: " + e.getMessage());
-        }*/
+        }
 
         if(toValidate.getTaskList() == null) {
             LOG.error("Error at Task List: List cannot be null");
@@ -95,67 +74,26 @@ public class Validator implements ValidateInput{
 
     public void inputValidationInvoice(Order invoice) throws InvalidInputException{
         inputValidationOrder(invoice);
-        if(invoice.getTaskList()==null || invoice.getTaskList().size()==0){
-            LOG.error("Error in Invoice: No Tasks");
-            throw new InvalidInputException("Error in Invoice: No Tasks");
-        }
-        if(invoice.getOrderDate() == null){
-            LOG.error("Error in Invoice: No Order Date");
-            throw new InvalidInputException("Error in Invoice: No Order Date");
-        }
-        if(invoice.getGrossAmount()<0){
-            LOG.error("Error in Invoice: Gross Amount is negative");
-            throw new InvalidInputException("Error in Invoice: Gross Amount is negative");
-        }
-        if(invoice.getTaxAmount()<0){
-            LOG.error("Error in Invoice: Gross Amount is negative");
-            throw new InvalidInputException("Error in Invoice: Gross Amount is negative");
-        }
-        if(invoice.getNetAmount()<0){
-            LOG.error("Error in Invoice: Net Amount is negative");
-            throw new InvalidInputException("Error in Invoice: Net Amount is negative");
-        }
-    }
 
-    public void inputValidationTaskOnOrder(Task toValidate) throws InvalidInputException {
         try {
-            primitiveValidator.validateText(toValidate.getDescription(), -1);
-        }catch(EmptyInputException e) {
-            LOG.error("Error at Task Description: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Task Description: " + e.getMessage());
+            primitiveValidator.isNumber(invoice.getGrossAmount(),102000000);
+        } catch(NoValidIntegerException e) {
+            LOG.error("Error in Invoice: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Rechnung: " + e.getMessage());
         }
+
         try {
-            primitiveValidator.validateText(toValidate.getFinishing(), -1);
-        }catch(EmptyInputException e) {
-            LOG.error("Error at Task Finishing: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Task Finishing: " + e.getMessage());
+            primitiveValidator.isNumber(invoice.getTaxAmount(),2000000);
+        } catch(NoValidIntegerException e) {
+            LOG.error("Error in Invoice: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Rechnung: " + e.getMessage());
         }
+
         try {
-            primitiveValidator.validateText(toValidate.getWood_type(), -1);
-        }catch(EmptyInputException e) {
-            LOG.error("Error at Task Wood Type: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Task Wood Type: " + e.getMessage());
-        }
-        try {
-            primitiveValidator.validateText(toValidate.getQuality(), -1);
-        }catch(EmptyInputException e) {
-            LOG.error("Error at Task Quality: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Task Quality: " + e.getMessage());
-        }
-        if(toValidate.getSize()<=0){LOG.error("Error at Task Size: Size <= 0");
-            throw new InvalidInputException("Fehler bei Task Size: Size <= 0");
-        }
-        if(toValidate.getWidth()<=0){LOG.error("Error at Task Width: Width <= 0");
-            throw new InvalidInputException("Fehler bei Task Width: Width <= 0");
-        }
-        if(toValidate.getLength()<=0){LOG.error("Error at Task Length: Length <= 0");
-            throw new InvalidInputException("Fehler bei Task Length: Length <= 0");
-        }
-        if(toValidate.getQuantity()<=0){LOG.error("Error at Task Quantity: Quantity <= 0");
-            throw new InvalidInputException("Fehler bei Task Quantity: Quantity <= 0");
-        }
-        if(toValidate.getPrice()<=0){LOG.error("Error at Task Price: Price <= 0");
-            throw new InvalidInputException("Fehler bei Task Price: Price <= 0");
+            primitiveValidator.isNumber(invoice.getNetAmount(),100000000);
+        } catch(NoValidIntegerException e) {
+            LOG.error("Error in Invoice: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Rechnung: " + e.getMessage());
         }
     }
 
@@ -237,7 +175,7 @@ public class Validator implements ValidateInput{
         }
         int validatedPrice;
         try {
-            validatedPrice = primitiveValidator.validateNumber(toValidate.getPrice(),10000000);
+            validatedPrice = primitiveValidator.validateNumber(toValidate.getPrice(),100000000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Price: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Price: " + e.getMessage());
@@ -249,6 +187,70 @@ public class Validator implements ValidateInput{
                 validatedLength,validatedQuantity,0,
                 false,validatedPrice);
 
+    }
+
+    //not entity validators
+    public int[] temporaryAddTaskToLumberValidation(String id, String amount) throws InvalidInputException {
+        int[] result = new int[2];
+        int validatedId;
+        try {
+            validatedId = primitiveValidator.validateNumber(id,Integer.MAX_VALUE);
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Id: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Id: " + e.getMessage());
+        }
+        result[0] = validatedId;
+        int validatedAmount;
+        try {
+            validatedAmount = primitiveValidator.validateNumber(amount,Integer.MAX_VALUE);
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Amount: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Amount: " + e.getMessage());
+        }
+        result[1] = validatedAmount;
+        return result;
+    }
+
+    public void inputValidationTaskOnOrder(Task toValidate) throws InvalidInputException {
+        try {
+            primitiveValidator.validateText(toValidate.getDescription(), -1);
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Task Description: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Task Description: " + e.getMessage());
+        }
+        try {
+            primitiveValidator.validateText(toValidate.getFinishing(), -1);
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Task Finishing: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Task Finishing: " + e.getMessage());
+        }
+        try {
+            primitiveValidator.validateText(toValidate.getWood_type(), -1);
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Task Wood Type: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Task Wood Type: " + e.getMessage());
+        }
+        try {
+            primitiveValidator.validateText(toValidate.getQuality(), -1);
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Task Quality: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Task Quality: " + e.getMessage());
+        }
+        if(toValidate.getSize()<=0){LOG.error("Error at Task Size: Size <= 0");
+            throw new InvalidInputException("Fehler bei Task Size: Size <= 0");
+        }
+        if(toValidate.getWidth()<=0){LOG.error("Error at Task Width: Width <= 0");
+            throw new InvalidInputException("Fehler bei Task Width: Width <= 0");
+        }
+        if(toValidate.getLength()<=0){LOG.error("Error at Task Length: Length <= 0");
+            throw new InvalidInputException("Fehler bei Task Length: Length <= 0");
+        }
+        if(toValidate.getQuantity()<=0){LOG.error("Error at Task Quantity: Quantity <= 0");
+            throw new InvalidInputException("Fehler bei Task Quantity: Quantity <= 0");
+        }
+        if(toValidate.getPrice()<=0){LOG.error("Error at Task Price: Price <= 0");
+            throw new InvalidInputException("Fehler bei Task Price: Price <= 0");
+        }
     }
 
     public FilterDTO validateFilter(FilterDTO filter) throws InvalidInputException{
