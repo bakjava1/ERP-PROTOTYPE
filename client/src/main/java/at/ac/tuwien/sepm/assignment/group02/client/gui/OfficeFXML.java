@@ -397,6 +397,7 @@ public class OfficeFXML {
                     timberService.addTimber(timber);
                     tf_timber_amount.setText("");
                     cb_timber_box.getSelectionModel().clearSelection();
+                    alertBuilder.showInformationAlert("Rundholz hinzugefügt", timber.getAmount() + " Rundhölzer zu Box " + timber.getBox_id() + " erfolgreich hinzugefügt", "");
                 }
             } catch (InvalidInputException e) {
                 LOG.error("Invalid Input Error: " + e.getMessage());
