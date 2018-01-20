@@ -17,6 +17,7 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -188,7 +189,17 @@ public class OfficeFXML {
         col_costumerName.setCellValueFactory(new PropertyValueFactory<Order, String>("customerName"));
         col_taskAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("taskAmount"));
         col_amount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
-        col_grossSum.setCellValueFactory(new PropertyValueFactory<Order, Integer>("grossAmount"));
+        col_grossSum.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Order, String>, ObservableValue<String>>() {
+
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Order, String> p) {
+                if (p.getValue() != null) {
+                    return new SimpleStringProperty(((double) p.getValue().getGrossAmount() / 100) + " €");
+                } else {
+                    return new SimpleStringProperty("0.0 €");
+                }
+            }
+        });
 
 
         table_bill.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);

@@ -87,7 +87,7 @@ public class Validator implements ValidateInput{
             validatedId = validateNumber(id,Integer.MAX_VALUE);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Id: " + e.getMessage());
-            throw new InvalidInputException("Error at Id: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Id: " + e.getMessage());
         }
         result[0] = validatedId;
         int validatedAmount;
@@ -95,7 +95,7 @@ public class Validator implements ValidateInput{
             validatedAmount = validateNumber(amount,Integer.MAX_VALUE);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Amount: " + e.getMessage());
-            throw new InvalidInputException("Error at Amount: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Amount: " + e.getMessage());
         }
         result[1] = validatedAmount;
         return result;
@@ -114,21 +114,21 @@ public class Validator implements ValidateInput{
             validateText(toValidate.getCustomerName(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Name: " + e.getMessage());
-            throw new InvalidInputException("Error at Customer Name: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Customer Name: " + e.getMessage());
         }
 
         try {
             validateText(toValidate.getCustomerAddress(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Address: " + e.getMessage());
-            throw new InvalidInputException("Error at Customer Address: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Customer Address: " + e.getMessage());
         }
 
         try {
             validateText(toValidate.getCustomerUID(),20);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer UID: " + e.getMessage());
-            throw new InvalidInputException("Error at Customer UID: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Customer UID: " + e.getMessage());
         }
 
      /*   try {
@@ -140,7 +140,7 @@ public class Validator implements ValidateInput{
 
         if(toValidate.getTaskList() == null) {
             LOG.error("Error at Task List: List cannot be null");
-            throw new InvalidInputException("Error at Order Date: List cannot be null");
+            throw new InvalidInputException("Fehler bei Order Date: List cannot be null");
         }
     }
 
@@ -173,40 +173,40 @@ public class Validator implements ValidateInput{
             validateText(toValidate.getDescription(), -1);
         }catch(EmptyInputException e) {
             LOG.error("Error at Task Description: " + e.getMessage());
-            throw new InvalidInputException("Error at Task Description: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Task Description: " + e.getMessage());
         }
         try {
             validateText(toValidate.getFinishing(), -1);
         }catch(EmptyInputException e) {
             LOG.error("Error at Task Finishing: " + e.getMessage());
-            throw new InvalidInputException("Error at Task Finishing: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Task Finishing: " + e.getMessage());
         }
         try {
             validateText(toValidate.getWood_type(), -1);
         }catch(EmptyInputException e) {
             LOG.error("Error at Task Wood Type: " + e.getMessage());
-            throw new InvalidInputException("Error at Task Wood Type: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Task Wood Type: " + e.getMessage());
         }
         try {
             validateText(toValidate.getQuality(), -1);
         }catch(EmptyInputException e) {
             LOG.error("Error at Task Quality: " + e.getMessage());
-            throw new InvalidInputException("Error at Task Quality: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Task Quality: " + e.getMessage());
         }
         if(toValidate.getSize()<=0){LOG.error("Error at Task Size: Size <= 0");
-            throw new InvalidInputException("Error at Task Size: Size <= 0");
+            throw new InvalidInputException("Fehler bei Task Size: Size <= 0");
         }
         if(toValidate.getWidth()<=0){LOG.error("Error at Task Width: Width <= 0");
-            throw new InvalidInputException("Error at Task Width: Width <= 0");
+            throw new InvalidInputException("Fehler bei Task Width: Width <= 0");
         }
         if(toValidate.getLength()<=0){LOG.error("Error at Task Length: Length <= 0");
-            throw new InvalidInputException("Error at Task Length: Length <= 0");
+            throw new InvalidInputException("Fehler bei Task Length: Length <= 0");
         }
         if(toValidate.getQuantity()<=0){LOG.error("Error at Task Quantity: Quantity <= 0");
-            throw new InvalidInputException("Error at Task Quantity: Quantity <= 0");
+            throw new InvalidInputException("Fehler bei Task Quantity: Quantity <= 0");
         }
         if(toValidate.getPrice()<=0){LOG.error("Error at Task Price: Price <= 0");
-            throw new InvalidInputException("Error at Task Price: Price <= 0");
+            throw new InvalidInputException("Fehler bei Task Price: Price <= 0");
         }
     }
 
@@ -215,7 +215,7 @@ public class Validator implements ValidateInput{
             validateText(toValidate.getDescription(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Description: " + e.getMessage());
-            throw new InvalidInputException("Error at Description: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Description: " + e.getMessage());
         }
 
         try {
@@ -224,22 +224,22 @@ public class Validator implements ValidateInput{
                     && !toValidate.getFinishing().equals("prismiert") && !toValidate.getFinishing().equals("trocken") && !toValidate.getFinishing().equals("lutro")
                     && !toValidate.getFinishing().equals("frisch") && !toValidate.getFinishing().equals("imprägniert")) {
                 LOG.error("Error at Finishing: Unknown Finishing");
-                throw new InvalidInputException("Error at Finishing: Unknown Finishing");
+                throw new InvalidInputException("Fehler bei Finishing: Unknown Finishing");
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Finishing: " + e.getMessage());
-            throw new InvalidInputException("Error at Finishing: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Finishing: " + e.getMessage());
         }
 
         try {
             validateText(toValidate.getWood_type(),10);
             if(!toValidate.getWood_type().equals("Fi") && !toValidate.getWood_type().equals("Ta") && !toValidate.getWood_type().equals("Lae")) {
                 LOG.error("Error at Wood Type: Unknown Wood Type");
-                throw new InvalidInputException("Error at Wood Type: Unknown Wood Type");
+                throw new InvalidInputException("Fehler bei Wood Type: Unknown Wood Type");
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Wood Type: " + e.getMessage());
-            throw new InvalidInputException("Error at Wood Type: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Wood Type: " + e.getMessage());
         }
 
         try {
@@ -248,25 +248,25 @@ public class Validator implements ValidateInput{
                     !toValidate.getQuality().equals("III") && !toValidate.getQuality().equals("IV") && !toValidate.getQuality().equals("V") &&
                     !toValidate.getQuality().equals("O/III") && !toValidate.getQuality().equals("III/IV") && !toValidate.getQuality().equals("III/V") ) {
                 LOG.error("Error at Quality: Unknown Quality");
-                throw new InvalidInputException("Error at Quality: Unknown Quality");
+                throw new InvalidInputException("Fehler bei Quality: Unknown Quality");
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Quality: " + e.getMessage());
-            throw new InvalidInputException("Error at Quality: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Quality: " + e.getMessage());
         }
         int validatedSize;
         try {
-            validatedSize = validateNumber(toValidate.getSize(),1000);
+            validatedSize = validateNumber(toValidate.getSize(),515);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Size: " + e.getMessage());
-            throw new InvalidInputException("Error at Size: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Size: " + e.getMessage());
         }
         int validatedWidth;
         try {
-            validatedWidth = validateNumber(toValidate.getWidth(),1000);
+            validatedWidth = validateNumber(toValidate.getWidth(),515);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Width: " + e.getMessage());
-            throw new InvalidInputException("Error at Width: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Width: " + e.getMessage());
         }
         int validatedLength;
         try {
@@ -277,21 +277,21 @@ public class Validator implements ValidateInput{
             }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Length: " + e.getMessage());
-            throw new InvalidInputException("Error at Length: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Length: " + e.getMessage());
         }
         int validatedQuantity;
         try {
-            validatedQuantity = validateNumber(toValidate.getQuantity(),1000);
+            validatedQuantity = validateNumber(toValidate.getQuantity(),100000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Quantity: " + e.getMessage());
-            throw new InvalidInputException("Error at Quantity: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Quantity: " + e.getMessage());
         }
         int validatedPrice;
         try {
             validatedPrice = validateNumber(toValidate.getPrice(),10000000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Price: " + e.getMessage());
-            throw new InvalidInputException("Error at Price: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Price: " + e.getMessage());
         }
 
         return new Task(-1,-1,toValidate.getDescription(),
@@ -324,7 +324,7 @@ public class Validator implements ValidateInput{
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Description: " + e.getMessage());
-            throw new InvalidInputException("Error at Description: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Description: " + e.getMessage());
         }
 
         try {
@@ -334,13 +334,13 @@ public class Validator implements ValidateInput{
                         && !finishing.equals("prismiert") && !finishing.equals("trocken") && !finishing.equals("lutro")
                         && !finishing.equals("frisch") && !finishing.equals("imprägniert")) {
                     LOG.error("Error at Finishing: Unknown Finishing");
-                    throw new InvalidInputException("Error at Finishing: Unknown Finishing");
+                    throw new InvalidInputException("Fehler bei Finishing: Unknown Finishing");
                 }
                 validatedFilter.setFinishing(finishing);
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Finishing: " + e.getMessage());
-            throw new InvalidInputException("Error at Finishing: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Finishing: " + e.getMessage());
         }
 
         try {
@@ -348,13 +348,13 @@ public class Validator implements ValidateInput{
                 validateText(wood_type, 20);
                 if (!wood_type.equals("Fi") && !wood_type.equals("Ta") && !wood_type.equals("Lae")) {
                     LOG.error("Error at Wood Type: Unknown Wood Type");
-                    throw new InvalidInputException("Error at Wood Type: Unknown Wood Type");
+                    throw new InvalidInputException("Fehler bei Wood Type: Unknown Wood Type");
                 }
                 validatedFilter.setWood_type(wood_type);
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Wood Type: " + e.getMessage());
-            throw new InvalidInputException("Error at Wood Type: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Wood Type: " + e.getMessage());
         }
 
         try {
@@ -364,13 +364,13 @@ public class Validator implements ValidateInput{
                         !quality.equals("III") && !quality.equals("IV") && !quality.equals("V") &&
                         !quality.equals("O/III") && !quality.equals("III/IV") && !quality.equals("III/V")) {
                     LOG.error("Error at Quality: Unknown Quality");
-                    throw new InvalidInputException("Error at Quality: Unknown Quality");
+                    throw new InvalidInputException("Fehler bei Quality: Unknown Quality");
                 }
                 validatedFilter.setQuality(quality);
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Quality: " + e.getMessage());
-            throw new InvalidInputException("Error at Quality: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Quality: " + e.getMessage());
         }
 
 
@@ -383,7 +383,7 @@ public class Validator implements ValidateInput{
             }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Size: " + e.getMessage());
-            throw new InvalidInputException("Error at Size: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Size: " + e.getMessage());
         }
 
         try {
@@ -394,7 +394,7 @@ public class Validator implements ValidateInput{
             }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Width: " + e.getMessage());
-            throw new InvalidInputException("Error at Width: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Width: " + e.getMessage());
         }
 
         try {
@@ -408,7 +408,7 @@ public class Validator implements ValidateInput{
             }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Length: " + e.getMessage());
-            throw new InvalidInputException("Error at Length: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Length: " + e.getMessage());
         }
 
         return validatedFilter;
