@@ -89,10 +89,10 @@ public class CreateTestData {
     private int maxNumOfTasksForOrder = 5;
     private int minPriceOfTask = 100;
     private int maxPriceOfTask = 400;
-    private String[] qualityLumber = new String[]{"O", "I", "II", "III"/*, "IV", "V", "O/III", "III/IV", "III/V"*/};
+    private String[] qualityLumber = new String[]{"O", "I", "II", "III", "IV", "V", "O/III", "III/IV", "III/V"};
     private int[] lengthLumber = new int[]{3500, 4000, 4500, 5000 };
     private String[] woodTypeLumber = new String[]{"Fi", "Ta", "Lae"};
-    private String[] finishingLumber = new String[]{"roh", "gehobelt", "besäumt", /*"prismiert", "trocken", "lutro", "frisch", "imprägniert"*/};
+    private String[] finishingLumber = new String[]{"roh", "gehobelt", "besäumt", "prismiert", "trocken", "lutro", "frisch", "imprägniert"};
 
 
 
@@ -275,31 +275,28 @@ public class CreateTestData {
 
         //1 = small, 2 = medium, 3 = big
         //comment because too many different types --> cannot find lumber when trying to reserve task
-//        int[] randomSize = new int[]{1, 2, 3};
-//        int rand = randomSize[faker.number().numberBetween(0, 3)];
-//        if(rand == 1){
-//            //small size and width
-//            int size = faker.number().numberBetween(18, 40);
-//            int width = faker.number().numberBetween(42, 60);
-//            command += size + ", " + width + ", ";
-//
-//        }
-//        else if(rand == 2){
-//            //medium size and width
-//            int size = faker.number().numberBetween(30, 60);
-//            int width = faker.number().numberBetween(80, 180);
-//            command += size + ", " + width + ", ";
-//        }
-//        else if(rand == 3){
-//            //big size and with
-//            int size = faker.number().numberBetween(200, 300);
-//            int width = faker.number().numberBetween(250, 400);
-//            command += size + ", " + width + ", ";
-//        }
+        int[] randomSize = new int[]{1, 2, 3};
+        int rand = randomSize[faker.number().numberBetween(0, 3)];
 
-        int size = faker.number().numberBetween(20, 26);
-        int width = faker.number().numberBetween(40, 46);
+            //small size and width
+            int size = faker.number().numberBetween(18, 40);
+            int width = faker.number().numberBetween(42, 60);
+
+        if(rand == 2){
+            //medium size and width
+            size = faker.number().numberBetween(30, 60);
+            width = faker.number().numberBetween(80, 180);
+        }
+        else if(rand == 3){
+            //big size and with
+            size = faker.number().numberBetween(200, 300);
+            width = faker.number().numberBetween(250, 400);
+        }
+
         command += size + ", " + width + ", ";
+//        int size = faker.number().numberBetween(20, 26);
+//        int width = faker.number().numberBetween(40, 46);
+//        command += size + ", " + width + ", ";
 
         //length
         int length = lengthLumber[faker.number().numberBetween(0, lengthLumber.length)];
@@ -326,7 +323,13 @@ public class CreateTestData {
         }
 
         //in progress
-        command += faker.bool().bool()+", false";
+        boolean inProgress = false;
+        //probability of 80 % task is in progress
+        if(faker.number().numberBetween(0, 100)>90){
+            inProgress = true;
+        }
+
+        command += inProgress+", false";
 
         writer.println(command+");");
 
