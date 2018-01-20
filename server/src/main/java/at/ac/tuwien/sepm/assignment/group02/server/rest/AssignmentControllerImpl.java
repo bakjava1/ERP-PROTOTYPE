@@ -43,7 +43,7 @@ public class AssignmentControllerImpl {
     /**
      * rest interface for getting all open assignments
      * @return list of all open assignments for the assignment overview for crane
-     * @throws ResourceNotFoundException if the database is not available for the persistence layer
+     * @throws ServiceLayerException if the database is not available or if the object wasn't found
      */
     @RequestMapping(value="/getAllOpenAssignments",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all open assignments")
@@ -54,16 +54,16 @@ public class AssignmentControllerImpl {
     }
 
     /**
-     * rest interface for getting all open assignments
-     * @return list of all open assignments for the assignment overview for crane
-     * @throws ResourceNotFoundException if the database is not available for the persistence layer
+     * rest interface for getting all closed assignments
+     * @return list of all closed assignments for the assignment overview for crane
+     * @throws ServiceLayerException if the database is not available or if the object wasn't found
      */
-    @RequestMapping(value="/getAllAssignments",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/getAllClosedAssignments",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all assignments")
     @ResponseStatus(HttpStatus.OK)
-    public List<AssignmentDTO> getAllAssignments() throws ServiceLayerException {
+    public List<AssignmentDTO> getAllClosedAssignments() throws ServiceLayerException {
         LOG.trace("called getAllAssignments");
-        return assignmentService.getAllAssignments();
+        return assignmentService.getAllClosedAssignments();
 
     }
 
@@ -75,4 +75,11 @@ public class AssignmentControllerImpl {
         assignmentService.addAssignment(assignmentDTO);
     }
 
+    @RequestMapping(value="/cleanUpAssignments", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "mark assignment as done")
+    @ResponseStatus(HttpStatus.OK)
+    public void cleanUpAssignments() throws ServiceLayerException {
+        LOG.debug("called cleanUpAssignments");
+        assignmentService.cleanUpAssignments();
+    }
 }

@@ -77,7 +77,7 @@ public class AssignmentClientServiceImplTest {
     }
 
     @Test
-    public void getAllAssignments_works() throws Exception {
+    public void getAllClosedAssignments_works() throws Exception {
         AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
 
         List<AssignmentDTO> assignmentDTOList1 = new ArrayList<>();
@@ -88,17 +88,17 @@ public class AssignmentClientServiceImplTest {
         assignmentDTOList1.add(a1);
         assignmentDTOList1.add(a2);
 
-        when(assignmentController.getAllAssignments()).thenReturn(assignmentDTOList1);
-        assignmentDTOList2 = assignmentService.getAllAssignments();
+        when(assignmentController.getAllClosedAssignments()).thenReturn(assignmentDTOList1);
+        assignmentDTOList2 = assignmentService.getAllClosedAssignments();
         Assert.assertSame(assignmentDTOList1, assignmentDTOList2);
 
     }
 
     @Test(expected = ServiceLayerException.class)
-    public void getAllAssignments_restLayerException() throws Exception {
+    public void getAllClosedAssignments_restLayerException() throws Exception {
         AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
-        doThrow(PersistenceLayerException.class).when(assignmentController).getAllAssignments();
-        assignmentService.getAllAssignments();
+        doThrow(PersistenceLayerException.class).when(assignmentController).getAllClosedAssignments();
+        assignmentService.getAllClosedAssignments();
     }
 
     @Test

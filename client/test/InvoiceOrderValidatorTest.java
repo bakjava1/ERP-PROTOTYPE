@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import org.junit.*;
 
+@Ignore
 public class InvoiceOrderValidatorTest {
 
     private static Validator validator;

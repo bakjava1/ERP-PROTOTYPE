@@ -48,13 +48,11 @@ public class OrderServerServiceImplTest {
         OrderService orderService
                 = new OrderServiceImpl(orderManagementDAO,taskManagementDAO, lumberManagementDAO,orderConverter,taskConverter);
 
-        Order order = new Order();
-        when(orderConverter.convertRestDTOToPlainObject(any(OrderDTO.class))).thenReturn(order);
+        OrderDTO orderDTO = Mockito.mock(OrderDTO.class);
+        orderService.deleteOrder(orderDTO);
 
-        orderService.deleteOrder(any(OrderDTO.class));
-
-        verify(orderConverter,times(1)).convertRestDTOToPlainObject(any(OrderDTO.class));
-        verify(orderManagementDAO,times(1)).deleteOrder(order);
+        verify(orderConverter,times(1)).convertRestDTOToPlainObject(orderDTO);
+        verify(orderManagementDAO,times(1)).deleteOrder(any(Order.class));
     }
 
     @Ignore
@@ -73,12 +71,11 @@ public class OrderServerServiceImplTest {
         OrderService orderService
                 = new OrderServiceImpl(orderManagementDAO,taskManagementDAO, lumberManagementDAO,orderConverter,taskConverter);
 
-        Order order = new Order();
+        OrderDTO orderDTO = Mockito.mock(OrderDTO.class);
+        Order order = Mockito.mock(Order.class);
         when(orderConverter.convertRestDTOToPlainObject(any(OrderDTO.class))).thenReturn(order);
-
         doThrow(PersistenceLayerException.class).when(orderManagementDAO).deleteOrder(any(Order.class));
-
-        orderService.deleteOrder(any(OrderDTO.class));
+        orderService.deleteOrder(orderDTO);
     }
 
     @Test
@@ -293,10 +290,11 @@ public class OrderServerServiceImplTest {
         OrderService orderService
                 = new OrderServiceImpl(orderManagementDAO,taskManagementDAO, lumberManagementDAO,orderConverter,taskConverter);
 
+        OrderDTO orderDTO = Mockito.mock(OrderDTO.class);
         Order order = Mockito.mock(Order.class);
         when(orderConverter.convertRestDTOToPlainObject(any(OrderDTO.class))).thenReturn(order);
 
-        orderService.invoiceOrder(any(OrderDTO.class));
+        orderService.invoiceOrder(orderDTO);
 
         verify(orderConverter,times(1)).convertRestDTOToPlainObject(any(OrderDTO.class));
         verify(orderManagementDAO, times(1)).invoiceOrder(order);
@@ -307,12 +305,13 @@ public class OrderServerServiceImplTest {
         OrderService orderService
                 = new OrderServiceImpl(orderManagementDAO,taskManagementDAO, lumberManagementDAO,orderConverter,taskConverter);
 
+        OrderDTO orderDTO = Mockito.mock(OrderDTO.class);
         Order order = Mockito.mock(Order.class);
         when(orderConverter.convertRestDTOToPlainObject(any(OrderDTO.class))).thenReturn(order);
 
         doThrow(PersistenceLayerException.class).when(orderManagementDAO).invoiceOrder(order);
 
-        orderService.invoiceOrder(any(OrderDTO.class));
+        orderService.invoiceOrder(orderDTO);
     }
 
 }

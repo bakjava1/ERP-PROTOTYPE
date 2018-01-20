@@ -47,20 +47,22 @@ public class OrderServiceImpl implements OrderService {
         LOG.debug("called deleteOrder");
         Order orderToDelete = orderConverter.convertRestDTOToPlainObject(orderDTO);
 
-        List<Task> connected_tasks;
-        try {             //get all connected tasks
-            connected_tasks = taskManagementDAO.getTasksByOrderId(orderDTO.getID());
-        } catch (PersistenceLayerException e) {
-            LOG.error("Error while getting connected tasks");
-            throw new ServiceLayerException("Datenbank Problem.");
-        }
-
-        for(Task t : connected_tasks) {
-            try {             //delete each connected tasks
-                taskManagementDAO.deleteTask(t);
+        if(orderDTO.getTaskList() != null) {
+            List<Task> connected_tasks;
+            try {             //get all connected tasks
+                connected_tasks = taskManagementDAO.getTasksByOrderId(orderDTO.getID());
             } catch (PersistenceLayerException e) {
-                LOG.error("Error while deleting task "+t.getId());
+                LOG.error("Error while getting connected tasks");
                 throw new ServiceLayerException("Datenbank Problem.");
+            }
+
+            for (Task t : connected_tasks) {
+                try {             //delete each connected tasks
+                    taskManagementDAO.deleteTask(t);
+                } catch (PersistenceLayerException e) {
+                    LOG.error("Error while deleting task " + t.getId());
+                    throw new ServiceLayerException("Datenbank Problem.");
+                }
             }
         }
 
@@ -161,22 +163,25 @@ public class OrderServiceImpl implements OrderService {
     public void invoiceOrder(OrderDTO orderDTO) throws ServiceLayerException {
         Order order = orderConverter.convertRestDTOToPlainObject(orderDTO);
 
-        List<TaskDTO> taskDTOList = orderDTO.getTaskList();
+        if(orderDTO.getTaskList() != null) {
+            List<TaskDTO> taskDTOList = orderDTO.getTaskList();
 
-        List<Task> taskList = new ArrayList<>();
+            List<Task> taskList = new ArrayList<>();
+            for (TaskDTO taskDTO : taskDTOList) {
+                taskList.add(taskConverter.convertRestDTOToPlainObject(taskDTO));
+            }
 
-        for(TaskDTO taskDTO : taskDTOList){
-            taskList.add(taskConverter.convertRestDTOToPlainObject(taskDTO));
+            order.setTaskList(taskList);
+            //TODO delete lumber from database
         }
-
-        order.setTaskList(taskList);
-        //TODO delete lumber from database
 
         try {
             orderManagementDAO.invoiceOrder(order);
-            for(Task task : order.getTaskList()){
-                //delete lumber for this task
-                deleteLumberForInvoicedTask(task);
+            if(order.getTaskList() != null) {
+                for (Task task : order.getTaskList()) {
+                    //delete lumber for this task
+                    deleteLumberForInvoicedTask(task);
+                }
             }
         } catch (PersistenceLayerException e) {
             LOG.error("Error while tying to invoice Order: " + e.getMessage());
