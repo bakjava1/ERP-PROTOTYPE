@@ -1,5 +1,6 @@
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateInput;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateTimber;
 import org.junit.*;
@@ -12,7 +13,7 @@ public class AddTimberValidatorTest {
     @BeforeClass
     public static void setup(){
 
-        timberValidator = new ValidateTimber();
+        timberValidator = new ValidateTimber(new PrimitiveValidator());
     }
 
     @Before

@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAOJDBC;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateLumber;
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -33,7 +34,7 @@ public class UpdateLumberServerServiceTest {
 
 
     private static LumberService lumberService;
-    private static ValidateLumber validateLumber=new ValidateLumber();
+    private static ValidateLumber validateLumber=new ValidateLumber(new PrimitiveValidator());
     private static Connection dbConnection;
     private static LumberDAO lumberDAO;
 

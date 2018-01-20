@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.rest.TaskControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TaskService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TaskServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateTask;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -83,7 +84,7 @@ public class TaskManagementTest {
         taskDTO2.setLength(3000);
         taskDTO2.setQuantity(40);
 
-        validateTask = new ValidateTask();
+        validateTask = new ValidateTask(new PrimitiveValidator());
         taskConverter = new TaskConverter();
         taskService = new TaskServiceImpl(taskDAO, taskConverter, validateTask);
         taskController = new TaskControllerImpl(taskService);

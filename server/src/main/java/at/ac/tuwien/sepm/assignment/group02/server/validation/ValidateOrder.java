@@ -43,21 +43,21 @@ public class ValidateOrder implements ValidateInput<Order>{
         }
 
         try {
-            primitiveValidator.validateText(order.getCustomerName(),50);
+            primitiveValidator.validateText(order.getCustomerName(),100);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Name: " + e.getMessage());
             throw new InvalidInputException("Error at Customer Name: " + e.getMessage());
         }
 
         try {
-            primitiveValidator.validateText(order.getCustomerAddress(),50);
+            primitiveValidator.validateText(order.getCustomerAddress(),100);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Address: " + e.getMessage());
             throw new InvalidInputException("Error at Customer Address: " + e.getMessage());
         }
 
         try {
-            primitiveValidator.validateText(order.getCustomerUID(),10);
+            primitiveValidator.validateText(order.getCustomerUID(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer UID: " + e.getMessage());
             throw new InvalidInputException("Error at Customer UID: " + e.getMessage());
