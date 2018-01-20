@@ -434,7 +434,7 @@ public class OfficeFXML {
 
     public void addTaskToOrder(ActionEvent actionEvent) {
         Dialog<UnvalidatedTask> dialog = new Dialog<>();
-        dialog.setTitle("Create Task");
+        dialog.setTitle("Auftrag hinzufügen");
         dialog.setHeaderText(null);
         DialogPane dialogPane = dialog.getDialogPane();
         dialogPane.getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.OK);
@@ -542,7 +542,7 @@ public class OfficeFXML {
                 }
             }
         });
-        Label l_size =  new Label("Dicke:");
+        Label l_size =  new Label("Dicke(in mm):");
         gridPane.add(l_size,0,4,2,1);
         gridPane.add(size,2,4);
 
@@ -556,7 +556,7 @@ public class OfficeFXML {
                 }
             }
         });
-        Label l_width =  new Label("Breite:");
+        Label l_width =  new Label("Breite(in mm):");
         gridPane.add(l_width,0,5,2,1);
         gridPane.add(width,2,5);
 
@@ -584,7 +584,7 @@ public class OfficeFXML {
                 return cell;
             }
         });
-        Label l_length =  new Label("Länge:");
+        Label l_length =  new Label("Länge(in mm):");
         gridPane.add(l_length,0,6,2,1);
         gridPane.add(length,2,6);
 
@@ -598,7 +598,7 @@ public class OfficeFXML {
                 }
             }
         });
-        Label l_quantity =  new Label("Menge:");
+        Label l_quantity =  new Label("Anzahl:");
         gridPane.add(l_quantity,0,7,2,1);
         gridPane.add(quantity,2,7);
 
@@ -612,7 +612,7 @@ public class OfficeFXML {
                 }
             }
         });
-        Label l_cost =  new Label("Preis:");
+        Label l_cost =  new Label("Gesamtpreis(in cent):");
         gridPane.add(l_cost,0,8,2,1);
         gridPane.add(cost,2,8);
 
@@ -729,6 +729,7 @@ public class OfficeFXML {
                 @Override
                 public void run() {
                     alertBuilder.showErrorAlert("Fehler bei Kosten/Nutzen Schätzung", null, "Ein Fehler trat bei der Kosten/Nutzen Schätzung auf\n Reason: " + e.getMessage());
+                    addTaskToOrder(null);
                 }
             });
             currentOrderTaskList.remove(task);
@@ -755,7 +756,6 @@ public class OfficeFXML {
                 alert.showAndWait();
             }
         });
-        addTaskToOrder(null);
         return true;
     }
 
