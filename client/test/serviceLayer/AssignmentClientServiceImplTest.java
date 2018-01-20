@@ -150,4 +150,18 @@ public class AssignmentClientServiceImplTest {
         verify(assignmentController, never()).setDone(assignmentDTO);
     }
 
+    @Test
+    public void cleanUpAssignments_works() throws Exception {
+        AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
+        assignmentService.cleanUpAssignments();
+        verify(assignmentController, times(1)).cleanUpAssignments();
+    }
+
+    @Test(expected = ServiceLayerException.class)
+    public void cleanUpAssignments_restLayerException() throws Exception {
+        AssignmentService assignmentService = new AssignmentServiceImpl(assignmentController, validateAssignmentDTO);
+        doThrow(PersistenceLayerException.class).when(assignmentController).cleanUpAssignments();
+        assignmentService.cleanUpAssignments();
+    }
+
 }

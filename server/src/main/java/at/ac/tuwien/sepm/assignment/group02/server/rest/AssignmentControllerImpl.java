@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.rest;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.service.AssignmentService;
 import io.swagger.annotations.Api;
@@ -28,9 +27,9 @@ public class AssignmentControllerImpl {
     }
 
     /**
-     * method marks a given assignment as done
+     * rest controller to mark a given assignment as done
      * @param assignmentDTO the assignment to be marked as done
-     * @throws ResourceNotFoundException thrown if the assignment couldn't be updated. (HttpStatusCode 404)
+     * @throws ServiceLayerException thrown if the assignment couldn't be updated.
      */
     @RequestMapping(value="/setAssignmentDone", method = RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "mark assignment as done")

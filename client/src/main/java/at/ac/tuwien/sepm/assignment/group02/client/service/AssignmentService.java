@@ -5,30 +5,26 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
 
 import java.util.List;
 
-/**
- * CONVERSION HAPPENS ON THIS LAYER
- * VALIDATION HAPPENS ON THIS LAYER
- */
 public interface AssignmentService {
 
     /**
-     * create a new assignment for crane
-     * @param assignmentDTO
-     * @throws ServiceLayerException
+     * create a new assignment for crane operator
+     * @param assignmentDTO the assignment to create
+     * @throws ServiceLayerException if assignment could not be created
      */
     void createAssignment(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 
     /**
-     * retrieve all open assignments overviewing not finihsing assignments
-     * @return a list of assignments
-     * @throws ServiceLayerException
+     * retrieve a list of all open assignments
+     * @return List<AssignmentDTO> list of assignments
+     * @throws ServiceLayerException if no list of assignments could be returned
      */
     List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 
     /**
      * retrieve all closed assignments
-     * @return a list of all closed assignments
-     * @throws ServiceLayerException
+     * @return List<AssignmentDTO> a list of all closed assignments
+     * @throws ServiceLayerException if no list of assignments could be returned
      */
     List<AssignmentDTO> getAllClosedAssignments() throws ServiceLayerException;
 
@@ -41,8 +37,8 @@ public interface AssignmentService {
     void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException;
 
     /**
-     * method deletes all yesterdays assignments if they are done
-     * @throws ServiceLayerException
+     * method invokes the deletion of past assignments if they are done
+     * @throws ServiceLayerException if assignments couldn't be deleted
      */
     void cleanUpAssignments() throws ServiceLayerException;
 
