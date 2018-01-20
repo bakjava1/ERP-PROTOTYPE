@@ -83,12 +83,8 @@ public class CreateTestData {
 
     private String[] descriptionLumber = new String[]{"Latten", "Kantholz", "Balken", "Dielen"};
 
-    private int numOfOpenOrders = 200;
-    private int numOfClosedOrders = 300;
-    private int minNumOfTasksForOrder = 1;
-    private int maxNumOfTasksForOrder = 5;
-    private int minPriceOfTask = 100;
-    private int maxPriceOfTask = 400;
+    private static final int numOfOpenOrders = 150;
+    private static final int numOfClosedOrders = 450;
     private String[] qualityLumber = new String[]{"O", "I", "II", "III", "IV", "V", "O/III", "III/IV", "III/V"};
     private int[] lengthLumber = new int[]{3500, 4000, 4500, 5000 };
     private String[] woodTypeLumber = new String[]{"Fi", "Ta", "Lae"};
@@ -99,6 +95,7 @@ public class CreateTestData {
     CreateTestData() {
         faker = new Faker();
         try {
+            //writer = new PrintWriter("server/src/main/resources/insertFinalData.sql");
             writer = new PrintWriter("server/src/main/resources/testData.sql");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -111,22 +108,17 @@ public class CreateTestData {
      */
     public static void main(String[] args) {
         CreateTestData createTestData = new CreateTestData();
-/*        for(int i = 0; i < 500; i++){
-            createTestData.insertLumber("Latten");
-            createTestData.insertLumber("Kantholz");
-            createTestData.insertLumber("Dielen");
-            createTestData.insertLumber("Balken");
-        }*/
+
         createTestData.writer.println();
         createTestData.writer.println();
 
-        for(int i = 0; i < 200; i++){
+        for(int i = 0; i < numOfOpenOrders; i++){
             createTestData.insertOrder(i);
         }
         createTestData.writer.println();
         createTestData.writer.println();
 
-        for(int i = 200; i < 500; i++){
+        for(int i = numOfOpenOrders; i < (numOfOpenOrders+numOfClosedOrders); i++){
             createTestData.insertInvoice(i);
         }
         createTestData.closeWriter();
@@ -325,9 +317,9 @@ public class CreateTestData {
         //in progress
         boolean inProgress = false;
         //probability of 80 % task is in progress
-        if(faker.number().numberBetween(0, 100)>90){
+/*        if(faker.number().numberBetween(0, 100)>90){
             inProgress = true;
-        }
+        }*/
 
         command += inProgress+", false";
 

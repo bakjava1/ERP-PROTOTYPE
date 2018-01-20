@@ -8,10 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class DBUtil {
@@ -90,6 +87,7 @@ public class DBUtil {
                     .getClassLoader()
                     .getResource("createFinalDB.sql").getPath();
             executeSQLFile(filepath);
+            fillFinalDatabaseIfEmpty();
         }
         else{
             //create test database
@@ -139,6 +137,36 @@ public class DBUtil {
             e.printStackTrace();
         }
 
+    }
+
+    private static void fillFinalDatabaseIfEmpty(){
+        boolean alreadyFilled = false;
+        try{
+            String query = "SELECT 1 FROM ORDERS";
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = null;
+
+            rs = pst.executeQuery();
+
+            if(rs.next()){
+                alreadyFilled = true;
+            }
+            if(rs!=null){
+                rs.close();
+            }
+            pst.close();
+        } catch (SQLException e) {
+            LOG.error(e.getMessage());
+        }
+
+        if(!alreadyFilled) {
+            LOG.debug("Start filling final database");
+            String filepath = DBUtil.class
+                    .getClassLoader()
+                    .getResource("insertFinalData.sql").getPath();
+            executeSQLFile(filepath);
+            LOG.debug("Finished filling final database with");
+        }
     }
 
 
