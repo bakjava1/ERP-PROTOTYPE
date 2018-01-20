@@ -16,6 +16,7 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -268,48 +269,6 @@ public class LeadWorkerFXML {
         task_col_done.setCellValueFactory(new PropertyValueFactory<>("done"));
         task_col_in_progress.setCellValueFactory(new PropertyValueFactory<>("in_progress"));
 
-        Task<Integer> task = new Task<>() {
-            @Override
-            protected Integer call() throws Exception {
-                while(true){
-                    if(isCancelled()) break;
-                    Thread.sleep(5000);
-                    int selected_index = table_task.getSelectionModel().getSelectedIndex();
-                    updateTaskTable();
-                    table_task.getSelectionModel().select(selected_index);
-                }
-                return 1;
-            }
-        };
-
-        //start the auto-refresh task
-        Thread th = new Thread(task);
-        th.setDaemon(true);
-        th.start();
-    }
-
-    private void updateTaskTable() {
-        LOG.debug("called updateTaskTable");
-
-        List<TaskDTO> allOpenTasks = null;
-
-        try{
-            allOpenTasks = taskService.getAllOpenTasks();
-        } catch (ServiceLayerException e){
-            LOG.warn(e.getMessage());
-            alertBuilder.showErrorAlert("Übersicht Aufträge",
-                    null, "Fehler bei Erstellung der Auftragsübersicht. "+ e.getMessage());
-        }
-
-        if(allOpenTasks != null){
-            ObservableList<TaskDTO> openTasksForTable = FXCollections.observableArrayList();
-            openTasksForTable.addAll(allOpenTasks);
-            table_task.setItems(openTasksForTable);
-            table_task.refresh();
-        } else {
-            table_task.refresh();
-        }
-
         // single row can be selected
         table_task.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
@@ -341,6 +300,72 @@ public class LeadWorkerFXML {
                         return row;
                     }
                 });
+
+        Task<Integer> task = new Task<>() {
+            @Override
+            protected Integer call() throws Exception {
+                while(true){
+                    if(isCancelled()) break;
+                    Thread.sleep(5000);
+
+                    //remember selected row
+                    int selected_index = table_task.getSelectionModel().getSelectedIndex();
+
+                    //remember current sort order
+                    TableColumn sort_column = null;
+                    TableColumn.SortType sort_type = null;
+
+                    if (!table_task.getSortOrder().isEmpty()) {
+                        sort_column = table_task.getSortOrder().get(0);
+                        sort_type = sort_column.getSortType();
+                    }
+
+                    //update tasks
+                    updateTaskTable();
+
+                    final TableColumn sc = sort_column;
+                    final TableColumn.SortType st = sort_type;
+
+                    Platform.runLater(()-> {
+                        //restore sort order
+                        if(sc != null) {
+                            table_task.getSortOrder().add(sc);
+                            sc.setSortType(st);
+                            sc.setSortable(true);
+                        }
+                        //set previous selected row
+                        table_task.getSelectionModel().select(selected_index);
+                    });
+
+                }
+                return 1;
+            }
+        };
+
+        //start the auto-refresh task
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
+    }
+
+    private void updateTaskTable() {
+        LOG.debug("called updateTaskTable");
+
+        List<TaskDTO> allOpenTasks = null;
+
+        try{
+            allOpenTasks = taskService.getAllOpenTasks();
+        } catch (ServiceLayerException e){
+            LOG.warn(e.getMessage());
+            alertBuilder.showErrorAlert("Übersicht Aufträge",
+                    null, "Fehler bei Erstellung der Auftragsübersicht. "+ e.getMessage());
+        }
+
+        if(allOpenTasks != null){
+            ObservableList<TaskDTO> openTasksForTable = FXCollections.observableArrayList();
+            openTasksForTable.addAll(allOpenTasks);
+            Platform.runLater(()->table_task.setItems(openTasksForTable));
+        }
 
         table_task.refresh();
     }

@@ -128,44 +128,7 @@ public class CraneOperatorFXML {
         table_done_assignment.getSelectionModel().setSelectionMode(null);
         //table_done_assignment.setDisable(true);
 
-        Task<Integer> task = new Task<>() {
-            @Override
-            protected Integer call() throws Exception {
-                while(true){
-                    if(isCancelled()) break;
-                    Thread.sleep(5000);
-                    int selected_index1 = table_open_assignment.getSelectionModel().getSelectedIndex();
-                    int selected_index2 = table_done_assignment.getSelectionModel().getSelectedIndex();
-                    updateAssignmentTable();
-                    table_open_assignment.getSelectionModel().select(selected_index1);
-                    table_done_assignment.getSelectionModel().select(selected_index2);
-                }
-                return 1;
-            }
-        };
-
-        //start the auto-refresh task
-        Thread th = new Thread(task);
-        th.setDaemon(true);
-        th.start();
-    }
-
-    private void updateAssignmentTable() {
-        List<AssignmentDTO> allOpenAssignments = new LinkedList<>();
-        List<AssignmentDTO> allDoneAssignments = new LinkedList<>();
-        try {
-            allOpenAssignments = assignmentService.getAllOpenAssignments();
-            allDoneAssignments = assignmentService.getAllClosedAssignments();
-        } catch (ServiceLayerException e) {
-            LOG.warn("error while updating assignment table for crane operator");
-            alertBuilder.showErrorAlert("Aufgaben-Service", null,
-                    "Tabelle konnte nicht aktualisiert werden. "+ e.getMessage());
-        }
-
-        table_open_assignment.setItems(FXCollections.observableArrayList(allOpenAssignments));
-        table_done_assignment.setItems(FXCollections.observableArrayList(allDoneAssignments));
-
-        // set row factory in order to create context menu and set row color
+        // set row factory in order to set row color
         table_done_assignment.setRowFactory(
                 new Callback<>() {
                     @Override
@@ -189,6 +152,46 @@ public class CraneOperatorFXML {
                         return row;
                     }
                 });
+
+        Task<Integer> task = new Task<>() {
+            @Override
+            protected Integer call() throws Exception {
+                while(true){
+                    if(isCancelled()) break;
+                    Thread.sleep(5000);
+                    //store currently selected indices
+                    int selected_index1 = table_open_assignment.getSelectionModel().getSelectedIndex();
+                    int selected_index2 = table_done_assignment.getSelectionModel().getSelectedIndex();
+                    updateAssignmentTable();
+                    //restore selection
+                    table_open_assignment.getSelectionModel().select(selected_index1);
+                    table_done_assignment.getSelectionModel().select(selected_index2);
+                }
+                return 1;
+            }
+        };
+
+        //start the auto-refresh task
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
+    }
+
+    private void updateAssignmentTable() {
+
+        List<AssignmentDTO> allOpenAssignments = new LinkedList<>();
+        List<AssignmentDTO> allDoneAssignments = new LinkedList<>();
+        try {
+            allOpenAssignments = assignmentService.getAllOpenAssignments();
+            allDoneAssignments = assignmentService.getAllClosedAssignments();
+        } catch (ServiceLayerException e) {
+            LOG.warn("error while updating assignment table for crane operator");
+            alertBuilder.showErrorAlert("Aufgaben-Service", null,
+                    "Tabelle konnte nicht aktualisiert werden. "+ e.getMessage());
+        }
+
+        table_open_assignment.setItems(FXCollections.observableArrayList(allOpenAssignments));
+        table_done_assignment.setItems(FXCollections.observableArrayList(allDoneAssignments));
 
         table_open_assignment.refresh();
         table_done_assignment.refresh();
@@ -271,6 +274,7 @@ public class CraneOperatorFXML {
                     super.succeeded();
                     LOG.debug("set-done succeeded with value {}", getValue());
                     alertBuilder.showInformationAlert("Aufgaben-Service", null, "Aufgabe " + assignmentDTO.getId() + " wurde als erledigt markiert.");
+                    updateAssignmentTable();
                 }
 
                 @Override

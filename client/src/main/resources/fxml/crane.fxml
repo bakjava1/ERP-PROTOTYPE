@@ -49,10 +49,10 @@
               <Label text="Keine offenen Aufgaben" />
           </placeholder>
           <columns>
-          <TableColumn fx:id="col_open_assignmentNr" editable="false" prefWidth="50.0" sortable="false" text="Nr" />
-          <TableColumn fx:id="col_open_assignmentCreated" editable="false" prefWidth="150.0" sortable="false" text="Eingang" />
-            <TableColumn fx:id="col_open_assignmentAmount" editable="false" prefWidth="150.0" sortable="false" text="RH Anzahl" />
-            <TableColumn fx:id="col_open_assignmentBoxID" editable="false" prefWidth="100.0" sortable="false" text="BoxNr" />
+          <TableColumn fx:id="col_open_assignmentNr" prefWidth="50.0" sortable="false" text="Nr" />
+          <TableColumn fx:id="col_open_assignmentCreated" prefWidth="150.0" sortable="false" text="Eingang" />
+            <TableColumn fx:id="col_open_assignmentAmount" prefWidth="150.0" sortable="false" text="RH Anzahl" />
+            <TableColumn fx:id="col_open_assignmentBoxID" prefWidth="100.0" sortable="false" text="BoxNr" />
         </columns>
       </TableView>
 
