@@ -1,9 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.*;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.AssignmentConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Assignment;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.*;
@@ -24,8 +21,6 @@ public class AssignmentServiceImpl implements AssignmentService {
     private static AssignmentDAO assignmentManagementDAO;
     private static AssignmentConverter assignmentConverter;
     private ValidateAssignment validateAssignment;
-
-
 
     private TimberService timberService;
 
@@ -110,17 +105,6 @@ public class AssignmentServiceImpl implements AssignmentService {
         // might throw InvalidInputException
         validateAssignment.isValid(assignment);
 
-        try {
-            // 3.2.2 (rest/AssignmentController) Aufgabe als erledigt markieren.
-            assignmentManagementDAO.setAssignmentDone(assignment);
-        } catch (EntityNotFoundException e){
-            LOG.error("Entity Not Found: " + e.getMessage());
-            throw new EntityNotFoundExceptionService(e.getMessage());
-        } catch(PersistenceLayerException e) {
-            LOG.error("Database Problems: " + e.getMessage());
-            throw new InternalServerException(e.getMessage());
-        }
-
         // 3.2.3 (rest/TimberController) Rundholz aus dem Lager entfernen.
         timberService.removeTimberFromBox(assignment.getBox_id(), assignment.getAmount());
 
@@ -179,5 +163,26 @@ public class AssignmentServiceImpl implements AssignmentService {
         // 3.2.6 (rest/TaskController) Reserviertes Schnittholz dem Auftrag hinzufügen.
         taskDTO.setProduced_quantity(taskDTO.getQuantity());
         taskService.updateTask(taskDTO);
+
+        /*
+        // check if order is completed
+        OrderDTO orderDTO = orderService.getOrderById(assignmentDTO.getTask_id());
+        List<TaskDTO> taskDTOList = taskService.getTasksByOrderId(orderDTO.getID());
+        boolean orderIsDone = false;
+        for (TaskDTO t : taskDTOList){
+            orderIsDone t.isDone();
+        }
+        */
+
+        try {
+            // 3.2.2 (rest/AssignmentController) Aufgabe als erledigt markieren.
+            assignmentManagementDAO.setAssignmentDone(assignment);
+        } catch (EntityNotFoundException e){
+            LOG.error("Entity Not Found: " + e.getMessage());
+            throw new EntityNotFoundExceptionService(e.getMessage());
+        } catch(PersistenceLayerException e) {
+            LOG.error("Database Problems: " + e.getMessage());
+            throw new InternalServerException(e.getMessage());
+        }
     }
 }

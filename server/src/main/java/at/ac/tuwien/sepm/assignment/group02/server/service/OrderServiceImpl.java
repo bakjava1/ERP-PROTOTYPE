@@ -1,15 +1,17 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.OrderConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
-import at.ac.tuwien.sepm.assignment.group02.server.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.*;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityCreationException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundExceptionService;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
@@ -42,8 +44,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(OrderDTO orderDTO) throws ServiceLayerException {
+        LOG.debug("called deleteOrder");
         Order orderToDelete = orderConverter.convertRestDTOToPlainObject(orderDTO);
+
         try {
+            //delete all connected tasks
+            List<Task> connected_tasks = taskManagementDAO.getTasksByOrderId(orderDTO.getID());
+            for(Task t : connected_tasks) {
+                taskManagementDAO.deleteTask(t);
+            }
+            //delete the order
             orderManagementDAO.deleteOrder(orderToDelete);
         } catch (PersistenceLayerException e) {
             LOG.error("Error while deleting an order");

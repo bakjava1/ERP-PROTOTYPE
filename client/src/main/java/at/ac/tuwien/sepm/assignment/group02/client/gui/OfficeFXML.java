@@ -47,7 +47,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
 import java.util.List;
 
 
@@ -232,24 +231,27 @@ public class OfficeFXML {
         Order order = new Order();
 
         if(table_openOrder.getSelectionModel().getSelectedItem() != null) {
+            Order selectedOrder = table_openOrder.getSelectionModel().getSelectedItem();
             AlertBuilder confirmDeletion = new AlertBuilder();
-            boolean confirmed = confirmDeletion.showConfirmationAlert("Bestellung löschen", null, "Möchten Sie die Bestellung wirklich löschen?");
+            boolean confirmed = confirmDeletion.showConfirmationAlert("Bestellung löschen", null, "Möchten Sie die Bestellung "+selectedOrder.getID()+", "+selectedOrder.getCustomerName()+" wirklich löschen?");
 
             if(confirmed) {
-                order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
+                order.setID(selectedOrder.getID());
 
-                Task task = new Task();
-                task.setOrder_id(order.getID());
+                //Task task = new Task();
+                //task.setOrder_id(order.getID());
 
                 try {
                     orderService.deleteOrder(order);
-                    taskService.deleteTask(task);
+                    //taskService.deleteTask(task);
                 } catch (InvalidInputException e) {
                     //InvalidInputException is never thrown
                     //the only user input is to select an order
-                    //LOG.warn(e.getMessage());
+                    LOG.warn(e.getMessage());
                 } catch (ServiceLayerException e) {
                     LOG.warn(e.getMessage());
+                    alertBuilder.showErrorAlert("Bestellung Löschen",
+                            null, "Fehler beim Löschen der Bestellung. "+ e.getMessage());
                 }
             }
         } else {
