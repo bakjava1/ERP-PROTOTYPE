@@ -14,6 +14,8 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -190,6 +192,46 @@ public class LeadWorkerFXML {
 
         //hide button "Reservieren" (only show it after task is selected)
         btn_reserve.setVisible(false);
+
+        tf_length.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    tf_length.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        tf_quantity.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    tf_quantity.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        tf_strength.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    tf_strength.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        tf_width.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    tf_width.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
 
         //add image to reset search parameters button
         URL imgpath = LeadWorkerFXML.class
