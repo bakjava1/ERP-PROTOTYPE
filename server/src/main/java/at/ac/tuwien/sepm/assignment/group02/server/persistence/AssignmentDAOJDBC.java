@@ -82,7 +82,7 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
             while(rs.next()) {
                 assignment = new Assignment();
                 assignment.setId(rs.getInt("ID"));
-                assignment.setCreation_date(rs.getDate("CREATION_DATE").toString());
+                assignment.setCreation_date(rs.getString("CREATION_DATE"));
                 assignment.setAmount(rs.getInt("AMOUNT"));
                 assignment.setBox_id(rs.getInt("BOX_ID"));
                 assignment.setDone(rs.getBoolean("ISDONE"));
@@ -114,7 +114,7 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
             while(rs.next()) {
                 assignment = new Assignment();
                 assignment.setId(rs.getInt("ID"));
-                assignment.setCreation_date(rs.getDate("CREATION_DATE").toString());
+                assignment.setCreation_date(rs.getString("CREATION_DATE"));
                 assignment.setAmount(rs.getInt("AMOUNT"));
                 assignment.setBox_id(rs.getInt("BOX_ID"));
                 assignment.setDone(rs.getBoolean("ISDONE"));

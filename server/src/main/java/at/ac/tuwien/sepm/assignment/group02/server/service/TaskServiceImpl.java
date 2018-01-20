@@ -111,4 +111,21 @@ public class TaskServiceImpl implements TaskService {
             throw new EntityNotFoundExceptionService(e.getMessage());
         }
     }
+
+    @Override
+    public List<TaskDTO> getTasksByOrderId(int order_id) throws ServiceLayerException {
+        LOG.trace("called getAllOpenTasks");
+        List<TaskDTO> taskDTOList = new ArrayList<>();
+        try {
+            List<Task> taskList = taskManagementDAO.getTasksByOrderId(order_id);
+            for (int i = 0; taskList!=null && i < taskList.size(); i++) {
+                taskDTOList.add(taskConverter.convertPlainObjectToRestDTO(taskList.get(i)));
+            }
+            return taskDTOList;
+        } catch (PersistenceLayerException e) {
+            LOG.error("Error while trying to get objects from Database: " + e.getMessage());
+            throw new EntityNotFoundExceptionService(e.getMessage());
+        }
+    }
+
 }

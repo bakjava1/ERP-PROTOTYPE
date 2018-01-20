@@ -47,18 +47,30 @@ public class OrderServiceImpl implements OrderService {
         LOG.debug("called deleteOrder");
         Order orderToDelete = orderConverter.convertRestDTOToPlainObject(orderDTO);
 
-        try {
-            //delete all connected tasks
-            List<Task> connected_tasks = taskManagementDAO.getTasksByOrderId(orderDTO.getID());
-            for(Task t : connected_tasks) {
+        List<Task> connected_tasks;
+        try {             //get all connected tasks
+            connected_tasks = taskManagementDAO.getTasksByOrderId(orderDTO.getID());
+        } catch (PersistenceLayerException e) {
+            LOG.error("Error while getting connected tasks");
+            throw new ServiceLayerException("Datenbank Problem.");
+        }
+
+        for(Task t : connected_tasks) {
+            try {             //delete each connected tasks
                 taskManagementDAO.deleteTask(t);
+            } catch (PersistenceLayerException e) {
+                LOG.error("Error while deleting task "+t.getId());
+                throw new ServiceLayerException("Datenbank Problem.");
             }
-            //delete the order
+        }
+
+        try {             //delete the order
             orderManagementDAO.deleteOrder(orderToDelete);
         } catch (PersistenceLayerException e) {
-            LOG.error("Error while deleting an order");
-            throw new ServiceLayerException("Failed Persistenz");
+            LOG.error("Error while deleting order "+orderToDelete.getID());
+            throw new ServiceLayerException("Datenbank Problem.");
         }
+
     }
 
     @Override

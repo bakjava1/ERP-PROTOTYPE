@@ -2,6 +2,7 @@ package validatorTests;
 
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Order;
 import org.junit.*;
@@ -13,7 +14,8 @@ public class orderValidatorTest {
 
     @BeforeClass
     public static void setUp() {
-        validator =  new Validator();
+        PrimitiveValidator primitiveValidator = new PrimitiveValidator();
+        validator = new Validator(primitiveValidator);
     }
 
     @Before

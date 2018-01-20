@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskController;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberServiceImpl;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 import org.junit.BeforeClass;
@@ -37,7 +38,8 @@ public class deleteLumberClientSideTest {
     private static LumberConverter lumberConverter;
     private static TaskController taskController;
     private static RestTemplate restTemplate;
-    private static Validator validator = new Validator();
+    private static PrimitiveValidator primitiveValidator = new PrimitiveValidator();
+    private static Validator validator = new Validator(primitiveValidator);
 
     private static Lumber lumber;
     private static LumberDTO lumberDTO;
@@ -50,7 +52,7 @@ public class deleteLumberClientSideTest {
         lumberController=new LumberControllerImpl(restTemplate);
         lumberConverter=mock(LumberConverter.class);
         taskController=new TaskControllerImpl(restTemplate);
-        lumberService=new LumberServiceImpl(lumberController,lumberConverter,taskController,validator);
+        lumberService=new LumberServiceImpl(lumberController,lumberConverter,taskController,validator,primitiveValidator);
 
         lumber= new Lumber();
         lumber.setId(1);

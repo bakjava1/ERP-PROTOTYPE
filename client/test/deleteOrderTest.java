@@ -7,6 +7,8 @@ import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderServiceImpl;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -45,7 +47,9 @@ public class deleteOrderTest {
         orderController = new OrderControllerImpl(restTemplate);
         orderConverter = mock(OrderConverter.class);
         taskConverter = new TaskConverter();
-        orderService = new OrderServiceImpl(orderController,orderConverter, taskConverter);
+        PrimitiveValidator primitiveValidator = new PrimitiveValidator();
+        Validator validator = new Validator(primitiveValidator);
+        orderService = new OrderServiceImpl(orderController,orderConverter, taskConverter,validator);
 
         order = new Order();
 

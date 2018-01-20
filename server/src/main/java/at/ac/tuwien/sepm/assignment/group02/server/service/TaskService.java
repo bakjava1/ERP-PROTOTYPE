@@ -44,4 +44,12 @@ public interface TaskService {
      */
     TaskDTO getTaskById(int task_id) throws ServiceLayerException;
 
+    /**
+     * method returns a list of taskDTOs connected to an order id
+     * @return a List of TaskDTO that are connected to the given order
+     * @throws ServiceLayerException in case the TaskDTO can't be returned
+     */
+    List<TaskDTO> getTasksByOrderId(int orderID) throws ServiceLayerException;
+
+
 }
