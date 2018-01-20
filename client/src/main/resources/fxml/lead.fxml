@@ -25,25 +25,25 @@
                                  <Label text="Keine offenen Aufträge" />
                              </placeholder>
                              <columns>
-                                 <TableColumn fx:id="task_col_order_id" editable="false" prefWidth="87.0" sortable="false" text="Bestellung" />
-                                 <TableColumn fx:id="task_col_description" editable="false" prefWidth="105.0" sortable="false" text="Bezeichnung" />
-                                 <TableColumn fx:id="task_col_finishing" editable="false" prefWidth="92.0" sortable="false" text="Ausführung" />
-                                 <TableColumn fx:id="task_col_wood_type" editable="false" prefWidth="64.0" sortable="false" text="Holzart" />
-                                 <TableColumn fx:id="task_col_quality" editable="false" prefWidth="69.0" sortable="false" text="Qualität" />
-                                 <TableColumn fx:id="task_col_size" editable="false" prefWidth="59.0" sortable="false" text="Stärke" />
-                                 <TableColumn fx:id="task_col_width" editable="false" prefWidth="61.0" sortable="false" text="Breite" />
-                                 <TableColumn fx:id="task_col_length" editable="false" prefWidth="58.0" sortable="false" text="Länge" />
-                                 <TableColumn fx:id="task_col_quantity" editable="false" prefWidth="92.0" sortable="false" text="Anzahl" />
-                                 <TableColumn fx:id="task_col_produced_quantity" editable="false" prefWidth="90.0" sortable="false" text="Produziert" />
-                                 <TableColumn fx:id="task_col_done" prefWidth="0.0" sortable="false" text="Fertig" visible="false" />
-                                 <TableColumn fx:id="task_col_in_progress" prefWidth="0.0" sortable="false" text="In_Arbeit" visible="false" />
+                                 <TableColumn fx:id="task_col_order_id" prefWidth="87.0" text="Bestellung" />
+                                 <TableColumn fx:id="task_col_description" prefWidth="105.0" text="Bezeichnung" />
+                                 <TableColumn fx:id="task_col_finishing" prefWidth="92.0" text="Ausführung" />
+                                 <TableColumn fx:id="task_col_wood_type" prefWidth="64.0" text="Holzart" />
+                                 <TableColumn fx:id="task_col_quality" prefWidth="69.0" text="Qualität" />
+                                 <TableColumn fx:id="task_col_size" prefWidth="59.0" text="Stärke" />
+                                 <TableColumn fx:id="task_col_width" prefWidth="61.0" text="Breite" />
+                                 <TableColumn fx:id="task_col_length" prefWidth="58.0" text="Länge" />
+                                 <TableColumn fx:id="task_col_quantity" prefWidth="92.0" text="Anzahl" />
+                                 <TableColumn fx:id="task_col_produced_quantity" prefWidth="90.0" text="Produziert" />
+                                 <TableColumn fx:id="task_col_done" prefWidth="0.0" text="Fertig" visible="false" />
+                                 <TableColumn fx:id="task_col_in_progress" prefWidth="0.0" text="In_Arbeit" visible="false" />
                              </columns>
                          </TableView>
 
 
-                        <Button fx:id="btn_opt_alg" layoutX="584.0" layoutY="520.0" mnemonicParsing="false" onAction="#optimisationBtnClicked" prefHeight="40.0" prefWidth="220.0" text="Optimierung starten" />
+                        <Button fx:id="btn_opt_alg" layoutX="574.0" layoutY="520.0" mnemonicParsing="false" onAction="#optimisationBtnClicked" prefHeight="40.0" prefWidth="230.0" text="Mit Optimierung produzieren" />
                         <Button fx:id="btn_addLumber" layoutX="25.0" layoutY="520.0" mnemonicParsing="false" onAction="#addLumberButtonClicked" prefHeight="40.0" prefWidth="170.0" text="Schnittholz reservieren" />
-                        <Button fx:id="btn_createAssignment" layoutX="348.0" layoutY="520.0" mnemonicParsing="false" onAction="#createAssignmentButtonClicked" prefHeight="40.0" prefWidth="220.0" text="Produktion in Auftrag geben" />
+                        <Button fx:id="btn_createAssignment" layoutX="338.0" layoutY="520.0" mnemonicParsing="false" onAction="#createAssignmentButtonClicked" prefHeight="40.0" prefWidth="230.0" text="Ohne Optimierung produzieren" />
                         <Label layoutX="349.0" layoutY="14.0" prefHeight="10.0" prefWidth="110.0" text="Aufträge" textAlignment="CENTER">
                            <font>
                               <Font name="System Bold" size="21.0" />

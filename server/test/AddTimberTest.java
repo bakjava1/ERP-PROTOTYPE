@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.rest.TimberControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.TimberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateTimber;
 import org.junit.*;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class AddTimberTest {
 
     private static TimberService timberService;
 
-    private static ValidateTimber validateTimber = new ValidateTimber();
+    private static ValidateTimber validateTimber = new ValidateTimber(new PrimitiveValidator());
 
     private static TimberControllerImpl timberController;
 

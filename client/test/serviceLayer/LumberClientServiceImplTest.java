@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskController;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.util.CORSFilter;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateInput;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
@@ -54,7 +55,8 @@ public class LumberClientServiceImplTest {
     private static LumberDTO lumberDTO;
     @Mock
     private static LumberService lumberService;
-
+    @Mock
+    private static PrimitiveValidator primitiveValidator;
 
     @Before
     public void init(){
@@ -68,7 +70,7 @@ public class LumberClientServiceImplTest {
 
     @Test
     public void testUpdate_Lumber_ShouldBe_Valid() throws Exception {
-        lumberService=new LumberServiceImpl(lumberController, lumberConverter, taskController, validator) ;
+        lumberService=new LumberServiceImpl(lumberController, lumberConverter, taskController, validator, primitiveValidator) ;
 
         Lumber lumber = new Lumber();
         when(lumberConverter.convertRestDTOToPlainObject(any(LumberDTO.class))).thenReturn(lumber);
@@ -80,14 +82,14 @@ public class LumberClientServiceImplTest {
     @Ignore
     @Test
     public void testDeleteLumber_InvalidInputException() throws Exception {
-         lumberService=new LumberServiceImpl(lumberController, lumberConverter, taskController, validator) ;
+         lumberService=new LumberServiceImpl(lumberController, lumberConverter, taskController, validator,primitiveValidator) ;
         lumberService.deleteLumber(any(Lumber.class));
     }
 
 
     @Test
     public void testDelete_Lumber_PersistenceLayerException() throws Exception {
-        lumberService=new LumberServiceImpl(lumberController, lumberConverter, taskController, validator) ;
+        lumberService=new LumberServiceImpl(lumberController, lumberConverter, taskController, validator,primitiveValidator) ;
         Lumber lumber = new Lumber();
         when(lumberConverter.convertRestDTOToPlainObject(any(LumberDTO.class))).thenReturn(lumber);
 
@@ -100,7 +102,7 @@ public class LumberClientServiceImplTest {
     @Test
     public void test_update_lumber_Should_throw_InvalidInputException() throws Exception {
 
-        lumberService=new LumberServiceImpl(lumberController, lumberConverter, taskController, validator) ;
+        lumberService=new LumberServiceImpl(lumberController, lumberConverter, taskController, validator,primitiveValidator) ;
 
         Lumber lumber= new Lumber();
 

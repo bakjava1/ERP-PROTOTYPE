@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.rest.LumberControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.LumberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateLumber;
 import org.junit.*;
 import org.slf4j.Logger;
@@ -88,7 +89,7 @@ public class DeleteLumberServerPersistenceTest {
         lumberDTO2.setLength(3500);
         lumberDTO2.setQuantity(40);
 
-        validateLumber = new ValidateLumber();
+        validateLumber = new ValidateLumber(new PrimitiveValidator());
         lumberConverter = new LumberConverter();
         lumberService = new LumberServiceImpl(lumberDAO, lumberConverter, validateLumber);
         lumberController = new LumberControllerImpl(lumberService);

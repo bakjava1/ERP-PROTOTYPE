@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.CostBenefitService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
@@ -17,6 +18,7 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -47,7 +49,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
 import java.util.List;
 
 
@@ -189,7 +190,17 @@ public class OfficeFXML {
         col_costumerName.setCellValueFactory(new PropertyValueFactory<Order, String>("customerName"));
         col_taskAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("taskAmount"));
         col_amount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
-        col_grossSum.setCellValueFactory(new PropertyValueFactory<Order, Integer>("grossAmount"));
+        col_grossSum.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Order, String>, ObservableValue<String>>() {
+
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Order, String> p) {
+                if (p.getValue() != null) {
+                    return new SimpleStringProperty(((double) p.getValue().getGrossAmount() / 100) + " €");
+                } else {
+                    return new SimpleStringProperty("0.0 €");
+                }
+            }
+        });
 
 
         table_bill.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -198,7 +209,17 @@ public class OfficeFXML {
         col_billCostumerName.setCellValueFactory(new PropertyValueFactory<Order, String>("customerName"));
         col_billTaskAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("taskAmount"));
         col_billAmount.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantity"));
-        col_billGrossSum.setCellValueFactory(new PropertyValueFactory<Order, Integer>("grossAmount"));
+        col_billGrossSum.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Order, String>, ObservableValue<String>>() {
+
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Order, String> p) {
+                if (p.getValue() != null) {
+                    return new SimpleStringProperty(((double) p.getValue().getGrossAmount() / 100) + " €");
+                } else {
+                    return new SimpleStringProperty("0.0 €");
+                }
+            }
+        });
 
 
         col_taskNr.setCellValueFactory(new PropertyValueFactory<Task, Integer>("id"));
@@ -222,7 +243,6 @@ public class OfficeFXML {
 
         // Listen for selection changes
         table_bill.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showRechnungDetails(newValue));
-
     }
 
     @FXML
@@ -232,24 +252,27 @@ public class OfficeFXML {
         Order order = new Order();
 
         if(table_openOrder.getSelectionModel().getSelectedItem() != null) {
+            Order selectedOrder = table_openOrder.getSelectionModel().getSelectedItem();
             AlertBuilder confirmDeletion = new AlertBuilder();
-            boolean confirmed = confirmDeletion.showConfirmationAlert("Bestellung löschen", null, "Möchten Sie die Bestellung wirklich löschen?");
+            boolean confirmed = confirmDeletion.showConfirmationAlert("Bestellung löschen", null, "Möchten Sie die Bestellung "+selectedOrder.getID()+", "+selectedOrder.getCustomerName()+" wirklich löschen?");
 
             if(confirmed) {
-                order.setID(table_openOrder.getSelectionModel().getSelectedItem().getID());
+                order.setID(selectedOrder.getID());
 
-                Task task = new Task();
-                task.setOrder_id(order.getID());
+                //Task task = new Task();
+                //task.setOrder_id(order.getID());
 
                 try {
                     orderService.deleteOrder(order);
-                    taskService.deleteTask(task);
+                    //taskService.deleteTask(task);
                 } catch (InvalidInputException e) {
                     //InvalidInputException is never thrown
                     //the only user input is to select an order
-                    //LOG.warn(e.getMessage());
+                    LOG.warn(e.getMessage());
                 } catch (ServiceLayerException e) {
                     LOG.warn(e.getMessage());
+                    alertBuilder.showErrorAlert("Bestellung Löschen",
+                            null, "Fehler beim Löschen der Bestellung. "+ e.getMessage());
                 }
             }
         } else {
@@ -374,6 +397,7 @@ public class OfficeFXML {
                     timberService.addTimber(timber);
                     tf_timber_amount.setText("");
                     cb_timber_box.getSelectionModel().clearSelection();
+                    alertBuilder.showInformationAlert("Rundholz hinzugefügt", timber.getAmount() + " Rundhölzer zu Box " + timber.getBox_id() + " erfolgreich hinzugefügt", "");
                 }
             } catch (InvalidInputException e) {
                 LOG.error("Invalid Input Error: " + e.getMessage());
@@ -398,28 +422,6 @@ public class OfficeFXML {
 
         cb_timber_box.setItems(boxes);
         cb_timber_box.getSelectionModel().selectFirst();
-        cb_timber_box.setMaxWidth(200);
-        cb_timber_box.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-
-            @Override
-            public ListCell<String> call(ListView<String> param) {
-                ListCell cell = new ListCell<String>() {
-                    @Override
-                    public void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-
-                        getListView().setMaxWidth(200);
-                        if (!empty) {
-                            setText(item);
-                        } else {
-                            setText(null);
-                        }
-                    }
-                };
-                return cell;
-            }
-        });
-
         // force the field to be numeric only
         tf_timber_amount.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -662,14 +664,29 @@ public class OfficeFXML {
         boolean accept = alertBuilder.showConfirmationAlert("Rechnung abrechnen", "Wollen Sie die Bestellung mit Nummer " + selectedOrder.getID() + " abrechnen?", "");
         if(accept){
             try {
+
+                List<Task> updatedTasks = new ArrayList<>();
+
+                boolean taskNotDone = false;
+                for(Task task : selectedOrder.getTaskList()){
+                    Task updatedTask = taskService.getTaskById(task.getId());
+                    updatedTasks.add(updatedTask);
+                    if(!updatedTask.isDone()){
+                        alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Auftrag Nr. " + task.getId() +" wurde noch nicht fertig gestellt!",
+                                "Es wurden bisher " + task.getProduced_quantity() + " von " + task.getQuantity() + " reserviert!");
+                        taskNotDone = true;
+                    }
+                }
+                if(taskNotDone){
+                    return;
+                }
+                selectedOrder.setTaskList(updatedTasks);
                 orderService.invoiceOrder(selectedOrder);
                 updateBillTable();
                 updateTable();
                 alertBuilder.showInformationAlert("Rechnung abgerechnet", "Rechnung mit Nummer " + selectedOrder.getID() + " erfolgreich abgerechnet!","");
-            } catch (InvalidInputException e) {
-                alertBuilder.showErrorAlert("Fehler beim Abrechnen", "Bestellung konnte nicht erfolgreich abgerechnet werden!", e.getMessage());
-            } catch (ServiceLayerException e) {
-                alertBuilder.showErrorAlert("Fehler beim Abrechnen!", "", "");
+            } catch (ServiceLayerException | PersistenceLayerException e) {
+                alertBuilder.showErrorAlert("Fehler beim Abrechnen!", "Bestellung konnte nicht erfolgreich abgerechnet werden!", e.getMessage());
             }
         }
 

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
@@ -107,7 +108,19 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public void getTaskById(int task_id) throws PersistenceLayerException {
+    public TaskDTO getTaskById(@RequestParam(value="id", defaultValue="0")int id) throws PersistenceLayerException {
+        LOG.trace("called getTaskById");
 
+        TaskDTO taskDTO = null;
+
+        try {
+            taskDTO = restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/getTaskById/{id}", TaskDTO.class, id);
+        }catch(HttpStatusCodeException e){
+                HandleException.handleHttpStatusCodeException(e);
+        } catch(RestClientException e){
+                LOG.warn("server down? ", e.getMessage());
+                throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
+        }
+        return taskDTO;
     }
 }

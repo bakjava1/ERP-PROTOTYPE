@@ -1,15 +1,17 @@
 package at.ac.tuwien.sepm.assignment.group02.server.service;
 
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.OrderConverter;
 import at.ac.tuwien.sepm.assignment.group02.server.converter.TaskConverter;
-import at.ac.tuwien.sepm.assignment.group02.server.entity.Filter;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.*;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityCreationException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundExceptionService;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.OrderDAO;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.TaskDAO;
@@ -42,13 +44,35 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(OrderDTO orderDTO) throws ServiceLayerException {
+        LOG.debug("called deleteOrder");
         Order orderToDelete = orderConverter.convertRestDTOToPlainObject(orderDTO);
-        try {
+
+        if(orderDTO.getTaskList() != null) {
+            List<Task> connected_tasks;
+            try {             //get all connected tasks
+                connected_tasks = taskManagementDAO.getTasksByOrderId(orderDTO.getID());
+            } catch (PersistenceLayerException e) {
+                LOG.error("Error while getting connected tasks");
+                throw new ServiceLayerException("Datenbank Problem.");
+            }
+
+            for (Task t : connected_tasks) {
+                try {             //delete each connected tasks
+                    taskManagementDAO.deleteTask(t);
+                } catch (PersistenceLayerException e) {
+                    LOG.error("Error while deleting task " + t.getId());
+                    throw new ServiceLayerException("Datenbank Problem.");
+                }
+            }
+        }
+
+        try {             //delete the order
             orderManagementDAO.deleteOrder(orderToDelete);
         } catch (PersistenceLayerException e) {
-            LOG.error("Error while deleting an order");
-            throw new ServiceLayerException("Failed Persistenz");
+            LOG.error("Error while deleting order "+orderToDelete.getID());
+            throw new ServiceLayerException("Datenbank Problem.");
         }
+
     }
 
     @Override
@@ -139,22 +163,25 @@ public class OrderServiceImpl implements OrderService {
     public void invoiceOrder(OrderDTO orderDTO) throws ServiceLayerException {
         Order order = orderConverter.convertRestDTOToPlainObject(orderDTO);
 
-        List<TaskDTO> taskDTOList = orderDTO.getTaskList();
+        if(orderDTO.getTaskList() != null) {
+            List<TaskDTO> taskDTOList = orderDTO.getTaskList();
 
-        List<Task> taskList = new ArrayList<>();
+            List<Task> taskList = new ArrayList<>();
+            for (TaskDTO taskDTO : taskDTOList) {
+                taskList.add(taskConverter.convertRestDTOToPlainObject(taskDTO));
+            }
 
-        for(TaskDTO taskDTO : taskDTOList){
-            taskList.add(taskConverter.convertRestDTOToPlainObject(taskDTO));
+            order.setTaskList(taskList);
+            //TODO delete lumber from database
         }
-
-        order.setTaskList(taskList);
-        //TODO delete lumber from database
 
         try {
             orderManagementDAO.invoiceOrder(order);
-            for(Task task : order.getTaskList()){
-                //delete lumber for this task
-                deleteLumberForInvoicedTask(task);
+            if(order.getTaskList() != null) {
+                for (Task task : order.getTaskList()) {
+                    //delete lumber for this task
+                    deleteLumberForInvoicedTask(task);
+                }
             }
         } catch (PersistenceLayerException e) {
             LOG.error("Error while tying to invoice Order: " + e.getMessage());
@@ -184,7 +211,7 @@ public class OrderServiceImpl implements OrderService {
                 lumberDAO.removeLumber(lumber.getId(), availableLumber);            }
         }
         if(remainingQuantity > 0){
-                throw new ServiceLayerException("Not enough Lumber for task {" + task.toString() + "} available");
+               // throw new ServiceLayerException("Not enough Lumber for task {" + task.toString() + "} available");
         }
     }
 

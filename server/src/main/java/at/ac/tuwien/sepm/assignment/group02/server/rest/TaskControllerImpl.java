@@ -9,10 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -66,8 +63,8 @@ public class TaskControllerImpl {
 
     @RequestMapping(value="/getTaskById/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get Task By Id")
-    public TaskDTO getTaskById(int task_id) throws ServiceLayerException {
+    public TaskDTO getTaskById(@PathVariable(value = "id")int id) throws ServiceLayerException {
         LOG.debug("called getTaskById");
-        return taskService.getTaskById(task_id);
+        return taskService.getTaskById(id);
     }
 }

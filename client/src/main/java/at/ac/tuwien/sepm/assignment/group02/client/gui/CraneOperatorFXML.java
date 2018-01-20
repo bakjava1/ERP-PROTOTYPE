@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -71,7 +74,8 @@ public class CraneOperatorFXML {
     private Label currentAssignment_amount;
     @FXML
     private Label currentAssignment_box;
-
+    @FXML
+    private Label label_date;
     @FXML
     private Button btn_done;
     @FXML
@@ -81,17 +85,32 @@ public class CraneOperatorFXML {
 
     @FXML
     public void initialize() {
-        initializeAssignmentTable();
-        updateAssignmentTable();
         btn_done.setVisible(false);
         btn_inProgressAbort.setVisible(false);
+        DateFormat dateFormat = new SimpleDateFormat("DD.MM.YY");
+        Date date = new Date();
+
+        label_date.setText(dateFormat.format(date));
+        initializeAssignmentTable();
+        updateAssignmentTable();
+
+        deleteYesterdaysAssignments();
+    }
+
+    private void deleteYesterdaysAssignments(){
+        try {
+            assignmentService.cleanUpAssignments();
+        } catch (ServiceLayerException e) {
+            LOG.warn(e.getMessage());
+        }
+        updateAssignmentTable();
     }
 
     private void initializeAssignmentTable() {
         table_open_assignment.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         col_open_assignmentNr.setCellValueFactory(new PropertyValueFactory<>("id"));
-        col_open_assignmentCreated.setCellValueFactory(new PropertyValueFactory<>("creation_date"));
+        col_open_assignmentCreated.setCellValueFactory(new PropertyValueFactory<>("creation_time"));
         col_open_assignmentAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         col_open_assignmentBoxID.setCellValueFactory(new PropertyValueFactory<>("box_id"));
 
@@ -99,7 +118,7 @@ public class CraneOperatorFXML {
         table_open_assignment.setItems(assignments);
 
         col_done_assignmentNr.setCellValueFactory(new PropertyValueFactory<>("id"));
-        col_done_assignmentCreated.setCellValueFactory(new PropertyValueFactory<>("creation_date"));
+        col_done_assignmentCreated.setCellValueFactory(new PropertyValueFactory<>("creation_time"));
         col_done_assignmentAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         col_done_assignmentBoxID.setCellValueFactory(new PropertyValueFactory<>("box_id"));
 
@@ -109,44 +128,7 @@ public class CraneOperatorFXML {
         table_done_assignment.getSelectionModel().setSelectionMode(null);
         //table_done_assignment.setDisable(true);
 
-        Task<Integer> task = new Task<>() {
-            @Override
-            protected Integer call() throws Exception {
-                while(true){
-                    if(isCancelled()) break;
-                    Thread.sleep(5000);
-                    int selected_index1 = table_open_assignment.getSelectionModel().getSelectedIndex();
-                    int selected_index2 = table_done_assignment.getSelectionModel().getSelectedIndex();
-                    updateAssignmentTable();
-                    table_open_assignment.getSelectionModel().select(selected_index1);
-                    table_done_assignment.getSelectionModel().select(selected_index2);
-                }
-                return 1;
-            }
-        };
-
-        //start the auto-refresh task
-        Thread th = new Thread(task);
-        th.setDaemon(true);
-        th.start();
-    }
-
-    private void updateAssignmentTable() {
-        List<AssignmentDTO> allOpenAssignments = new LinkedList<>();
-        List<AssignmentDTO> allDoneAssignments = new LinkedList<>();
-        try {
-            allOpenAssignments = assignmentService.getAllOpenAssignments();
-            allDoneAssignments = assignmentService.getAllAssignments();
-        } catch (ServiceLayerException e) {
-            LOG.warn("error while updating assignment table for crane operator");
-            alertBuilder.showErrorAlert("Aufgaben-Service", null,
-                    "Tabelle konnte nicht aktualisiert werden. "+ e.getMessage());
-        }
-
-        table_open_assignment.setItems(FXCollections.observableArrayList(allOpenAssignments));
-        table_done_assignment.setItems(FXCollections.observableArrayList(allDoneAssignments));
-
-        // set row factory in order to create context menu and set row color
+        // set row factory in order to set row color
         table_done_assignment.setRowFactory(
                 new Callback<>() {
                     @Override
@@ -170,6 +152,46 @@ public class CraneOperatorFXML {
                         return row;
                     }
                 });
+
+        Task<Integer> task = new Task<>() {
+            @Override
+            protected Integer call() throws Exception {
+                while(true){
+                    if(isCancelled()) break;
+                    Thread.sleep(5000);
+                    //store currently selected indices
+                    int selected_index1 = table_open_assignment.getSelectionModel().getSelectedIndex();
+                    int selected_index2 = table_done_assignment.getSelectionModel().getSelectedIndex();
+                    updateAssignmentTable();
+                    //restore selection
+                    table_open_assignment.getSelectionModel().select(selected_index1);
+                    table_done_assignment.getSelectionModel().select(selected_index2);
+                }
+                return 1;
+            }
+        };
+
+        //start the auto-refresh task
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
+    }
+
+    private void updateAssignmentTable() {
+
+        List<AssignmentDTO> allOpenAssignments = new LinkedList<>();
+        List<AssignmentDTO> allDoneAssignments = new LinkedList<>();
+        try {
+            allOpenAssignments = assignmentService.getAllOpenAssignments();
+            allDoneAssignments = assignmentService.getAllClosedAssignments();
+        } catch (ServiceLayerException e) {
+            LOG.warn("error while updating assignment table for crane operator");
+            alertBuilder.showErrorAlert("Aufgaben-Service", null,
+                    "Tabelle konnte nicht aktualisiert werden. "+ e.getMessage());
+        }
+
+        table_open_assignment.setItems(FXCollections.observableArrayList(allOpenAssignments));
+        table_done_assignment.setItems(FXCollections.observableArrayList(allDoneAssignments));
 
         table_open_assignment.refresh();
         table_done_assignment.refresh();
@@ -252,6 +274,7 @@ public class CraneOperatorFXML {
                     super.succeeded();
                     LOG.debug("set-done succeeded with value {}", getValue());
                     alertBuilder.showInformationAlert("Aufgaben-Service", null, "Aufgabe " + assignmentDTO.getId() + " wurde als erledigt markiert.");
+                    updateAssignmentTable();
                 }
 
                 @Override

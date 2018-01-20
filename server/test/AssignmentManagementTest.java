@@ -60,11 +60,11 @@ public class AssignmentManagementTest {
     }
 
     @Test (expected = PersistenceLayerException.class)
-    public void getAllAssignments_throws_Exception_in_persistenceLayer_withoutDB() throws PersistenceLayerException {
+    public void getAllClosedAssignments_throws_Exception_in_persistenceLayer_withoutDB() throws PersistenceLayerException {
         LOG.debug("testing get all open assignments for exception when DB is not available");
 
         DBUtil.closeConnection();
-        assignmentDAO.getAllAssignments();
+        assignmentDAO.getAllClosedAssignments();
     }
 
     @Test

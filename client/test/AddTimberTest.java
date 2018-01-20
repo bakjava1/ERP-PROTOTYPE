@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerExcept
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TimberController;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberServiceImpl;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateInput;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateTimber;
 import org.junit.AfterClass;
@@ -27,7 +28,7 @@ public class AddTimberTest {
     private static Timber timberAmountError;
     private static Timber timberNoError;
     private static TimberController timberControllerMock = Mockito.mock(TimberController.class);
-    private static ValidateTimber timberValidator = new ValidateTimber();
+    private static ValidateTimber timberValidator = new ValidateTimber(new PrimitiveValidator());
     private static TimberService timberService = new TimberServiceImpl(timberControllerMock, new TimberConverter(), timberValidator);
 
     @BeforeClass

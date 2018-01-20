@@ -7,6 +7,8 @@ import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderController;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.OrderControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.OrderServiceImpl;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import org.junit.*;
 import org.mockito.Mockito;
@@ -38,7 +40,9 @@ public class createOrderClientSideTest {
         orderDTO = new OrderDTO();
         restTemplate = Mockito.mock(RestTemplate.class);
         orderController =  new OrderControllerImpl(restTemplate);
-        orderService = new OrderServiceImpl(orderController,new OrderConverter(),new TaskConverter());
+        PrimitiveValidator primitiveValidator = new PrimitiveValidator();
+        Validator validator = new Validator(primitiveValidator);
+        orderService = new OrderServiceImpl(orderController,new OrderConverter(),new TaskConverter(),validator);
     }
 
     @Test(expected = PersistenceLayerException.class)

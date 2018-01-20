@@ -1,9 +1,6 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.OptAlgorithmResult;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.*;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.*;
@@ -22,9 +19,7 @@ import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -75,8 +70,6 @@ public class OptimisationFXML {
 
     @FXML
     void initialize() {
-
-
 
         tv_tasks.setSelectionModel(null);
         tc_task_amount.setCellValueFactory(new PropertyValueFactory("algorithmResultAmount"));
@@ -198,10 +191,6 @@ public class OptimisationFXML {
 
         Image image = SwingFXUtils.toFXImage(bestResult.getRenderedImage(), null);
         iv_cutaway_view.setImage(image);
-
-
-
     }
-
 
 }

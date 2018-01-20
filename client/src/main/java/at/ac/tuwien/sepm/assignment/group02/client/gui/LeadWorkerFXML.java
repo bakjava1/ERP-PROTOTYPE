@@ -14,6 +14,9 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -182,7 +185,7 @@ public class LeadWorkerFXML {
         col_reserved_quantity.setCellValueFactory(new PropertyValueFactory<>("reserved_quantity"));
 
         cb_finishing.setItems(FXCollections.observableArrayList("keine Angabe", "roh", "gehobelt", "besäumt", "prismiert", "trocken","lutro","frisch", "imprägniert"));
-        cb_wood_type.setItems(FXCollections.observableArrayList("keine Angabe", "Fi", "Ta", "Lä", "Ki", "Zi"));
+        cb_wood_type.setItems(FXCollections.observableArrayList("keine Angabe", "Fi", "Ta", "Lae"));
         cb_quality.setItems(FXCollections.observableArrayList("keine Angabe", "O","I","II","III","IV","V", "O/III", "III/IV", "III/V"));
 
         cb_finishing.getSelectionModel().selectFirst();
@@ -191,6 +194,46 @@ public class LeadWorkerFXML {
 
         //hide button "Reservieren" (only show it after task is selected)
         btn_reserve.setVisible(false);
+
+        tf_length.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    tf_length.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        tf_quantity.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    tf_quantity.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        tf_strength.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    tf_strength.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        tf_width.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    tf_width.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
 
         //add image to reset search parameters button
         URL imgpath = LeadWorkerFXML.class
@@ -227,48 +270,6 @@ public class LeadWorkerFXML {
         task_col_done.setCellValueFactory(new PropertyValueFactory<>("done"));
         task_col_in_progress.setCellValueFactory(new PropertyValueFactory<>("in_progress"));
 
-        Task<Integer> task = new Task<>() {
-            @Override
-            protected Integer call() throws Exception {
-                while(true){
-                    if(isCancelled()) break;
-                    Thread.sleep(5000);
-                    int selected_index = table_task.getSelectionModel().getSelectedIndex();
-                    updateTaskTable();
-                    table_task.getSelectionModel().select(selected_index);
-                }
-                return 1;
-            }
-        };
-
-        //start the auto-refresh task
-        Thread th = new Thread(task);
-        th.setDaemon(true);
-        th.start();
-    }
-
-    private void updateTaskTable() {
-        LOG.debug("called updateTaskTable");
-
-        List<TaskDTO> allOpenTasks = null;
-
-        try{
-            allOpenTasks = taskService.getAllOpenTasks();
-        } catch (ServiceLayerException e){
-            LOG.warn(e.getMessage());
-            alertBuilder.showErrorAlert("Übersicht Aufträge",
-                    null, "Fehler bei Erstellung der Auftragsübersicht. "+ e.getMessage());
-        }
-
-        if(allOpenTasks != null){
-            ObservableList<TaskDTO> openTasksForTable = FXCollections.observableArrayList();
-            openTasksForTable.addAll(allOpenTasks);
-            table_task.setItems(openTasksForTable);
-            table_task.refresh();
-        } else {
-            table_task.refresh();
-        }
-
         // single row can be selected
         table_task.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
@@ -300,6 +301,72 @@ public class LeadWorkerFXML {
                         return row;
                     }
                 });
+
+        Task<Integer> task = new Task<>() {
+            @Override
+            protected Integer call() throws Exception {
+                while(true){
+                    if(isCancelled()) break;
+                    Thread.sleep(5000);
+
+                    //remember selected row
+                    int selected_index = table_task.getSelectionModel().getSelectedIndex();
+
+                    //remember current sort order
+                    TableColumn sort_column = null;
+                    TableColumn.SortType sort_type = null;
+
+                    if (!table_task.getSortOrder().isEmpty()) {
+                        sort_column = table_task.getSortOrder().get(0);
+                        sort_type = sort_column.getSortType();
+                    }
+
+                    //update tasks
+                    updateTaskTable();
+
+                    final TableColumn sc = sort_column;
+                    final TableColumn.SortType st = sort_type;
+
+                    Platform.runLater(()-> {
+                        //restore sort order
+                        if(sc != null) {
+                            table_task.getSortOrder().add(sc);
+                            sc.setSortType(st);
+                            sc.setSortable(true);
+                        }
+                        //set previous selected row
+                        table_task.getSelectionModel().select(selected_index);
+                    });
+
+                }
+                return 1;
+            }
+        };
+
+        //start the auto-refresh task
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
+    }
+
+    private void updateTaskTable() {
+        LOG.debug("called updateTaskTable");
+
+        List<TaskDTO> allOpenTasks = null;
+
+        try{
+            allOpenTasks = taskService.getAllOpenTasks();
+        } catch (ServiceLayerException e){
+            LOG.warn(e.getMessage());
+            alertBuilder.showErrorAlert("Übersicht Aufträge",
+                    null, "Fehler bei Erstellung der Auftragsübersicht. "+ e.getMessage());
+        }
+
+        if(allOpenTasks != null){
+            ObservableList<TaskDTO> openTasksForTable = FXCollections.observableArrayList();
+            openTasksForTable.addAll(allOpenTasks);
+            Platform.runLater(()->table_task.setItems(openTasksForTable));
+        }
 
         table_task.refresh();
     }

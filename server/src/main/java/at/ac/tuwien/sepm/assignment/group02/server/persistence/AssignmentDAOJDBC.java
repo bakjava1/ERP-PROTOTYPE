@@ -82,7 +82,7 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
             while(rs.next()) {
                 assignment = new Assignment();
                 assignment.setId(rs.getInt("ID"));
-                assignment.setCreation_date(rs.getDate("CREATION_DATE").toString());
+                assignment.setCreation_date(rs.getString("CREATION_DATE"));
                 assignment.setAmount(rs.getInt("AMOUNT"));
                 assignment.setBox_id(rs.getInt("BOX_ID"));
                 assignment.setDone(rs.getBoolean("ISDONE"));
@@ -98,7 +98,7 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
     }
 
     @Override
-    public List<Assignment> getAllAssignments() throws PersistenceLayerException {
+    public List<Assignment> getAllClosedAssignments() throws PersistenceLayerException {
         LOG.trace("get all assignments called in server persistence layer");
 
         List<Assignment> assignmentList = new LinkedList<>();
@@ -114,7 +114,7 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
             while(rs.next()) {
                 assignment = new Assignment();
                 assignment.setId(rs.getInt("ID"));
-                assignment.setCreation_date(rs.getDate("CREATION_DATE").toString());
+                assignment.setCreation_date(rs.getString("CREATION_DATE"));
                 assignment.setAmount(rs.getInt("AMOUNT"));
                 assignment.setBox_id(rs.getInt("BOX_ID"));
                 assignment.setDone(rs.getBoolean("ISDONE"));
@@ -149,5 +149,21 @@ public class AssignmentDAOJDBC implements AssignmentDAO {
     @Override
     public void deleteAssignment(int id) throws PersistenceLayerException {
 
+    }
+
+    @Override
+    public void deleteYesterdaysAssignments() throws PersistenceLayerException {
+        LOG.debug("called deleteYesterdaysAssignments");
+        String deleteAssignments = "DELETE FROM ASSIGNMENT WHERE ISDONE=TRUE " +
+                "AND CREATION_DATE <= DATEADD('DAY',-1, CURRENT_DATE)";
+        try {
+            PreparedStatement stmt = dbConnection.prepareStatement(deleteAssignments);
+            stmt.execute();
+            LOG.debug("stmt: ", stmt.toString());
+            stmt.close();
+        } catch(SQLException e) {
+            LOG.error("SQL Exception: " + e.getMessage());
+            throw new PersistenceLayerException("Datenbank Problem");
+        }
     }
 }
