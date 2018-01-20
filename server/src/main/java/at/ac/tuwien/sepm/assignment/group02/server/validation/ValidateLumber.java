@@ -88,14 +88,14 @@ public class ValidateLumber implements ValidateInput<Lumber> {
 
 
         try {
-            primitiveValidator.isNumber(strength, 1000);
+            primitiveValidator.isNumber(strength, 515);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Size: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Dicke: " + e.getMessage());
         }
 
         try {
-            primitiveValidator.isNumber(width, 1000);
+            primitiveValidator.isNumber(width, 515);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Width: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Breite: " + e.getMessage());

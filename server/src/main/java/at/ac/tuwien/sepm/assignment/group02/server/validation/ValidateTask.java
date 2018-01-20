@@ -91,14 +91,14 @@ public class ValidateTask implements ValidateInput<Task> {
         }
 
         try {
-            primitiveValidator.isNumber(task.getSize(),1000);
+            primitiveValidator.isNumber(task.getSize(),515);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Size: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Dicke: " + e.getMessage());
         }
 
         try {
-            primitiveValidator.isNumber(task.getWidth(),1000);
+            primitiveValidator.isNumber(task.getWidth(),515);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Width: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Breite: " + e.getMessage());
@@ -115,7 +115,7 @@ public class ValidateTask implements ValidateInput<Task> {
         }
 
         try {
-            primitiveValidator.isNumber(task.getQuantity(),1000);
+            primitiveValidator.isNumber(task.getQuantity(),100000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Quantity: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Anzahl: " + e.getMessage());

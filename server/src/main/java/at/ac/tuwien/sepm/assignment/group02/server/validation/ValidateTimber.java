@@ -43,7 +43,7 @@ public class ValidateTimber implements ValidateInput<Timber> {
         }
 
         try {
-            primitiveValidator.isNumber(timber.getAmount(),800);
+            primitiveValidator.isNumber(timber.getAmount(),50);
         } catch(NoValidIntegerException e) {
             LOG.error("Error in Timber Amount: "+ e.getMessage());
             throw new InvalidInputException("Fehler bei Anzahl Rundholz: " + e.getMessage());
