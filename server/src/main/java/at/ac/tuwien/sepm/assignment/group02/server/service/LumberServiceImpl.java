@@ -124,6 +124,13 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
+    public void reserveLumberAlg(LumberDTO lumberDTO) {
+        Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
+
+        lumberManagementDAO.updateLumberAlg(lumber);
+    }
+
+    @Override
     public void updateLumber(LumberDTO lumberDTO) throws ServiceLayerException {
 
         Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);

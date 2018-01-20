@@ -59,6 +59,22 @@ public class LumberControllerImpl implements LumberController {
     }
 
     @Override
+    public void reserveLumberAlg(LumberDTO lumberDTO) {
+        LOG.debug("Sending request for lumber reservation to server");
+
+        try {
+            restTemplate.exchange(
+                    "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/reserveLumberAlg",
+                    HttpMethod.PUT, new HttpEntity<>(lumberDTO), LumberDTO.class);
+
+        } catch(HttpStatusCodeException e){
+
+        } catch(RestClientException e){
+
+        }
+    }
+
+    @Override
     public List<LumberDTO> getAllLumber(@RequestBody FilterDTO filterDTO) throws PersistenceLayerException {
         LOG.debug("get lumber");
 

@@ -31,6 +31,12 @@ public interface LumberDAO {
     void updateLumber(Lumber lumber) throws PersistenceLayerException;
 
     /**
+     * update an existing lumber
+     * @param lumber lumber to update
+     */
+    void updateLumberAlg(Lumber lumber);
+
+    /**
      * delete lumber from the lumber store.
      * @param lumber
      * @throws PersistenceLayerException

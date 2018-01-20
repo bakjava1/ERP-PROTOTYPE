@@ -155,6 +155,7 @@ public class LeadWorkerFXML {
     private OptimisationAlgorithmService optimisationAlgorithmService;
 
     private TaskDTO selectedTask;
+    private TaskDTO selectedTaskAlgorithm;
 
     @Autowired
     public LeadWorkerFXML(LumberService lumberService, OptimisationFXML optimisationFXML, TaskService taskService, AssignmentService assignmentService, OptimisationAlgorithmService optimisationAlgorithmService){
@@ -628,10 +629,12 @@ public class LeadWorkerFXML {
 
                 }*/
 
-                TaskDTO task = table_task.getSelectionModel().getSelectedItem();
-                if(!task.isDone()) {
+                selectedTaskAlgorithm = table_task.getSelectionModel().getSelectedItem();
+                if(selectedTaskAlgorithm.isDone() || selectedTaskAlgorithm.isIn_progress()) {
+                    failed();
+                } else {
                     try {
-                        bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(task);
+                        bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(selectedTaskAlgorithm);
                     } catch (PersistenceLayerException e) {
                         LOG.error("Fehler bei der Optimierung in der Persistenzschicht" + e.getMessage());
                         alertBuilder.showErrorAlert("Fehler", "Fehler in der Persistenzschicht", e.getMessage());
@@ -639,8 +642,6 @@ public class LeadWorkerFXML {
                         LOG.error("Fehler beim Optimierungsalgorithmus:" + e.getMessage());
                         alertBuilder.showErrorAlert("Fehler", "Fehler bei der Optimierung", e.getMessage());
                     }
-                } else {
-                    failed();
                 }
 
 
@@ -674,7 +675,13 @@ public class LeadWorkerFXML {
 
             @Override
             protected void failed(){
-                alertBuilder.showInformationAlert("Information", "Auftrag ist bereits fertig!", "Bitte wählen Sie einen anderen Auftrag aus.");
+                if(selectedTaskAlgorithm.isDone()) {
+                    alertBuilder.showInformationAlert("Information", "Auftrag ist bereits fertig!", "Bitte wählen Sie einen anderen Auftrag aus.");
+                } else if(selectedTaskAlgorithm.isIn_progress()) {
+                    alertBuilder.showInformationAlert("Information", "Auftrag wird bereits produziert!", "Bitte wählen Sie einen anderen Auftrag aus.");
+                } else {
+                    alertBuilder.showInformationAlert("Fehler", "", "Es konnte keine Optimierung durchgeführt werden.");
+                }
                 btn_opt_alg.setDisable(false);
             }
         }, "optimisation-algorithm").start();

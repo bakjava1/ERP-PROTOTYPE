@@ -46,6 +46,12 @@ public interface LumberService {
     void reserveLumber(LumberDTO lumberDTO) throws ServiceLayerException;
 
     /**
+     * mark lumber as reserved
+     * @param lumberDTO lumber to reserve
+     */
+    void reserveLumberAlg(LumberDTO lumberDTO);
+
+    /**
      * insert a new lumber in the lumber store
      * @param lumber
      * @throws ServiceLayerException

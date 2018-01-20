@@ -311,8 +311,29 @@ public class LumberDAOJDBC implements LumberDAO {
 
     }
 
+    @Override
+    public void updateLumberAlg(Lumber lumber) {
+        LOG.debug("Entering update Lumber method with parameter:{}" ,lumber);
 
+        String updateLumber =    "UPDATE Lumber SET quantity=?, reserved_quantity=? WHERE ID=?";
 
+        try {
+            PreparedStatement ps = dbConnection.prepareStatement(updateLumber);
+            ps.setInt(1, lumber.getQuantity());
+            ps.setInt(2, lumber.getReserved_quantity());
+            ps.setInt(3, lumber.getId());
+
+            LOG.debug(ps.toString());
+
+            int executeUpdate = ps.executeUpdate();
+            LOG.debug("executeUpdate: {}", executeUpdate);
+
+            ps.close();
+        } catch (SQLException e){
+
+        }
+
+    }
 
     @Override
     public void deleteLumber(Lumber lumber) throws PersistenceLayerException {

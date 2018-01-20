@@ -27,6 +27,8 @@ public class TaskDTO {
 
     private boolean deleted;
 
+    private int algorithmResultAmount;
+
     public TaskDTO() {
 
     }
@@ -166,6 +168,10 @@ public class TaskDTO {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    public void setAlgorithmResultAmount(int algorithmResultAmount) { this.algorithmResultAmount = algorithmResultAmount; }
+
+    public int getAlgorithmResultAmount() { return algorithmResultAmount; }
 
     @Override
     public String toString() {

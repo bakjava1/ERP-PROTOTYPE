@@ -151,6 +151,35 @@ public class LumberServiceImpl implements LumberService {
         }
     }
 
+    @Override
+    public void reserveLumberAlg(Lumber lumber, int quantity, TaskDTO taskDTO) throws ServiceLayerException {
+        LOG.debug("reserveLumberAlg called: {}", lumber);
+
+        int currentProducedQuantity = taskDTO.getProduced_quantity();
+        int currentQuantity = lumber.getQuantity();
+        int currentReservedQuantity = lumber.getReserved_quantity();
+        if(taskDTO.getQuantity() > currentProducedQuantity + quantity) {
+            taskDTO.setProduced_quantity(currentProducedQuantity + quantity);
+            lumber.setReserved_quantity(currentReservedQuantity + quantity);
+        } else if (taskDTO.getQuantity() == (currentProducedQuantity + quantity)){
+            taskDTO.setProduced_quantity(currentProducedQuantity + quantity);
+            lumber.setReserved_quantity(currentReservedQuantity + quantity);
+            taskDTO.setDone(true);
+            taskDTO.setIn_progress(false);
+        } else {
+            taskDTO.setProduced_quantity(taskDTO.getQuantity());
+            lumber.setReserved_quantity(currentReservedQuantity + (taskDTO.getQuantity() - currentProducedQuantity));
+        }
+
+        lumber.setQuantity(currentQuantity + quantity);
+
+        // convert lumber to lumberDTO
+        LumberDTO lumberDTO = lumberConverter.convertPlainObjectToRestDTO(lumber);
+
+        lumberController.reserveLumberAlg(lumberDTO);
+        taskController.updateTaskAlg(taskDTO);
+    }
+
 
     @Override
     public boolean deleteLumber(Lumber lumber) throws ServiceLayerException {

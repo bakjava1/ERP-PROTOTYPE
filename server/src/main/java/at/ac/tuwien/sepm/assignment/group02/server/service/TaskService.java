@@ -30,6 +30,12 @@ public interface TaskService {
     void updateTask(TaskDTO task) throws ServiceLayerException;
 
     /**
+     * updating task with reserved lumber
+     * @param task to be updated
+     */
+    void updateTaskAlg(TaskDTO task);
+
+    /**
      * method returns all open tasks
      * @return a List of TaskDTO that are marked as open tasks
      * @throws ServiceLayerException in case the TaskDTO can't be returned

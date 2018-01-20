@@ -37,6 +37,14 @@ public interface LumberController {
     void reserveLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
 
     /**
+     * reserve additional lumber
+     * @param lumberDTO lumber to reserve
+     * @throws PersistenceLayerException
+     * @inv lumberDTO is validated
+     */
+    void reserveLumberAlg(LumberDTO lumberDTO);
+
+    /**
      * update a lumber and marking it  as reserved
      * @param lumberDTO
      * @throws PersistenceLayerException

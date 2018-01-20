@@ -1,14 +1,12 @@
 package at.ac.tuwien.sepm.assignment.group02.client.gui;
 
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.OptAlgorithmResult;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.service.*;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -27,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class OptimisationFXML {
@@ -80,7 +79,7 @@ public class OptimisationFXML {
 
 
         tv_tasks.setSelectionModel(null);
-        tc_task_amount.setCellValueFactory(new PropertyValueFactory("quantity"));
+        tc_task_amount.setCellValueFactory(new PropertyValueFactory("algorithmResultAmount"));
         tc_task_description.setCellValueFactory(new PropertyValueFactory("description"));
         tc_task_finishing.setCellValueFactory(new PropertyValueFactory("finishing"));
         tc_task_length.setCellValueFactory(new PropertyValueFactory("length"));
@@ -141,12 +140,30 @@ public class OptimisationFXML {
         TimberDTO timberDTO = observableListTimber.get(0);
 
         ObservableList<TaskDTO> observableListTasks = tv_tasks.getItems();
-        TaskDTO taskDTO = observableListTasks.get(0);
+        TaskDTO mainTask = observableListTasks.get(0);
 
+        int timberAmount = timberDTO.getTaken_amount();
         assignmentDTO.setBox_id(timberDTO.getBox_id());
-        assignmentDTO.setAmount(timberDTO.getTaken_amount());
-        assignmentDTO.setTask_id(taskDTO.getId());
+        assignmentDTO.setAmount(timberAmount);
+        assignmentDTO.setTask_id(mainTask.getId());
         assignmentService.createAssignment(assignmentDTO);
+
+        int lumberAmount;
+        for(int i = 1; i < observableListTasks.size(); i++) {
+            TaskDTO taskDTO = observableListTasks.get(i);
+            lumberAmount = timberAmount * taskDTO.getAlgorithmResultAmount();
+            FilterDTO filterDTO = new FilterDTO();
+            filterDTO.setDescription(taskDTO.getDescription());
+            filterDTO.setFinishing(taskDTO.getFinishing());
+            filterDTO.setWood_type(taskDTO.getWood_type());
+            filterDTO.setQuality(taskDTO.getQuality());
+            filterDTO.setSize(String.valueOf(taskDTO.getSize()));
+            filterDTO.setWidth(String.valueOf(taskDTO.getWidth()));
+            filterDTO.setLength(String.valueOf(taskDTO.getLength()));
+            List<Lumber> list = lumberService.getAll(filterDTO);
+            Lumber lumber = list.get(0);
+            lumberService.reserveLumberAlg(lumber, lumberAmount, taskDTO);
+        }
 
         stage.close();
     }

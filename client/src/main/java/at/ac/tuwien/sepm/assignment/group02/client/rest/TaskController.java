@@ -32,6 +32,12 @@ public interface TaskController {
     void updateTask(TaskDTO task) throws PersistenceLayerException;
 
     /**
+     * updating task with lumber
+     * @param task to be updated
+     */
+    void updateTaskAlg(TaskDTO task);
+
+    /**
      * showing an overview for the existing task
      * @return a list of tasks
      * @throws PersistenceLayerException

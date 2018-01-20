@@ -71,6 +71,20 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
+    public void updateTaskAlg(@RequestBody TaskDTO task) {
+        LOG.info("Attempting to update Task");
+        try {
+            restTemplate.exchange(
+                    "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateTaskAlg",
+                    HttpMethod.PUT, new HttpEntity<>(task), TaskDTO.class);
+        } catch(HttpStatusCodeException e){
+
+        } catch(RestClientException e){
+
+        }
+    }
+
+    @Override
     public List<TaskDTO> getAllOpenTasks() throws PersistenceLayerException {
         LOG.trace("called getAllOpenTasks");
 

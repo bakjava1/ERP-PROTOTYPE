@@ -83,6 +83,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public void updateTaskAlg(TaskDTO task) {
+        LOG.info("called updateTask");
+
+        Task toUpdate = taskConverter.convertRestDTOToPlainObject(task);
+
+        taskManagementDAO.updateTaskAlg(toUpdate);
+    }
+
+    @Override
     public List<TaskDTO> getAllOpenTasks() throws ServiceLayerException {
         LOG.trace("called getAllOpenTasks");
         List<TaskDTO> allOpenConverted = new ArrayList<>();

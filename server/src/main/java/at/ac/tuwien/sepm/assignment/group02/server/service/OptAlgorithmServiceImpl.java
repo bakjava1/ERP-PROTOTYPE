@@ -247,12 +247,24 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             optAlgorithmResult.setTimberResult(currentTimber);
 
             ArrayList<TaskDTO> taskResult = new ArrayList<>();
+            mainTask.setAlgorithmResultAmount(nachschnittAnzahl*vorschnittAnzahl);
+            taskResult.add(mainTask);
+
+            clearResultAmount(horizontalSideTask);
+            clearResultAmount(verticalSideTask);
+
             for(SideTaskResult sideTaskResult : horizontalSideTask) {
-                taskResult.add(sideTaskResult.getTask());
+                sideTaskResult.getTask().setAlgorithmResultAmount(sideTaskResult.getTask().getAlgorithmResultAmount() + sideTaskResult.getCount()*2);
+                if(!taskResult.contains(sideTaskResult.getTask())) {
+                    taskResult.add(sideTaskResult.getTask());
+                }
             }
 
             for(SideTaskResult sideTaskResult : verticalSideTask) {
-                taskResult.add(sideTaskResult.getTask());
+                sideTaskResult.getTask().setAlgorithmResultAmount(sideTaskResult.getTask().getAlgorithmResultAmount() + sideTaskResult.getCount()*2);
+                if(!taskResult.contains(sideTaskResult.getTask())) {
+                    taskResult.add(sideTaskResult.getTask());
+                }
             }
 
             optAlgorithmResult.setTaskResult(taskResult);
@@ -264,6 +276,12 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         verticalMaxA = Double.MIN_VALUE;
         verticalSideTask.clear();
         horizontalSideTask.clear();
+    }
+
+    private void clearResultAmount(List<SideTaskResult> taskResult) {
+        for(SideTaskResult sideTaskResult : taskResult) {
+            sideTaskResult.getTask().setAlgorithmResultAmount(0);
+        }
     }
 
 

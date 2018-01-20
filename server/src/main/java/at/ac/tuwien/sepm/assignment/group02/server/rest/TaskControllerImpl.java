@@ -43,6 +43,13 @@ public class TaskControllerImpl {
         taskService.updateTask(task);
     }
 
+    @RequestMapping(value="/updateTaskAlg",method = RequestMethod.PUT,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "update task")
+    public void updateTaskAlg(@RequestBody TaskDTO task) {
+        LOG.debug("Atemmpting to Update Task, {}", task.toString());
+        taskService.updateTaskAlg(task);
+    }
+
     @RequestMapping(value="/deleteTask", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "delete task")
     public void deleteTask(TaskDTO task) throws ServiceLayerException {

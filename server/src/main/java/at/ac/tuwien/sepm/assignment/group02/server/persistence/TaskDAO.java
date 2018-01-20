@@ -32,6 +32,12 @@ public interface TaskDAO {
     void updateTask(Task task) throws PersistenceLayerException;
 
     /**
+     * updating task with reserved lumber
+     * @param task to be updated
+     */
+    void updateTaskAlg(Task task);
+
+    /**
      * retrieve all open tasks
      * @return a list of all tasks
      * @throws PersistenceLayerException

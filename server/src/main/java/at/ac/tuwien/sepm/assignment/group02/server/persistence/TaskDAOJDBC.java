@@ -152,6 +152,25 @@ public class TaskDAOJDBC implements TaskDAO {
         }
 
     @Override
+    public void updateTaskAlg(Task task) {
+        LOG.info("called updateTask");
+        String updateStatement = "UPDATE TASK SET PRODUCED_QUANTITY = ?, DONE=?, IN_PROGRESS=? WHERE ID = ?";
+
+        try {
+            PreparedStatement stmt = dbConnection.prepareStatement(updateStatement);
+            stmt.setInt(1, task.getProduced_quantity());
+            stmt.setBoolean(2, task.isDone());
+            stmt.setBoolean(3, task.isIn_progress());
+            stmt.setInt(4, task.getId());
+            stmt.executeUpdate();
+
+            stmt.close();
+        } catch(SQLException e) {
+
+        }
+    }
+
+    @Override
     public List<Task> getAllOpenTasks() throws PersistenceLayerException {
 
         LOG.trace("called getAllOpenTasks");

@@ -29,6 +29,15 @@ public interface LumberService {
     void reserveLumber(Lumber lumber, int quantity, TaskDTO taskDTO) throws ServiceLayerException;
 
     /**
+     * reserve lumber
+     * @param lumber
+     * @param quantity
+     * @param taskDTO
+     * @throws ServiceLayerException
+     */
+    void reserveLumberAlg(Lumber lumber, int quantity, TaskDTO taskDTO) throws ServiceLayerException;
+
+    /**
      * delete a lumber from the store
      *
      * @param lumber
