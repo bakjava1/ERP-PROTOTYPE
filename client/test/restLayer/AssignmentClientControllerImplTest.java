@@ -108,9 +108,9 @@ public class AssignmentClientControllerImplTest {
         AssignmentDTO[] assignmentArray1 = {a1,a2,a3};
         assignmentList1.addAll(Arrays.asList(assignmentArray1));
 
-        when(restTemplate.getForObject(Mockito.matches(".*getAllAssignments"),eq(AssignmentDTO[].class))).thenReturn(assignmentArray1);
+        when(restTemplate.getForObject(Mockito.matches(".*getAllClosedAssignments"),eq(AssignmentDTO[].class))).thenReturn(assignmentArray1);
 
-        List<AssignmentDTO> assignmentList2 = assignmentController.getAllAssignments();
+        List<AssignmentDTO> assignmentList2 = assignmentController.getAllClosedAssignments();
 
         verify(restTemplate, times(1))
                 .getForObject(anyString(), eq(AssignmentDTO[].class));
@@ -122,16 +122,16 @@ public class AssignmentClientControllerImplTest {
     public void testGetAllAssignments_reactsToRestClientException() throws PersistenceLayerException {
         AssignmentController assignmentController = new AssignmentControllerImpl(restTemplate);
         doThrow(RestClientException.class)
-                .when(restTemplate).getForObject(Mockito.matches(".*getAllAssignments"),eq(AssignmentDTO[].class));
-        assignmentController.getAllAssignments();
+                .when(restTemplate).getForObject(Mockito.matches(".*getAllClosedAssignments"),eq(AssignmentDTO[].class));
+        assignmentController.getAllClosedAssignments();
     }
 
     @Test(expected = PersistenceLayerException.class)
     public void testGetAllAssignments_reactsTo404() throws PersistenceLayerException {
         AssignmentController assignmentController = new AssignmentControllerImpl(restTemplate);
         doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND))
-                .when(restTemplate).getForObject(Mockito.matches(".*getAllAssignments"),eq(AssignmentDTO[].class));
-        assignmentController.getAllAssignments();
+                .when(restTemplate).getForObject(Mockito.matches(".*getAllClosedAssignments"),eq(AssignmentDTO[].class));
+        assignmentController.getAllClosedAssignments();
     }
 
     @Test

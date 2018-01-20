@@ -29,63 +29,77 @@ public class ValidateInvoice implements ValidateInput<Order> {
             primitiveValidator.isNumber(input.getID(),-1);
         } catch(NoValidIntegerException e) {
             LOG.error("Error in Order Id: "+ e.getMessage());
-            throw new InvalidInputException("Error in Order Id: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Bestellungs ID: " + e.getMessage());
         }
 
         try {
             primitiveValidator.validateText(input.getCustomerName(),100);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Name: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Customer Name: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Kundenname: " + e.getMessage());
         }
 
         try {
             primitiveValidator.validateText(input.getCustomerAddress(),100);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Address: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Customer Address: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Kundenaddresse: " + e.getMessage());
         }
 
         try {
             primitiveValidator.validateText(input.getCustomerUID(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer UID: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Customer UID: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Kunden UID: " + e.getMessage());
         }
 
         try {
             primitiveValidator.isValidDate(input.getOrderDate());
         } catch(InvalidInputException e) {
             LOG.error("Error at Order Date: " + e.getMessage());
-            throw new InvalidInputException("Error at Order Date: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Erstellungsdatum: " + e.getMessage());
         }
 
         if(input.getTaskList() == null) {
             LOG.error("Error at Task List: List cannot be null");
-            throw new InvalidInputException("Fehler bei Order Date: List cannot be null");
+            throw new InvalidInputException("Fehler bei Auftragsliste: Liste kann nicht null sein!");
         }
 
         try {
             primitiveValidator.isNumber(input.getGrossAmount(),102000000);
         } catch(NoValidIntegerException e) {
             LOG.error("Error in Invoice: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Rechnung: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Rechnung Bruttopreis: " + e.getMessage());
         }
 
         try {
             primitiveValidator.isNumber(input.getTaxAmount(),2000000);
         } catch(NoValidIntegerException e) {
             LOG.error("Error in Invoice: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Rechnung: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Rechnung Steuersatz: " + e.getMessage());
         }
 
         try {
             primitiveValidator.isNumber(input.getNetAmount(),100000000);
         } catch(NoValidIntegerException e) {
             LOG.error("Error in Invoice: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Rechnung: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Rechnung Nettopreis: " + e.getMessage());
         }
-        
+
+        try{
+            primitiveValidator.isValidDate(input.getDeliveryDate());
+        } catch(InvalidInputException e) {
+            LOG.error("Error in Invoice: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Rechnung Lieferdatum: " + e.getMessage());
+        }
+
+        try{
+            primitiveValidator.isValidDate(input.getInvoiceDate());
+        } catch(InvalidInputException e) {
+            LOG.error("Error in Invoice: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Rechnung Erstellungsdatum: " + e.getMessage());
+        }
+
         return true;
     }
 }

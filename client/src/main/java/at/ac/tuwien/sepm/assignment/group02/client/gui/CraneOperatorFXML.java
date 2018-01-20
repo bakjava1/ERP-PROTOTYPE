@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -71,7 +74,8 @@ public class CraneOperatorFXML {
     private Label currentAssignment_amount;
     @FXML
     private Label currentAssignment_box;
-
+    @FXML
+    private Label label_date;
     @FXML
     private Button btn_done;
     @FXML
@@ -81,17 +85,32 @@ public class CraneOperatorFXML {
 
     @FXML
     public void initialize() {
-        initializeAssignmentTable();
-        updateAssignmentTable();
         btn_done.setVisible(false);
         btn_inProgressAbort.setVisible(false);
+        DateFormat dateFormat = new SimpleDateFormat("DD.MM.YY");
+        Date date = new Date();
+
+        label_date.setText(dateFormat.format(date));
+        initializeAssignmentTable();
+        updateAssignmentTable();
+
+        deleteYesterdaysAssignments();
+    }
+
+    private void deleteYesterdaysAssignments(){
+        try {
+            assignmentService.cleanUpAssignments();
+        } catch (ServiceLayerException e) {
+            LOG.warn(e.getMessage());
+        }
+        updateAssignmentTable();
     }
 
     private void initializeAssignmentTable() {
         table_open_assignment.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         col_open_assignmentNr.setCellValueFactory(new PropertyValueFactory<>("id"));
-        col_open_assignmentCreated.setCellValueFactory(new PropertyValueFactory<>("creation_date"));
+        col_open_assignmentCreated.setCellValueFactory(new PropertyValueFactory<>("creation_time"));
         col_open_assignmentAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         col_open_assignmentBoxID.setCellValueFactory(new PropertyValueFactory<>("box_id"));
 
@@ -99,7 +118,7 @@ public class CraneOperatorFXML {
         table_open_assignment.setItems(assignments);
 
         col_done_assignmentNr.setCellValueFactory(new PropertyValueFactory<>("id"));
-        col_done_assignmentCreated.setCellValueFactory(new PropertyValueFactory<>("creation_date"));
+        col_done_assignmentCreated.setCellValueFactory(new PropertyValueFactory<>("creation_time"));
         col_done_assignmentAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         col_done_assignmentBoxID.setCellValueFactory(new PropertyValueFactory<>("box_id"));
 
@@ -136,7 +155,7 @@ public class CraneOperatorFXML {
         List<AssignmentDTO> allDoneAssignments = new LinkedList<>();
         try {
             allOpenAssignments = assignmentService.getAllOpenAssignments();
-            allDoneAssignments = assignmentService.getAllAssignments();
+            allDoneAssignments = assignmentService.getAllClosedAssignments();
         } catch (ServiceLayerException e) {
             LOG.warn("error while updating assignment table for crane operator");
             alertBuilder.showErrorAlert("Aufgaben-Service", null,

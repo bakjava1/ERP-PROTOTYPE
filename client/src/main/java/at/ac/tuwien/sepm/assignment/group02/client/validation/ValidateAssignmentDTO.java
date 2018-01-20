@@ -44,7 +44,7 @@ public class ValidateAssignmentDTO implements ValidateInput<AssignmentDTO> {
         }
 
         try {
-            primitiveValidator.isNumber(amount,800);
+            primitiveValidator.isNumber(amount,50);
         } catch(NoValidIntegerException e) {
             LOG.error("Error at Amount: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Anzahl: " + e.getMessage());

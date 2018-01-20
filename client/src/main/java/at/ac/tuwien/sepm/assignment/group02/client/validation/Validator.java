@@ -95,6 +95,20 @@ public class Validator implements ValidateInput{
             LOG.error("Error in Invoice: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Rechnung Nettopreis: " + e.getMessage());
         }
+
+        try{
+            primitiveValidator.isValidDate(invoice.getDeliveryDate());
+        } catch(InvalidInputException e) {
+            LOG.error("Error in Invoice: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Rechnung Lieferdatum: " + e.getMessage());
+        }
+
+        try{
+            primitiveValidator.isValidDate(invoice.getInvoiceDate());
+        } catch(InvalidInputException e) {
+            LOG.error("Error in Invoice: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Rechnung Erstellungsdatum: " + e.getMessage());
+        }
     }
 
     public Task inputValidationTask(UnvalidatedTask toValidate) throws InvalidInputException {

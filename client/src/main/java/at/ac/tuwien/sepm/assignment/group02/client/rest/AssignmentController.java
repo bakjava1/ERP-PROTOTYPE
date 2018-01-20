@@ -23,11 +23,11 @@ public interface AssignmentController {
     List<AssignmentDTO> getAllOpenAssignments() throws PersistenceLayerException;
 
     /**
-     * retrieve all assignments
-     * @return a list of all assignments
+     * retrieve all closed assignments
+     * @return a list of all closed assignments
      * @throws PersistenceLayerException
      */
-    List<AssignmentDTO> getAllAssignments() throws PersistenceLayerException;
+    List<AssignmentDTO> getAllClosedAssignments() throws PersistenceLayerException;
 
     /**
      * to mark an assignment as done
@@ -37,4 +37,9 @@ public interface AssignmentController {
      */
     void setDone(AssignmentDTO assignmentDTO) throws PersistenceLayerException;
 
+    /**
+     * method to send rest request to clean up assignments
+     * @throws PersistenceLayerException
+     */
+    void cleanUpAssignments() throws PersistenceLayerException;
 }

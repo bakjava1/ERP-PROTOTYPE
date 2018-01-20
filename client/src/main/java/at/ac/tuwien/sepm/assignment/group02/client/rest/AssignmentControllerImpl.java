@@ -69,14 +69,14 @@ public class AssignmentControllerImpl implements AssignmentController {
     }
 
     @Override
-    public List<AssignmentDTO> getAllAssignments() throws PersistenceLayerException {
+    public List<AssignmentDTO> getAllClosedAssignments() throws PersistenceLayerException {
         LOG.trace("get all open assignments called in client assignment controller");
 
         List<AssignmentDTO> assignmentList = new ArrayList<>();
         AssignmentDTO[] assignmentArray = null;
 
         try {
-            assignmentArray = restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllAssignments", AssignmentDTO[].class);
+            assignmentArray = restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getAllClosedAssignments", AssignmentDTO[].class);
         } catch(HttpClientErrorException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
@@ -100,6 +100,19 @@ public class AssignmentControllerImpl implements AssignmentController {
                     HttpMethod.PUT, new HttpEntity<>(assignmentDTO), AssignmentDTO.class);
 
         } catch(HttpStatusCodeException e){
+            HandleException.handleHttpStatusCodeException(e);
+        } catch(RestClientException e){
+            LOG.warn("RestClientException. Is the server up and running?", e.getMessage());
+            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar? ");
+        }
+    }
+
+    @Override
+    public void cleanUpAssignments() throws PersistenceLayerException {
+        LOG.trace("cleanUpAssignments called");
+        try {
+            restTemplate.exchange("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/cleanUpAssignments", HttpMethod.PUT, null, AssignmentDTO.class);
+        } catch(HttpClientErrorException e){
             HandleException.handleHttpStatusCodeException(e);
         } catch(RestClientException e){
             LOG.warn("RestClientException. Is the server up and running?", e.getMessage());

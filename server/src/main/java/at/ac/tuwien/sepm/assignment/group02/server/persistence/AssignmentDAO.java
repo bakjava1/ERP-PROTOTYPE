@@ -23,11 +23,11 @@ public interface AssignmentDAO {
     List<Assignment> getAllOpenAssignments() throws PersistenceLayerException;
 
     /**
-     * retrieve all assignments
-     * @return a list of all assignments
+     * retrieve all assignments that are done
+     * @return a list of all completed assignments
      * @throws PersistenceLayerException
      */
-    List<Assignment> getAllAssignments() throws PersistenceLayerException;
+    List<Assignment> getAllClosedAssignments() throws PersistenceLayerException;
 
     /**
      * update an assignment and mark it as a done
@@ -44,4 +44,9 @@ public interface AssignmentDAO {
      */
     void deleteAssignment(int id) throws PersistenceLayerException;
 
+    /**
+     * delete past assignments if they are done
+     * @throws PersistenceLayerException
+     */
+    void deleteYesterdaysAssignments() throws PersistenceLayerException;
 }

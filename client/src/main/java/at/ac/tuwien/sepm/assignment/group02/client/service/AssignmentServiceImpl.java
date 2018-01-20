@@ -36,7 +36,6 @@ public class AssignmentServiceImpl implements AssignmentService {
             LOG.warn(e.getMessage());
             throw new ServiceLayerException(e.getMessage());
         }
-
     }
 
     @Override
@@ -51,23 +50,16 @@ public class AssignmentServiceImpl implements AssignmentService {
             throw new ServiceLayerException(e.getMessage());
         }
 
-        /*
-        List<AssignmentDTO> allOpenAssignmentsConverted = new LinkedList<>();
-
-        for(AssignmentDTO assignmentDTO : allOpenAssignments) {
-            allOpenAssignmentsConverted.add(assignmentConverter.convertRestDTOToPlainObject(assignmentDTO));
-        }*/
-
-        return allOpenAssignments;//Converted;
+        return allOpenAssignments;
     }
 
     @Override
-    public List<AssignmentDTO> getAllAssignments() throws ServiceLayerException {
-        LOG.trace("getAllAssignments called");
+    public List<AssignmentDTO> getAllClosedAssignments() throws ServiceLayerException {
+        LOG.trace("getAllClosedAssignments called");
         List<AssignmentDTO> allAssignments;
 
         try {
-            allAssignments = assignmentController.getAllAssignments();
+            allAssignments = assignmentController.getAllClosedAssignments();
         } catch (PersistenceLayerException e) {
             LOG.warn("Error while getting all open assignments in client service layer: ", e.getMessage());
             throw new ServiceLayerException(e.getMessage());
@@ -95,5 +87,15 @@ public class AssignmentServiceImpl implements AssignmentService {
             throw new ServiceLayerException(e.getMessage());
         }
 
+    }
+
+    @Override
+    public void cleanUpAssignments() throws ServiceLayerException {
+        try {
+            assignmentController.cleanUpAssignments();
+        } catch (PersistenceLayerException e) {
+            LOG.warn(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
+        }
     }
 }

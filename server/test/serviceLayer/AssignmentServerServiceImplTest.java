@@ -95,6 +95,10 @@ public class AssignmentServerServiceImplTest {
         allOpenAssignments.add(l2);
         when(assignmentManagementDAO.getAllOpenAssignments()).thenReturn(allOpenAssignments);
 
+        AssignmentDTO aDTO = Mockito.mock(AssignmentDTO.class);
+        when(assignmentConverter.convertPlainObjectToRestDTO(any(Assignment.class))).thenReturn(aDTO);
+        when(aDTO.getCreation_date()).thenReturn("yyyy-MM-dd HH:mm:ss.S");
+
         List<AssignmentDTO> allOpenAssignmentsConverted = assignmentService.getAllOpenAssignments();
 
         verify(assignmentManagementDAO, times(1)).getAllOpenAssignments();
@@ -130,11 +134,15 @@ public class AssignmentServerServiceImplTest {
         Assignment l2 = Mockito.mock(Assignment.class);
         allAssignments.add(l1);
         allAssignments.add(l2);
-        when(assignmentManagementDAO.getAllAssignments()).thenReturn(allAssignments);
+        when(assignmentManagementDAO.getAllClosedAssignments()).thenReturn(allAssignments);
 
-        List<AssignmentDTO> allAssignmentsConverted = assignmentService.getAllAssignments();
+        AssignmentDTO aDTO = Mockito.mock(AssignmentDTO.class);
+        when(assignmentConverter.convertPlainObjectToRestDTO(any(Assignment.class))).thenReturn(aDTO);
+        when(aDTO.getCreation_date()).thenReturn("yyyy-MM-dd HH:mm:ss.S");
 
-        verify(assignmentManagementDAO, times(1)).getAllAssignments();
+        List<AssignmentDTO> allAssignmentsConverted = assignmentService.getAllClosedAssignments();
+
+        verify(assignmentManagementDAO, times(1)).getAllClosedAssignments();
         verify(assignmentConverter, times(2)).convertPlainObjectToRestDTO(any(Assignment.class));
 
         Assert.assertEquals(allAssignmentsConverted.size(),2);
@@ -148,9 +156,9 @@ public class AssignmentServerServiceImplTest {
 
         doThrow(PersistenceLayerException.class).when(assignmentManagementDAO).getAllOpenAssignments();
 
-        List<AssignmentDTO> allAssignmentsConverted = assignmentService.getAllAssignments();
+        List<AssignmentDTO> allAssignmentsConverted = assignmentService.getAllClosedAssignments();
 
-        verify(assignmentManagementDAO, times(1)).getAllAssignments();
+        verify(assignmentManagementDAO, times(1)).getAllClosedAssignments();
         verify(assignmentConverter, times(0)).convertPlainObjectToRestDTO(any(Assignment.class));
 
         Assert.assertEquals(allAssignmentsConverted.size(),0);
@@ -211,6 +219,11 @@ public class AssignmentServerServiceImplTest {
         AssignmentService assignmentService
                 = new AssignmentServiceImpl(assignmentManagementDAO, assignmentConverter, validateAssignment,
                 timberService, lumberService, taskService);
+
+        Assignment mockAssignment = Mockito.mock(Assignment.class);
+        when(assignmentConverter.convertRestDTOToPlainObject(any(AssignmentDTO.class))).thenReturn(mockAssignment);
+        TaskDTO taskDTO = Mockito.mock(TaskDTO.class);
+        when(taskService.getTaskById(any(Integer.class))).thenReturn(taskDTO);
 
         doThrow(PersistenceLayerException.class).when(assignmentManagementDAO).setAssignmentDone(any(Assignment.class));
 

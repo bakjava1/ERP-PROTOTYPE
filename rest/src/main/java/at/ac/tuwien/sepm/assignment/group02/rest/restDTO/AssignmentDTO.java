@@ -13,6 +13,7 @@ public class AssignmentDTO {
 
     @ApiModelProperty(readOnly = true, name = "The creation date of this assignment")
     private String creation_date;
+    private String creation_time;
 
     @ApiModelProperty(readOnly = true, name = "The amount of timber to transport")
     private int amount;
@@ -72,5 +73,13 @@ public class AssignmentDTO {
 
     public void setTask_id(int task_id) {
         this.task_id = task_id;
+    }
+
+    public String getCreation_time() {
+        return creation_time;
+    }
+
+    public void setCreation_time(String creation_time) {
+        this.creation_time = creation_time;
     }
 }

@@ -26,11 +26,11 @@ public interface AssignmentService {
     List<AssignmentDTO> getAllOpenAssignments() throws ServiceLayerException;
 
     /**
-     * retrieve all assignments
-     * @return a list of all assignments
+     * retrieve all closed assignments
+     * @return a list of all closed assignments
      * @throws ServiceLayerException
      */
-    List<AssignmentDTO> getAllAssignments() throws ServiceLayerException;
+    List<AssignmentDTO> getAllClosedAssignments() throws ServiceLayerException;
 
 
     /**
@@ -39,6 +39,12 @@ public interface AssignmentService {
      * @throws ServiceLayerException if the assignment couldn't be marked as done
      */
     void setDone(AssignmentDTO assignmentDTO) throws ServiceLayerException;
+
+    /**
+     * method deletes all yesterdays assignments if they are done
+     * @throws ServiceLayerException
+     */
+    void cleanUpAssignments() throws ServiceLayerException;
 
 }
 
