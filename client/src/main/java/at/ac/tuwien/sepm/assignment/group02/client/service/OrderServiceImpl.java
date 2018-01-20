@@ -25,17 +25,18 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static Validator validator = new Validator();
+    private static Validator validator;
 
     private static OrderController orderController;
     private static OrderConverter orderConverter;
     private static TaskConverter taskConverter;
 
     @Autowired
-    public OrderServiceImpl (OrderController orderController, OrderConverter orderConverter,TaskConverter taskConverter){
+    public OrderServiceImpl (OrderController orderController, OrderConverter orderConverter,TaskConverter taskConverter,Validator validator){
         OrderServiceImpl.orderController = orderController;
         OrderServiceImpl.orderConverter = orderConverter;
         OrderServiceImpl.taskConverter = taskConverter;
+        this.validator = validator;
     }
 
     @Override

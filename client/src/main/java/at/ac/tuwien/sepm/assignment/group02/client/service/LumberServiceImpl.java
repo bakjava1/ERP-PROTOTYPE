@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerEx
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberController;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TaskController;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
@@ -28,14 +29,16 @@ public class LumberServiceImpl implements LumberService {
     private static LumberController lumberController;
     private static LumberConverter lumberConverter;
     private static TaskController taskController;
-    private static Validator validator=new Validator();
+    private static Validator validator;
+    private static PrimitiveValidator primitiveValidator;
 
     @Autowired
-    public LumberServiceImpl (LumberController lumberController, LumberConverter lumberConverter,TaskController taskController,Validator validator){
+    public LumberServiceImpl (LumberController lumberController, LumberConverter lumberConverter,TaskController taskController,Validator validator,PrimitiveValidator primitiveValidator){
         LumberServiceImpl.lumberController = lumberController;
         LumberServiceImpl.lumberConverter = lumberConverter;
         LumberServiceImpl.taskController = taskController;
         LumberServiceImpl.validator = validator;
+        LumberServiceImpl.primitiveValidator = primitiveValidator;
     }
 
 
@@ -113,7 +116,7 @@ public class LumberServiceImpl implements LumberService {
 
         // validate method parameters
         validateLumber(lumber);
-        validator.validateNumber(quantity+"",1000);
+        primitiveValidator.validateNumber(quantity+"",1000);
         //validateTask(taskDTO); TODO
 
         // check if reservation quantity is needed for task

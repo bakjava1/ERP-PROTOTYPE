@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
@@ -21,70 +22,18 @@ public class Validator implements ValidateInput{
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public void isValidDate(String inDate) throws InvalidInputException {
+    private final PrimitiveValidator primitiveValidator;
 
-        //case not set cause assignment getting created
-        if (inDate == null)
-            return;
-
-        //set the format to use as a constructor argument
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        try {
-            //parse the inDate parameter
-            Date test = dateFormat.parse(inDate);
-            if(!test.before(new Date())) {
-                throw new InvalidInputException("Impossible Date");
-            }
-        }
-        catch (ParseException pe) {
-            throw new InvalidInputException("Date is not in correct format!");
-        }
-    }
-
-    public int validateNumber(String toValidate,int size) throws NoValidIntegerException {
-        int num;
-        if(toValidate == null || toValidate.length() == 0) {
-            throw new NoValidIntegerException("Empty Field, No Number entered");
-        }
-        try {
-            num = Integer.parseInt(toValidate);
-            if (num <= 0) {
-                throw new NoValidIntegerException("Negative Integer or Null entered");
-            }
-            if(num > size && size != -1) {
-                throw new NoValidIntegerException("Value entered was too big! Enter Value < " + size);
-            }
-        } catch (NumberFormatException e) {
-            LOG.error("No valid Integer entered");
-            throw new NoValidIntegerException("No valid Integer entered");
-        }
-        return num;
-    }
-
-    private void validateText(String toValidate, int length) throws EmptyInputException {
-        if(toValidate == null || toValidate.length() == 0) {
-            throw new EmptyInputException("Empty Field");
-        }
-        if(toValidate.length() > length && length != -1) {
-            throw new EmptyInputException("Input was too long! Enter Input which is max. " + length + " long");
-        }
-    }
-
-    private void isNumber(int toCheck,int limit) throws NoValidIntegerException {
-        if (toCheck < 0) {
-            throw new NoValidIntegerException("Negative Integer entered");
-        }
-        if(toCheck > limit && limit != -1) {
-            throw new NoValidIntegerException("Integer entered too big! Value must be < " + limit);
-        }
+    @Autowired
+    public Validator(PrimitiveValidator primitiveValidator) {
+        this.primitiveValidator = primitiveValidator;
     }
 
     public int[] temporaryAddTaskToLumberValidation(String id, String amount) throws InvalidInputException {
         int[] result = new int[2];
         int validatedId;
         try {
-            validatedId = validateNumber(id,Integer.MAX_VALUE);
+            validatedId = primitiveValidator.validateNumber(id,Integer.MAX_VALUE);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Id: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Id: " + e.getMessage());
@@ -92,7 +41,7 @@ public class Validator implements ValidateInput{
         result[0] = validatedId;
         int validatedAmount;
         try {
-            validatedAmount = validateNumber(amount,Integer.MAX_VALUE);
+            validatedAmount = primitiveValidator.validateNumber(amount,Integer.MAX_VALUE);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Amount: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Amount: " + e.getMessage());
@@ -104,35 +53,35 @@ public class Validator implements ValidateInput{
     public void inputValidationOrder(Order toValidate) throws InvalidInputException {
 
         try {
-            isNumber(toValidate.getID(),-1);
+            primitiveValidator.isNumber(toValidate.getID(),-1);
         } catch(NoValidIntegerException e) {
             LOG.error("Error in Order Id: "+ e.getMessage());
             throw new InvalidInputException("Error in Order Id: " + e.getMessage());
         }
 
         try {
-            validateText(toValidate.getCustomerName(),50);
+            primitiveValidator.validateText(toValidate.getCustomerName(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Name: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Customer Name: " + e.getMessage());
         }
 
         try {
-            validateText(toValidate.getCustomerAddress(),50);
+            primitiveValidator.validateText(toValidate.getCustomerAddress(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer Address: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Customer Address: " + e.getMessage());
         }
 
         try {
-            validateText(toValidate.getCustomerUID(),20);
+            primitiveValidator.validateText(toValidate.getCustomerUID(),20);
         }catch(EmptyInputException e) {
             LOG.error("Error at Customer UID: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Customer UID: " + e.getMessage());
         }
 
      /*   try {
-            isValidDate(toValidate.getOrderDate().toString());
+            primitiveValidator.isValidDate(toValidate.getOrderDate().toString());
         } catch(InvalidInputException e) {
             LOG.error("Error at Order Date: " + e.getMessage());
             throw new InvalidInputException("Error at Order Date: " + e.getMessage());
@@ -170,25 +119,25 @@ public class Validator implements ValidateInput{
 
     public void inputValidationTaskOnOrder(Task toValidate) throws InvalidInputException {
         try {
-            validateText(toValidate.getDescription(), -1);
+            primitiveValidator.validateText(toValidate.getDescription(), -1);
         }catch(EmptyInputException e) {
             LOG.error("Error at Task Description: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Task Description: " + e.getMessage());
         }
         try {
-            validateText(toValidate.getFinishing(), -1);
+            primitiveValidator.validateText(toValidate.getFinishing(), -1);
         }catch(EmptyInputException e) {
             LOG.error("Error at Task Finishing: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Task Finishing: " + e.getMessage());
         }
         try {
-            validateText(toValidate.getWood_type(), -1);
+            primitiveValidator.validateText(toValidate.getWood_type(), -1);
         }catch(EmptyInputException e) {
             LOG.error("Error at Task Wood Type: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Task Wood Type: " + e.getMessage());
         }
         try {
-            validateText(toValidate.getQuality(), -1);
+            primitiveValidator.validateText(toValidate.getQuality(), -1);
         }catch(EmptyInputException e) {
             LOG.error("Error at Task Quality: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Task Quality: " + e.getMessage());
@@ -212,14 +161,14 @@ public class Validator implements ValidateInput{
 
     public Task inputValidationTask(UnvalidatedTask toValidate) throws InvalidInputException {
         try {
-            validateText(toValidate.getDescription(),50);
+            primitiveValidator.validateText(toValidate.getDescription(),50);
         }catch(EmptyInputException e) {
             LOG.error("Error at Description: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Description: " + e.getMessage());
         }
 
         try {
-            validateText(toValidate.getFinishing(),15);
+            primitiveValidator.validateText(toValidate.getFinishing(),15);
             if(!toValidate.getFinishing().equals("roh") && !toValidate.getFinishing().equals("gehobelt") && !toValidate.getFinishing().equals("besäumt")
                     && !toValidate.getFinishing().equals("prismiert") && !toValidate.getFinishing().equals("trocken") && !toValidate.getFinishing().equals("lutro")
                     && !toValidate.getFinishing().equals("frisch") && !toValidate.getFinishing().equals("imprägniert")) {
@@ -232,7 +181,7 @@ public class Validator implements ValidateInput{
         }
 
         try {
-            validateText(toValidate.getWood_type(),10);
+            primitiveValidator.validateText(toValidate.getWood_type(),10);
             if(!toValidate.getWood_type().equals("Fi") && !toValidate.getWood_type().equals("Ta") && !toValidate.getWood_type().equals("Lae")) {
                 LOG.error("Error at Wood Type: Unknown Wood Type");
                 throw new InvalidInputException("Fehler bei Wood Type: Unknown Wood Type");
@@ -243,7 +192,7 @@ public class Validator implements ValidateInput{
         }
 
         try {
-            validateText(toValidate.getQuality(),10);
+            primitiveValidator.validateText(toValidate.getQuality(),10);
             if(!toValidate.getQuality().equals("O") && !toValidate.getQuality().equals("I") && !toValidate.getQuality().equals("II") &&
                     !toValidate.getQuality().equals("III") && !toValidate.getQuality().equals("IV") && !toValidate.getQuality().equals("V") &&
                     !toValidate.getQuality().equals("O/III") && !toValidate.getQuality().equals("III/IV") && !toValidate.getQuality().equals("III/V") ) {
@@ -256,21 +205,21 @@ public class Validator implements ValidateInput{
         }
         int validatedSize;
         try {
-            validatedSize = validateNumber(toValidate.getSize(),515);
+            validatedSize = primitiveValidator.validateNumber(toValidate.getSize(),515);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Size: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Size: " + e.getMessage());
         }
         int validatedWidth;
         try {
-            validatedWidth = validateNumber(toValidate.getWidth(),515);
+            validatedWidth = primitiveValidator.validateNumber(toValidate.getWidth(),515);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Width: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Width: " + e.getMessage());
         }
         int validatedLength;
         try {
-            validatedLength = validateNumber(toValidate.getLength(),5000);
+            validatedLength = primitiveValidator.validateNumber(toValidate.getLength(),5000);
             if(validatedLength != 3500 && validatedLength != 4000 && validatedLength != 4500 && validatedLength != 5000) {
                 LOG.error("No producable Length!");
                 throw new InvalidInputException("Please enter a producable Length! (3500,4000,4500,5000");
@@ -281,14 +230,14 @@ public class Validator implements ValidateInput{
         }
         int validatedQuantity;
         try {
-            validatedQuantity = validateNumber(toValidate.getQuantity(),100000);
+            validatedQuantity = primitiveValidator.validateNumber(toValidate.getQuantity(),100000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Quantity: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Quantity: " + e.getMessage());
         }
         int validatedPrice;
         try {
-            validatedPrice = validateNumber(toValidate.getPrice(),10000000);
+            validatedPrice = primitiveValidator.validateNumber(toValidate.getPrice(),10000000);
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Price: " + e.getMessage());
             throw new InvalidInputException("Fehler bei Price: " + e.getMessage());
@@ -319,7 +268,7 @@ public class Validator implements ValidateInput{
 
         try {
             if(!description.equals("")) {
-                validateText(description, 50);
+                primitiveValidator.validateText(description, 50);
                 validatedFilter.setDescription(description);
             }
         }catch(EmptyInputException e) {
@@ -329,7 +278,7 @@ public class Validator implements ValidateInput{
 
         try {
             if(!finishing.equals("")) {
-                validateText(finishing, 30);
+                primitiveValidator.validateText(finishing, 30);
                 if (!finishing.equals("roh") && !finishing.equals("gehobelt") && !finishing.equals("besäumt")
                         && !finishing.equals("prismiert") && !finishing.equals("trocken") && !finishing.equals("lutro")
                         && !finishing.equals("frisch") && !finishing.equals("imprägniert")) {
@@ -345,7 +294,7 @@ public class Validator implements ValidateInput{
 
         try {
             if(!wood_type.equals("")) {
-                validateText(wood_type, 20);
+                primitiveValidator.validateText(wood_type, 20);
                 if (!wood_type.equals("Fi") && !wood_type.equals("Ta") && !wood_type.equals("Lae")) {
                     LOG.error("Error at Wood Type: Unknown Wood Type");
                     throw new InvalidInputException("Fehler bei Wood Type: Unknown Wood Type");
@@ -359,7 +308,7 @@ public class Validator implements ValidateInput{
 
         try {
             if(!quality.equals("")) {
-                validateText(quality, 20);
+                primitiveValidator.validateText(quality, 20);
                 if (!quality.equals("O") && !quality.equals("I") && !quality.equals("II") &&
                         !quality.equals("III") && !quality.equals("IV") && !quality.equals("V") &&
                         !quality.equals("O/III") && !quality.equals("III/IV") && !quality.equals("III/V")) {
@@ -378,7 +327,7 @@ public class Validator implements ValidateInput{
             if(strength.equals("")) { validatedFilter.setSize(null); }
             else {
 
-                int validatedStrength = validateNumber(strength, 1000);
+                int validatedStrength = primitiveValidator.validateNumber(strength, 1000);
                 validatedFilter.setSize(validatedStrength+"");
             }
         }catch(NoValidIntegerException e) {
@@ -389,7 +338,7 @@ public class Validator implements ValidateInput{
         try {
             if(width.equals("")) { validatedFilter.setWidth(null); }
             else {
-                int validatedWidth = validateNumber(width, 1000);
+                int validatedWidth = primitiveValidator.validateNumber(width, 1000);
                 validatedFilter.setWidth(validatedWidth+"");
             }
         }catch(NoValidIntegerException e) {
@@ -400,7 +349,7 @@ public class Validator implements ValidateInput{
         try {
             if(length.equals("")) { validatedFilter.setLength(null); }
             else {
-                int validatedLength = validateNumber(length, 5000);
+                int validatedLength = primitiveValidator.validateNumber(length, 5000);
                 if (validatedLength != 3500 && validatedLength != 4000 && validatedLength != 4500 && validatedLength != 5000) {
                     throw new InvalidInputException("Please enter a producable Length! (3500,4000,4500,5000");
                 }

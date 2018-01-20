@@ -20,7 +20,7 @@ public class ValidateAssignment implements ValidateInput<Assignment> {
 
     @Override
     public boolean isValid(Assignment input) throws InvalidInputException {
-        LOG.debug("validating input");
+        LOG.debug("validating assignment: {}",input);
 
         int id = input.getId();
         int amount = input.getAmount();
@@ -82,12 +82,7 @@ public class ValidateAssignment implements ValidateInput<Assignment> {
             return;
 
         //set the format to use as a constructor argument
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        if (inDate.trim().length() != dateFormat.toPattern().length())
-            throw new InvalidInputException("Date is not in correct format!");
-
-        dateFormat.setLenient(false);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 
         try {
             //parse the inDate parameter
