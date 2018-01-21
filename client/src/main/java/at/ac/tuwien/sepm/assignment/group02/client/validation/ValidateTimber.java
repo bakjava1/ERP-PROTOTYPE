@@ -92,7 +92,7 @@ public class ValidateTimber implements ValidateInput<Timber> {
         }
 
         try {
-            primitiveValidator.isNumber(toValidate.getPrice(),1000000);
+            primitiveValidator.isNumber(toValidate.getPrice(),100000000);
         } catch(NoValidIntegerException e) {
             LOG.error("Error in Timber Price: "+ e.getMessage());
             throw new InvalidInputException("Fehler bei Rundholzpreis: " + e.getMessage());

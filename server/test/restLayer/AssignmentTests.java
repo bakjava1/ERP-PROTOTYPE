@@ -6,8 +6,7 @@ import at.ac.tuwien.sepm.assignment.group02.server.MainApplication;
 import at.ac.tuwien.sepm.assignment.group02.server.rest.AssignmentControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.server.util.DBUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -36,9 +35,17 @@ public class AssignmentTests {
     @Autowired
     private ObjectMapper mapper;
 
+    private static Connection con;
+
+    @BeforeClass
+    public static void setUp() {
+        con = DBUtil.getConnection();
+    }
+
     @Before
     public void beforeMethod() {
-        Connection con = DBUtil.getConnection();
+
+        DBUtil.initDB(false);
         try {
             PreparedStatement ps = con.prepareStatement(
                     "INSERT INTO ASSIGNMENT(ID,CREATION_DATE, AMOUNT, BOX_ID, ISDONE, TASK_ID) " +
@@ -180,5 +187,10 @@ public class AssignmentTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        DBUtil.closeConnection();
     }
 }

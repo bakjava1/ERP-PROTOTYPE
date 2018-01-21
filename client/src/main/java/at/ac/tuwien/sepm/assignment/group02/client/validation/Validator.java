@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
-public class Validator implements ValidateInput{
+public class Validator {
 
     public static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -204,26 +204,6 @@ public class Validator implements ValidateInput{
     }
 
     //not entity validators
-    public int[] temporaryAddTaskToLumberValidation(String id, String amount) throws InvalidInputException {
-        int[] result = new int[2];
-        int validatedId;
-        try {
-            validatedId = primitiveValidator.validateNumber(id,Integer.MAX_VALUE);
-        }catch(NoValidIntegerException e) {
-            LOG.error("Error at Id: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Id: " + e.getMessage());
-        }
-        result[0] = validatedId;
-        int validatedAmount;
-        try {
-            validatedAmount = primitiveValidator.validateNumber(amount,Integer.MAX_VALUE);
-        }catch(NoValidIntegerException e) {
-            LOG.error("Error at Amount: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Amount: " + e.getMessage());
-        }
-        result[1] = validatedAmount;
-        return result;
-    }
 
     public void inputValidationTaskOnOrder(Task toValidate) throws InvalidInputException {
         try {
@@ -378,11 +358,5 @@ public class Validator implements ValidateInput{
 
         return validatedFilter;
 
-    }
-
-
-    @Override
-    public boolean isValid(Object input) throws InvalidInputException {
-        return false;
     }
 }

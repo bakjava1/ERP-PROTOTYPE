@@ -59,23 +59,6 @@ public class LumberServiceImpl implements LumberService {
     }
 
     @Override
-    public void addReservedLumberToTask(String id, String quantity) throws ServiceLayerException {
-        try {
-            int[] validated = validator.temporaryAddTaskToLumberValidation(id,quantity);
-            TaskDTO toAdd = new TaskDTO();
-            toAdd.setId(validated[0]);
-            toAdd.setProduced_quantity(validated[1]);
-            taskController.updateTask(toAdd);
-        }catch(InvalidInputException e) {
-            LOG.error("Failed to validate Input: " + e.getMessage());
-            throw new InvalidInputException(e.getMessage());
-        } catch(PersistenceLayerException e) {
-            LOG.error("Failed to reserve Lumber in Task: " + e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
-        }
-    }
-
-    @Override
     public boolean lumberExists(Lumber lumber) {
 
         return getLumber(lumber.getId()) != null;

@@ -93,7 +93,7 @@ public class LumberClientServiceImplTest {
         Lumber lumber = new Lumber();
         when(lumberConverter.convertRestDTOToPlainObject(any(LumberDTO.class))).thenReturn(lumber);
 
-        doThrow(PersistenceLayerException.class).when(validator).isValid(any(Lumber.class));
+        //doThrow(PersistenceLayerException.class).when(validator).isValid(any(Lumber.class));
 
         lumberService.deleteLumber(any(Lumber.class));
     }

@@ -63,16 +63,6 @@ public interface LumberService {
     Lumber getLumber(int id) throws ServiceLayerException;
 
     /**
-     * add a reserved lumber to task
-     *
-     * @param id
-     * @param quantity
-     * @throws InvalidInputException
-     * @throws ServiceLayerException
-     */
-    void addReservedLumberToTask(String id, String quantity) throws ServiceLayerException;
-
-    /**
      * @param lumber
      * @return
      */
