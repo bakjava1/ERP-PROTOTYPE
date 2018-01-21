@@ -403,6 +403,7 @@ public class OfficeFXML {
                 LOG.error("Invalid Input Error: " + e.getMessage());
             } catch (ServiceLayerException e) {
                 LOG.warn(e.getMessage());
+                alertBuilder.showErrorAlert("Fehler beim Hinzufügen von Rundholz", null, e.getMessage());
             }
         }
     }

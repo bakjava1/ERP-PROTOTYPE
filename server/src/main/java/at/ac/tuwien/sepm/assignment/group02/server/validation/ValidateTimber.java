@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Component
 public class ValidateTimber implements ValidateInput<Timber> {
@@ -43,7 +40,7 @@ public class ValidateTimber implements ValidateInput<Timber> {
         }
 
         try {
-            primitiveValidator.isNumber(timber.getAmount(),50);
+            primitiveValidator.isNumber(timber.getAmount(),800);
         } catch(NoValidIntegerException e) {
             LOG.error("Error in Timber Amount: "+ e.getMessage());
             throw new InvalidInputException("Fehler bei Anzahl Rundholz: " + e.getMessage());
