@@ -76,7 +76,7 @@
                            <font>
                               <Font size="14.0" />
                            </font></TextField>
-                        <Button layoutX="567.0" layoutY="100.0" mnemonicParsing="false" onAction="#onSearchButtonClicked" prefHeight="35.0" prefWidth="83.0" text="Suchen">
+                        <Button fx:id="btn_search" layoutX="567.0" layoutY="100.0" mnemonicParsing="false" onAction="#onSearchButtonClicked" prefHeight="35.0" prefWidth="83.0" text="Suchen">
                            <font>
                               <Font size="14.0" />
                            </font>

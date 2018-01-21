@@ -108,6 +108,12 @@ public class LeadWorkerFXML {
     private Button btn_reserve;
     @FXML
     private Button btn_resetSearch;
+    @FXML
+    private Button btn_addLumber;
+    @FXML
+    private Button btn_createAssignment;
+    @FXML
+    private Button btn_search;
 
     @FXML
     private TableColumn<TaskDTO, Integer> task_col_order_id;
@@ -664,6 +670,11 @@ public class LeadWorkerFXML {
         LOG.info("optimisationBtn clicked");
 
         btn_opt_alg.setDisable(true);
+        btn_reserve.setDisable(true);
+        btn_resetSearch.setDisable(true);
+        btn_addLumber.setDisable(true);
+        btn_createAssignment.setDisable(true);
+        btn_search.setDisable(true);
 
         final OptAlgorithmResultDTO[] bestResult = {null};
 
@@ -696,19 +707,23 @@ public class LeadWorkerFXML {
 
                 }*/
 
-                selectedTaskAlgorithm = table_task.getSelectionModel().getSelectedItem();
-                if(selectedTaskAlgorithm.isDone() || selectedTaskAlgorithm.isIn_progress()) {
-                    failed();
-                } else {
-                    try {
-                        bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(selectedTaskAlgorithm);
-                    } catch (PersistenceLayerException e) {
-                        LOG.error("Fehler bei der Optimierung in der Persistenzschicht" + e.getMessage());
-                        alertBuilder.showErrorAlert("Fehler", "Fehler in der Persistenzschicht", e.getMessage());
-                    } catch (OptimisationAlgorithmException e) {
-                        LOG.error("Fehler beim Optimierungsalgorithmus:" + e.getMessage());
-                        alertBuilder.showErrorAlert("Fehler", "Fehler bei der Optimierung", e.getMessage());
+                if(table_task.getSelectionModel().getSelectedItem() != null) {
+                    selectedTaskAlgorithm = table_task.getSelectionModel().getSelectedItem();
+                    if (selectedTaskAlgorithm.isDone() || selectedTaskAlgorithm.isIn_progress()) {
+                        failed();
+                    } else {
+                        try {
+                            bestResult[0] = optimisationAlgorithmService.getOptAlgorithmResult(selectedTaskAlgorithm);
+                        } catch (PersistenceLayerException e) {
+                            LOG.error("Fehler bei der Optimierung in der Persistenzschicht" + e.getMessage());
+                            alertBuilder.showErrorAlert("Fehler", "Fehler in der Persistenzschicht", e.getMessage());
+                        } catch (OptimisationAlgorithmException e) {
+                            LOG.error("Fehler beim Optimierungsalgorithmus:" + e.getMessage());
+                            alertBuilder.showErrorAlert("Fehler", "Fehler bei der Optimierung", e.getMessage());
+                        }
                     }
+                } else {
+                    failed();
                 }
 
 
@@ -723,6 +738,11 @@ public class LeadWorkerFXML {
 
                     try {
                         btn_opt_alg.setDisable(false);
+                        btn_reserve.setDisable(false);
+                        btn_resetSearch.setDisable(false);
+                        btn_addLumber.setDisable(false);
+                        btn_createAssignment.setDisable(false);
+                        btn_search.setDisable(false);
 
 
                         FXMLLoader fxmlLoader = new FXMLLoader(OfficeFXML.class.getResource("/fxml/optimisation.fxml"));
@@ -742,7 +762,9 @@ public class LeadWorkerFXML {
 
             @Override
             protected void failed(){
-                if(selectedTaskAlgorithm.isDone()) {
+                if(table_task.getSelectionModel().getSelectedItem() == null) {
+                    alertBuilder.showErrorAlert("Fehler", "Kein Auftrag ausgewählt.", "Bitte wählen Sie einen Auftrag aus.");
+                } else if(selectedTaskAlgorithm.isDone()) {
                     alertBuilder.showInformationAlert("Information", "Auftrag ist bereits fertig!", "Bitte wählen Sie einen anderen Auftrag aus.");
                 } else if(selectedTaskAlgorithm.isIn_progress()) {
                     alertBuilder.showInformationAlert("Information", "Auftrag wird bereits produziert!", "Bitte wählen Sie einen anderen Auftrag aus.");
@@ -750,6 +772,11 @@ public class LeadWorkerFXML {
                     alertBuilder.showInformationAlert("Fehler", "", "Es konnte keine Optimierung durchgeführt werden.");
                 }
                 btn_opt_alg.setDisable(false);
+                btn_reserve.setDisable(false);
+                btn_resetSearch.setDisable(false);
+                btn_addLumber.setDisable(false);
+                btn_createAssignment.setDisable(false);
+                btn_search.setDisable(false);
             }
         }, "optimisation-algorithm").start();
 

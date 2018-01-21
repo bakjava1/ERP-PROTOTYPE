@@ -88,15 +88,15 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             inputStream.close();
         } catch (IOException e) {
             LOG.error("Properties file for optimisation algorithm not found: {}", e.getMessage());
-            throw new ServiceLayerException("Properties file for optimisation algorithm not found: " + e.getMessage());
+            throw new ServiceLayerException("Properties Datei für Optimierungsalgorithmus nicht gefunden: " + e.getMessage());
         }
 
         mainTask = task;
 
         List<TimberDTO> possibleTimbers = getPossibleTimbers(mainTask);
         if(possibleTimbers.isEmpty()){
-            LOG.debug("Optimierungsalgorithmus: Kein geeignetes Rundohlz gefunden.");
-            throw new OptimisationAlgorithmException("Kein geeignetes Rundholz gefunden.");
+            LOG.debug("Optimierungsalgorithmus: Keine geeignete Box gefunden.");
+            throw new OptimisationAlgorithmException("Keine geeignete Box gefunden.");
         }
 
         possibleSideTasksVertical = getPossibleTasks("vertical", mainTask);
@@ -233,11 +233,6 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         horizontalMaxA = widthMainTask * (currentRadius-(heightMainTask/2))*2;
         calculateHorizontalSideTasks(0, new ArrayList<>(),currentRadius + (heightMainTask / 2) +SCHNITTFUGE,  1);
 
-        if (horizontalSideTask.isEmpty()){
-            //TODO fill default lumber - properties file?
-
-        }
-
 
         double currentWaste =  currentCircleArea - mainTaskArea - maxAreaSideTaskHorizontal - maxAreaSideTaskVertical;
 
@@ -252,7 +247,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             optAlgorithmResult.setTimberResult(currentTimber);
 
             ArrayList<TaskDTO> taskResult = new ArrayList<>();
-            mainTask.setAlgorithmResultAmount(nachschnittAnzahl*vorschnittAnzahl);
+            //mainTask.setAlgorithmResultAmount(nachschnittAnzahl*vorschnittAnzahl);
             taskResult.add(mainTask);
 
             clearResultAmount(horizontalSideTask);
@@ -306,6 +301,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
                 rectangles.add(new RectangleDTO(xCoordinate, yCoordinate, "#2D8A41", optimisationBuffer.getSmallerSize(), optimisationBuffer.getBiggerSize()));
                 xCoordinate += optimisationBuffer.getBiggerSize() + SCHNITTFUGE;
+                mainTask.setAlgorithmResultAmount(mainTask.getAlgorithmResultAmount() + 1);
             }
 
             yCoordinate += (optimisationBuffer.getSmallerSize() + SCHNITTFUGE);
