@@ -122,6 +122,57 @@ public class orderValidatorTest {
         Assert.assertEquals(true,success);
     }
 
+    @Test(expected = InvalidInputException.class)
+    public void testFailInvalidDate() throws InvalidInputException {
+        order.setCustomerName("test");
+        order.setCustomerAddress("test");
+        order.setCustomerUID("test");
+        order.setOrderDate("abcde");
+        Task temp  = new Task();
+        order.addTask(temp);
+        validator.inputValidationOrder(order);
+    }
+
+    @Test
+    public void testValidOrderNoFailWithDate() {
+        boolean success =  true;
+        order.setCustomerName("test");
+        order.setCustomerAddress("test");
+        order.setCustomerUID("test");
+        order.setOrderDate("2018-01-01 12:38:40.123");
+        Task temp  = new Task();
+        order.addTask(temp);
+        try {
+            validator.inputValidationOrder(order);
+        } catch(InvalidInputException e) {
+            success = false;
+        }
+        Assert.assertEquals(true,success);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testFailNegativeID() throws InvalidInputException {
+        order.setCustomerName("test");
+        order.setCustomerAddress("test");
+        order.setCustomerUID("test");
+        order.setOrderDate("2018-01-01 12:38:40.123");
+        Task temp  = new Task();
+        order.addTask(temp);
+        order.setID(-1);
+        validator.inputValidationOrder(order);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testFailEmptyList() throws InvalidInputException {
+        order.setCustomerName("test");
+        order.setCustomerAddress("test");
+        order.setCustomerUID("test");
+        order.setOrderDate("2018-01-01 12:38:40.123");
+        order.setTaskList(null);
+        validator.inputValidationOrder(order);
+    }
+
+
     @After
     public void afterMethod() {
 

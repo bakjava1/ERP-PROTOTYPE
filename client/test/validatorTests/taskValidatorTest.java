@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.entity.UnvalidatedTask;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
+import io.swagger.models.auth.In;
 import org.junit.*;
 
 public class taskValidatorTest {
@@ -41,7 +42,7 @@ public class taskValidatorTest {
     }
 
     @Test(expected = InvalidInputException.class)
-    public void testTaskNoFinishingFailedValidation() throws InvalidInputException{
+    public void testTaskWrongFinishingFailedValidation() throws InvalidInputException{
         task = new UnvalidatedTask("a","","c","d","1","2","3","4","5");
         validator.inputValidationTask(task);
     }
@@ -57,7 +58,13 @@ public class taskValidatorTest {
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNoWoodTypeFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","","d","1","2","3","4","5");
+        task = new UnvalidatedTask("a","roh","","d","1","2","3","4","5");
+        validator.inputValidationTask(task);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testTaskWrongWoodTypeFailedValidation() throws InvalidInputException{
+        task = new UnvalidatedTask("a","roh","abc","d","1","2","3","4","5");
         validator.inputValidationTask(task);
     }
 
@@ -66,13 +73,13 @@ public class taskValidatorTest {
         String tooLong = "";
         for(int i = 0; i < 15;i++)
             tooLong += "a";
-        task = new UnvalidatedTask("a","b",tooLong,"d","1","2","3","4","5");
+        task = new UnvalidatedTask("a","roh",tooLong,"d","1","2","3","4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
-    public void testTaskNoQualityFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","","1","2","3","4","5");
+    public void testTaskWrongQualityFailedValidation() throws InvalidInputException{
+        task = new UnvalidatedTask("a","roh","Fi","","1","2","3","4","5");
         validator.inputValidationTask(task);
     }
 
@@ -81,97 +88,97 @@ public class taskValidatorTest {
         String tooLong = "";
         for(int i = 0; i < 15;i++)
             tooLong += "a";
-        task = new UnvalidatedTask("a","b","c",tooLong,"1","2","3","4","5");
+        task = new UnvalidatedTask("a","roh","Fi",tooLong,"1","2","3","4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNoValidIntegerSizeFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","abc","2","3","4","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","arohc","2","3","4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNegativeIntegerSizeFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","-1","2","3","4","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","-1","2","3","4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNoSizeFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","","2","3","4","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","","2","3","4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNoValidIntegerWidthFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","abc","3","4","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","abc","3","4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNegativeIntegerWidthFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","-2","3","4","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","-2","3","4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNoWidthFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","","3","4","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","","3","4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNoValidIntegerLengthFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","2","abc","4","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","2","abc","4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNegativeIntegerLengthFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","2","-3","4","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","2","-3","4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNoLengthFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","2","","4","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","2","","4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNoValidIntegerQuantityFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","2","3","abc","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","2","4000","abc","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNegativeIntegerQuantityFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","2","3","-4","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","2","4000","-4","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNoQuantityFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","2","3","","5");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","2","4000","","5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNoValidIntegerPriceFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","2","3","4","abc");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","2","4000","4","abc");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNegativeIntegerPriceFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","2","3","4","-5");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","2","4000","4","-5");
         validator.inputValidationTask(task);
     }
 
     @Test(expected = InvalidInputException.class)
     public void testTaskNoPriceFailedValidation() throws InvalidInputException{
-        task = new UnvalidatedTask("a","b","c","d","1","2","3","4","");
+        task = new UnvalidatedTask("a","roh","Fi","I","1","2","4000","4","");
         validator.inputValidationTask(task);
     }
 
@@ -200,6 +207,24 @@ public class taskValidatorTest {
         Assert.assertEquals(temp.getQuantity(),4);
         Assert.assertEquals(temp.getPrice(),5);
 
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testFailedWrongLength() throws InvalidInputException{
+        task = new UnvalidatedTask("Latten","roh","Fi","I","1","2","3000","4","5");
+        validator.inputValidationTask(task);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testFailedWrongQuality() throws InvalidInputException {
+        task = new UnvalidatedTask("Latten","roh","Fi","VII","1","2","3500","4","5");
+        validator.inputValidationTask(task);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testFailedWrongFinishing() throws InvalidInputException{
+        task = new UnvalidatedTask("Latten","rohkant","Fi","I","1","2","3500","4","5");
+        validator.inputValidationTask(task);
     }
 
     @After
