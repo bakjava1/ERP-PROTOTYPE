@@ -78,7 +78,7 @@ public class DBUtil {
         return connection;
     }
 
-    private static void initDB(boolean isFinalDB) {
+    public static void initDB(boolean isFinalDB) {
         if(isFinalDB){
             //create final database
             LOG.debug("creating final database");

@@ -68,6 +68,7 @@ public class OptimisationAlgorithmServiceImpl implements OptimisationAlgorithmSe
         Color border = new Color(50, 50, 50);
         g2.setColor(border);
 
+
         Shape circle = new Ellipse2D.Double(0, 0, diameter, diameter);
         g2.draw(circle);
 
@@ -76,35 +77,18 @@ public class OptimisationAlgorithmServiceImpl implements OptimisationAlgorithmSe
         for (RectangleDTO rectangle : optAlgorithmResult.getCutViewInRectangle()) {
 
 
-            Shape rect = new java.awt.Rectangle((int)rectangle.getxCoordinate(), (int)rectangle.getyCoordinate(), (int)rectangle.getWidth(), (int)rectangle.getHeight());
+            Shape rect = new java.awt.Rectangle((int)rectangle.getxCoordinate(), (int)rectangle.getyCoordinate(),
+                    (int)rectangle.getWidth(), (int)rectangle.getHeight());
 
-            switch (rectangle.getColor()){
-                case"green" :
-                    g2.setColor(new Color(45, 138, 65));
-                    g2.fill(rect);
-                    g2.setColor(border);
-                    g2.draw(rect);
-                    break;
-                case"red" :
-                    g2.setColor(new Color(222, 113, 103));
-                    g2.fill(rect);
-                    g2.setColor(border);
-                    g2.draw(rect);
-                    break;
-                case"blue" :
-                    g2.setColor(new Color(40, 145, 217));
-                    g2.fill(rect);
-                    g2.setColor(border);
-                    g2.draw(rect);
-                    break;
-                default:
-                    break;
 
-            }
-
+            g2.setColor(Color.decode(rectangle.getColor()));
+            g2.fill(rect);
+            g2.setColor(border);
+            g2.draw(rect);
 
 
         }
+
         g2.dispose();
 
 

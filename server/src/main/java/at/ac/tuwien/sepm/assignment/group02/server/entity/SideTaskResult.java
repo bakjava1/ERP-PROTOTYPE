@@ -17,6 +17,7 @@ public class SideTaskResult {
     private double biggerSize;
     private double maxHeight;
     private boolean isEmpty;
+    private String color;
     private TaskDTO task;
 
 
@@ -159,4 +160,11 @@ public class SideTaskResult {
 
     public TaskDTO getTask() { return task; }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }
