@@ -102,6 +102,7 @@ public class timberValidatorTest {
         timber.setQuality(null);
         validateInput.isValid(timber);
     }
+
     @Test(expected = InvalidInputException.class)
     public void timberCheckFailTooLongQuality() throws InvalidInputException {
         timber.setQuality("aaaaaaaaaaa");
@@ -131,11 +132,13 @@ public class timberValidatorTest {
         timber.setFestmeter(-1);
         validateInput.isValid(timber);
     }
+
     @Test(expected = InvalidInputException.class)
     public void timberCheckFailTooBigFestmeter() throws InvalidInputException {
         timber.setFestmeter(801);
         validateInput.isValid(timber);
     }
+
     @Test(expected = InvalidInputException.class)
     public void timberCheckFailNegativePrice() throws InvalidInputException {
         timber.setPrice(-1);
@@ -151,6 +154,11 @@ public class timberValidatorTest {
     @Test(expected = InvalidInputException.class)
     public void timberCheckFailInvalidDate() throws InvalidInputException {
         timber.setLast_edited("abc");
+        validateInput.isValid(timber);
+    }
+
+    @Test
+    public void timberCheckSuccess() throws InvalidInputException {
         validateInput.isValid(timber);
     }
 
