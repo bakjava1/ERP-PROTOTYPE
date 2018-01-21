@@ -21,11 +21,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -105,6 +107,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         }
 
         if (optAlgorithmResult.getTimberResult() != null){
+            setColors();
             calculateRectangleCoordinates();
         }else{
             LOG.debug("Optimierungsalgorithmus: Keine geeignete Box gefunden.");
@@ -157,8 +160,6 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
 
         for (Task task : tasks) {
-            //main task is not allowed as side task
-            if (task.getId() != mainTask.getId()) {
                 //compare wood type
                 if (task.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
                     //length of side task is not bigger than length of main task
@@ -166,15 +167,15 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                         //quality of side task is not better than quality of main task
                         if (task.getQuality().toLowerCase().equals(mainTask.getQuality().toLowerCase())) {
                             //horizontal tasks need the same width as main task
-                            if(direction.equals("horizontal") && task.getWidth() == mainTask.getWidth()) {
+                            if (direction.equals("horizontal") && task.getWidth() == mainTask.getWidth()) {
                                 possibleTasks.add(taskConverter.convertPlainObjectToRestDTO(task));
-                            } else if(direction.equals("vertical")) {
+                            } else if (direction.equals("vertical") && task.getId() != mainTask.getId()) {
+                                //main task is not allowed as side task
                                 possibleTasks.add(taskConverter.convertPlainObjectToRestDTO(task));
                             }
                         }
                     }
                 }
-            }
         }
 
         return possibleTasks;
@@ -286,6 +287,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
 
     private void calculateRectangleCoordinates(){
+        int colorIndex = 0;
         List<RectangleDTO> rectangles = new ArrayList<>();
 
         //main task
@@ -297,7 +299,8 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             xCoordinate = x;
 
             for (int j = 0; j < optimisationBuffer.getVorschnittAnzahl(); j++){
-                rectangles.add(new RectangleDTO(xCoordinate, yCoordinate, "green", optimisationBuffer.getSmallerSize(), optimisationBuffer.getBiggerSize()));
+
+                rectangles.add(new RectangleDTO(xCoordinate, yCoordinate, "#2D8A41", optimisationBuffer.getSmallerSize(), optimisationBuffer.getBiggerSize()));
                 xCoordinate += optimisationBuffer.getBiggerSize() + SCHNITTFUGE;
             }
 
@@ -324,8 +327,8 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
         for(int i = 0; i < optimisationBuffer.getVerticalSideTaskResult().get(k).getCount(); i++) {
 
-            rectangles.add(new RectangleDTO(xCoordinateLeft, yCoordinate, "red", optimisationBuffer.getVerticalSideTaskResult().get(k).getBiggerSize(), optimisationBuffer.getVerticalSideTaskResult().get(k).getSmallerSize()));
-            rectangles.add(new RectangleDTO(xCoordinateRight, yCoordinate, "red", optimisationBuffer.getVerticalSideTaskResult().get(k).getBiggerSize(), optimisationBuffer.getVerticalSideTaskResult().get(k).getSmallerSize()));
+            rectangles.add(new RectangleDTO(xCoordinateLeft, yCoordinate, optimisationBuffer.getVerticalSideTaskResult().get(k).getColor(), optimisationBuffer.getVerticalSideTaskResult().get(k).getBiggerSize(), optimisationBuffer.getVerticalSideTaskResult().get(k).getSmallerSize()));
+            rectangles.add(new RectangleDTO(xCoordinateRight, yCoordinate, optimisationBuffer.getVerticalSideTaskResult().get(k).getColor(), optimisationBuffer.getVerticalSideTaskResult().get(k).getBiggerSize(), optimisationBuffer.getVerticalSideTaskResult().get(k).getSmallerSize()));
             yCoordinate += (optimisationBuffer.getVerticalSideTaskResult().get(k).getBiggerSize() + SCHNITTFUGE);}
         }
 
@@ -341,8 +344,9 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             //double yCoordinateBottom = optimisationBuffer.getHorizontalSideTaskResult().get(k).getY();
 
             for(int i = 0; i < optimisationBuffer.getHorizontalSideTaskResult().get(k).getCount(); i++) {
-                rectangles.add(new RectangleDTO(xCoordinate, yCoordinateTop, "blue", optimisationBuffer.getHorizontalSideTaskResult().get(k).getSmallerSize(), optimisationBuffer.getHorizontalSideTaskResult().get(k).getBiggerSize()));
-                rectangles.add(new RectangleDTO(xCoordinate, yCoordinateBottom, "blue", optimisationBuffer.getHorizontalSideTaskResult().get(k).getSmallerSize(), optimisationBuffer.getHorizontalSideTaskResult().get(k).getBiggerSize()));
+
+                rectangles.add(new RectangleDTO(xCoordinate, yCoordinateTop,optimisationBuffer.getHorizontalSideTaskResult().get(k).getColor() , optimisationBuffer.getHorizontalSideTaskResult().get(k).getSmallerSize(), optimisationBuffer.getHorizontalSideTaskResult().get(k).getBiggerSize()));
+                rectangles.add(new RectangleDTO(xCoordinate, yCoordinateBottom, optimisationBuffer.getHorizontalSideTaskResult().get(k).getColor(), optimisationBuffer.getHorizontalSideTaskResult().get(k).getSmallerSize(), optimisationBuffer.getHorizontalSideTaskResult().get(k).getBiggerSize()));
                 xCoordinate += (optimisationBuffer.getBiggerSize() + SCHNITTFUGE);
             }
         }
@@ -473,7 +477,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
                     double U = currArea +sideTaskVertical.getSize()*sideTaskVertical.getWidth()*verticalAmount*2 +  (sideTaskVertical.getSize()*sideTaskVertical.getWidth()) * (verticalMaxA - currArea)/(sideTaskVertical.getSize()*sideTaskVertical.getWidth());
 
-                    if (U >maxAreaSideTaskVertical ) {
+                    if (U > maxAreaSideTaskVertical ) {
                         SideTaskResult x = new SideTaskResult(sideTaskVertical, verticalAmount, sideTaskVertical.getSize(), heightSideTaskVertical, currX, y2, sideTaskVertical.getSize(), sideTaskVertical.getWidth(), maxHeightSideTaskVertical, false);
 
                         currSideTask.add(x);
@@ -483,5 +487,86 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                 }
             }
         }
+    }
+
+    private void setColors(){
+        int colorIndex = 0;
+        HashMap<Integer, String> foundTasks = new HashMap<>();
+
+        List<SideTaskResult> allSideTasks = new ArrayList<>();
+        allSideTasks.addAll(optimisationBuffer.getHorizontalSideTaskResult());
+        allSideTasks.addAll(optimisationBuffer.getVerticalSideTaskResult());
+
+
+        for (SideTaskResult task: allSideTasks) {
+            int key = task.getTask().getId();
+
+            if (!foundTasks.containsKey(key)) {
+                if (key != mainTask.getId()) {
+
+                    switch (colorIndex++ % 9) {
+                        case 0:
+                            //color = "blue";
+                            task.setColor("#2891D9");
+                            foundTasks.put(key, "#2891D9");
+                            break;
+                        case 1:
+                            //color = "red";
+                            task.setColor("#DE7167");
+                            foundTasks.put(key, "#DE7167");
+                            break;
+                        case 2:
+                            //color = "indigo";
+                            task.setColor("#9575cd");
+                            foundTasks.put(key, "#9575cd");
+                            break;
+                        case 3:
+                            //color = "lime";
+                            task.setColor("#afb42b");
+                            foundTasks.put(key, "#afb42b");
+                            break;
+                        case 4:
+                            //color = "teal";
+                            task.setColor("#00897b");
+                            foundTasks.put(key, "#00897b");
+                            break;
+                        case 5:
+                            //color = "cyan";
+                            task.setColor("#00acc1");
+                            foundTasks.put(key, "#00acc1");
+                            break;
+                        case 6:
+                            //color = "purple";
+                            task.setColor("#ba68c8");
+                            foundTasks.put(key, "#ba68c8");
+                            break;
+                        case 7:
+                            //color = "yellow";
+                            task.setColor("#ffff72");
+                            foundTasks.put(key, "#ffff72");
+                            break;
+                        case 8:
+                            //color = "orange";
+                            task.setColor("#ffb74d");
+                            foundTasks.put(key, "#ffb74d");
+                            break;
+                        default:
+                            break;
+                    }
+
+                } else {
+                    //color = "green";
+                    task.setColor("#2D8A41");
+                    foundTasks.put(key, "#2D8A41");
+                }
+            }else{
+                task.setColor(foundTasks.get(key));
+            }
+
+
+
+        }
+
+
     }
 }
