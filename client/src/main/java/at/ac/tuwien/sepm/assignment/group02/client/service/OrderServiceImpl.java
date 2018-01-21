@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
         OrderServiceImpl.orderController = orderController;
         OrderServiceImpl.orderConverter = orderConverter;
         OrderServiceImpl.taskConverter = taskConverter;
-        this.validator = validator;
+        OrderServiceImpl.validator = validator;
     }
 
     @Override
@@ -45,8 +44,8 @@ public class OrderServiceImpl implements OrderService {
         try {
             validator.inputValidationOrder(order);
             List<TaskDTO> convertList = new ArrayList<>();
-            for(int i = 0; i < tasks.size();i++) {
-                convertList.add(taskConverter.convertPlainObjectToRestDTO(tasks.get(i)));
+            for(Task t : tasks){
+                convertList.add(taskConverter.convertPlainObjectToRestDTO(t));
             }
             OrderDTO toAdd = orderConverter.convertPlainObjectToRestDTO(order);
             toAdd.setTaskList(convertList);
@@ -93,11 +92,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void closeOrder(Order order) {
-        LOG.debug("closeOrder called: {}", order);
-    }
-
-    @Override
     public List<Order> getAllClosed() throws ServiceLayerException {
         LOG.debug("getAllClosed called");
         List<OrderDTO> allClosed;
@@ -114,12 +108,6 @@ public class OrderServiceImpl implements OrderService {
         setPrices(convertedOrders);
 
         return convertedOrders;
-    }
-
-    @Override
-    public Order getReceiptById(int order_id) {
-        LOG.debug("getReceiptById called: {}", order_id);
-        return null;
     }
 
     @Override

@@ -1,12 +1,10 @@
 package at.ac.tuwien.sepm.assignment.group02.client.rest;
 
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.FilterDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.LumberDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface LumberController {
@@ -51,14 +49,6 @@ public interface LumberController {
      * @inv lumberDTO is validated
      */
     void updateLumber(LumberDTO lumberDTO) throws PersistenceLayerException, ServiceLayerException;
-
-    /**
-     * create a new lumber.
-     * @param lumberDTO
-     * @throws PersistenceLayerException
-     * @inv lumberDTO is validated
-     */
-    void createLumber(LumberDTO lumberDTO) throws PersistenceLayerException;
 
     /**
      * get lumber specified by id

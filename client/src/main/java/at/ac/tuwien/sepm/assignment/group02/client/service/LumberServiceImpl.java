@@ -53,38 +53,8 @@ public class LumberServiceImpl implements LumberService {
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
         }
-        Lumber lumber = lumberConverter.convertRestDTOToPlainObject(lumberDTO);
 
-        return lumber;
-    }
-
-    @Override
-    public void addReservedLumberToTask(String id, String quantity) throws ServiceLayerException {
-        try {
-            int[] validated = validator.temporaryAddTaskToLumberValidation(id,quantity);
-            TaskDTO toAdd = new TaskDTO();
-            toAdd.setId(validated[0]);
-            toAdd.setProduced_quantity(validated[1]);
-            taskController.updateTask(toAdd);
-        }catch(InvalidInputException e) {
-            LOG.error("Failed to validate Input: " + e.getMessage());
-            throw new InvalidInputException(e.getMessage());
-        } catch(PersistenceLayerException e) {
-            LOG.error("Failed to reserve Lumber in Task: " + e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
-        }
-    }
-
-    @Override
-    public boolean lumberExists(Lumber lumber) {
-
-        return getLumber(lumber.getId()) != null;
-    }
-
-
-    @Override
-    public void createLumber(Lumber lumber) {
-
+        return lumberConverter.convertRestDTOToPlainObject(lumberDTO);
     }
 
     @Override
@@ -195,7 +165,7 @@ public class LumberServiceImpl implements LumberService {
 
 
     @Override
-    public boolean deleteLumber(Lumber lumber) throws ServiceLayerException {
+    public void deleteLumber(Lumber lumber) throws ServiceLayerException {
 
         LOG.debug("deleteLumber called: {}", lumber);
 
@@ -210,32 +180,11 @@ public class LumberServiceImpl implements LumberService {
             } catch (PersistenceLayerException e) {
                 LOG.warn(e.getMessage());
             }
-            return true;
     }
 
-
-
-   // @Override
-   /* public void updateLumber(LumberDTO lumberDTO) throws ServiceLayerException {
-
-        LOG.debug("updateLumber called: {}", lumberDTO);
-        try {
-            Lumber lumber=new Lumber();
-            validateLumber(lumber);
-        } catch (NoValidIntegerException e) {
-            LOG.warn(e.getMessage());
-        }
-        LumberDTO toUpdate = lumberConverter.convertPlainObjectToRestDTO(lumberDTO);
-        try {
-            lumberController.updateLumber(toUpdate);
-        } catch (PersistenceLayerException e) {
-            LOG.warn(e.getMessage());
-        }
-    }*/
-
-
-@Override
-public void updateLumber(Lumber lumber) throws ServiceLayerException {
+    /*
+    @Override
+    public void updateLumber(Lumber lumber) throws ServiceLayerException {
         LOG.debug("updateLumber called: {}", lumber);
         try {
             validateLumber(lumber);
@@ -248,18 +197,15 @@ public void updateLumber(Lumber lumber) throws ServiceLayerException {
         } catch (PersistenceLayerException e) {
         LOG.warn(e.getMessage());
         }
-}
+    }
+    */
 
     private void validateLumber(Lumber lumber) throws InvalidInputException {
         LOG.debug("Validating lumber: {}",lumber);
 
         if(lumber==null){
             LOG.debug("Lumber is null.");
-            try {
-                throw new InvalidInputException("Lumber can't be empty.");
-            } catch (InvalidInputException e) {
-                LOG.warn(e.getMessage());
-            }
+            throw new InvalidInputException("Lumber can't be empty.");
         }
 
         if(lumber.getId()<0){

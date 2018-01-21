@@ -3,7 +3,6 @@ package at.ac.tuwien.sepm.assignment.group02.client.rest;
 import at.ac.tuwien.sepm.assignment.group02.client.configuration.RestTemplateConfiguration;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.util.HandleException;
-import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OrderDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,28 +33,6 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public void createTask(TaskDTO task) throws PersistenceLayerException {
-
-    }
-
-    @Override
-    public void deleteTask(@RequestBody TaskDTO task) throws PersistenceLayerException {
-        LOG.debug("sending task to be deleted to server");
-
-        try {
-            //restTemplate.put("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteTask", task, TaskDTO.class);
-            restTemplate.exchange(
-                    "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/deleteTask",
-                    HttpMethod.PUT, new HttpEntity<>(task), TaskDTO.class);
-        } catch(HttpStatusCodeException e){
-            HandleException.handleHttpStatusCodeException(e);
-        } catch(RestClientException e){
-            LOG.warn("server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
-        }
-    }
-
-    @Override
     public void updateTask(@RequestBody TaskDTO task) throws PersistenceLayerException {
         LOG.info("Attempting to update Task");
         try {
@@ -78,10 +55,8 @@ public class TaskControllerImpl implements TaskController {
             restTemplate.exchange(
                     "http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/updateTaskAlg",
                     HttpMethod.PUT, new HttpEntity<>(task), TaskDTO.class);
-        } catch(HttpStatusCodeException e){
-
         } catch(RestClientException e){
-
+            // do nothing
         }
     }
 

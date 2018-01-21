@@ -2,7 +2,8 @@ package at.ac.tuwien.sepm.assignment.group02.server.util;
 
 import com.github.javafaker.Faker;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -96,7 +97,10 @@ public class CreateTestData {
         faker = new Faker();
         try {
             //writer = new PrintWriter("server/src/main/resources/insertFinalData.sql");
-            writer = new PrintWriter("server/src/main/resources/testData.sql");
+            //writer = new PrintWriter("server/src/main/resources/testData.sql");
+            writer = new PrintWriter(CreateTestData.class
+                    .getClassLoader()
+                    .getResource("cost.properties").getPath());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

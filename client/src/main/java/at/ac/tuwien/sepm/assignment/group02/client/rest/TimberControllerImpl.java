@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
@@ -42,31 +41,6 @@ public class TimberControllerImpl implements TimberController {
         }
 
 
-    }
-
-    @Override
-    public void deleteTimber(TimberDTO timberDTO) {
-
-    }
-
-    @Override
-    public TimberDTO getTimberById(@RequestParam(value="id", defaultValue="0") int id) throws PersistenceLayerException {
-        LOG.debug("called getTimberById");
-        TimberDTO timberDTO = null;
-
-        try{
-            timberDTO = restTemplate.getForObject(
-                    "http://"+RestTemplateConfiguration.host+":"+ RestTemplateConfiguration.port+"/getTimberbyId/{id}",
-                    TimberDTO.class, id);
-
-        } catch(HttpStatusCodeException e){
-            HandleException.handleHttpStatusCodeException(e);
-        } catch(RestClientException e){
-            LOG.warn("Unexpected server reaction. Is the server down? ", e.getMessage());
-            throw new PersistenceLayerException("Keine valide Antwort vom Server. Ist der Server erreichbar?");
-        }
-
-        return timberDTO;
     }
 
     @Override

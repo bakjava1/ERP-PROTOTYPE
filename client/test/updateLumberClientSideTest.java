@@ -1,6 +1,6 @@
 import at.ac.tuwien.sepm.assignment.group02.client.converter.LumberConverter;
 import at.ac.tuwien.sepm.assignment.group02.client.entity.Lumber;
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.LumberNotFountException;
+import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberController;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.LumberControllerImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.service.LumberService;
@@ -71,7 +71,7 @@ public class updateLumberClientSideTest {
 
     @Test
     public void findById_LumberNotFound_ShouldReturnHttpStatusCode404() throws Exception {
-        when(lumberServiceMock.getLumber(1)).thenThrow(new LumberNotFountException(""));
+        when(lumberServiceMock.getLumber(1)).thenThrow(new ServiceLayerException(""));
 
         mockMvc.perform(get("/lumbers/{id}", 1L))
                 .andExpect(status().isNotFound());

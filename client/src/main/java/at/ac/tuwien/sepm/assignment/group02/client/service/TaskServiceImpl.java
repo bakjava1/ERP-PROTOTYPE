@@ -33,11 +33,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void createTask(Task task) throws InvalidInputException {
-
-    }
-
-    @Override
     public List<TaskDTO> getAllOpenTasks() throws ServiceLayerException {
         LOG.trace("getAllOpenTasks called");
         List<TaskDTO> allOpen;
@@ -58,7 +53,6 @@ public class TaskServiceImpl implements TaskService {
         try {
             validated = validator.inputValidationTask(toValidate);
         } catch (InvalidInputException e) {
-            //TODO maybe add another exception like Failed TaskCreationException
             LOG.error("Input Validation failed: " + e.getMessage());
             throw new InvalidInputException(e.getMessage());
         }
@@ -77,17 +71,4 @@ public class TaskServiceImpl implements TaskService {
         return taskConverter.convertRestDTOToPlainObject(taskDTO);
     }
 
-    @Override
-    public void deleteTask(Task task) throws ServiceLayerException {
-        LOG.debug("deleteTask called: {}", task);
-
-        TaskDTO taskToDelete = taskConverter.convertPlainObjectToRestDTO(task);
-
-        try {
-            taskController.deleteTask(taskToDelete);
-        } catch (PersistenceLayerException e) {
-            LOG.warn(e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
-        }
-    }
 }

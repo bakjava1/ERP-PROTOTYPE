@@ -1,4 +1,4 @@
-package at.ac.tuwien.sepm.assignment.group02.client.util;
+/*package at.ac.tuwien.sepm.assignment.group02.client.util;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -7,7 +7,7 @@ import javax.servlet.Filter;
 
 /**
  * Created by raquelsima on 15.01.18.
- */
+
 public class ServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 
@@ -32,3 +32,4 @@ public class ServletInitializer extends AbstractAnnotationConfigDispatcherServle
     }
 
 }
+*/

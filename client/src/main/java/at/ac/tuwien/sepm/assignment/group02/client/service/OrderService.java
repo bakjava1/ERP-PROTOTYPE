@@ -14,36 +14,26 @@ import java.util.List;
 public interface OrderService {
 
     /**
-     * create an order and a task with all theire relevant data
-     * @param order
-     * @param tasks
-     * @throws InvalidInputException
-     * @throws ServiceLayerException
+     * create an order and a task with all the relevant data
+     * @param order order to be created
+     * @param tasks list of tasks connected to order
+     * @throws ServiceLayerException if the order couldn't be created
      */
     void addOrder(Order order, List<Task> tasks) throws ServiceLayerException;
 
     /**
      * delete an order
-     * @param order
-     * @throws InvalidInputException
-     * @throws ServiceLayerException
+     * @param order to be deleted
+     * @throws ServiceLayerException if the order couldn't be deleted
      */
-    void deleteOrder(Order order) throws InvalidInputException, ServiceLayerException;
+    void deleteOrder(Order order) throws ServiceLayerException;
 
     /**
-     *  retrieve all orders from data base
+     * retrieve all orders from data base
      * @return list of all open order
      * @throws ServiceLayerException is thrown if an error occurs in the client persistence layer
      */
     List<Order> getAllOpen() throws ServiceLayerException;
-
-    /**
-     * update an order, put flag and save additional values
-     * @param order
-     * @throws InvalidInputException
-     * @throws ServiceLayerException
-     */
-    void closeOrder(Order order) throws InvalidInputException, ServiceLayerException;
 
     /**
      * retrieve all clossed orders
@@ -53,15 +43,6 @@ public interface OrderService {
     List<Order> getAllClosed() throws ServiceLayerException;
 
     /**
-     * get an invoice by its id
-     * @param order_id
-     * @return the invoice
-     * @throws InvalidInputException
-     * @throws ServiceLayerException
-     */
-    Order getReceiptById(int order_id) throws InvalidInputException, ServiceLayerException;
-
-    /**
      * takes an orders and invoices it, calculates the necessary prices and removes reserved lumber
      * converts order to an orderDTO
      * @author Philipp Klein
@@ -69,5 +50,5 @@ public interface OrderService {
      * @throws InvalidInputException if selectedOrder is not initialized correctly
      * @throws ServiceLayerException if error when trying to execute command
      */
-    void invoiceOrder(Order selectedOrder) throws InvalidInputException, ServiceLayerException;
+    void invoiceOrder(Order selectedOrder) throws ServiceLayerException;
 }

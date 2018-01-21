@@ -20,7 +20,7 @@ public interface TimberService {
      *                                  or amount of added timber is negative
      * @throws ServiceLayerException    if could not add timber to the timber store
      */
-    void addTimber(Timber timber) throws InvalidInputException, ServiceLayerException;
+    void addTimber(Timber timber) throws ServiceLayerException;
 
 
     /**

@@ -20,22 +20,6 @@ public interface TimberController {
     void createTimber(TimberDTO timberDTO) throws PersistenceLayerException;
 
     /**
-     * This method removes round timber from the round timber store.
-     * @param timberDTO timberDTO that will be removed/amount reduced
-     * @throws PersistenceLayerException if error in server or no connection to server
-     * @inv timberDTO is validated
-     */
-    void deleteTimber(TimberDTO timberDTO) throws PersistenceLayerException;
-
-    /**
-     * get a timber by its id
-     * @param timber_id id of timber
-     * @return timberDTO with {@code timber_id}
-     * @throws PersistenceLayerException if error in server or no connection to server
-     */
-    TimberDTO getTimberById(int timber_id) throws PersistenceLayerException;
-
-    /**
      * This method returns the number of boxes currently existing.
      * @author Philipp Klein
      * @return number of boxes

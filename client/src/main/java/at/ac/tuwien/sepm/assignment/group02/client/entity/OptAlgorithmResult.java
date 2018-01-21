@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.assignment.group02.client.entity;
 
 
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;

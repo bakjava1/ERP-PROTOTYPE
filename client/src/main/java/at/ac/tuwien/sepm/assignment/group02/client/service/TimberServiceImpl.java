@@ -1,12 +1,11 @@
 package at.ac.tuwien.sepm.assignment.group02.client.service;
 
+import at.ac.tuwien.sepm.assignment.group02.client.converter.TimberConverter;
+import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.client.rest.TimberController;
-import at.ac.tuwien.sepm.assignment.group02.client.converter.TimberConverter;
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
-import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateInput;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateTimber;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import org.slf4j.Logger;
@@ -33,9 +32,8 @@ public class TimberServiceImpl implements TimberService{
     }
 
     @Override
-    public void addTimber(Timber timber) throws ServiceLayerException, InvalidInputException{
+    public void addTimber(Timber timber) throws ServiceLayerException {
 
-        //TODO get Number of Boxes from properties file and do not get if from database
         try {
             if(timber.getBox_id()>timberController.getNumberOfBoxes())
                 throw new InvalidInputException("Error in Timber Box: Box ID is bigger than number of boxes");
