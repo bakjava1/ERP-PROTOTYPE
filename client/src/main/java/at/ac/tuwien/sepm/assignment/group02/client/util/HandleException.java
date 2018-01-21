@@ -15,20 +15,22 @@ public class HandleException {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static void handleHttpStatusCodeException(HttpStatusCodeException e) throws PersistenceLayerException {
-        LOG.debug("called handleHttpStatusCodeException: ", e.getResponseBodyAsString());
+        LOG.debug("called handleHttpStatusCodeException: " + e.getResponseBodyAsString());
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY); //throw JsonProcessingException on duplicate key or any other error
         String msg = "Fehlermeldung konnte nicht interpretiert werden. ";
         try {
             if (mapper.readTree(e.getResponseBodyAsString()) != null) {
-                msg = mapper.readTree(e.getResponseBodyAsString()).get("message").asText();
+                if(e.getResponseBodyAsString().contains("message")) {
+                    msg = mapper.readTree(e.getResponseBodyAsString()).get("message").asText();
+                }
             }
         } catch (JsonProcessingException e0){
             LOG.warn(e0.getMessage().trim()+" "+e.getMessage());
         } catch (IOException e1) {
             LOG.warn(e1.getMessage().trim());
         }
-        LOG.warn("HttpStatusCodeException: ", msg);
+        LOG.warn("HttpStatusCodeException: "+ msg);
         throw new PersistenceLayerException("Problem am Server. "+msg);
     }
 }
