@@ -256,36 +256,6 @@ public class OrderServerServiceImplTest {
     }
 
     @Test
-    public void testGetOrderById_works() throws Exception {
-        OrderService orderService
-                = new OrderServiceImpl(orderManagementDAO,taskManagementDAO, lumberManagementDAO,orderConverter,taskConverter);
-
-        Order order = Mockito.mock(Order.class);
-        OrderDTO orderDTO = Mockito.mock(OrderDTO.class);
-
-        when(orderManagementDAO.getOrderById(anyInt())).thenReturn(order);
-        when(orderConverter.convertPlainObjectToRestDTO(order)).thenReturn(orderDTO);
-
-        OrderDTO orderDTO1 = orderService.getOrderById(anyInt());
-
-        verify(orderManagementDAO, times(1)).getOrderById(anyInt());
-        verify(orderConverter,times(1)).convertPlainObjectToRestDTO(any(Order.class));
-
-        Assert.assertSame(orderDTO, orderDTO1);
-    }
-
-
-    @Test(expected = ServiceLayerException.class)
-    public void testGetOrderById_PersistenceLayerException() throws Exception {
-        OrderService orderService
-                = new OrderServiceImpl(orderManagementDAO,taskManagementDAO, lumberManagementDAO,orderConverter,taskConverter);
-
-        doThrow(PersistenceLayerException.class).when(orderManagementDAO).getOrderById(anyInt());
-
-        orderService.getOrderById(anyInt());
-    }
-
-    @Test
     public void testInvoiceOrder_works() throws Exception {
         OrderService orderService
                 = new OrderServiceImpl(orderManagementDAO,taskManagementDAO, lumberManagementDAO,orderConverter,taskConverter);

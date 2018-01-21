@@ -139,11 +139,6 @@ public class OrderDAOJDBC implements OrderDAO {
     }
 
     @Override
-    public void updateOrder(Order order) throws PersistenceLayerException {
-
-    }
-
-    @Override
     public List<Order> getAllClosed() throws PersistenceLayerException {
         LOG.debug("Get all closed Order from database");
 
@@ -181,11 +176,6 @@ public class OrderDAOJDBC implements OrderDAO {
             throw new PersistenceLayerException("Database error:" + e.getMessage());
         }
         return billList;
-    }
-
-    @Override
-    public Order getOrderById(int order_id) throws PersistenceLayerException {
-        return null;
     }
 
     @Override

@@ -30,26 +30,11 @@ public interface OrderService {
     List<OrderDTO> getAllOpen() throws ServiceLayerException;
 
     /**
-     * update an order, put flag and save additional values
-     * @param orderDTO
-     * @throws ServiceLayerException
-     */
-    void updateOrder(OrderDTO orderDTO) throws ServiceLayerException;
-
-    /**
      * retrieve all closed orders equal
      * @return list of all closed orders
      * @throws ServiceLayerException if the database is not available for the persistence layer
      */
     List<OrderDTO> getAllClosed() throws ServiceLayerException;
-
-    /**
-     * get an order by its id
-     * @param order_id
-     * @return an order with its id
-     * @throws ServiceLayerException
-     */
-    OrderDTO getOrderById(int order_id) throws ServiceLayerException;
 
     /**
      * takes an orderDTO converts it into an order and invoices it

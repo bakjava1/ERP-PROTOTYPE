@@ -26,13 +26,6 @@ public class TaskControllerImpl {
         TaskControllerImpl.taskService = taskService;
     }
 
-    @RequestMapping(value="/createTask", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "create task")
-    public void createTask(@RequestBody TaskDTO taskDTO) throws ServiceLayerException {
-        LOG.debug("createTask: {}" + taskDTO.toString());
-        taskService.createTask(taskDTO);
-    }
-
     @RequestMapping(value="/updateTask",method = RequestMethod.PUT,produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "update task")
     public void updateTask(@RequestBody TaskDTO task) throws ServiceLayerException {
@@ -45,13 +38,6 @@ public class TaskControllerImpl {
     public void updateTaskAlg(@RequestBody TaskDTO task) {
         LOG.debug("Atemmpting to Update Task, {}", task.toString());
         taskService.updateTaskAlg(task);
-    }
-
-    @RequestMapping(value="/deleteTask", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "delete task")
-    public void deleteTask(TaskDTO task) throws ServiceLayerException {
-        LOG.debug("Deleting task " + task.getId());
-        taskService.deleteTask(task);
     }
 
     @RequestMapping(value="/getAllOpenTasks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -67,4 +53,20 @@ public class TaskControllerImpl {
         LOG.debug("called getTaskById");
         return taskService.getTaskById(id);
     }
+
+    /*
+    @RequestMapping(value="/createTask", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "create task")
+    public void createTask(@RequestBody TaskDTO taskDTO) throws ServiceLayerException {
+        LOG.debug("createTask: {}" + taskDTO.toString());
+        taskService.createTask(taskDTO);
+    }
+
+    @RequestMapping(value="/deleteTask", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "delete task")
+    public void deleteTask(TaskDTO task) throws ServiceLayerException {
+        LOG.debug("Deleting task " + task.getId());
+        taskService.deleteTask(task);
+    }
+    */
 }

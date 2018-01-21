@@ -78,7 +78,8 @@ public class AssignmentTests {
 
     @Test
     public void getAllClosedAssignments_works() throws Exception {
-        this.mvc.perform(get("/getAllClosedAssignments").accept(MediaType.APPLICATION_JSON_VALUE))
+        this.mvc.perform(get("/getAllClosedAssignments")
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0]done")
                         .value("true"));

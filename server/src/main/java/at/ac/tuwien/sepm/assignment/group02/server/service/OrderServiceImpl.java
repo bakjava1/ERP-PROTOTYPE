@@ -9,7 +9,6 @@ import at.ac.tuwien.sepm.assignment.group02.server.entity.Lumber;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Order;
 import at.ac.tuwien.sepm.assignment.group02.server.entity.Task;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityCreationException;
-import at.ac.tuwien.sepm.assignment.group02.server.exceptions.EntityNotFoundExceptionService;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.PersistenceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.persistence.LumberDAO;
@@ -117,12 +116,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrder(OrderDTO orderDTO) {
-        LOG.info("called updateOrder");
-
-    }
-
-    @Override
     public List<OrderDTO> getAllClosed() throws ServiceLayerException {
         List<OrderDTO> allClosedConverted =  new ArrayList<>();
 
@@ -146,17 +139,6 @@ public class OrderServiceImpl implements OrderService {
 
 
         return allClosedConverted;
-    }
-
-    @Override
-    public OrderDTO getOrderById(int order_id) throws ServiceLayerException {
-
-        try {
-            return orderConverter.convertPlainObjectToRestDTO(orderManagementDAO.getOrderById(order_id));
-        } catch (PersistenceLayerException e) {
-            LOG.error("Error while trying to get objects from Database: " + e.getMessage());
-            throw new EntityNotFoundExceptionService(e.getMessage());
-        }
     }
 
     @Override
