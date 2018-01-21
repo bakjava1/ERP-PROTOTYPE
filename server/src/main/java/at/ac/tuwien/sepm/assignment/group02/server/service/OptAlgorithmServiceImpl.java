@@ -93,8 +93,8 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
         List<TimberDTO> possibleTimbers = getPossibleTimbers(mainTask);
         if(possibleTimbers.isEmpty()){
-            //throw exception or set boolean
-            return null;
+            LOG.debug("Optimierungsalgorithmus: Kein geeignetes Rundohlz gefunden.");
+            throw new OptimisationAlgorithmException("Kein geeignetes Rundholz gefunden.");
         }
 
         possibleSideTasksVertical = getPossibleTasks("vertical", mainTask);
@@ -180,7 +180,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         return possibleTasks;
     }
 
-    private void calculateCut(TimberDTO timber){
+    private void calculateCut(TimberDTO timber) throws OptimisationAlgorithmException {
         LOG.debug("calculation cut for box number: {}", timber.getBox_id());
 
         currentTimber = timber;
@@ -220,7 +220,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         calculateVerticalSideTasks(0, new ArrayList<>(),currentRadius + (widthMainTask / 2) +SCHNITTFUGE,  1);
 
         if (verticalSideTask.isEmpty()){
-            //TODO fill default lumber - properties file?
+            throw new OptimisationAlgorithmException("Es ist keine passende vertikale Seitenware verfügbar.");
         }
 
 
