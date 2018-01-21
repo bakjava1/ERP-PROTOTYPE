@@ -122,7 +122,8 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         List<TimberDTO> possibleTimbers = new ArrayList<>();
         List<TimberDTO> timbers =  new ArrayList<>();
 
-        List<Timber> timbersToConvert = timberDAO.getAllBoxes();
+        List<Timber> timbersToConvert = timberDAO.getBoxesForTask(taskConverter.convertRestDTOToPlainObject(mainTask));
+        List <String> possibleQualities = convertLumberQualityToTimberQuality(mainTask.getQuality());
 
         for (Timber timber: timbersToConvert) {
             timbers.add(timberConverter.convertPlainObjectToRestDTO(timber));
@@ -142,9 +143,12 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                 if((mainTask.getSize()*mainTask.getWidth())< pow(timber.getDiameter()/2,2)*Math.PI){
                     //length of main task = length of timber
                     if(mainTask.getLength()==timber.getLength()){
-                        //TODO quality
+                        //TODO mainTask.getQuantity() <= timber.getAmount ?
+
                         //quality of main task is not better than best possible quality from timber
                         possibleTimbers.add(timber);
+
+
                     }
                 }
             }
@@ -568,5 +572,45 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
         }
 
 
+    }
+
+    private List<String> convertLumberQualityToTimberQuality(String quality) {
+        List<String> temp = new ArrayList<>();
+        if(quality.equals("O")) {
+            temp.add("A");
+        }
+        if(quality.equals("I")) {
+            temp.add("A");
+            temp.add("B");
+        }
+        if(quality.equals("II")) {
+            temp.add("A");
+            temp.add("B");
+            temp.add("C");
+        }
+        if(quality.equals("III")) {
+            temp.add("B");
+            temp.add("C");
+            temp.add("CX");
+        }
+        if(quality.equals("IV")) {
+            temp.add("C");
+            temp.add("CX");
+        }
+        if(quality.equals("V")) {
+            temp.add("CX");
+        }
+        if(quality.equals("O/III")) {
+            temp.add("A");
+            temp.add("B");
+            temp.add("C");
+            temp.add("CX");
+        }
+        if(quality.equals("III/IV") || quality.equals("III/V")) {
+            temp.add("B");
+            temp.add("C");
+            temp.add("CX");
+        }
+        return temp;
     }
 }
