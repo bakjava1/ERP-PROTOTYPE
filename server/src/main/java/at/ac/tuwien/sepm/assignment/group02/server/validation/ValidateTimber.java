@@ -25,7 +25,7 @@ public class ValidateTimber implements ValidateInput<Timber> {
 
     @Override
     public boolean isValid(Timber timber) throws InvalidInputException {
-        LOG.debug("validating timber: ", timber.toString());
+        LOG.debug("validating timber: ", timber);
 
         if(timber == null){
             LOG.error("Error at Timber: Timber cannot be null");

@@ -25,6 +25,11 @@ public class ValidateInvoice implements ValidateInput<Order> {
 
     @Override
     public boolean isValid(Order input) throws InvalidInputException {
+
+        if(input == null) {
+            throw new InvalidInputException("Fehler in Rechnung: Rechnung kann nicht null sein!");
+        }
+
         try {
             primitiveValidator.isNumber(input.getID(),-1);
         } catch(NoValidIntegerException e) {
