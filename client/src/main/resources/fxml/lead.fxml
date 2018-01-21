@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.LeadWorkerFXML">
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.group02.client.gui.LeadWorkerFXML">
    <children>
       <TabPane fx:id="tabPane" prefHeight="634.0" prefWidth="831.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -61,7 +61,7 @@
                            <font>
                               <Font size="14.0" />
                            </font></TextField>
-                        <ComboBox fx:id="cb_finishing" layoutX="27.0" layoutY="59.0" prefHeight="25.0" prefWidth="160.0" />
+                        <ComboBox fx:id="cb_finishing" layoutX="21.0" layoutY="59.0" prefHeight="26.0" prefWidth="166.0" />
                         <ComboBox fx:id="cb_wood_type" layoutX="198.0" layoutY="59.0" prefHeight="25.0" prefWidth="160.0" />
                         <ComboBox fx:id="cb_quality" layoutX="372.0" layoutY="59.0" prefHeight="25.0" prefWidth="160.0" />
                         <TextField fx:id="tf_strength" alignment="TOP_CENTER" layoutX="547.0" layoutY="59.0" prefHeight="25.0" prefWidth="75.0" promptText="Stärke">
@@ -105,9 +105,9 @@
                               <TableColumn fx:id="col_reserved_quantity" prefWidth="100.0" text="reserviert" />
                           </columns>
                         </TableView>
-                        <Button fx:id="btn_resetSearch" layoutX="688.0" layoutY="95.0" mnemonicParsing="false" onAction="#resetSearchClicked">
+                        <Button fx:id="btn_resetSearch" layoutX="689.0" layoutY="100.0" mnemonicParsing="false" onAction="#resetSearchClicked">
                            <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </Button>
                         <Label layoutX="349.0" layoutY="14.0" prefHeight="10.0" prefWidth="137.0" text="Schnittholz" textAlignment="CENTER">
