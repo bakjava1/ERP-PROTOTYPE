@@ -54,7 +54,6 @@ public class OrderServiceImpl implements OrderService {
             LOG.warn(e.getMessage());
             throw new ServiceLayerException(e.getMessage());
         } catch(InvalidInputException e) {
-            //TODO maybe add another exception like Failed TaskCreationException
             LOG.error("Input Validation failed: " + e.getMessage());
             throw new ServiceLayerException(e.getMessage());
         }
@@ -127,7 +126,6 @@ public class OrderServiceImpl implements OrderService {
 
 
         selectedOrder.setNetAmount(netSumTasks);
-        //TODO get tax rate from properties file
         double taxAmount = (double)netSumTasks * (20.0/100.0);
         int grossAmount = netSumTasks + (int)taxAmount;
         selectedOrder.setGrossAmount(grossAmount);
