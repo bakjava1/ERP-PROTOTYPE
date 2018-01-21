@@ -195,7 +195,7 @@ public class Validator {
             throw new InvalidInputException("Fehler bei Gesamtpreis: " + e.getMessage());
         }
 
-        return new Task(-1,-1,toValidate.getDescription(),
+        return new Task(0,0,toValidate.getDescription(),
                 toValidate.getFinishing(),toValidate.getWood_type(),
                 toValidate.getQuality(),validatedSize,validatedWidth,
                 validatedLength,validatedQuantity,0,
@@ -206,44 +206,113 @@ public class Validator {
     //not entity validators
 
     public void inputValidationTaskOnOrder(Task toValidate) throws InvalidInputException {
+
+        if(toValidate == null){
+            LOG.error("Error at Task: Task cannot be null");
+            throw new InvalidInputException("Fehler bei Auftrag: Auftrag kann nicht null sein");
+        }
+
         try {
-            primitiveValidator.validateText(toValidate.getDescription(), -1);
-        }catch(EmptyInputException e) {
-            LOG.error("Error at Task Description: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Task Description: " + e.getMessage());
+            primitiveValidator.isNumber(toValidate.getId(),-1);
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Id: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Auftrags ID: " + e.getMessage());
         }
+
         try {
-            primitiveValidator.validateText(toValidate.getFinishing(), -1);
-        }catch(EmptyInputException e) {
-            LOG.error("Error at Task Finishing: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Task Finishing: " + e.getMessage());
+            primitiveValidator.isNumber(toValidate.getOrder_id(),-1);
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Id: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Bestellungs ID: " + e.getMessage());
         }
+
         try {
-            primitiveValidator.validateText(toValidate.getWood_type(), -1);
+            primitiveValidator.validateText(toValidate.getDescription(),50);
         }catch(EmptyInputException e) {
-            LOG.error("Error at Task Wood Type: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Task Wood Type: " + e.getMessage());
+            LOG.error("Error at Description: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Beschreibung: " + e.getMessage());
         }
+
         try {
-            primitiveValidator.validateText(toValidate.getQuality(), -1);
+            primitiveValidator.validateText(toValidate.getFinishing(),15);
+            if(!toValidate.getFinishing().equals("roh") && !toValidate.getFinishing().equals("gehobelt") && !toValidate.getFinishing().equals("besäumt")
+                    && !toValidate.getFinishing().equals("prismiert") && !toValidate.getFinishing().equals("trocken") && !toValidate.getFinishing().equals("lutro")
+                    && !toValidate.getFinishing().equals("frisch") && !toValidate.getFinishing().equals("imprägniert")) {
+                LOG.error("Error at Finishing: Unknown Finishing");
+                throw new InvalidInputException("Fehler bei Ausführung: Unbekannte Ausführung!");
+            }
         }catch(EmptyInputException e) {
-            LOG.error("Error at Task Quality: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Task Quality: " + e.getMessage());
+            LOG.error("Error at Finishing: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Ausführung: " + e.getMessage());
         }
-        if(toValidate.getSize()<=0){LOG.error("Error at Task Size: Size <= 0");
-            throw new InvalidInputException("Fehler bei Task Size: Size <= 0");
+
+        try {
+            primitiveValidator.validateText(toValidate.getWood_type(),10);
+            if(!toValidate.getWood_type().equals("Fi") && !toValidate.getWood_type().equals("Ta") && !toValidate.getWood_type().equals("Lae")) {
+                LOG.error("Error at Wood Type: Unknown Wood Type");
+                throw new InvalidInputException("Fehler bei Holzart: Unbekannte Holzart!");
+            }
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Wood Type: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Holzart: " + e.getMessage());
         }
-        if(toValidate.getWidth()<=0){LOG.error("Error at Task Width: Width <= 0");
-            throw new InvalidInputException("Fehler bei Task Width: Width <= 0");
+
+        try {
+            primitiveValidator.validateText(toValidate.getQuality(),10);
+            if(!toValidate.getQuality().equals("O") && !toValidate.getQuality().equals("I") && !toValidate.getQuality().equals("II") &&
+                    !toValidate.getQuality().equals("III") && !toValidate.getQuality().equals("IV") && !toValidate.getQuality().equals("V") &&
+                    !toValidate.getQuality().equals("O/III") && !toValidate.getQuality().equals("III/IV") && !toValidate.getQuality().equals("III/V") ) {
+                LOG.error("Error at Quality: Unknown Quality");
+                throw new InvalidInputException("Fehler bei Qualität: Unbekannte Qualität!");
+            }
+        }catch(EmptyInputException e) {
+            LOG.error("Error at Quality: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Qualität: " + e.getMessage());
         }
-        if(toValidate.getLength()<=0){LOG.error("Error at Task Length: Length <= 0");
-            throw new InvalidInputException("Fehler bei Task Length: Length <= 0");
+
+        try {
+            primitiveValidator.isNumber(toValidate.getSize(),515);
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Size: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Dicke: " + e.getMessage());
         }
-        if(toValidate.getQuantity()<=0){LOG.error("Error at Task Quantity: Quantity <= 0");
-            throw new InvalidInputException("Fehler bei Task Quantity: Quantity <= 0");
+
+        try {
+            primitiveValidator.isNumber(toValidate.getWidth(),515);
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Width: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Breite: " + e.getMessage());
         }
-        if(toValidate.getPrice()<=0){LOG.error("Error at Task Price: Price <= 0");
-            throw new InvalidInputException("Fehler bei Task Price: Price <= 0");
+
+        try {
+            primitiveValidator.isNumber(toValidate.getLength(),5000);
+            if(toValidate.getLength() != 3500 && toValidate.getLength() != 4000 && toValidate.getLength() != 4500 && toValidate.getLength() != 5000) {
+                throw new InvalidInputException("Keine produzierbare Länge! Bitte geben sie eine produzierbare Länge an! (3500,4000,4500,5000");
+            }
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Length: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Länge: " + e.getMessage());
+        }
+
+        try {
+            primitiveValidator.isNumber(toValidate.getQuantity(),100000);
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Quantity: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Anzahl: " + e.getMessage());
+        }
+
+        try {
+            primitiveValidator.isNumber(toValidate.getPrice(),10000000);
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Price: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Gesamtpreis: " + e.getMessage());
+        }
+
+        try {
+            primitiveValidator.isNumber(toValidate.getProduced_quantity(),-1);
+        }catch(NoValidIntegerException e) {
+            LOG.error("Error at Produced Quantity: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei produzierter Anzahl: " + e.getMessage());
         }
     }
 
@@ -269,7 +338,7 @@ public class Validator {
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Description: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Description: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Beschreibung: " + e.getMessage());
         }
 
         try {
@@ -279,13 +348,13 @@ public class Validator {
                         && !finishing.equals("prismiert") && !finishing.equals("trocken") && !finishing.equals("lutro")
                         && !finishing.equals("frisch") && !finishing.equals("imprägniert")) {
                     LOG.error("Error at Finishing: Unknown Finishing");
-                    throw new InvalidInputException("Fehler bei Finishing: Unknown Finishing");
+                    throw new InvalidInputException("Fehler bei Ausführung: Unbekannte Ausführung");
                 }
                 validatedFilter.setFinishing(finishing);
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Finishing: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Finishing: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Ausführung: " + e.getMessage());
         }
 
         try {
@@ -293,13 +362,13 @@ public class Validator {
                 primitiveValidator.validateText(wood_type, 20);
                 if (!wood_type.equals("Fi") && !wood_type.equals("Ta") && !wood_type.equals("Lae")) {
                     LOG.error("Error at Wood Type: Unknown Wood Type");
-                    throw new InvalidInputException("Fehler bei Wood Type: Unknown Wood Type");
+                    throw new InvalidInputException("Fehler bei Holzart: Unbekannte Holzart");
                 }
                 validatedFilter.setWood_type(wood_type);
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Wood Type: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Wood Type: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Holzart: " + e.getMessage());
         }
 
         try {
@@ -309,13 +378,13 @@ public class Validator {
                         !quality.equals("III") && !quality.equals("IV") && !quality.equals("V") &&
                         !quality.equals("O/III") && !quality.equals("III/IV") && !quality.equals("III/V")) {
                     LOG.error("Error at Quality: Unknown Quality");
-                    throw new InvalidInputException("Fehler bei Quality: Unknown Quality");
+                    throw new InvalidInputException("Fehler bei Qualität: Unbekannte Qualität");
                 }
                 validatedFilter.setQuality(quality);
             }
         }catch(EmptyInputException e) {
             LOG.error("Error at Quality: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Quality: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Qualität: " + e.getMessage());
         }
 
 
@@ -323,23 +392,23 @@ public class Validator {
             if(strength.equals("")) { validatedFilter.setSize(null); }
             else {
 
-                int validatedStrength = primitiveValidator.validateNumber(strength, 1000);
+                int validatedStrength = primitiveValidator.validateNumber(strength, 515);
                 validatedFilter.setSize(validatedStrength+"");
             }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Size: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Size: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Dicke: " + e.getMessage());
         }
 
         try {
             if(width.equals("")) { validatedFilter.setWidth(null); }
             else {
-                int validatedWidth = primitiveValidator.validateNumber(width, 1000);
+                int validatedWidth = primitiveValidator.validateNumber(width, 515);
                 validatedFilter.setWidth(validatedWidth+"");
             }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Width: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Width: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Breite: " + e.getMessage());
         }
 
         try {
@@ -353,7 +422,7 @@ public class Validator {
             }
         }catch(NoValidIntegerException e) {
             LOG.error("Error at Length: " + e.getMessage());
-            throw new InvalidInputException("Fehler bei Length: " + e.getMessage());
+            throw new InvalidInputException("Fehler bei Länge: " + e.getMessage());
         }
 
         return validatedFilter;

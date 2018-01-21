@@ -31,27 +31,11 @@ public interface OrderDAO {
     List<Order> getAllOpen() throws PersistenceLayerException;
 
     /**
-     * update an existing order, put flag and save additional values
-     * @param order
-     * @throws PersistenceLayerException
-     * @inv order is validated
-     */
-    void updateOrder(Order order) throws PersistenceLayerException;
-
-    /**
      * all closed orders equal request of invoice
      * @return list of all closed orders
      * @throws PersistenceLayerException if the database is not available
      */
     List<Order> getAllClosed() throws PersistenceLayerException;
-
-    /**
-     * get order by its id
-     * @param order_id
-     * @return an order with its id
-     * @throws PersistenceLayerException
-     */
-    Order getOrderById(int order_id) throws PersistenceLayerException;
 
     /**
      * takes an orders and marks it as invoiced and sets necessary fields to create an invoice

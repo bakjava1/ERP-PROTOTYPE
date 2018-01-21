@@ -1,10 +1,10 @@
-package validatorTests;
+package validatorTest;
 
-import at.ac.tuwien.sepm.assignment.group02.client.entity.Timber;
-import at.ac.tuwien.sepm.assignment.group02.client.exceptions.InvalidInputException;
-import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator;
-import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateInput;
-import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateTimber;
+import at.ac.tuwien.sepm.assignment.group02.server.entity.Timber;
+import at.ac.tuwien.sepm.assignment.group02.server.exceptions.InvalidInputException;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.PrimitiveValidator;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateInput;
+import at.ac.tuwien.sepm.assignment.group02.server.validation.ValidateTimber;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -35,6 +35,12 @@ public class timberValidatorTest {
         timber.setFestmeter(400.0);
         timber.setPrice(10000);
         timber.setLast_edited("2018-01-01 12:38:40.123");
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void timberCheckFailNull() throws InvalidInputException {
+        timber = null;
+        validateInput.isValid(timber);
     }
 
     @Test(expected = InvalidInputException.class)

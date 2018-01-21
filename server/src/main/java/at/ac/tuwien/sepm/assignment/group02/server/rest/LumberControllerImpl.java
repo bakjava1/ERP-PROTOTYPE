@@ -81,11 +81,4 @@ public class LumberControllerImpl {
         lumberService.reserveLumberAlg(lumberDTO);
     }
 
-    @RequestMapping(value="/createLumber", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Create Lumber")
-    public void createLumber(@RequestBody LumberDTO lumberDTO) throws ServiceLayerException {
-        LOG.debug("called createLumber, {}", lumberDTO.toString());
-        lumberService.addLumber(lumberDTO);
-    }
-
 }

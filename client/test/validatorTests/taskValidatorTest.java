@@ -12,11 +12,21 @@ public class taskValidatorTest {
 
     private static Validator validator;
     private static UnvalidatedTask task;
+    private Task task2;
 
     @BeforeClass
     public static void setUp() {
         PrimitiveValidator primitiveValidator = new PrimitiveValidator();
         validator = new Validator(primitiveValidator);
+    }
+
+    @Before
+    public void before() {
+        task2 = new Task(0,0,"Latten",
+                "roh","Fi",
+                "I",20,40,
+                4000,100,0,
+                false,20000);
     }
 
 
@@ -225,6 +235,178 @@ public class taskValidatorTest {
     public void testFailedWrongFinishing() throws InvalidInputException{
         task = new UnvalidatedTask("Latten","rohkant","Fi","I","1","2","3500","4","5");
         validator.inputValidationTask(task);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailNull() throws InvalidInputException {
+        task2 = null;
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailNegativeId() throws InvalidInputException {
+        task2.setId(-1);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailNegativeOrderId() throws InvalidInputException {
+        task2.setOrder_id(-1);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailDescriptionNull() throws InvalidInputException {
+        task2.setDescription(null);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailDescriptionTooLong() throws InvalidInputException {
+        String tooLong = "";
+        for(int i = 0; i < 51;i++)
+            tooLong += "a";
+        task2.setDescription(tooLong);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailFinishingNull() throws InvalidInputException {
+        task2.setFinishing(null);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailFinishingTooLong() throws InvalidInputException {
+        String tooLong = "";
+        for(int i = 0; i < 16;i++)
+            tooLong += "a";
+        task2.setFinishing(tooLong);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailUnknownFinishing() throws InvalidInputException {
+        task2.setFinishing("rohe");
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailWoodTypeNull() throws InvalidInputException {
+        task2.setWood_type(null);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailWoodTypeTooLong() throws InvalidInputException {
+        String tooLong = "";
+        for(int i = 0; i < 11;i++)
+            tooLong += "a";
+        task2.setWood_type(tooLong);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailUnknownWoodType() throws InvalidInputException {
+        task2.setWood_type("unknown");
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailQualityNull() throws InvalidInputException {
+        task2.setQuality(null);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailQualityTooLong() throws InvalidInputException {
+        String tooLong = "";
+        for(int i = 0; i < 11;i++)
+            tooLong += "a";
+        task2.setQuality(tooLong);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailUnknownQuality() throws InvalidInputException {
+        task2.setQuality("unknown");
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailNegativeSize() throws InvalidInputException {
+        task2.setSize(-1);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailSizeTooBig() throws InvalidInputException {
+        task2.setSize(516);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailNegativeWidth() throws InvalidInputException {
+        task2.setWidth(-1);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailWidthTooBig() throws InvalidInputException {
+        task2.setWidth(516);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailNegativeLength() throws InvalidInputException {
+        task2.setLength(-1);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailLengthTooBig() throws InvalidInputException {
+        task2.setLength(5001);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailUnknownLength() throws InvalidInputException {
+        task2.setLength(3000);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailNegativeQuantity() throws InvalidInputException {
+        task2.setQuantity(-1);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailQuantityTooBig() throws InvalidInputException {
+        task2.setQuantity(100001);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailNegativePrice() throws InvalidInputException {
+        task2.setPrice(-1);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailPriceTooBig() throws InvalidInputException {
+        task2.setPrice(100000000);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void taskCheckFailNegativeProducedQuantity() throws InvalidInputException {
+        task2.setProduced_quantity(-1);
+        validator.inputValidationTaskOnOrder(task2);
+    }
+
+    @Test
+    public void taskCheckSuccess() throws InvalidInputException {
+        validator.inputValidationTaskOnOrder(task2);
     }
 
     @After

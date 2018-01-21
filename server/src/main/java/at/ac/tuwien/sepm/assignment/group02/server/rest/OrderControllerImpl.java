@@ -61,13 +61,6 @@ public class OrderControllerImpl {
         return orderService.getAllOpen();
     }
 
-    @RequestMapping(value="/updateOrder", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "update order")
-    public void updateOrder(OrderDTO orderDTO) throws ServiceLayerException {
-        LOG.debug("called updateOrder, {}", orderDTO.toString());
-        orderService.updateOrder(orderDTO);
-    }
-
     @RequestMapping(value="/getAllClosedOrders", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all closed orders")
     public List<OrderDTO> getAllClosed() throws ServiceLayerException {
@@ -75,12 +68,14 @@ public class OrderControllerImpl {
         return orderService.getAllClosed();
     }
 
+    /*
     @RequestMapping(value="/getOrderById/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get Order By Id")
     public OrderDTO getOrderById(int order_id) throws ServiceLayerException {
         LOG.debug("called getOrderById");
         return orderService.getOrderById(order_id);
     }
+    */
 
     @RequestMapping(value="/invoiceOrder", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "invoice order")
@@ -88,4 +83,13 @@ public class OrderControllerImpl {
         LOG.debug("invoice Order " + orderDTO.getID());
         orderService.invoiceOrder(orderDTO);
     }
+
+    /*
+    @RequestMapping(value="/updateOrder", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "update order")
+    public void updateOrder(OrderDTO orderDTO) throws ServiceLayerException {
+        LOG.debug("called updateOrder, {}", orderDTO.toString());
+        orderService.updateOrder(orderDTO);
+    }
+     */
 }
