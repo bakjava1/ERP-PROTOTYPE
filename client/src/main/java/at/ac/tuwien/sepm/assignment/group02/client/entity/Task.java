@@ -148,4 +148,21 @@ public class Task {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "description='" + description + '\'' +
+                ", finishing='" + finishing + '\'' +
+                ", wood_type='" + wood_type + '\'' +
+                ", quality='" + quality + '\'' +
+                ", size=" + size +
+                ", width=" + width +
+                ", length=" + length +
+                ", quantity=" + quantity +
+                ", produced_quantity=" + produced_quantity +
+                ", price=" + price +
+                ", done=" + done +
+                '}';
+    }
 }

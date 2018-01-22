@@ -12,7 +12,9 @@ import at.ac.tuwien.sepm.assignment.group02.client.service.TimberService;
 import at.ac.tuwien.sepm.assignment.group02.client.service.TimberServiceImpl;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator;
 import at.ac.tuwien.sepm.assignment.group02.client.validation.ValidateTimber;
+import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.AssignmentDTO;
+import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import org.junit.*;
 import org.mockito.Mock;
@@ -20,10 +22,17 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.PersistenceContextType;
 import java.lang.invoke.MethodHandles;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -32,73 +41,57 @@ public class TimberClientServiceImplTest {
 
     private static Timber timber;
     private static TimberConverter timberConverter;
-    @Mock
+    private static RestTemplate restTemplate;
     private static TimberController timberController;
     private static TimberService timberService;
+    private static ValidateTimber validator;
 
 
     @BeforeClass
     public static void setup(){
-        LOG.debug("add timber test initiated");
+        LOG.debug("timber service test at client initiated");
         timberConverter = new TimberConverter();
+        validator = new ValidateTimber(new PrimitiveValidator());
 
     }
 
     @Before
     public void before(){
-        timber = new Timber();
-        timberController = mock(TimberControllerImpl.class);
-        timberService = new TimberServiceImpl(timberController,timberConverter,new ValidateTimber(new PrimitiveValidator()));
+        timber = new Timber(10, 2);
+        restTemplate = mock(RestTemplate.class);
+        timberController = new TimberControllerImpl(restTemplate);
+        timberService = new TimberServiceImpl(timberController, timberConverter, validator);
 
     }
 
     @Test(expected = ServiceLayerException.class)
-    public void testAddTimberNegativeTest() throws Exception {
-
-        LOG.debug("add timber negative test");
-        timber = new Timber(1, 2);
-        when(timberController.getNumberOfBoxes()).thenReturn(42);
-        doThrow(PersistenceLayerException.class).when(timberController).createTimber(any(TimberDTO.class));
-
-        timberService.addTimber(timber);
-    }
-
-    @Test(expected = ServiceLayerException.class)
-    public void testAddTimberRestLayerException() throws Exception {
+    public void testAddTimberRestLayerException() throws ServiceLayerException, PersistenceLayerException {
         LOG.debug("add timber test with rest layer exception");
-        timber = new Timber(1, 1);
 
-        doThrow(PersistenceLayerException.class).when(timberController).createTimber(any(TimberDTO.class));
-        //when(timberController.createTimber(timberDTO);
-        // when(restTemplate.getForObject("http://localhost:8080/getNumberOfBoxes", Integer.class)).thenReturn(42);
-        // when(restTemplate.postForObject("http://localhost:8080/createTimber", timberDTO, TimberDTO.class)).thenReturn(timberDTO);
+        TimberDTO timberDTO = timberConverter.convertPlainObjectToRestDTO(timber);
 
+        when(restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getNumberOfBoxes", Integer.class)).thenReturn(42);
+        Mockito.when( restTemplate.postForObject(anyString(), any(TimberDTO.class), eq(TimberDTO.class))).thenThrow(RestClientException.class);
         timberService.addTimber(timber);
-        verify(timberController, times(1)).createTimber(any(TimberDTO.class));
+        Mockito.verify(restTemplate, times(1)).postForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/createTimber", timberDTO, TimberDTO.class);
     }
 
     @Test
     public void testAddTimberPositiveTest() throws Exception {
 
         LOG.debug("add timber test with no error");
-        timber = new Timber(1, 1);
 
-        TimberDTO timberDTO = timberConverter.convertPlainObjectToRestDTO(timber);
-        when(timberController.getNumberOfBoxes()).thenReturn(42);
-        //when(timberController.createTimber(timberDTO);
-        // when(restTemplate.getForObject("http://localhost:8080/getNumberOfBoxes", Integer.class)).thenReturn(42);
-       // when(restTemplate.postForObject("http://localhost:8080/createTimber", timberDTO, TimberDTO.class)).thenReturn(timberDTO);
-
+        when(restTemplate.getForObject("http://"+RestTemplateConfiguration.host+":"+RestTemplateConfiguration.port+"/getNumberOfBoxes", Integer.class)).thenReturn(42);
         timberService.addTimber(timber);
-        verify(timberController, times(1)).getNumberOfBoxes();
+        Mockito.verify(restTemplate, times(1)).postForObject(anyString(), any(TimberDTO.class), eq(TimberDTO.class));
+
     }
 
-    @Test(expected = ServiceLayerException.class)
+    @Test(expected = InvalidInputException.class)
     public void testSelectedBoxNumberIsNotValid() throws Exception {
         LOG.debug("test selected box number is not valid");
-        timber = new Timber(123, 3);
 
-        //when(restTemplate.getForObject("http://localhost:8080/getNumberOfBoxes", Integer.class)).thenReturn(2);
+        when(restTemplate.getForObject("http://localhost:8080/getNumberOfBoxes", Integer.class)).thenReturn(1);
         timberService.addTimber(timber);
         verify(timberController, times(1)).getNumberOfBoxes();
     }
@@ -108,10 +101,7 @@ public class TimberClientServiceImplTest {
     public void testGetNumOfBoxesNegativeTest() throws Exception {
         LOG.debug("test timber get number of boxes negative");
 
-
-        //when(restTemplate.getForObject("http://localhost:8080/getNumberOfBoxes", Integer.class)).thenReturn(2);
-        when(timberController.getNumberOfBoxes()).thenThrow(PersistenceLayerException.class);
-
+        when(restTemplate.getForObject("http://localhost:8080/getNumberOfBoxes", Integer.class)).thenThrow(PersistenceLayerException.class);
         timberService.getNumberOfBoxes();
     }
 
@@ -119,10 +109,9 @@ public class TimberClientServiceImplTest {
     public void testGetNumOfBoxesPositiveTest() throws Exception {
         LOG.debug("test timber get number of boxes negative");
 
-        //when(restTemplate.getForObject("http://localhost:8080/getNumberOfBoxes", Integer.class)).thenReturn(2);
-        when(timberController.getNumberOfBoxes()).thenReturn(2);
+        when(restTemplate.getForObject("http://localhost:8080/getNumberOfBoxes", Integer.class)).thenReturn(2);
 
-        assert(timberService.getNumberOfBoxes()==2);
+        assertEquals(2, timberService.getNumberOfBoxes());
     }
 
     @After

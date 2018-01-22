@@ -32,5 +32,5 @@ public interface TaskService {
      * @return updated task with same id
      * @throws PersistenceLayerException if no task with given id could be returned
      */
-    Task getTaskById(int id) throws PersistenceLayerException;
+    Task getTaskById(int id) throws PersistenceLayerException, ServiceLayerException;
 }

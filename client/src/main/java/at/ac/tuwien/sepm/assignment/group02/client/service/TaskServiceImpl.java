@@ -60,13 +60,14 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task getTaskById(int id) throws PersistenceLayerException {
+    public Task getTaskById(int id) throws ServiceLayerException {
 
         TaskDTO taskDTO = null;
         try {
             taskDTO = taskController.getTaskById(id);
         } catch (PersistenceLayerException e) {
             LOG.warn(e.getMessage());
+            throw new ServiceLayerException(e.getMessage());
         }
         return taskConverter.convertRestDTOToPlainObject(taskDTO);
     }
