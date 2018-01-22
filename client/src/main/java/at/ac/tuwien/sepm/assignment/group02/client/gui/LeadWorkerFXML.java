@@ -111,8 +111,6 @@ public class LeadWorkerFXML {
     @FXML
     private Button btn_addLumber;
     @FXML
-    private Button btn_createAssignment;
-    @FXML
     private Button btn_search;
 
     @FXML
@@ -673,7 +671,6 @@ public class LeadWorkerFXML {
         btn_reserve.setDisable(true);
         btn_resetSearch.setDisable(true);
         btn_addLumber.setDisable(true);
-        btn_createAssignment.setDisable(true);
         btn_search.setDisable(true);
 
         final OptAlgorithmResultDTO[] bestResult = {null};
@@ -741,7 +738,6 @@ public class LeadWorkerFXML {
                         btn_reserve.setDisable(false);
                         btn_resetSearch.setDisable(false);
                         btn_addLumber.setDisable(false);
-                        btn_createAssignment.setDisable(false);
                         btn_search.setDisable(false);
 
 
@@ -775,7 +771,6 @@ public class LeadWorkerFXML {
                 btn_reserve.setDisable(false);
                 btn_resetSearch.setDisable(false);
                 btn_addLumber.setDisable(false);
-                btn_createAssignment.setDisable(false);
                 btn_search.setDisable(false);
             }
         }, "optimisation-algorithm").start();
