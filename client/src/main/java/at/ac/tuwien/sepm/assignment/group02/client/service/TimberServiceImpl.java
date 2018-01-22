@@ -32,16 +32,16 @@ public class TimberServiceImpl implements TimberService{
     }
 
     @Override
-    public void addTimber(Timber timber) throws ServiceLayerException {
+    public void addTimber(Timber timber) throws ServiceLayerException{
 
-        try {
-            if(timber.getBox_id()>timberController.getNumberOfBoxes())
+        LOG.debug("add Timber to Database called");
+
+            if(timber.getBox_id()>getNumberOfBoxes()){
+                LOG.warn("Box number is bigger than number of boxes");
                 throw new InvalidInputException("Error in Timber Box: Box ID is bigger than number of boxes");
+            }
             timberValidator.isValid(timber);
-        } catch (PersistenceLayerException e) {
-            LOG.warn(e.getMessage());
-            throw new ServiceLayerException(e.getMessage());
-        }
+
 
         TimberDTO timberDTO = timberConverter.convertPlainObjectToRestDTO(timber);
         try {
