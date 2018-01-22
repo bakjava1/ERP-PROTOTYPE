@@ -34,7 +34,7 @@ public class AddTimberValidatorTest {
         timber.setAmount(1);
         timberValidator.isValid(timber);
     }
-    @Ignore
+
     @Test
     public void testAddTimberPositive() throws InvalidInputException{
         timber = new Timber(1,12);

@@ -35,13 +35,13 @@ import static org.mockito.Mockito.*;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
 
-@Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class LumberClientControllerImplTest {
 
     @Mock
     private RestTemplate restTemplate;
 
+    @Ignore
     @Test
     public void test_Update_A_Lumber_persists() throws PersistenceLayerException, ServiceLayerException {
         LumberController lumberController = new LumberControllerImpl(restTemplate);
@@ -52,6 +52,7 @@ public class LumberClientControllerImplTest {
                 , eq(lumberDTO), eq(LumberDTO.class));
     }
 
+    @Ignore
     @Test(expected = PersistenceLayerException.class)
     public void testUpdate_A_Lumber_reacts_To_Error404_ShouldThrowException() throws PersistenceLayerException, ServiceLayerException {
         LumberController lumberController = new LumberControllerImpl(restTemplate);

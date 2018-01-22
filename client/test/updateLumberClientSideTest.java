@@ -32,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 
 //@RunWith(MockitoJUnitRunner.class)
-@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 public class updateLumberClientSideTest {
 
@@ -69,6 +68,7 @@ public class updateLumberClientSideTest {
 
 
 
+    @Ignore
     @Test
     public void findById_LumberNotFound_ShouldReturnHttpStatusCode404() throws Exception {
         when(lumberServiceMock.getLumber(1)).thenThrow(new ServiceLayerException(""));

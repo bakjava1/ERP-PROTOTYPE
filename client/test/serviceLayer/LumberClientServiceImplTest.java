@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by raquelsima on 15.01.18.
  */
-@Ignore
+
 public class LumberClientServiceImplTest {
 
 
@@ -65,7 +65,6 @@ public class LumberClientServiceImplTest {
        // verify(lumberController,times(1)).updateLumber(lumberDTO);
     }
     */
-    @Ignore
     @Test
     public void testDeleteLumber_InvalidInputException() throws Exception {
          lumberService=new LumberServiceImpl(lumberController, lumberConverter, taskController, validator,primitiveValidator) ;

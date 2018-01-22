@@ -5,7 +5,7 @@ import at.ac.tuwien.sepm.assignment.group02.client.validation.PrimitiveValidator
 import at.ac.tuwien.sepm.assignment.group02.client.validation.Validator;
 import org.junit.*;
 
-@Ignore
+
 public class InvoiceOrderValidatorTest {
 
     private static Validator validator;
@@ -14,7 +14,7 @@ public class InvoiceOrderValidatorTest {
     @BeforeClass
     public static void setup(){
         PrimitiveValidator primitiveValidator = new PrimitiveValidator();
-        Validator validator = new Validator(primitiveValidator);
+        validator = new Validator(primitiveValidator);
     }
 
     @Before
@@ -77,6 +77,7 @@ public class InvoiceOrderValidatorTest {
         order.setCustomerName("test");
         order.setCustomerAddress("test");
         order.setCustomerUID("test");
+        order.setDeliveryDate("");
         validator.inputValidationInvoice(order);
     }
 
@@ -161,9 +162,9 @@ public class InvoiceOrderValidatorTest {
         order.setCustomerName("test");
         order.setCustomerAddress("test");
         order.setCustomerUID("test");
-        order.setDeliveryDate("2018-01-01 12:38:40");
-        order.setOrderDate("2018-01-01 12:38:40");
-        order.setInvoiceDate("2018-01-01 12:38:40");
+        order.setDeliveryDate("2018-01-01 12:38:40.3");
+        order.setOrderDate("2018-01-01 12:38:40.4");
+        order.setInvoiceDate("2018-01-01 12:38:40.5");
         Task temp = new Task();
         temp.setPrice(12);
         order.addTask(temp);

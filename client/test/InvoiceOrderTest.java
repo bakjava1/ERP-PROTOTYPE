@@ -61,7 +61,7 @@ public class InvoiceOrderTest {
         orderNoError.setCustomerAddress("Musterstraße 12, 1000 Musterdorf");
         orderNoError.setCustomerUID("1234567890");
         orderNoError.setID(1);
-        orderNoError.setOrderDate("2018-01-01 12:38:40");
+        orderNoError.setOrderDate("2018-01-01 12:38:40.2");
         Task temp = new Task();
         temp.setDescription("test");
         temp.setDone(false);
