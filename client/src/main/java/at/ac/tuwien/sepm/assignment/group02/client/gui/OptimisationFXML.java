@@ -134,6 +134,7 @@ public class OptimisationFXML {
 
         ObservableList<TaskDTO> observableListTasks = tv_tasks.getItems();
         TaskDTO mainTask = observableListTasks.get(0);
+        mainTask.setIn_progress(true);
 
         int timberAmount = timberDTO.getTaken_amount();
         assignmentDTO.setBox_id(timberDTO.getBox_id());
@@ -144,6 +145,7 @@ public class OptimisationFXML {
         int lumberAmount;
         for(int i = 1; i < observableListTasks.size(); i++) {
             TaskDTO taskDTO = observableListTasks.get(i);
+            if(taskDTO.getId()==mainTask.getId()) taskDTO.setIn_progress(true);
             lumberAmount = timberAmount * taskDTO.getAlgorithmResultAmount();
             FilterDTO filterDTO = new FilterDTO();
             filterDTO.setDescription(taskDTO.getDescription());

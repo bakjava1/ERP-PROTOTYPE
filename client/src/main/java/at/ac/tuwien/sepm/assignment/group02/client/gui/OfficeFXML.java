@@ -316,7 +316,7 @@ public class OfficeFXML {
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setTitle("Creation successful");
             success.setHeaderText(null);
-            success.setContentText("Order created successfully!");
+            success.setContentText("Bestellung wurde erfolgreich erstellt!");
             success.showAndWait();
         } catch (ServiceLayerException e) {
             LOG.warn(e.getMessage());
@@ -644,9 +644,9 @@ public class OfficeFXML {
                 initiateCostValueFunction(toAdd);
             } catch(InvalidInputException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error creating Task");
+                alert.setTitle("Auftrag konnte nicht erstellt werden.");
                 alert.setHeaderText(null);
-                alert.setContentText("Error creating Task!\nReason: " + e.getMessage());
+                alert.setContentText("Auftrag konnte nicht erstellt werden.\n " + e.getMessage());
                 alert.showAndWait();
                 addTaskToOrder(null);
                 return;
@@ -728,7 +728,7 @@ public class OfficeFXML {
             Alert error = new Alert(Alert.AlertType.ERROR);
             error.setTitle("No Tasks to evaluate");
             error.setHeaderText(null);
-            error.setContentText("There is no Task added to the Order!\nPlease add Tasks to proceed to Cost/Benefit Function");
+            error.setContentText("Bestellung umfasst keine Aufträge!\nBitte fügen Sie Aufträge hinzu bevor Sie die Kosten/Nutzen-Rechnung aufrufen!");
             error.showAndWait();
             return;
         }
@@ -774,9 +774,9 @@ public class OfficeFXML {
                 currentOrderSum += centToEuro(task.getPrice());
                 l_sumorders.setText(currentOrderSum + " €");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Successfully created Task");
+                alert.setTitle("Auftrag erfolgreich erstellt.");
                 alert.setHeaderText(null);
-                alert.setContentText("Task successfully created and added to your Order");
+                alert.setContentText("Auftrag erfolgreich erstellt.");
                 alert.showAndWait();
             }
         });

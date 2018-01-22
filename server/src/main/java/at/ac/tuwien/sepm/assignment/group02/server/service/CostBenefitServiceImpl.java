@@ -90,7 +90,7 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                     List<Timber> possibleBoxes = timberDAO.getBoxesForTask(toEvaluate.get(i));
                     if(possibleBoxes.size() == 0) {
                         LOG.error("Lumber with Values length: " + toEvaluate.get(i).getLength() + " width: " + toEvaluate.get(i).getWidth() + " size: " + toEvaluate.get(i).getSize() + " quality : " + toEvaluate.get(i).getQuality() + " can not be produced");
-                        throw new ServiceLayerException("Lumber with Values length: " + toEvaluate.get(i).getLength() + " width: " + toEvaluate.get(i).getWidth() + " size: " + toEvaluate.get(i).getSize() + " quality : " + toEvaluate.get(i).getQuality() + " can not be produced");
+                        throw new ServiceLayerException("Schnittholz mit Länge: " + toEvaluate.get(i).getLength() + " Breite: " + toEvaluate.get(i).getWidth() + " Dicke: " + toEvaluate.get(i).getSize() + " Qualität: " + toEvaluate.get(i).getQuality() + " kann nicht produziert werden.");
                     }
                     for(int j = 0; j < possibleBoxes.size();j++) {
                         Timber temp = possibleBoxes.get(j);
@@ -132,6 +132,16 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                     }
                     if(optimalProduceCost == -1) {
                         LOG.error("Lumber with Values length: " + toEvaluate.get(i).getLength() + " width: " + toEvaluate.get(i).getWidth() + " size: " + toEvaluate.get(i).getSize() + " can not be produced");
+                        throw new ServiceLayerException("Schnittholz mit Länge: " + toEvaluate.get(i).getLength() + " Breite: " + toEvaluate.get(i).getWidth() + " Dicke: " + toEvaluate.get(i).getSize() + " Qualität: " + toEvaluate.get(i).getQuality() + " kann nicht produziert werden.");
+                    } else {
+                        double fromCentToEuro = centToEuro(toEvaluate.get(i).getPrice());
+                        double difference = fromCentToEuro - optimalProduceCost;
+                        LOG.debug("Optimal Production Costs are: " + optimalProduceCost + " Resulting in: " + difference + " €");
+                        summe += difference;
+                    }
+                    summe += (double) toEvaluate.get(i).getPrice() - optimalProduceCost;
+                    if(optimalProduceCost == -1) {
+                        LOG.error("Lumber with Values length: " + toEvaluate.get(i).getLength() + " width: " + toEvaluate.get(i).getWidth() + " size: " + toEvaluate.get(i).getSize() + " can not be produced");
                         throw new ServiceLayerException("Lumber with Values length: " + toEvaluate.get(i).getLength() + " width: " + toEvaluate.get(i).getWidth() + " size: " + toEvaluate.get(i).getSize() + " can not be produced");
                     } else {
                         double fromCentToEuro = centToEuro(toEvaluate.get(i).getPrice());
@@ -142,7 +152,7 @@ public class CostBenefitServiceImpl implements CostBenefitService {
                 }
             } catch(PersistenceLayerException e) {
                 LOG.error("Database Problems, Reason: " + e.getMessage());
-                throw new ServiceLayerException("Database Error");
+                throw new ServiceLayerException("Datenbank Error");
             }
             LOG.debug("Current Sum: " + summe);
         }
