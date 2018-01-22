@@ -389,8 +389,12 @@ public class OfficeFXML {
             alertBuilder.showErrorAlert("Fehler bei Eingabe", "Eigabe unvollständig.", "Bitte nur gültige Eingaben benützen!");
         }
         else{
-            Timber timber = new Timber(cb_timber_box.getSelectionModel().getSelectedIndex()+1, Integer.parseInt(tf_timber_amount.getText()));
             try {
+
+                if(tf_timber_amount.getLength()>4){
+                    throw new InvalidInputException("Eingegebe Anzahl ist nicht gültig!");
+                }
+                Timber timber = new Timber(cb_timber_box.getSelectionModel().getSelectedIndex()+1, Integer.parseInt(tf_timber_amount.getText()));
                 boolean addTimberConfirmation = alertBuilder.showConfirmationAlert("Rundholz hinzufügen", "Wollen Sie " +
                         timber.getAmount() + " Stück Rundholz zu Box " + timber.getBox_id() + " hinzufügen?", "");
                 if(addTimberConfirmation){
@@ -399,8 +403,10 @@ public class OfficeFXML {
                     cb_timber_box.getSelectionModel().clearSelection();
                     alertBuilder.showInformationAlert("Rundholz hinzugefügt", timber.getAmount() + " Rundhölzer zu Box " + timber.getBox_id() + " erfolgreich hinzugefügt", "");
                 }
-            } catch (InvalidInputException e) {
+            }
+            catch (InvalidInputException e) {
                 LOG.error("Invalid Input Error: " + e.getMessage());
+                alertBuilder.showErrorAlert("Fehler beim Hinzufügen von Rundholz", null, e.getMessage());
             } catch (ServiceLayerException e) {
                 LOG.warn(e.getMessage());
                 alertBuilder.showErrorAlert("Fehler beim Hinzufügen von Rundholz", null, e.getMessage());

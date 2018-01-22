@@ -154,8 +154,10 @@ public class OptimisationFXML {
             filterDTO.setWidth(String.valueOf(taskDTO.getWidth()));
             filterDTO.setLength(String.valueOf(taskDTO.getLength()));
             List<Lumber> list = lumberService.getAll(filterDTO);
-            Lumber lumber = list.get(0);
-            lumberService.reserveLumberAlg(lumber, lumberAmount, taskDTO);
+            if(list.size()>0){
+                Lumber lumber = list.get(0);
+                lumberService.reserveLumberAlg(lumber, lumberAmount, taskDTO);
+            }
         }
 
         stage.close();

@@ -154,7 +154,6 @@ public class OrderServiceImpl implements OrderService {
             }
 
             order.setTaskList(taskList);
-            //TODO delete lumber from database
         }
 
         try {
@@ -181,17 +180,16 @@ public class OrderServiceImpl implements OrderService {
         filterDTO.setQuality(task.getQuality());
         filterDTO.setWood_type(task.getWood_type());
         List<Lumber> compatibleLumber = lumberDAO.getAllLumber(filterDTO);
-        int remainingQuantity = task.getQuantity()-task.getProduced_quantity();
-        for(Lumber lumber : compatibleLumber){
-            int availableLumber = lumber.getQuantity()-lumber.getReserved_quantity();
+        int remainingQuantity = task.getQuantity();
+        for(Lumber lumber : compatibleLumber) {
+            int availableLumber = lumber.getReserved_quantity();
             remainingQuantity = remainingQuantity - availableLumber;
-            if(remainingQuantity <= 0){
-                lumberDAO.removeLumber(lumber.getId(), remainingQuantity);
+            lumberDAO.removeLumber(lumber.getId(), availableLumber);
+            if (remainingQuantity <= 0) {
                 break;
             }
-            else{
-                lumberDAO.removeLumber(lumber.getId(), availableLumber);            }
         }
+
         if(remainingQuantity > 0){
                // throw new ServiceLayerException("Not enough Lumber for task {" + task.toString() + "} available");
         }

@@ -8,7 +8,9 @@ import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.OptAlgorithmResultDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TaskDTO;
 import at.ac.tuwien.sepm.assignment.group02.rest.restDTO.TimberDTO;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
@@ -77,7 +79,7 @@ public class OptimisationAlgorithmTest {
         LOG.debug("optimisation algorithm test setup completed");
     }
 
-    /*
+    @Ignore
     @Test
     public void test_optimisation_algorithm_in_client_serviceLayer() throws OptimisationAlgorithmException, PersistenceLayerException {
         LOG.debug("test call of optimisation algorithm in client service layer");
@@ -86,7 +88,7 @@ public class OptimisationAlgorithmTest {
 
         verify(restTemplate, times(1))
                 .postForObject(Mockito.matches(".*getOptAlgorithmResult"), eq(TaskDTO.class), eq(OptAlgorithmResultDTO.class));
-    }*/
+    }
 
     @Test (expected = OptimisationAlgorithmException.class)
     public void expect_optimisationAlgorithmException_in_client_serviceLayer_without_taskResult() throws OptimisationAlgorithmException, PersistenceLayerException {

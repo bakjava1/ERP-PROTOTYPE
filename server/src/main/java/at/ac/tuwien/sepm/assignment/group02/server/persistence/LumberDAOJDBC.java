@@ -379,7 +379,7 @@ public class LumberDAOJDBC implements LumberDAO {
 
 
         String selectStatement = "SELECT QUANTITY, RESERVED_QUANTITY FROM LUMBER WHERE ID = ?";
-        String removeStatement = "UPDATE LUMBER SET QUANTITY = ?, RESERVED_QUANTITY = ? WHERE ID = ?";
+        String removeStatement = "UPDATE LUMBER SET RESERVED_QUANTITY = ? WHERE ID = ?";
 
         try {
             PreparedStatement ps = dbConnection.prepareStatement(selectStatement    );
@@ -389,16 +389,15 @@ public class LumberDAOJDBC implements LumberDAO {
             int currentQuantity = rs.getInt(1);
             int currentReservedQuantity = rs.getInt(2);
 
-            if(removedQuantity > (currentQuantity-currentReservedQuantity)) {
+            if(removedQuantity > (currentReservedQuantity)) {
                 throw new PersistenceLayerException("Trying to remove more lumber than existing");
             }
 
             ps = dbConnection.prepareStatement(removeStatement);
-            currentQuantity = currentQuantity -removedQuantity;
+            currentQuantity = currentQuantity - removedQuantity;
             currentReservedQuantity = currentReservedQuantity - removedQuantity;
-            ps.setInt(1, currentQuantity);
-            ps.setInt(2, currentReservedQuantity);
-            ps.setInt(3, id);
+            ps.setInt(1, currentReservedQuantity);
+            ps.setInt(2, id);
             ps.executeUpdate();
 
             ps.close();
