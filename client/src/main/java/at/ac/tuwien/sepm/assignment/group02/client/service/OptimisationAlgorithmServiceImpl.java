@@ -47,11 +47,11 @@ public class OptimisationAlgorithmServiceImpl implements OptimisationAlgorithmSe
 
         //OptAlgorithmResult optAlgorithmResult = optAlgorithmConverter.convertRestDTOToPlainObject(optAlgorithmResultDTO);
 
-        renderImage(optAlgorithmResultDTO);
-
         if(optAlgorithmResultDTO.getTimberResult() == null || optAlgorithmResultDTO.getTaskResult() == null) {
             throw new OptimisationAlgorithmException("Es konnte keine Optimierung gefunden werden!");
         }
+
+        renderImage(optAlgorithmResultDTO);
 
         return optAlgorithmResultDTO;
     }
