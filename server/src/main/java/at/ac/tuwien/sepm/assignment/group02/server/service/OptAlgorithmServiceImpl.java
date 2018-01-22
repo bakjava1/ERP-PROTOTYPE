@@ -164,6 +164,7 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
 
 
         for (Task task : tasks) {
+            if(possibleTasks.size() < 20) {
                 //compare wood type
                 if (task.getWood_type().toLowerCase().equals(mainTask.getWood_type().toLowerCase())) {
                     //length of side task is not bigger than length of main task
@@ -180,6 +181,9 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                         }
                     }
                 }
+            } else {
+                return possibleTasks;
+            }
         }
 
         return possibleTasks;
