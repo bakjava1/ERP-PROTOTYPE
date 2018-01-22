@@ -243,21 +243,17 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
             optimisationBuffer.setVerticalSideTaskResult(new ArrayList<>(verticalSideTask));
             optimisationBuffer.setNewMainOrderValues(currentRadius, nachschnittAnzahl, vorschnittAnzahl, widthMainTask, heightMainTask, biggerSize, smallerSize);
 
-            currentTimber.setTaken_amount((int) Math.ceil((double) (mainTask.getQuantity() - mainTask.getProduced_quantity()) / (nachschnittAnzahl * vorschnittAnzahl)));
-            optAlgorithmResult.setTimberResult(currentTimber);
-
             ArrayList<TaskDTO> taskResult = new ArrayList<>();
-            //mainTask.setAlgorithmResultAmount(nachschnittAnzahl*vorschnittAnzahl);
             taskResult.add(mainTask);
 
             clearResultAmount(horizontalSideTask);
             clearResultAmount(verticalSideTask);
 
             for(SideTaskResult sideTaskResult : horizontalSideTask) {
-                sideTaskResult.getTask().setAlgorithmResultAmount(sideTaskResult.getTask().getAlgorithmResultAmount() + sideTaskResult.getCount()*2);
-                if(!taskResult.contains(sideTaskResult.getTask())) {
-                    taskResult.add(sideTaskResult.getTask());
-                }
+                    sideTaskResult.getTask().setAlgorithmResultAmount(sideTaskResult.getTask().getAlgorithmResultAmount() + sideTaskResult.getCount() * 2);
+                    if (!taskResult.contains(sideTaskResult.getTask())) {
+                        taskResult.add(sideTaskResult.getTask());
+                    }
             }
 
             for(SideTaskResult sideTaskResult : verticalSideTask) {
@@ -266,6 +262,19 @@ public class OptAlgorithmServiceImpl implements OptAlgorithmService{
                     taskResult.add(sideTaskResult.getTask());
                 }
             }
+
+            if(horizontalSideTask.contains(mainTask)) {
+                int taken_amount = 0;
+                for (TaskDTO task : taskResult) {
+                    if (task.getId() == mainTask.getId()) {
+                        taken_amount += task.getAlgorithmResultAmount();
+                    }
+                }
+                currentTimber.setTaken_amount((int) Math.ceil((double) (mainTask.getQuantity() - mainTask.getProduced_quantity()) / taken_amount));
+            } else {
+                currentTimber.setTaken_amount((int) Math.ceil((double) (mainTask.getQuantity() - mainTask.getProduced_quantity()) / (nachschnittAnzahl * vorschnittAnzahl)));
+            }
+            optAlgorithmResult.setTimberResult(currentTimber);
 
             optAlgorithmResult.setTaskResult(taskResult);
         }
