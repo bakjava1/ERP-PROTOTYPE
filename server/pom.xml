@@ -35,6 +35,8 @@
             <version>${smartholz-rest.version}</version>
         </dependency>
 
+
+
         <!-- Import dependency management from Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -43,6 +45,8 @@
             <type>pom</type>
             <scope>import</scope>
         </dependency>
+
+
 
         <!-- Starter for building web, including RESTful, applications using Spring MVC.
         Uses Tomcat as the default embedded container -->

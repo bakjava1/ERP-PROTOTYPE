@@ -26,6 +26,10 @@
         <jackson.version>2.9.2</jackson.version>
         <itext.version>2.1.7</itext.version>
         <maven-shade-plugin.version>3.1.0</maven-shade-plugin.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>9</maven.compiler.source>
+        <maven.compiler.target>9</maven.compiler.target>
     </properties>
 
 
@@ -35,6 +39,14 @@
             <artifactId>smartholz-rest</artifactId>
             <version>${smartholz-rest.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>20.0.1</version>
+        </dependency>
+
+
 
         <!-- Import dependency management from Spring Boot -->
         <dependency>
@@ -79,6 +91,16 @@
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
             <version>${itext.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>21-ea+17</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>21-ea+17</version>
         </dependency>
 
     </dependencies>
