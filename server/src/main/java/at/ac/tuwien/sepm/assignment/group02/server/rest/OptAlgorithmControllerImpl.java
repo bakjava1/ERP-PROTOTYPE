@@ -8,15 +8,14 @@ import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ResourceNotFoundEx
 import at.ac.tuwien.sepm.assignment.group02.server.exceptions.ServiceLayerException;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OptAlgorithmService;
 import at.ac.tuwien.sepm.assignment.group02.server.service.OptAlgorithmServiceImpl;
+import at.ac.tuwien.sepm.assignment.group02.server.service.TaskService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.invoke.MethodHandles;
 
@@ -24,19 +23,18 @@ import java.lang.invoke.MethodHandles;
 @Api(value= "Optimisation Algorithm Controller")
 public class OptAlgorithmControllerImpl {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    /* TODO Autowire
-    @Autowired
-    public OptAlgorithmControllerImpl(OptAlgorithmService optAlgorithmService){
-        OrderControllerImpl.orderService = orderService;
-    }
-    */
-
-
-
     private static OptAlgorithmService optAlgorithmService;
 
+     /*TODO Autowire
 
+    @Autowired
+    public OptAlgorithmControllerImpl(OptAlgorithmService optAlgorithmService){
+        OptAlgorithmControllerImpl.optAlgorithmService = optAlgorithmService;
+
+    }
+      */
+
+    @CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" ) // TODO ADDED 11.06 is this okay? enabling cors
     @RequestMapping(value="/getOptAlgorithmResult",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get optimisation algorithm result")
     public OptAlgorithmResultDTO getOptAlgorithmResult(@RequestBody TaskDTO taskDTO) throws ResourceNotFoundException, OptimisationAlgorithmException {

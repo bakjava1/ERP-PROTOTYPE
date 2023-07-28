@@ -40,6 +40,7 @@ public class TaskControllerImpl {
         taskService.updateTaskAlg(task);
     }
 
+    @CrossOrigin
     @RequestMapping(value="/getAllOpenTasks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all open tasks")
     public List<TaskDTO> getAllOpenTasks() throws ServiceLayerException {
