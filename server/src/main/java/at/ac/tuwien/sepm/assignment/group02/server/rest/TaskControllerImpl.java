@@ -40,7 +40,7 @@ public class TaskControllerImpl {
         taskService.updateTaskAlg(task);
     }
 
-    //@CrossOrigin
+    @CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" ) // TODO ADDED 11.06 is this okay? enabling cors
     @RequestMapping(value="/getAllOpenTasks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "get all open tasks")
     public List<TaskDTO> getAllOpenTasks() throws ServiceLayerException {
